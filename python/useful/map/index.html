@@ -7,21 +7,21 @@
         
         
         
-        <link rel="shortcut icon" href="/img/favicon.ico">
-        <title>Ben's Code Journal</title>
-        <link href="/css/bootstrap-custom.min.css" rel="stylesheet">
-        <link href="/css/font-awesome.min.css" rel="stylesheet">
-        <link href="/css/base.css" rel="stylesheet">
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>map() - Ben's Code Journal</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
-        <link href="/css/extra.css" rel="stylesheet">
+        <link href="../../../css/extra.css" rel="stylesheet">
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!--[if lt IE 9]>
             <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
             <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
 
-        <script src="/js/jquery-1.10.2.min.js" defer></script>
-        <script src="/js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
         <script>hljs.initHighlightingOnLoad();</script> 
     </head>
@@ -40,7 +40,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/.">Ben's Code Journal</a>
+                    <a class="navbar-brand" href="../../..">Ben's Code Journal</a>
                 </div>
 
                 <!-- Expanded navigation -->
@@ -48,9 +48,9 @@
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
                             <li >
-                                <a href="/.">Home</a>
+                                <a href="../../..">Home</a>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     
@@ -58,22 +58,22 @@
     <a href="#">Useful</a>
     <ul class="dropdown-menu">
             
-<li >
-    <a href="/python/useful/map/">map()</a>
+<li class="active">
+    <a href="./">map()</a>
 </li>
     </ul>
   </li>
                                     
 <li >
-    <a href="/python/base_modules/base_modules.md">Base Modules</a>
+    <a href="../../base_modules/base_modules.md">Base Modules</a>
 </li>
                                     
 <li >
-    <a href="/python/advanced/advanced.md">Advanced</a>
+    <a href="../../advanced/advanced.md">Advanced</a>
 </li>
                                     
 <li >
-    <a href="/python/strings/strings.md">Strings</a>
+    <a href="../../strings/strings.md">Strings</a>
 </li>
                                 </ul>
                             </li>
@@ -82,20 +82,20 @@
                                 <ul class="dropdown-menu">
                                     
 <li >
-    <a href="/sql/postgres/postgres/">Postgres</a>
+    <a href="../../../sql/postgres/postgres/">Postgres</a>
 </li>
                                     
 <li >
-    <a href="/sql/sql_server/sql_server/">SQL server</a>
+    <a href="../../../sql/sql_server/sql_server/">SQL server</a>
 </li>
                                     
 <li >
-    <a href="/sql/sqlite/sqlite/">sqlite</a>
+    <a href="../../../sql/sqlite/sqlite/">sqlite</a>
 </li>
                                 </ul>
                             </li>
                             <li >
-                                <a href="/javascript/javascript/">Javascript</a>
+                                <a href="../../../javascript/javascript/">Javascript</a>
                             </li>
                         </ul>
 
@@ -105,21 +105,45 @@
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
+                            <li >
+                                <a rel="next" href="../../..">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../../../sql/postgres/postgres/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#map">map(...)</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
 
-    <div class="row-fluid">
-      <div id="main-content" class="span12">
-        <h1 id="404-page-not-found" style="text-align: center">404</h1>
-        <p style="text-align: center"><strong>Page not found</strong></p>
-      </div>
-    </div>
+<h1 id="map">map(...)</h1>
+<p>map() allows us to apply a function to a list of items</p>
+<pre><code class="python"># Simple Example
+&gt;&gt;&gt; list(map(float, ['1.0', '2.0']))
+[1.0, 2.0]
 
+# Turn this:
+items = [1, 2, 3, 4, 5]
+squared = []
+for i in items:
+    squared.append(i**2)
 
+# Into this with a lambda function:
+items = [1, 2, 3, 4, 5]
+squared = list(map(lambda x: x**2, items))
+</code></pre></div>
         </div>
 
         <footer class="col-md-12">
@@ -127,11 +151,11 @@
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
         <script>
-            var base_url = "/",
+            var base_url = "../../..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
         </script>
-        <script src="/js/base.js" defer></script>
-        <script src="/search/main.js" defer></script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
 
         <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
     <div class="modal-dialog">
