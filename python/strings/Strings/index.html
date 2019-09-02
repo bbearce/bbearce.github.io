@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../../img/favicon.ico">
+        <title>Strings - Ben's Code Journal</title>
+        <link href="../../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/obsidian.min.css">
+        <link href="../../../css/extra.css" rel="stylesheet">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../../..">Ben's Code Journal</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../../..">Home</a>
+                            </li>
+                            <li class="dropdown active">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">Useful</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../../useful/Map/">map()</a>
+</li>
+            
+<li >
+    <a href="../../useful/Input/">input()</a>
+</li>
+            
+<li >
+    <a href="../../useful/Sets/">Sets</a>
+</li>
+            
+<li >
+    <a href="../../useful/Pass By Reference/">P.B. Reference</a>
+</li>
+            
+<li >
+    <a href="../../useful/Args and Kwargs/">args, kwargs</a>
+</li>
+            
+<li >
+    <a href="../../useful/Zip/">zip()</a>
+</li>
+            
+<li >
+    <a href="../../useful/Sorted/">sorted()</a>
+</li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">Base Modules</a>
+    <ul class="dropdown-menu">
+            
+  <li class="dropdown-submenu">
+    <a href="#">Collection</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../../base_modules/collections/Counter/">Counter</a>
+</li>
+            
+<li >
+    <a href="../../base_modules/collections/Default Dict/">default_dict()</a>
+</li>
+    </ul>
+  </li>
+    </ul>
+  </li>
+                                    
+  <li class="dropdown-submenu">
+    <a href="#">Advanced</a>
+    <ul class="dropdown-menu">
+            
+<li >
+    <a href="../../advanced/Decorators/">Decorators</a>
+</li>
+            
+<li >
+    <a href="../../advanced/Classes/">Classes</a>
+</li>
+            
+<li >
+    <a href="../../advanced/Generators/">Generators</a>
+</li>
+    </ul>
+  </li>
+                                    
+<li class="active">
+    <a href="./">Strings</a>
+</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">SQL <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../../../sql/postgres/Postgres/">Postgres</a>
+</li>
+                                    
+<li >
+    <a href="../../../sql/sql_server/Sql Server/">SQL server</a>
+</li>
+                                    
+<li >
+    <a href="../../../sql/sqlite/Sqlite/">sqlite</a>
+</li>
+                                </ul>
+                            </li>
+                            <li >
+                                <a href="../../../javascript/Javascript/">Javascript</a>
+                            </li>
+                            <li >
+                                <a href="../../../Quick Notes/">MKDocs</a>
+                            </li>
+                            <li >
+                                <a href="../../../bash/bash/">Bash</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li >
+                                <a rel="next" href="../../advanced/Generators/">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li >
+                                <a rel="prev" href="../../../sql/postgres/Postgres/">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#strings">Strings</a></li>
+            <li><a href="#padding-center-rjust-ljust">Padding: center(), rjust(), ljust()</a></li>
+            <li><a href="#strformat">str.format()</a></li>
+            <li><a href="#strfind">str.find()</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="strings">Strings</h1>
+<h2 id="padding-center-rjust-ljust">Padding: center(), rjust(), ljust()</h2>
+<p>The center() method returns a string which is padded with the specified character.</p>
+<p>The rjust()\ljust() methods return a string which is padded on either side.</p>
+<pre><code class="python">&gt;&gt;&gt; 'A'.center(1, '*')
+'A'
+&gt;&gt;&gt; 'A'.center(2, '*')
+'A*'
+&gt;&gt;&gt; 'A'.center(3, '*')
+'*A*'
+&gt;&gt;&gt; 'A'.rjust(1, '*')
+'A'
+&gt;&gt;&gt; 'A'.rjust(2, '*')
+'*A'
+&gt;&gt;&gt; 'A'.rjust(3, '*')
+'**A'
+&gt;&gt;&gt; 'A'.ljust(1, '*')
+'A'
+&gt;&gt;&gt; 'A'.ljust(2, '*')
+'A*'
+&gt;&gt;&gt; 'A'.ljust(3, '*')
+'A**'
+</code></pre>
+
+<h2 id="strformat">str.format()</h2>
+<p><strong>Different common uses of the str.format() function</strong></p>
+<p><em>format(value[, format_spec])</em></p>
+<p>First example:</p>
+<pre><code class="python">&gt;&gt;&gt; &quot;{}&quot;.format('value')
+'value'
+</code></pre>
+
+<p>Multiple values:</p>
+<pre><code class="python">&gt;&gt;&gt; &quot;{} {}&quot;.format('value1','value2')
+'value1 value2'
+</code></pre>
+
+<p>Reverse order:</p>
+<pre><code class="python">&gt;&gt;&gt; &quot;{1} {0}&quot;.format('value1','value2')
+'value2 value1'
+</code></pre>
+
+<p>Key Word Arguments</p>
+<pre><code class="python">&gt;&gt;&gt; print(&quot;{kwarg} is {0} used for {1}&quot;
+.format(&quot;being&quot;, &quot;string formatting&quot;, kwarg =&quot;Some Key Word Argument&quot;))
+
+... Some Key Word Argument is being used for string formatting
+</code></pre>
+
+<p>We can also use types to further format values:</p>
+<p><strong>Syntax:</strong> {field_name:conversion}.format(value) </p>
+<p><em>Note: field_name can be the index (0) or name of key word argument</em></p>
+<pre><code class="python">conversion values:
+s – strings
+d – decimal integers (base-10)
+f – floating point display
+c – character
+b – binary
+o – octal
+x – hexadecimal with lowercase letters after 9
+X – hexadecimal with uppercase letters after 9
+e – exponent notation
+</code></pre>
+
+<p>Use like this:</p>
+<p><strong>s - string</strong></p>
+<pre><code class="python">&gt;&gt;&gt; '{kwarg:s}'.format(kwarg='5')
+'5'
+&gt;&gt;&gt; '{kwarg:s}'.format(kwarg=5)
+Traceback (most recent call last):
+  File &quot;&quot;, line 1, in 
+ValueError: Unknown format code 's' for object of type 'int'
+</code></pre>
+
+<p>Notice how we got an error for trying to convert an int to a string</p>
+<p><strong>d - decimal integers</strong></p>
+<pre><code class="python">&gt;&gt;&gt; # This works 
+print(&quot;Convert {0} to decimal integer: {0:d}.&quot;.format(100))
+# Notice the Error
+print(&quot;Convert {0} to decimal integer: {0:d}.&quot;.format(100.0))
+
+... Convert 100 to decimal integer: 100.
+&gt;&gt;&gt; ... Traceback (most recent call last):
+  File &quot;&quot;, line 2, in 
+ValueError: Unknown format code 'd' for object of type 'float'
+</code></pre>
+
+<p><strong>f - floats</strong></p>
+<pre><code class="python">&gt;&gt;&gt; # Default decimal precision to 0.000001
+print(&quot;Convert {0} to float: {0:f}.&quot;.format(100.123456789))
+... Convert 100.123456789 to float: 100.123457.
+&gt;&gt;&gt; # Change decimal precision to 0.01
+print(&quot;Convert {0} to float: {0:.2f}.&quot;.format(100.123456789))
+... Convert 100.123456789 to float: 100.12.
+&gt;&gt;&gt; # Change decimal precision to 0.1
+print(&quot;Convert {0} to float: {0:.1f}.&quot;.format(100.123456789))
+... Convert 100.123456789 to float: 100.1.
+&gt;&gt;&gt; # Change decimal precision to 0.000000001
+print(&quot;Convert {0} to float: {0:.9f}.&quot;.format(100.123456789))
+... Convert 100.123456789 to float: 100.123456789.
+</code></pre>
+
+<p><strong>c - single character</strong> <em>(accepts integer or single character string). <a href="https://unicode-table.com/en/">Use this link for a unicode character lookup table</a></em></p>
+<p>Brief sample...</p>
+<table>
+<thead>
+<tr>
+<th>NUL</th>
+<th>SOH</th>
+<th>STX</th>
+<th>ETX</th>
+<th>EOT</th>
+<th>ENQ</th>
+<th>ACK</th>
+<th>BEL</th>
+<th>BS</th>
+<th>HT</th>
+<th>LF</th>
+<th>VT</th>
+<th>FF</th>
+<th>CR</th>
+<th>SO</th>
+<th>SI</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DLE</td>
+<td>DC1</td>
+<td>DC2</td>
+<td>DC3</td>
+<td>DC4</td>
+<td>NAK</td>
+<td>SYN</td>
+<td>ETB</td>
+<td>CAN</td>
+<td>EM</td>
+<td>SUB</td>
+<td>ESC</td>
+<td>FS</td>
+<td>GS</td>
+<td>RS</td>
+<td>US</td>
+</tr>
+<tr>
+<td></td>
+<td>!</td>
+<td>"</td>
+<td>#</td>
+<td>$</td>
+<td>%</td>
+<td>&amp;</td>
+<td>'</td>
+<td>(</td>
+<td>)</td>
+<td>*</td>
+<td>+</td>
+<td>,</td>
+<td>-</td>
+<td>.</td>
+<td>/</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>2</td>
+<td>3</td>
+<td>4</td>
+<td>5</td>
+<td>6</td>
+<td>7</td>
+<td>8</td>
+<td>9</td>
+<td>:</td>
+<td>;</td>
+<td>&lt;</td>
+<td>=</td>
+<td>&gt;</td>
+<td>?</td>
+</tr>
+<tr>
+<td>@</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+<td>J</td>
+<td>K</td>
+<td>L</td>
+<td>M</td>
+<td>N</td>
+<td>O</td>
+</tr>
+<tr>
+<td>P</td>
+<td>Q</td>
+<td>R</td>
+<td>S</td>
+<td>T</td>
+<td>U</td>
+<td>V</td>
+<td>W</td>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+<td>[</td>
+<td>\</td>
+<td>]</td>
+<td>^</td>
+<td>_</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>...</p>
+<pre><code class="python">#000
+&gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(16)])
+'\x00 \x01 \x02 \x03 \x04 \x05 \x06 \x07 \x08 \t \n \x0b \x0c \r \x0e \x0f'
+#001
+&gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(16,32)])
+'\x10 \x11 \x12 \x13 \x14 \x15 \x16 \x17 \x18 \x19 \x1a \x1b \x1c \x1d \x1e \x1f'
+#002
+&gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(32,48)])
+'  ! &quot; # $ % &amp; \' ( ) * + , - . /'
+#003
+&gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(48,64)])
+'0 1 2 3 4 5 6 7 8 9 : ; &lt; = &gt; ?'
+#004
+&gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(64,80)])
+'@ A B C D E F G H I J K L M N O'
+#005
+&gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(80,96)])
+'P Q R S T U V W X Y Z [ \\ ] ^ _'
+</code></pre>
+
+<p><strong>b - binary</strong></p>
+<pre><code class="python">&gt;&gt;&gt; print(&quot;{0:b}&quot;.format(0))
+0
+&gt;&gt;&gt; print(&quot;{0:b}&quot;.format(1))
+1
+&gt;&gt;&gt; print(&quot;{0:b}&quot;.format(2))
+10
+&gt;&gt;&gt; print(&quot;{0:b}&quot;.format(3))
+11
+&gt;&gt;&gt; print(&quot;{0:b}&quot;.format(100))
+1100100
+</code></pre>
+
+<p><strong>o - octal</strong></p>
+<pre><code class="python">&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(0))
+0
+&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8))
+10
+&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8*2))
+20
+&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8*3))
+30
+&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8*4))
+40
+&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8 ** 1))
+10
+&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8 ** 2))
+100
+&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8 ** 3))
+1000
+</code></pre>
+
+<p><strong>x\H - hex\HEX</strong></p>
+<pre><code class="python">print(&quot;{0:x}&quot;.format(0*16)) # 0
+print(&quot;{0:x}&quot;.format(1*16)) # 10
+print(&quot;{0:x}&quot;.format(2*16)) # 20
+print(&quot;{0:x}&quot;.format(16 ** 1)) # 10
+print(&quot;{0:x}&quot;.format(16 ** 2)) # 100
+print(&quot;{0:x}&quot;.format(16 ** 3)) # 1000
+print(&quot;{0:x}&quot;.format(10)) # a
+print(&quot;{0:X}&quot;.format(10)) # A
+print(&quot;{0:x}&quot;.format(15)) # f
+print(&quot;{0:X}&quot;.format(15)) # F
+</code></pre>
+
+<p><strong>e - exponent</strong></p>
+<pre><code class="python">print(&quot;{0:e}&quot;.format(10))   # 1.000000e+01 
+print(&quot;{0:e}&quot;.format(100))  # 1.000000e+02
+print(&quot;{0:e}&quot;.format(1000)) # 1.000000e+03 
+</code></pre>
+
+<h2 id="strfind">str.find()</h2>
+<p><strong>Use a substring and start-end range to identify where a substring resides in a larger string</strong></p>
+<p><em>str.find(sub[, start[, end]])</em></p>
+<pre><code class="python">s = 'ABCBCBCBCBC'
+
+# str.find() will return the index found or -1.
+
+# with only a start value the rest of the string is searched
+print(s.find('BC', 0)) # &gt;&gt;&gt; 1
+print(s.find('BC', 1)) # &gt;&gt;&gt; 1
+print(s.find('BC', 2)) # &gt;&gt;&gt; 3
+print(s.find('BC', 3)) # &gt;&gt;&gt; 3
+print(s.find('BC', 4)) # &gt;&gt;&gt; 5
+print(s.find('BC', 5)) # &gt;&gt;&gt; 5
+print(s.find('BC', 6)) # &gt;&gt;&gt; 7
+print(s.find('BC', 7)) # &gt;&gt;&gt; 7
+print(s.find('BC', 8)) # &gt;&gt;&gt; 9
+print(s.find('BC', 9)) # &gt;&gt;&gt; 9
+print(s.find('BC', 10)) # &gt;&gt;&gt; -1
+
+# with start and end, the substring must be within the range
+print(s.find('BC', 0,1)) # &gt;&gt;&gt; -1
+print(s.find('BC', 0,2)) # &gt;&gt;&gt; -1
+print(s.find('BC', 0,3)) # &gt;&gt;&gt; 1
+</code></pre></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../../..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../../../js/base.js" defer></script>
+        <script src="../../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
