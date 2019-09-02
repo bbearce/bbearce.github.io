@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>args, kwargs - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../zip/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../zip/" class="btn btn-xs btn-link">
+        zip()
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../pass_by_reference/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../pass_by_reference/" class="btn btn-xs btn-link">
+        P.B. Reference
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <p>Passing unknown amounts of inputs to a function</p>
+<p><code>*args</code> - any number of inputs of any data type. They will be referenced in order with indicies being of the form args[0]...etc.</p>
+<p><code>**kwargs</code> - The same as above but with key work arguments, so you would be able to access elements by key name. kwargs</p>
+<p>The * is important as it signifies if args or kwargs are being used. Otherwise this happens:</p>
+<pre><code class="python">&gt;&gt;&gt; def prac(*args):
+...     for i in args:
+...         print(&quot;This arg is :{}&quot;.format(i))
+... 
+&gt;&gt;&gt; prac([1,2,3,4,5])
+This arg is :[1, 2, 3, 4, 5] # ooooops!
+
+&gt;&gt;&gt; prac(*[1,2,3,4,5])
+This arg is :1
+This arg is :2
+This arg is :3
+This arg is :4
+This arg is :5
+
+&gt;&gt;&gt; def prac(**kwargs):
+...     for k in kwargs.keys():
+...         print(kwargs[k])
+... 
+&gt;&gt;&gt; prac(**{'A':1,'B':2})
+1
+2
+</code></pre>
+
+<p>Also note iterables are acceptible inputs:</p>
+<pre><code class="python">&gt;&gt;&gt; prac(*[1,2,3,4,5])
+This arg is :1
+This arg is :2
+This arg is :3
+This arg is :4
+This arg is :5
+&gt;&gt;&gt; prac(*(1,2,3,4,5))
+This arg is :1
+This arg is :2
+This arg is :3
+This arg is :4
+This arg is :5
+&gt;&gt;&gt; prac(*{1,2,3,4,5})
+This arg is :1
+This arg is :2
+This arg is :3
+This arg is :4
+This arg is :5
+&gt;&gt;&gt; prac(*range(1,6))
+This arg is :1
+This arg is :2
+This arg is :3
+This arg is :4
+This arg is :5
+Below are additional examples
+
+def f(*args,**kwargs): print(args, kwargs)
+
+l = [1,2,3]
+t = (4,5,6)
+d = {'a':7,'b':8,'c':9}
+
+f()                         # () {}
+f(1,2,3)                    # (1, 2, 3) {}
+f(1,2,3,&quot;groovy&quot;)           # (1, 2, 3, 'groovy') {}
+f(a=1,b=2,c=3)              # () {'a': 1, 'c': 3, 'b': 2}
+f(a=1,b=2,c=3,zzz=&quot;hi&quot;)     # () {'a': 1, 'c': 3, 'b': 2, 'zzz': 'hi'}
+f(1,2,3,a=1,b=2,c=3)        # (1, 2, 3) {'a': 1, 'c': 3, 'b': 2}
+
+f(*l,**d)                   # (1, 2, 3) {'a': 7, 'c': 9, 'b': 8}
+f(*t,**d)                   # (4, 5, 6) {'a': 7, 'c': 9, 'b': 8}
+f(1,2,*t)                   # (1, 2, 4, 5, 6) {}
+f(q=&quot;winning&quot;,**d)          # () {'a': 7, 'q': 'winning', 'c': 9, 'b': 8}
+f(1,2,*t,q=&quot;winning&quot;,**d)   # (1, 2, 4, 5, 6) {'a': 7, 'q': 'winning', 'c': 9, 'b': 8}
+
+def f2(arg1,arg2,*args,**kwargs): print(arg1,arg2, args, kwargs)
+
+f2(1,2,3)                       # 1 2 (3,) {}
+f2(1,2,3,&quot;groovy&quot;)              # 1 2 (3, 'groovy') {}
+f2(arg1=1,arg2=2,c=3)           # 1 2 () {'c': 3}
+f2(arg1=1,arg2=2,c=3,zzz=&quot;hi&quot;)  # 1 2 () {'c': 3, 'zzz': 'hi'}
+f2(1,2,3,a=1,b=2,c=3)           # 1 2 (3,) {'a': 1, 'c': 3, 'b': 2}
+
+f2(*l,**d)                   # 1 2 (3,) {'a': 7, 'c': 9, 'b': 8}
+f2(*t,**d)                   # 4 5 (6,) {'a': 7, 'c': 9, 'b': 8}
+f2(1,2,*t)                   # 1 2 (4, 5, 6) {}
+f2(1,1,q=&quot;winning&quot;,**d)      # 1 1 () {'a': 7, 'q': 'winning', 'c': 9, 'b': 8}
+f2(1,2,*t,q=&quot;winning&quot;,**d)   # 1 2 (4, 5, 6) {'a': 7, 'q': 'winning', 'c': 9, 'b': 8} 
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../zip/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../zip/" class="btn btn-xs btn-link">
+        zip()
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../pass_by_reference/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../pass_by_reference/" class="btn btn-xs btn-link">
+        P.B. Reference
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

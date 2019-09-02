@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>map() - Ben's Code Journal</title>
+    <title>P.B. Reference - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -59,20 +59,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../input/" class="btn btn-xs btn-default pull-right">
+      <a href="../args_kwargs/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../input/" class="btn btn-xs btn-link">
-        input()
+      <a href="../args_kwargs/" class="btn btn-xs btn-link">
+        args, kwargs
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../.." class="btn btn-xs btn-default pull-left">
+      <a href="../sets/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../.." class="btn btn-xs btn-link">
-        Home
+        Previous</a><a href="../sets/" class="btn btn-xs btn-link">
+        Sets
       </a>
     </div>
     
@@ -80,20 +80,39 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <p>map() allows us to apply a function to a list of items</p>
-<pre><code class="python"># Simple Example
-&gt;&gt;&gt; list(map(float, ['1.0', '2.0']))
-[1.0, 2.0]
+    <p>Pass By Reference</p>
+<p>Python will pass values between objects as references to their memory position. Addresses not values are passed...except for primitives.. An example:</p>
+<pre><code class="python">def f(x,l=[]):
+    for i in range(x):
+        l.append(i*i)
+    print(l) 
 
-# Turn this:
-items = [1, 2, 3, 4, 5]
-squared = []
-for i in items:
-    squared.append(i**2)
+f(2) # [0, 1]
+f(3,[3,2,1]) # [3, 2, 1, 0, 1, 4]
+Here python treats the variable l as a fresh list because a fresh list or more accurately, it's location in memory was passed. See python created [3, 2, 1] separately and passed it's location to the function. Watch what happends when we call the function again with no list.
 
-# Into this with a lambda function:
-items = [1, 2, 3, 4, 5]
-squared = list(map(lambda x: x**2, items))
+f(3) # [0, 1, 0, 1, 4]
+why not [0,1,4]?. When the function was first called we created the default list &quot;l=[]&quot;, and according to the function's directions, by default this function refers to that list's memory position. Check out the following examples of pythons memory usage for this example:
+
+l_mem = []
+
+l = l_mem           # the first call
+for i in range(2):
+    l.append(i*i)
+
+print(l)            # [0, 1]
+
+l = [3,2,1]         # the second call
+for i in range(3):
+    l.append(i*i)
+
+print(l)            # [3, 2, 1, 0, 1, 4]
+
+l = l_mem           # the third call
+for i in range(3):
+    l.append(i*i)
+
+print(l)            # [0, 1, 0, 1, 4]
 </code></pre>
 
   <br>
@@ -107,20 +126,20 @@ squared = list(map(lambda x: x**2, items))
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../input/" class="btn btn-xs btn-default pull-right">
+      <a href="../args_kwargs/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../input/" class="btn btn-xs btn-link">
-        input()
+      <a href="../args_kwargs/" class="btn btn-xs btn-link">
+        args, kwargs
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../.." class="btn btn-xs btn-default pull-left">
+      <a href="../sets/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../.." class="btn btn-xs btn-link">
-        Home
+        Previous</a><a href="../sets/" class="btn btn-xs btn-link">
+        Sets
       </a>
     </div>
     

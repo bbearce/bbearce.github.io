@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>map() - Ben's Code Journal</title>
+    <title>input() - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -59,20 +59,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../input/" class="btn btn-xs btn-default pull-right">
+      <a href="../sets/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../input/" class="btn btn-xs btn-link">
-        input()
+      <a href="../sets/" class="btn btn-xs btn-link">
+        Sets
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../.." class="btn btn-xs btn-default pull-left">
+      <a href="../map/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../.." class="btn btn-xs btn-link">
-        Home
+        Previous</a><a href="../map/" class="btn btn-xs btn-link">
+        map()
       </a>
     </div>
     
@@ -80,20 +80,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <p>map() allows us to apply a function to a list of items</p>
-<pre><code class="python"># Simple Example
-&gt;&gt;&gt; list(map(float, ['1.0', '2.0']))
-[1.0, 2.0]
+    <p>Here we show how to accept user input</p>
+<pre><code class="python">print('Enter your name:')
+x = input()
+print('Hello, ' + x)
 
-# Turn this:
-items = [1, 2, 3, 4, 5]
-squared = []
-for i in items:
-    squared.append(i**2)
-
-# Into this with a lambda function:
-items = [1, 2, 3, 4, 5]
-squared = list(map(lambda x: x**2, items))
+&gt;&gt;&gt; Enter your name:
+Ben
+Hello, Ben
 </code></pre>
 
   <br>
@@ -107,20 +101,20 @@ squared = list(map(lambda x: x**2, items))
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../input/" class="btn btn-xs btn-default pull-right">
+      <a href="../sets/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../input/" class="btn btn-xs btn-link">
-        input()
+      <a href="../sets/" class="btn btn-xs btn-link">
+        Sets
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../.." class="btn btn-xs btn-default pull-left">
+      <a href="../map/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../.." class="btn btn-xs btn-link">
-        Home
+        Previous</a><a href="../map/" class="btn btn-xs btn-link">
+        map()
       </a>
     </div>
     

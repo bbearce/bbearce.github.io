@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Decorators - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Simple Example:", url: "#_top", children: [
+          ]},
+          {title: "Tutorial:", url: "#tutorial", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="../../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../classes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../classes/" class="btn btn-xs btn-link">
+        Classes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../base_modules/collections/default_dict/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../base_modules/collections/default_dict/" class="btn btn-xs btn-link">
+        default_dict()
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <p>@Add_This_Functionality_To_Any_Function!</p>
+<h1 id="simple-example">Simple Example:</h1>
+<pre><code class="python">def my_decorator(original_function):
+    def new_function(*args,**kwargs):
+        print(&quot;you did it!&quot;)
+        of = original_function(*args,**kwargs)
+        return of
+    return new_function
+
+@my_decorator
+def my_func1(stuff):
+    print(&quot;do things&quot;)
+
+@my_decorator
+def my_func2(stuff):
+    print(&quot;do things&quot;)
+
+@my_decorator
+def my_func3(stuff):
+    print(&quot;do things&quot;)
+
+
+my_func1(1);my_func2(1);my_func3(1);
+</code></pre>
+
+<h1 id="tutorial">Tutorial:</h1>
+<p>We need to discuss global variables and function closure</p>
+<p>[1] functions:</p>
+<pre><code class="python">def foo():
+    return 1;
+</code></pre>
+
+<p>[2] scope</p>
+<pre><code class="python">a_string = 'this is a string'
+def foo():
+    print(locals())
+foo() # {}
+print(globals()) # {..., 'a_string': 'this is a string'}
+</code></pre>
+
+<p>[3] varible resolution rules</p>
+<p>Local variables with the same name as global ones don't modify the global one.</p>
+<p>[4] variable lifetime</p>
+<pre><code class="python">def foo():
+    x = 1;
+
+foo() # NameError: name 'x' is not defined
+</code></pre>
+
+<p>[5] function arguments and parameters</p>
+<pre><code class="python">def foo(x):
+    print(locals())
+foo(1) # {'x': 1}
+
+def foo(x, y=0): # remember if no default it's mandatory
+    return x - y
+foo()
+# Traceback (most recent call last):
+#   File &quot;&quot;, line 1, in 
+# TypeError: foo() missing 1 required positional argument: 'x'
+</code></pre>
+
+<p>[6] Nested Functions</p>
+<pre><code class="python">def outer():
+    x = 1
+    def inner():
+        print(x)
+    inner()
+outer() # 1
+</code></pre>
+
+<p>[7] Functions are first class objectsin python</p>
+<pre><code class="python"># all objects in Python inherit from a common baseclass
+issubclass(int, object) # True
+
+def foo():
+    pass
+foo.__class__ # &lt;type 'function'&gt;
+issubclass(foo.__class__, object) # True
+
+#..so what?
+def add(x,y):
+    return x + y
+def sub(x,y):
+    return x - y
+def apply(func, x, y):
+    return func(x, y)
+
+apply(add, 2, 1) # 3
+apply(sub, 2, 1) # 1
+
+#.. closure lead in
+
+def outer():
+    def inner():
+        print('this is inner')
+
+    return inner # the function not what it returns
+
+foo = outer()
+foo # .inner at 0x10be011e0&gt;
+foo() # 'this is inner'
+</code></pre>
+
+<p>[8] Closures</p>
+<pre><code class="python">def outer():
+    x = 1
+    def inner():
+        print(x)
+    return inner # the function not what it returns
+foo = outer()
+foo.__closure__ # (,)
+
+# aside: cell objects are used to store the free variables of a closure
+# without closures x would have not existed as after the call to outer x is gone based on variable life time.
+# inner functions defined in non-global scope remember what their enclosing namespaces looked like at definition time.
+foo() # 1
+
+# let's tweak it
+def outer(x):
+    def inner():
+        print(x)
+    return inner 
+
+print1 = outer(1)
+print2 = outer(2)
+
+print1() # 1
+print2() # 2
+</code></pre>
+
+<p>[9] Decorators</p>
+<pre><code class="python">def outer(some_func):
+    def inner():
+        print('before some_func')
+        ret = some_func() # 1
+        return ret + 1
+    return inner
+
+def foo():
+    return 1
+
+decorated = outer(foo)
+decorated() # we've added functionality to foo()!
+
+# what if we did this
+foo = outer(foo)
+foo()
+# before some_func
+# 2
+
+# Let's write a more useful decorator
+class Coordinate(object):
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    def __repr__(self):
+            return &quot;Coord: &quot; + str(self.__dict__)
+
+def add(a, b):
+    return Coordinate(a.x + b.x, a.y + b.y)
+def sub(a, b):
+    return Coordinate(a.x - b.x, a.y - b.y)
+
+one = Coordinate(100, 200)
+two = Coordinate(300, 200)
+add(one, two) # Coord: {'y': 400, 'x': 400}
+
+# add this instance
+three = Coordinate(-100, -100)
+
+def wrapper(func):
+    def checker(a, b): # 1
+        if a.x &lt; 0 or a.y &lt; 0:
+            a = Coordinate(a.x if a.x &gt; 0 else 0, a.y if a.y &gt; 0 else 0)
+        if b.x &lt; 0 or b.y &lt; 0:
+            b = Coordinate(b.x if b.x &gt; 0 else 0, b.y if b.y &gt; 0 else 0)
+        ret = func(a, b)
+        if ret.x &lt; 0 or ret.y &lt; 0:
+            ret = Coordinate(ret.x if ret.x &gt; 0 else 0, ret.y if ret.y &gt; 0 else 0)
+        return ret
+    return checker
+
+add = wrapper(add)
+sub = wrapper(sub)
+
+sub(one, two)
+add(one, three)
+</code></pre>
+
+<p>[10] the @ symbol</p>
+<pre><code class="python"># so instead of wrapper(add)\wrapper(sub), use @wrapper
+@wrapper
+def add(a, b):
+    return Coordinate(a.x + b.x, a.y + b.y)
+
+@wrapper
+def sub(a, b):
+    return Coordinate(a.x - b.x, a.y - b.y)
+</code></pre>
+
+<p>[11] <em>args and </em>*kwargs</p>
+<pre><code class="python">def one(*args):
+    print(args)
+
+one() # ()
+one(1,2,3) # (1, 2, 3)
+
+def two(x, y, *args):
+    print(x, y, args)
+
+two('a','b','c')
+
+# Reminder
+# l = (1,2,3)
+# one(l[0], l[1], l[2]) # (1, 2, 3)
+# one(*l) # (1, 2, 3)
+
+def foo(**kwargs):
+    print(kwargs)
+
+foo()
+foo(x=1, y=2)
+</code></pre>
+
+<p>[12] More generic decorators</p>
+<pre><code class="python">def logger(func):
+    def inner(*args, **kwargs):
+        print('Arguments were: {}, {}'.format(args,kwargs))
+        return func(*args, **kwargs)
+    return inner
+
+@logger
+def foo1(x,y=1):
+    return x * y
+
+@logger
+def foo2():
+    return 2
+
+foo1(5,4)
+# Arguments were: (5, 4), {}
+# 20
+foo2()
+# Arguments were: (), {}
+# 2
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../classes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../classes/" class="btn btn-xs btn-link">
+        Classes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../base_modules/collections/default_dict/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../base_modules/collections/default_dict/" class="btn btn-xs btn-link">
+        default_dict()
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
