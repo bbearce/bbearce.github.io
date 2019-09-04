@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../../img/favicon.ico">
-        <title>Bash - Ben's Code Journal</title>
+        <title>Installs - Ben's Code Journal</title>
         <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
         <link href="../../css/font-awesome.min.css" rel="stylesheet">
         <link href="../../css/base.css" rel="stylesheet">
@@ -50,40 +50,44 @@
                             <li >
                                 <a href="../..">Home</a>
                             </li>
-                            <li class="dropdown">
+                            <li class="dropdown active">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Python <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
+                                    
+<li class="active">
+    <a href="./">Installs</a>
+</li>
                                     
   <li class="dropdown-submenu">
     <a href="#">Useful</a>
     <ul class="dropdown-menu">
             
 <li >
-    <a href="../../python/useful/Map/">map()</a>
+    <a href="../useful/Map/">map()</a>
 </li>
             
 <li >
-    <a href="../../python/useful/Input/">input()</a>
+    <a href="../useful/Input/">input()</a>
 </li>
             
 <li >
-    <a href="../../python/useful/Sets/">Sets</a>
+    <a href="../useful/Sets/">Sets</a>
 </li>
             
 <li >
-    <a href="../../python/useful/Pass By Reference/">P.B. Reference</a>
+    <a href="../useful/Pass By Reference/">P.B. Reference</a>
 </li>
             
 <li >
-    <a href="../../python/useful/Args and Kwargs/">args, kwargs</a>
+    <a href="../useful/Args and Kwargs/">args, kwargs</a>
 </li>
             
 <li >
-    <a href="../../python/useful/Zip/">zip()</a>
+    <a href="../useful/Zip/">zip()</a>
 </li>
             
 <li >
-    <a href="../../python/useful/Sorted/">sorted()</a>
+    <a href="../useful/Sorted/">sorted()</a>
 </li>
     </ul>
   </li>
@@ -97,11 +101,11 @@
     <ul class="dropdown-menu">
             
 <li >
-    <a href="../../python/base_modules/collections/Counter/">Counter</a>
+    <a href="../base_modules/collections/Counter/">Counter</a>
 </li>
             
 <li >
-    <a href="../../python/base_modules/collections/Default Dict/">default_dict()</a>
+    <a href="../base_modules/collections/Default Dict/">default_dict()</a>
 </li>
     </ul>
   </li>
@@ -113,21 +117,21 @@
     <ul class="dropdown-menu">
             
 <li >
-    <a href="../../python/advanced/Decorators/">Decorators</a>
+    <a href="../advanced/Decorators/">Decorators</a>
 </li>
             
 <li >
-    <a href="../../python/advanced/Classes/">Classes</a>
+    <a href="../advanced/Classes/">Classes</a>
 </li>
             
 <li >
-    <a href="../../python/advanced/Generators/">Generators</a>
+    <a href="../advanced/Generators/">Generators</a>
 </li>
     </ul>
   </li>
                                     
 <li >
-    <a href="../../python/strings/Strings/">Strings</a>
+    <a href="../strings/Strings/">Strings</a>
 </li>
                                 </ul>
                             </li>
@@ -151,8 +155,8 @@
                             <li >
                                 <a href="../../javascript/Javascript/">Javascript</a>
                             </li>
-                            <li class="active">
-                                <a href="./">Bash</a>
+                            <li >
+                                <a href="../../bash/tar_files/">Bash</a>
                             </li>
                             <li >
                                 <a href="../../Quick Notes/">MKDocs</a>
@@ -166,12 +170,12 @@
                             </a>
                         </li>
                             <li >
-                                <a rel="next" href="../../javascript/Javascript/">
+                                <a rel="next" href="../..">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li >
-                                <a rel="prev" href="../../Quick Notes/">
+                                <a rel="prev" href="../useful/Map/">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -183,13 +187,63 @@
         <div class="container">
                 <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
     <ul class="nav bs-sidenav">
-        <li class="main active"><a href="#bash">Bash</a></li>
+        <li class="main active"><a href="#installs">Installs</a></li>
+            <li><a href="#installing">Installing</a></li>
+            <li><a href="#build-instructions">Build Instructions</a></li>
+            <li><a href="#installing-multiple-versions">Installing multiple versions</a></li>
     </ul>
 </div></div>
                 <div class="col-md-9" role="main">
 
-<h1 id="bash">Bash</h1>
-<pre><code class="bash">echo hello world
+<h1 id="installs">Installs</h1>
+<h2 id="installing">Installing</h2>
+<p>You an use <code>wget</code> to grab the latest like so:</p>
+<pre><code class="bash">cd /usr/src
+sudo wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
+</code></pre>
+
+<p>You can also go to https://www.python.org/ and download it. This gave me a Python-3.7.4.tar.xz file. To unzip it use:</p>
+<pre><code class="bash">$ tar -xf Python-3.7.4.tar.xz 
+$ ls -la
+drwxr-xr-x 18 bbearce bbearce     4096 Jul  8 14:31 Python-3.7.4
+-rw-rw-r--  1 bbearce bbearce 17131432 Sep  4 11:09 Python-3.7.4.tar.xz
+</code></pre>
+
+<p><em>To see other unzipping techniques for different file types try <a href="/bash/tar_files">here</a></em></p>
+<p>Change into that new directory and use <code>make</code> to install Python:</p>
+<pre><code class="bash">$ cd Python-3.7.4
+</code></pre>
+
+<p><em>Note: Notice the README.rst</em></p>
+<pre><code class="bash">$ vi README.rst
+</code></pre>
+
+<p>...</p>
+<h2 id="build-instructions">Build Instructions</h2>
+<p>On Unix, Linux, BSD, macOS, and Cygwin::</p>
+<pre><code>./configure
+make
+make test
+sudo make install
+</code></pre>
+<p>This will install Python as <code>python3</code>.</p>
+<p>...</p>
+<h2 id="installing-multiple-versions">Installing multiple versions</h2>
+<p>On Unix and Mac systems if you intend to install multiple versions of Python
+using the same installation prefix (<code>--prefix</code> argument to the configure
+script) you must take care that your primary python executable is not
+overwritten by the installation of a different version.  All files and
+directories installed using <code>make altinstall</code> contain the major and minor
+version and can thus live side-by-side.  <code>make install</code> also creates
+<code>${prefix}/bin/python3</code> which refers to <code>${prefix}/bin/pythonX.Y</code>.  If you
+intend to install multiple versions using the same prefix you must decide which
+version (if any) is your "primary" version.  Install that version using <code>make
+install</code>.  Install all other versions using <code>make altinstall</code>.</p>
+<p>To continue run <code>make</code>:</p>
+<pre><code class="bash">$ ./configure
+$ make
+$ make test
+$ sudo make altinstall
 </code></pre></div>
         </div>
 
