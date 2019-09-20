@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Python - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Make a Spinning Wheel", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../MKDocs/Quick Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../MKDocs/Quick Notes/" class="btn btn-xs btn-link">
+        MKDocs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../internet_of_things/General Notes/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../internet_of_things/General Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="make-a-spinning-wheel">Make a Spinning Wheel</h1>
+<p>To start we need picture like states. We can make these with strings.</p>
+<blockquote>
+<p>Import what you need</p>
+</blockquote>
+<pre><code class="python">import os
+import sys
+import time
+import math
+</code></pre>
+
+<pre><code class="python">state_1 = &quot;&quot;&quot;
+                    -|-
+                     |
+      /              |              \\
+                     |
+                     |
+                     |
+                     |
+                     |
+|                    |                    |
+                     |
+                     |
+                     |
+                     |
+     \\              |             /
+                     |
+                     |
+                    -|-
+&quot;&quot;&quot;
+</code></pre>
+
+<pre><code class="python">state_2 = &quot;&quot;&quot;
+
+                           /
+                          /
+                         /
+                        /
+                       /
+                      /
+                     /
+                    /
+                   /
+                  /
+                 /
+                /
+               /
+              /
+
+&quot;&quot;&quot; 
+</code></pre>
+
+<pre><code class="python">state_3 = &quot;&quot;&quot;
+
+
+
+
+
+
+                              ---------------
+               ---------------
+---------------
+
+
+
+
+
+
+
+&quot;&quot;&quot;
+</code></pre>
+
+<pre><code class="python">state_4 = &quot;&quot;&quot;
+                    -
+
+
+      /                            \\
+
+
+
+
+
+----------------------------------------
+
+
+
+
+     \\                           /
+
+
+
+                     -
+&quot;&quot;&quot;
+</code></pre>
+
+<pre><code class="python">state_5 = &quot;&quot;&quot;
+
+
+
+
+
+
+---------------
+               ---------------
+                              ---------------
+
+
+
+
+
+
+
+&quot;&quot;&quot;
+</code></pre>
+
+<pre><code class="python">state_6 = &quot;&quot;&quot;
+
+             \\
+              \\
+               \\
+                \\
+                 \\
+                  \\
+                   \\
+                    \\
+                     \\
+                      \\
+                       \\
+                        \\
+                         \\
+                          \\
+
+&quot;&quot;&quot; 
+</code></pre>
+
+<p>Now define a generator to access the wheel states infintely:</p>
+<pre><code class="python">def spinning_cursor():
+    while True:
+        for cursor in [state_1,state_2,state_3,state_4,state_5,state_6]:
+            yield cursor
+
+</code></pre>
+
+<p>Next wheel size and set placeholders to keep track of the <em>elapsed time</em> and <em>velocity</em>:</p>
+<pre><code class="python">radius = 1 # ft
+
+spinner = spinning_cursor()
+elapsed_time = 0
+velocity = 0
+</code></pre>
+
+<p>Choose the speed in terms of rotations per second:</p>
+<pre><code class="python">rotations_per_second = 3
+rotations_desired = 2
+</code></pre>
+
+<p>"DJ spin that shit!"
+- KS -</p>
+<pre><code class="python">for _ in range(6*rotations_desired): 
+    # there are 6 states and we need all of them per rotation
+    state = next(spinner) # call the next state
+    if state == state_1 and elapsed_time != 0:
+        # Once we've done a full rotation we should have enough info to calculate the velocity
+        velocity = 2*math.pi*radius / elapsed_time # ft/s 
+
+    # In 1 second we do 6 states * rotations_per_second.
+    # We can divide 1 second into these partitions to find out 
+    # how much time has passed between states.
+    elapsed_time += 1.0 / (6*rotations_per_second) # seconds
+
+
+    sys.stdout.write(state) # see the state
+    sys.stdout.flush() # clear screen
+    time.sleep(1.0/(6*rotations_per_second)) # control the rate of execution
+    os.system('clear') # clear the screen of any states
+
+os.system('clear') # clear the screen of any states 
+
+print(&quot;velocity: {} in miles/hour&quot;.format(velocity/5280*60*60))
+# velocity is currently in ft/s.
+
+# 5280 ft in a mile 
+# 60 seconds in a min
+# 60 min in an hour
+
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../MKDocs/Quick Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../MKDocs/Quick Notes/" class="btn btn-xs btn-link">
+        MKDocs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../internet_of_things/General Notes/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../internet_of_things/General Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
