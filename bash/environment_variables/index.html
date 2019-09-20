@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Screen - Ben's Code Journal</title>
+    <title>Environment Variables - Ben's Code Journal</title>
     <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../css/base.css" rel="stylesheet">
@@ -33,7 +33,8 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "Screen", url: "#_top", children: [
+          {title: "Environment Variables", url: "#_top", children: [
+              {title: "$PATH", url: "#path" },
           ]},
         ];
 
@@ -60,20 +61,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../ssh/" class="btn btn-xs btn-default pull-right">
+      <a href="../vi/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../ssh/" class="btn btn-xs btn-link">
-        SSH
+      <a href="../vi/" class="btn btn-xs btn-link">
+        VI
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../zip_and_unzip/" class="btn btn-xs btn-default pull-left">
+      <a href="../ssh/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../zip_and_unzip/" class="btn btn-xs btn-link">
-        Zip and Unzip
+        Previous</a><a href="../ssh/" class="btn btn-xs btn-link">
+        SSH
       </a>
     </div>
     
@@ -81,7 +82,26 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="screen">Screen</h1>
+    <h1 id="environment-variables">Environment Variables</h1>
+<h2 id="path">$PATH</h2>
+<blockquote>
+<p>Courtesy of <a href="https://smallbusiness.chron.com/modify-path-ubuntu-52030.html">smallbusiness.chron.com</a></p>
+</blockquote>
+<p>Ubuntu Linux, as well as all other Linux distributions, uses the PATH variable to tell the operating system where to look for executable commands. Typically these commands are located in the /usr/sbin, usr/bin and /sbin, and /bin directories. Other command directories can be added to this list of directories by adding them to the PATH variable. You can choose to make a user-specified directory available for a single user or the entire system, depending on your company's requirements.</p>
+<h3 id="add-to-path">Add to Path</h3>
+<p>Add a path to the <code>PATH</code> variable:</p>
+<pre><code class="bash">export PATH=$PATH:/my/custom/path
+</code></pre>
+
+<p>This appends your new path to the old path and overwrites PATH.</p>
+<h3 id="remove-from-path">Remove from Path</h3>
+<p>Execute <code>echo $PATH</code> to see full path variable and copy it to clipboard. Then remove a specific path between colons <code>...:&lt;some path&gt;:&lt;path to be removed&gt;:...</code> and paste that into this command:</p>
+<pre><code class="bash">export PATH=&lt;new full path minus the path you do not want&gt;
+</code></pre>
+
+<blockquote>
+<p>Note thatwe aren't appending to <code>$PATH</code> this time, but overwriting it.</p>
+</blockquote>
 
   <br>
     
@@ -94,20 +114,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../ssh/" class="btn btn-xs btn-default pull-right">
+      <a href="../vi/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../ssh/" class="btn btn-xs btn-link">
-        SSH
+      <a href="../vi/" class="btn btn-xs btn-link">
+        VI
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../zip_and_unzip/" class="btn btn-xs btn-default pull-left">
+      <a href="../ssh/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../zip_and_unzip/" class="btn btn-xs btn-link">
-        Zip and Unzip
+        Previous</a><a href="../ssh/" class="btn btn-xs btn-link">
+        SSH
       </a>
     </div>
     
