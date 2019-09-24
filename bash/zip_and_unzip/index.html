@@ -215,16 +215,61 @@ directory  something.txt  wheel.py
 </code></pre>
 
 <h2 id="tar-files">Tar Files</h2>
-<p>When downloading 3DSlicer you get a *.tar.gz file. This command installs it. </p>
-<pre><code class="bash">tar zxvf Slicer-4.8.1-linux-amd64.tar.gz 
+<h3 id="tar">.tar</h3>
+<p>The <code>tar</code> command is used to create tar archives by converting a group of files into an archive. It supports a vast range of compression programs such as <code>gzip</code>, <code>bzip2</code>, <code>lzip</code>, <code>lzma</code>, <code>lzop</code>, <code>xz</code> and <code>compress</code>. Tar was originally designed for creating archives to store files on magnetic tape which is why it has its name “<strong>T</strong>ape <strong>AR</strong>chive”.</p>
+<h4 id="create-a-tar">Create a .tar</h4>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ tar -cvf test.tar test.txt
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar  test.txt
 </code></pre>
 
-<p>FYI: (<a href="https://stackoverflow.com/questions/21929223/what-does-zxvf-mean-in-tar-zxvf-filename">Link</a>) </p>
-<p>z means (un)z̲ip.<br />
-x means ex̲tract files from the archive.<br />
-v means print the filenames v̲erbosely.<br />
-f means the following argument is a f̱ilename.  </p>
-<p>...https://askubuntu.com/questions/25961/how-do-i-install-a-tar-gz-or-tar-bz2-file</p>
+<blockquote>
+<p>Here <code>-cvf</code> means <em>c: create; v: verbose; f: use archive file or device (we can and did specify a filename to use)</em>. Keep in mind we didn't use the <code>-z</code> flag which would make a <code>gzip</code>.</p>
+</blockquote>
+<h3 id="targz">.tar.gz</h3>
+<blockquote>
+<p><code>.tar.gz</code> files are just files that have been zipped with -z to make a gzip.</p>
+</blockquote>
+<p>Let's redo the above example with <code>-z</code>:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ tar -cvzf test.tar test.txt
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar  test.txt
+</code></pre>
+
+<blockquote>
+<p>Note that the archive name <code>test.tar</code> is a <code>.tar.gz</code> but you have to specify that explicitly. So a canonical way of diong this is: <code>tar -cvzf test.tar.gz test.txt</code>.
+Also the [-] is optional, so <code>tar cvzf test.tar.gz test.txt</code> would work too.</p>
+</blockquote>
+<p>We can see that the .tar.gz is smaller with <code>du</code></p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ du -BK ./*
+20K     ./test.tar
+4K      ./test.tar.gz
+12K     ./test.txt
+
+</code></pre>
+
+<h4 id="unzip-a-tar">Unzip a .tar</h4>
+<p>We need the <code>-x</code> option:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar
+bbearce@bbearce-XPS-15-9560:~/Desktop$ tar -xvf test.tar
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar  test.txt
+
+</code></pre>
+
+<p>When downloading 3DSlicer you get a *.tar.gz file. This command installs it.</p>
+<pre><code class="bash">tar zxvf Slicer-4.8.1-linux-amd64.tar.gz
+</code></pre>
+
+<p>FYI: (<a href="https://stackoverflow.com/questions/21929223/what-does-zxvf-mean-in-tar-zxvf-filename">Link</a>)</p>
 
   <br>
     
