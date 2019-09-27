@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Class Quiz - Ben's Code Journal</title>
+    <title>Print Directory - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,7 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "Class Quiz!", url: "#_top", children: [
+          {title: "Print Directory", url: "#_top", children: [
           ]},
         ];
 
@@ -60,20 +60,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../print_directory/" class="btn btn-xs btn-default pull-right">
+      <a href="../crossing_rects/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../print_directory/" class="btn btn-xs btn-link">
-        Print Directory
+      <a href="../crossing_rects/" class="btn btn-xs btn-link">
+        Crossing Rects
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../swap_case/" class="btn btn-xs btn-default pull-left">
+      <a href="../class_quiz/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../swap_case/" class="btn btn-xs btn-link">
-        sWAP cASE
+        Previous</a><a href="../class_quiz/" class="btn btn-xs btn-link">
+        Class Quiz
       </a>
     </div>
     
@@ -81,104 +81,21 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="class-quiz">Class Quiz!</h1>
-<p>Consider the following code, what will it output?</p>
-<pre><code class="python">class A(object):
-    def go(self):
-        print(&quot;go A go!&quot;)
-    def stop(self):
-        print(&quot;stop A stop!&quot;)
-    def pause(self):
-        raise Exception(&quot;Not Implemented&quot;)
-
-class B(A):
-    def go(self):
-        super(B, self).go()
-        print(&quot;go B go!&quot;)
-
-class C(A):
-    def go(self):
-        super(C, self).go()
-        print(&quot;go C go!&quot;)
-    def stop(self):
-        super(C, self).stop()
-        print(&quot;stop C stop!&quot;)
-
-class D(B,C):
-    def go(self):
-        super(D, self).go()
-        print(&quot;go D go!&quot;)
-    def stop(self):
-        super(D, self).stop()
-        print(&quot;stop D stop!&quot;)
-    def pause(self):
-        print(&quot;wait D wait!&quot;)
-
-class E(B,C): pass
-
-a = A()
-b = B()
-c = C()
-d = D()
-e = E()
-
-# specify output from here onwards
-
-a.go()
-# go A go!
-
-b.go()
-# go A go!
-# go B go!
-
-c.go()
-# go A go!
-# go C go!
-
-d.go()
-# go A go!
-# go C go!
-# go B go!
-# go D go!
-
-e.go()
-# go A go!
-# go C go!
-# go B go!
-
-a.stop()
-# stop A stop!
-
-b.stop()
-# stop A stop!
-
-c.stop()
-# stop A stop!
-# stop C stop!
-
-d.stop()
-# stop A stop!
-# stop C stop!
-# stop D stop!
-
-e.stop()
-# stop A stop!
-
-a.pause()
-# ... Exception: Not Implemented
-
-b.pause()
-# ... Exception: Not Implemented
-
-c.pause()
-# ... Exception: Not Implemented
-
-d.pause()
-# wait D wait!
-
-e.pause()
-# ...Exception: Not Implemented
-
+    <h1 id="print-directory">Print Directory</h1>
+<p><strong>This function takes the name of a directory and prints out the paths files within that directory as well as any files contained in contained directories.</strong></p>
+<p>This function is similar to os.walk. Please don't use os.walk in your answer. We are interested in your ability to work with nested structures.</p>
+<pre><code class="python">def print_directory_contents(sPath):
+    import os                                       
+    for sChild in os.listdir(sPath):
+        # Everything gets turned into a new path
+        # Then we see which can go deeper...               
+        sChildPath = os.path.join(sPath,sChild)
+        if os.path.isdir(sChildPath):
+            # If we have a folder, recall this function
+            print_directory_contents(sChildPath)
+        else:
+            # If we hit a base case then print as we have found a file
+            print(sChildPath)
 </code></pre>
 
   <br>
@@ -192,20 +109,20 @@ e.pause()
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../print_directory/" class="btn btn-xs btn-default pull-right">
+      <a href="../crossing_rects/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../print_directory/" class="btn btn-xs btn-link">
-        Print Directory
+      <a href="../crossing_rects/" class="btn btn-xs btn-link">
+        Crossing Rects
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../swap_case/" class="btn btn-xs btn-default pull-left">
+      <a href="../class_quiz/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../swap_case/" class="btn btn-xs btn-link">
-        sWAP cASE
+        Previous</a><a href="../class_quiz/" class="btn btn-xs btn-link">
+        Class Quiz
       </a>
     </div>
     
