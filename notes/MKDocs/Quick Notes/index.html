@@ -34,10 +34,9 @@
         
         var pageToc = [
           {title: "Quick Notes", url: "#_top", children: [
-          ]},
-          {title: "Deploy the server\\site", url: "#deploy-the-serversite", children: [
-          ]},
-          {title: "Detailed Github Notes", url: "#detailed-github-notes", children: [
+              {title: "Deploy the server\\site", url: "#deploy-the-serversite" },
+              {title: "Detailed Github Notes", url: "#detailed-github-notes" },
+              {title: "Note for the venv", url: "#note-for-the-venv" },
           ]},
         ];
 
@@ -76,7 +75,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="quick-notes">Quick Notes</h1>
-<h1 id="deploy-the-serversite">Deploy the server\site</h1>
+<h2 id="deploy-the-serversite">Deploy the server\site</h2>
 <p>Be sure you are in ./code-journal/ or ./&lt;project root&gt;</p>
 <pre><code class="bash">code-journal  
   |-docs  
@@ -101,8 +100,24 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 mkdocs gh-deploy --config-file ../code-journal/mkdocs.yml --remote-branch master
 </code></pre>
 
-<h1 id="detailed-github-notes">Detailed Github Notes</h1>
+<h2 id="detailed-github-notes">Detailed Github Notes</h2>
 <p><a href="https://www.mkdocs.org/user-guide/deploying-your-docs/#readthedocs">github deploy</a></p>
+<h2 id="note-for-the-venv">Note for the venv</h2>
+<p><code>pip freeze</code> lists these packages:</p>
+<pre><code class="bash">Click==7.0
+Jinja2==2.10.1
+livereload==2.6.1
+Markdown==3.1.1
+MarkupSafe==1.1.1
+mkdocs==1.0.4
+mkdocs-rtd-dropdown==1.0.2
+mkdocs-windmill-dark==0.2.0
+PyYAML==5.1.2
+six==1.12.0
+tornado==6.0.3
+</code></pre>
+
+<p>I am pretty sure I only installed <code>mkdocs</code> and <code>mkdocs-windmill-dark</code></p>
 
   <br>
     
