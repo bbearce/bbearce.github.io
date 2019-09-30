@@ -34,6 +34,7 @@
         
         var pageToc = [
           {title: "Sass", url: "#_top", children: [
+              {title: "SCSS or SASS?", url: "#scss-or-sass" },
               {title: "Preprocessing", url: "#preprocessing" },
               {title: "More...", url: "#more" },
           ]},
@@ -88,6 +89,9 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Courtesy of <a href="https://sass-lang.com/guide">sass-lang.com</a></p>
 </blockquote>
 <p><a href="https://sass-lang.com/install">Install Instructions</a></p>
+<h2 id="scss-or-sass">SCSS or SASS?</h2>
+<p>There are two syntaxes available for Sass. The first, known as <code>SCSS (Sassy CSS)</code> and used throughout this reference, is an extension of the syntax of CSS. This means that <strong>every valid CSS stylesheet is a valid SCSS file</strong> with the same meaning. This syntax is enhanced with the Sass features described below. Files using this syntax have the <code>.scss</code> extension.</p>
+<p>The second and <em>older syntax</em>, known as the indented syntax (or sometimes just “<code>Sass</code>”), provides a more concise way of writing CSS. It uses indentation rather than brackets to indicate nesting of selectors, and newlines rather than semicolons to separate properties. Files using this syntax have the <code>.sass</code> extension.</p>
 <h2 id="preprocessing">Preprocessing</h2>
 <p>CSS on its own can be fun, but stylesheets are getting larger, more complex, and harder to maintain. This is where a preprocessor can help. Sass lets you use features that don't exist in CSS yet like variables, nesting, mixins, inheritance and other nifty goodies that make writing CSS fun again.</p>
 <p>Once you start tinkering with Sass, it will take your preprocessed Sass file and save it as a normal CSS file that you can use in your website.</p>
