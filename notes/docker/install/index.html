@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Install - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Install", url: "#_top", children: [
+              {title: "Useful Flags", url: "#useful-flags" },
+              {title: "Managing and Removing", url: "#managing-and-removing" },
+              {title: "Investigating and playing around", url: "#investigating-and-playing-around" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../bash/users/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../bash/users/" class="btn btn-xs btn-link">
+        Users
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="install">Install</h1>
+<p>Docker has good documentation <a href="https://docs.docker.com/install/linux/docker-ce/ubuntu/">here</a>.</p>
+<p>Recap and cheat sheet: </p>
+<p><strong>List Docker CLI commands</strong></p>
+<pre><code>docker 
+docker container --help 
+</code></pre>
+
+<p><strong>Display Docker version and info</strong></p>
+<pre><code>docker --version 
+docker version 
+docker info 
+</code></pre>
+
+<p><strong>Execute Docker image</strong></p>
+<pre><code>docker run hello-world 
+</code></pre>
+
+<p><strong>List Docker images</strong> </p>
+<pre><code>docker image ls 
+docker image ls --all 
+docker image ls -aq 
+</code></pre>
+
+<p><strong>List Docker containers (running, all, all in quiet mode)</strong></p>
+<pre><code>docker container ls 
+docker container ls --all 
+docker container ls –aq 
+</code></pre>
+
+<p><strong>List Docker services</strong></p>
+<pre><code>docker service ls 
+docker stack services getstartedlab 
+</code></pre>
+
+<p><strong>Tasks</strong> <em>Note the addition of '_web' to the service name</em></p>
+<pre><code>docker service ps getstartedlab_web 
+</code></pre>
+
+<blockquote>
+<p>Note: container ls will show you the tasks running as well </p>
+</blockquote>
+<pre><code>docker container ls 
+</code></pre>
+
+<h2 id="useful-flags">Useful Flags</h2>
+<p><em>-v|--volume[=[[HOST-DIR:]CONTAINER-DIR[:OPTIONS]]]</em></p>
+<pre><code>          Create a bind mount. If you specify, -v /HOST-DIR:/CONTAINER-DIR, Docker 
+          bind mounts /HOST-DIR in the host to /CONTAINER-DIR in the Docker 
+          container. If 'HOST-DIR' is omitted,  Docker automatically creates the new 
+          volume on the host.  The OPTIONS are a comma delimited list and can be: 
+
+              · [rw|ro] 
+              · [z|Z] 
+              · [[r]shared|[r]slave|[r]private] 
+              · [delegated|cached|consistent] 
+              · [nocopy] 
+</code></pre>
+
+<p><em>-d, --detach=true|false</em></p>
+<pre><code>          Detached mode: run the container in the background and print the new container ID. The default is false. 
+</code></pre>
+
+<p><em>-i, --interactive=true|false</em></p>
+<pre><code>          Keep STDIN open even if not attached. The default is false. When set to true, keep stdin open even if not attached. 
+</code></pre>
+
+<p><em>-t, --tty=true|false</em></p>
+<pre><code>          Allocate a pseudo-TTY. The default is false. When set to true Docker can allocate a pseudo-tty and attach to the standard input of any container. This can be used, for example, to run a throwaway interactive shell. The default is false. The -t option is incompatible with a redirection of the docker client standard input. 
+</code></pre>
+
+<p><em>--name=" "</em></p>
+<pre><code>          Assign a name to the container 
+
+       The operator can identify a container in three ways: 
+
+       │Identifier type       │ Example value │ 
+       │UUID long identifier  │ &quot;f78375b1c487e03c9438c729345e54db9d20cfa2ac1fc3494b6eb60872e74778&quot; │ 
+       │UUID short identifier │ &quot;f78375b1c487&quot;│ 
+       │Name                  │ &quot;evil_ptolemy&quot;|   
+</code></pre>
+
+<h2 id="managing-and-removing">Managing and Removing</h2>
+<p>Good <a href="https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/">discussion</a></p>
+<p><strong>Summary</strong></p>
+<pre><code class="bash">docker build -t friendlyhello .  # Create image using this directory's Dockerfile  
+docker run -d -p 4000:80 friendlyhello         # Same thing, but in detached mode  
+docker container ls                                # List all running containers  
+docker container ls -a             # List all containers, even those not running  
+docker container stop &lt;hash&gt;           # Gracefully stop the specified container  
+docker container kill &lt;hash&gt;         # Force shutdown of the specified container  
+docker container rm &lt;hash&gt;        # Remove specified container from this machine  
+docker container rm $(docker container ls -a -q)         # Remove all containers  
+docker image ls -a                             # List all images on this machine  
+docker image rm &lt;image id&gt;            # Remove specified image from this machine  
+docker image rm $(docker image ls -a -q)   # Remove all images from this machine  
+docker login             # Log in this CLI session using your Docker credentials  
+docker tag &lt;image&gt; username/repository:tag  # Tag &lt;image&gt; for upload to registry  
+docker push username/repository:tag            # Upload tagged image to registry  
+docker run username/repository:tag                   # Run image from a registry  
+</code></pre>
+
+<h2 id="investigating-and-playing-around">Investigating and playing around</h2>
+<p><strong>DockerHub:</strong></p>
+<p>Image specifications: </p>
+<ul>
+<li>Account: bbearce  </li>
+<li>Repo: <repo example>  </li>
+<li>Nomenclature: bbearce/<repo example>:<tag>  </li>
+</ul>
+<p>To start with a clean slate: </p>
+<ul>
+<li>Stop all containers: <ol>
+<li><code>docker container rm $(docker container ls -a -q)</code>         # Remove all containers </li>
+<li><code>docker image rm $(docker image ls -a -q)</code>   # Remove all images from this machine </li>
+</ol>
+</li>
+</ul>
+<p>If you want to run an instance of an image issue this command(this will download it if you don't have the image): </p>
+<pre><code>docker run -it -d ashok/pyashokproj bin/bash 
+</code></pre>
+
+<p>Keep in mind this is different than getting inside a running container. For this to work the container needs to be already running: </p>
+<pre><code>docker exec -it &lt;container-name/ID&gt; bash 
+</code></pre>
+
+<p>Some dockers can be started and stopped indefinitely either because they are a web server or an OS image(Ubuntu). Others based on things like pythonX.X can't be started up once stopped. A lot of customization and investigation can only really be done inside the running docker. So in order to get in we need to one of two things depending on the docker: </p>
+<p><em>OS or web server type docker:</em></p>
+<p>Use <code>docker container –ls a</code> to find the stopped container id. Next use <code>docker start &lt;container id&gt;</code>  to start the container again. Now use <code>docker ps</code> to see that it is running </p>
+<p><em>Python or language image:</em></p>
+<p>If you attempt to start the stopped container it will run for a brief second like it already did upon instantiation and then stop. We have to explicitly use <code>docker run -it -d &lt;image&gt; bin/bash</code>. This needs all of those flags (itd) in order to start a container in an interactive session, pipe the terminal from the docker to your local terminal and to run in detached mode. Now that it is running indefinitely we can run <code>docker exec -it &lt;container-name/ID&gt; bash</code> and actually connect to it. </p>
+<p><em>Start a docker container:</em> </p>
+<p><code>docker start &lt;container-name/ID&gt;</code></p>
+<p><em>Stop a docker container:</em></p>
+<p><code>docker stop &lt;container-name/ID&gt;</code></p>
+<p>Take a container and make a new image from it (Example): </p>
+<p><code>docker run -itd codalab/codalab-legacy bash</code></p>
+<blockquote>
+<p>Note: Don't forget the -d </p>
+</blockquote>
+<p>This downloads a new image and starts an instance. It doesn't have the python package 'seaborn' installed in the python so we are going to add it. We started a container and it is running in detached mode. Now let's connect to it. Use <code>docker ps</code> to get the container's id: </p>
+<p><code>docker  exec -it d7ef724c4309 bash</code>  </p>
+<p>You should be looking at the prompt: </p>
+<p><code>root@f907b9e5d9a6:/#</code></p>
+<p>Follow these instructions </p>
+<p><code>root@f907b9e5d9a6:/# pip install seaborn</code><br />
+...python is importing stuff... </p>
+<p><code>root@f907b9e5d9a6:/# python</code></p>
+<pre><code class="python">&gt;&gt;&gt; import seaborn 
+&gt;&gt;&gt; 
+
+</code></pre>
+
+<p>You can see we installed seaborn. Now exit the docker <code>root@f907b9e5d9a6:/# exit</code>. We need to build it to an image: </p>
+<p><code>docker commit d7ef724c4309 bbearce/codalab:legacy</code></p>
+<p>We just made an image and tagged it with this identifier <code>bbearce/codalab:legacy</code> and we can see it if we execute: </p>
+<pre><code>$ docker images 
+REPOSITORY               TAG                 IMAGE ID            CREATED             SIZE 
+bbearce/codalab          legacy              c2d04ddb825a        3 seconds ago       2.65GB 
+codalab/codalab-legacy   latest              432ce2829707        20 months ago       2.64GB 
+</code></pre>
+
+<p>Now let's push it online (Docker Hub) as an optional last step: </p>
+<p><code>docker login</code></p>
+<p><code>docker push bbearce/codalab:legacy</code></p>
+<p>Another way to share is with: </p>
+<p><code>docker save</code></p>
+<p><code>docker load</code></p>
+<p><a href="https://docs.docker.com/engine/reference/commandline/save/">save/load docs</a></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../bash/users/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../bash/users/" class="btn btn-xs btn-link">
+        Users
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
