@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Install - Ben's Code Journal</title>
+    <title>Basics - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -35,6 +35,8 @@
         var pageToc = [
           {title: "Docker", url: "#_top", children: [
               {title: "Install", url: "#install" },
+              {title: "Run without sudo", url: "#run-without-sudo" },
+              {title: "Useful Commands", url: "#useful-commands" },
               {title: "Useful Flags", url: "#useful-flags" },
               {title: "Managing and Removing", url: "#managing-and-removing" },
               {title: "Investigating and playing around", url: "#investigating-and-playing-around" },
@@ -129,6 +131,59 @@ docker stack services getstartedlab
 <p>Note: container ls will show you the tasks running as well </p>
 </blockquote>
 <pre><code>docker container ls 
+</code></pre>
+
+<h2 id="run-without-sudo">Run without sudo</h2>
+<p>To create the docker group and add your user:</p>
+<ol>
+<li>
+<p>Create the docker group:
+<code>$ sudo groupadd docker</code></p>
+</li>
+<li>
+<p>Add your user to the docker group.
+<code>$ sudo usermod -aG docker $USER</code></p>
+</li>
+<li>
+<p>Log out and log back in so that your group membership is re-evaluated. If testing on a virtual machine, it may be necessary to restart the virtual machine for changes to take effect.</p>
+<blockquote>
+<p>On a desktop Linux environment such as X Windows, log out of your session completely and then log back in.
+On Linux, you can also run the following command to activate the changes to groups:
+<code>$ newgrp docker</code></p>
+</blockquote>
+</li>
+<li>
+<p>Verify that you can run docker commands without sudo.</p>
+</li>
+</ol>
+<p><code>$ docker run hello-world</code></p>
+<h2 id="useful-commands">Useful Commands</h2>
+<p>Use <code>docker container inspect 4ca8ce46f817</code> to inspect a container. You will get a json dump of characteristics that are super useful.</p>
+<p>Example:</p>
+<pre><code>[
+    {
+        &quot;Id&quot;: &quot;4ca8ce46f8170fc5c5eeb93bc27e8f84c2e8b32ddafc8e748a124e24fc8ff455&quot;,
+        &quot;Created&quot;: &quot;2019-09-26T19:10:42.524604801Z&quot;,
+        &quot;Path&quot;: &quot;python&quot;,
+        &quot;Args&quot;: [
+            &quot;predict.py&quot;
+        ],
+        &quot;State&quot;: {
+            &quot;Status&quot;: &quot;exited&quot;,
+            &quot;Running&quot;: false,
+            &quot;Paused&quot;: false,
+            &quot;Restarting&quot;: false,
+            &quot;OOMKilled&quot;: false,
+            &quot;Dead&quot;: false,
+            &quot;Pid&quot;: 0,
+            &quot;ExitCode&quot;: 0,
+            &quot;Error&quot;: &quot;&quot;,
+            &quot;StartedAt&quot;: &quot;2019-09-26T19:10:43.536396229Z&quot;,
+            &quot;FinishedAt&quot;: &quot;2019-09-27T01:41:30.393256193Z&quot;
+
+.
+.
+.there is a lot more.
 </code></pre>
 
 <h2 id="useful-flags">Useful Flags</h2>
