@@ -37,6 +37,7 @@
               {title: ".tables", url: "#tables" },
               {title: ".schema", url: "#schema" },
               {title: "bulk insert", url: "#bulk-insert" },
+              {title: "csv export", url: "#csv-export" },
           ]},
         ];
 
@@ -203,6 +204,19 @@ CREATE TABLE all_images(
 <p>If the table doesn't exist, sqlite will try to create it and it's scheme assuming a header.</p>
 <pre><code class="bash">sqlite&gt; .mode csv all_images 
 sqlite&gt; .import &lt;path_to_csv&gt; all_images
+</code></pre>
+
+<h2 id="csv-export">csv export</h2>
+<p>An example export from the <code>rad</code> table.</p>
+<blockquote>
+<p>Any query can be used as the basis for the export, including multi-line complex ones.</p>
+</blockquote>
+<pre><code class="bash">sqlite&gt; .headers on
+sqlite&gt; .mode csv
+sqlite&gt; .output rad_data.csv
+sqlite&gt; select * from rad;
+sqlite&gt; 
+
 </code></pre>
 
   <br>
