@@ -38,6 +38,7 @@
               {title: "Checkout a Repo", url: "#checkout-a-repo" },
               {title: "Workflow", url: "#workflow" },
               {title: "Add and Commit", url: "#add-and-commit" },
+              {title: "Adding a New Remote", url: "#adding-a-new-remote" },
               {title: "Pushing Changes", url: "#pushing-changes" },
               {title: "Branching", url: "#branching" },
               {title: "Update and Merge", url: "#update-and-merge" },
@@ -129,6 +130,39 @@ Initialized empty Git repository in /home/bbearce/Desktop/git_practice/.git/
 </code></pre>
 
 <p>Now the file is committed to the <code>HEAD</code>, but not in your remote repository yet.</p>
+<blockquote>
+<p><code>git remote -v</code> will tell you which remote you are connected to.</p>
+</blockquote>
+<pre><code>SYNOPSIS
+       git remote [-v | --verbose]
+
+...
+
+OPTIONS
+       -v, --verbose
+           Be a little more verbose and show remote url after name. NOTE: This must be placed between remote and subcommand.
+</code></pre>
+
+<h2 id="adding-a-new-remote">Adding a New Remote</h2>
+<blockquote>
+<p>Courtesy of <a href="https://articles.assembla.com/en/articles/1136998-how-to-add-a-new-remote-to-your-git-repo#targetText=To%20add%20a%20new%20remote%2C%20use%20the%20git%20remote%20add,tab%20of%20your%20Git%20repo">articles.assembla.com</a></p>
+</blockquote>
+<p>To add a new remote, use the <code>git remote add</code> command on the terminal, in the directory your repository is stored at.</p>
+<p>The git remote add command takes two arguments:</p>
+<ul>
+<li>A remote name, for example, “origin”  </li>
+<li>A remote URL, which you can find on the Source sub-tab of your Git repo  </li>
+</ul>
+<pre><code class="bash">#set a new remote
+git remote add origin git@git.assembla.com:portfolio/space.space_name.git
+
+#Verify new remote
+git remote -v
+
+origin  git@git.assembla.com:portfolio/space.space_name.git (fetch)
+origin  git@git.assembla.com:portfolio/space.space_name.git (push)
+</code></pre>
+
 <h2 id="pushing-changes">Pushing Changes</h2>
 <p>Your changes are now in the <code>HEAD</code> of your local working copy. To send those changes to your remote repository, execute:</p>
 <pre><code class="bash">git push origin master
