@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Basics - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Git Basics", url: "#_top", children: [
+              {title: "Create a Repo", url: "#create-a-repo" },
+              {title: "Checkout a Repo", url: "#checkout-a-repo" },
+              {title: "Workflow", url: "#workflow" },
+              {title: "Add and Commit", url: "#add-and-commit" },
+              {title: "Pushing Changes", url: "#pushing-changes" },
+              {title: "Branching", url: "#branching" },
+              {title: "Update and Merge", url: "#update-and-merge" },
+              {title: "Tagging", url: "#tagging" },
+              {title: "Log", url: "#log" },
+              {title: "Replace Local Changes", url: "#replace-local-changes" },
+              {title: "Useful Hints", url: "#useful-hints" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../docker/basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../docker/basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="git-basics">Git Basics</h1>
+<blockquote>
+<p>Courtesy of <a href="https://rogerdudler.github.io/git-guide/">rogerdudler.github.io</a></p>
+</blockquote>
+<h2 id="create-a-repo">Create a Repo</h2>
+<p>Create a new repo with <code>git init</code>:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop/git_practice$ git init
+Initialized empty Git repository in /home/bbearce/Desktop/git_practice/.git/
+
+</code></pre>
+
+<h2 id="checkout-a-repo">Checkout a Repo</h2>
+<p>Checkout a repo with <code>git clone</code>:</p>
+<pre><code class="bash">$ git clone /path/to/repository
+</code></pre>
+
+<p>When using a remote server, your command will be:</p>
+<pre><code class="bash">git clone username@host:/path/to/repository
+</code></pre>
+
+<h2 id="workflow">Workflow</h2>
+<p>Your local repository consists of three "trees" maintained by git. the first one is your <code>Working Directory</code> which holds the actual files. The second one is the <code>Index</code> which acts as a staging area and finally the <code>HEAD</code> which points to the last commit you've made.</p>
+<p><img alt="Basic Git Workflow" src="/notes/git/git_trees.png" /></p>
+<h2 id="add-and-commit">Add and Commit</h2>
+<p>You can propose changes (add it to the Index) using:</p>
+<pre><code class="bash">git add &lt;filename&gt;
+</code></pre>
+
+<p>or</p>
+<pre><code>git add *
+</code></pre>
+
+<p>This is the first step in the basic git workflow. To actually commit these changes use:</p>
+<pre><code class="bash">git commit -m &quot;Commit message&quot;
+</code></pre>
+
+<p>Now the file is committed to the <code>HEAD</code>, but not in your remote repository yet.</p>
+<h2 id="pushing-changes">Pushing Changes</h2>
+<p>Your changes are now in the <code>HEAD</code> of your local working copy. To send those changes to your remote repository, execute:</p>
+<pre><code class="bash">git push origin master
+</code></pre>
+
+<p>Change master to whatever branch you want to push your changes to.</p>
+<p>If you have not cloned an existing repository and want to connect your repository to a remote server, you need to add it with:</p>
+<pre><code class="bash">git remote add origin &lt;server&gt;
+</code></pre>
+
+<p>Now you are able to push your changes to the selected remote server.</p>
+<h2 id="branching">Branching</h2>
+<p>Branches are used to develop features isolated from each other. The master branch is the "default" branch when you create a repository. Use other branches for development and merge them back to the master branch upon completion.</p>
+<p><img alt="Branching Image" src="/notes/git/branches.png" /></p>
+<p>Create a new branch named "feature_x" and switch to it using:</p>
+<p><code>git checkout -b feature_x</code></p>
+<p>Switch back to master:</p>
+<p><code>git checkout master</code></p>
+<p>Delete the branch again:</p>
+<p><code>git branch -d feature_x</code></p>
+<p>A branch is not available to others unless you push the branch to your remote repository:</p>
+<p><code>git push origin &lt;branch&gt;</code></p>
+<h2 id="update-and-merge">Update and Merge</h2>
+<p>To update your local repository to the newest commit, execute:</p>
+<p><code>git pull</code></p>
+<p>In your working directory to fetch and merge remote changes. To merge another branch into your active branch (e.g. master), use:</p>
+<p><code>git merge &lt;branch&gt;</code></p>
+<p>In both cases git tries to auto-merge changes. Unfortunately, this is not always possible and results in conflicts. You are responsible to merge those conflicts manually by editing the files shown by git. After changing, you need to mark them as merged with:</p>
+<p><code>git add &lt;filename&gt;</code></p>
+<p>Before merging changes, you can also preview them by using:</p>
+<p><code>git diff &lt;source_branch&gt; &lt;target_branch&gt;</code></p>
+<h2 id="tagging">Tagging</h2>
+<p>It's recommended to create tags for software releases. This is a known concept, which also exists in SVN. You can create a new tag named 1.0.0 by executing:</p>
+<p><code>git tag 1.0.0 1b2e1d63ff</code></p>
+<p>The 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag. You can get the commit id by looking at the...log.</p>
+<h2 id="log">Log</h2>
+<p>In its simplest form, you can study repository history using:</p>
+<p><code>git log</code></p>
+<p>You can add a lot of parameters to make the log look like what you want. To see only the commits of a certain author:</p>
+<p><code>git log --author=bob</code></p>
+<p>To see a very compressed log where each commit is one line:</p>
+<p><code>git log --pretty=oneline</code></p>
+<p>Or maybe you want to see an ASCII art tree of all the branches, decorated with the names of tags and branches:</p>
+<p><code>git log --graph --oneline --decorate --all</code></p>
+<p>See only which files have changed:</p>
+<p><code>git log --name-status</code></p>
+<p>These are just a few of the possible parameters you can use. For more, see <code>git log --help</code></p>
+<h2 id="replace-local-changes">Replace Local Changes</h2>
+<p>In case you did something wrong, which for sure never happens ;), you can replace local changes using the command:</p>
+<p><code>git checkout -- &lt;filename&gt;</code></p>
+<p>This replaces the changes in your working tree with the last content in <code>HEAD</code>. Changes already added to the index, as well as new files, will be kept.</p>
+<p>If you instead want to drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this:</p>
+<pre><code class="bash">git fetch origin
+git reset --hard origin/master
+</code></pre>
+
+<h2 id="useful-hints">Useful Hints</h2>
+<p>If you want a built-in git GUI, use:</p>
+<p><code>gitk</code></p>
+<p>Use colorful git output:</p>
+<p><code>git config color.ui true</code></p>
+<p>To show log on just one line per commit, use:</p>
+<p><code>git config format.pretty oneline</code></p>
+<p>Use interactive adding:</p>
+<p><code>git add -i</code></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../docker/basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../docker/basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
