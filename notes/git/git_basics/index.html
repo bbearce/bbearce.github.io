@@ -40,6 +40,7 @@
               {title: "Add and Commit", url: "#add-and-commit" },
               {title: "Adding a New Remote", url: "#adding-a-new-remote" },
               {title: "Pushing Changes", url: "#pushing-changes" },
+              {title: "Push Without User:Pass", url: "#push-without-userpass" },
               {title: "Branching", url: "#branching" },
               {title: "Update and Merge", url: "#update-and-merge" },
               {title: "Tagging", url: "#tagging" },
@@ -174,6 +175,25 @@ origin  git@git.assembla.com:portfolio/space.space_name.git (push)
 </code></pre>
 
 <p>Now you are able to push your changes to the selected remote server.</p>
+<h2 id="push-without-userpass">Push Without User:Pass</h2>
+<blockquote>
+<p>Courtesy of <a href="https://medium.com/@amanze.ogbonna/accessing-pushing-to-github-without-username-and-password-3022feb077fb">medium.com</a></p>
+</blockquote>
+<p>A way to skip typing my username/password when using https://github, is by changing the HTTPs origin remote which pointing to an HTTP url into an SSH url.</p>
+<p>For example:</p>
+<p>https url: <code>https://github.com/&lt;Username&gt;/&lt;Project&gt;.git</code><br />
+ssh url: <code>git@github.com:&lt;Username&gt;/&lt;Project&gt;.git</code>  </p>
+<p>You can do:</p>
+<pre><code class="bash">git remote set-url origin git@github.com:&lt;Username&gt;/&lt;Project&gt;.git
+</code></pre>
+
+<p>to change the url.</p>
+<blockquote>
+<p>You need to have an ssh key pair generated and added to github</p>
+</blockquote>
+<p>Steps:<br />
+1. <a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key">Generate Key Pair</a><br />
+2. <a href="https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys">Add public key to git repo</a>  </p>
 <h2 id="branching">Branching</h2>
 <p>Branches are used to develop features isolated from each other. The master branch is the "default" branch when you create a repository. Use other branches for development and merge them back to the master branch upon completion.</p>
 <p><img alt="Branching Image" src="/notes/git/branches.png" /></p>
