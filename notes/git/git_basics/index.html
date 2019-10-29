@@ -47,6 +47,7 @@
               {title: "Log", url: "#log" },
               {title: "Replace Local Changes", url: "#replace-local-changes" },
               {title: "Useful Hints", url: "#useful-hints" },
+              {title: "Clone Single Branch", url: "#clone-single-branch" },
           ]},
         ];
 
@@ -73,11 +74,11 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../sub_trees/" class="btn btn-xs btn-default pull-right">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../sub_trees/" class="btn btn-xs btn-link">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-link">
         Subtrees
       </a>
     </div>
@@ -263,6 +264,12 @@ git reset --hard origin/master
 <p><code>git config format.pretty oneline</code></p>
 <p>Use interactive adding:</p>
 <p><code>git add -i</code></p>
+<h2 id="clone-single-branch">Clone Single Branch</h2>
+<blockquote>
+<p>Courtesy of <a href="https://stackoverflow.com/questions/4811434/clone-only-one-branch/14930421#14930421">stackoverflow</a></p>
+</blockquote>
+<pre><code class="bash">git clone -b &lt;mybranch&gt; --single-branch &lt;git-url&gt;
+</code></pre>
 
   <br>
     
@@ -275,11 +282,11 @@ git reset --hard origin/master
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../sub_trees/" class="btn btn-xs btn-default pull-right">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../sub_trees/" class="btn btn-xs btn-link">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-link">
         Subtrees
       </a>
     </div>
