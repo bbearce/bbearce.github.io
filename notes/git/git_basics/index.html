@@ -73,12 +73,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+      <a href="../sub_trees/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
-        AWS
+      <a href="../sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
       </a>
     </div>
     
@@ -191,9 +191,24 @@ ssh url: <code>git@github.com:&lt;Username&gt;/&lt;Project&gt;.git</code>  </p>
 <blockquote>
 <p>You need to have an ssh key pair generated and added to github</p>
 </blockquote>
-<p>Steps:<br />
-1. <a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key">Generate Key Pair</a><br />
-2. <a href="https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys">Add public key to git repo</a>  </p>
+<p>Steps:  </p>
+<p>[1]. <a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key">Generate Key Pair</a>  </p>
+<p>Open Terminal.</p>
+<p>Paste the text below, substituting in your GitHub email address.</p>
+<pre><code class="bash">$ ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
+
+Generating public/private rsa key pair.
+</code></pre>
+
+<p>This creates a new ssh key, using the provided email as a label. When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location.</p>
+<pre><code class="bash">Enter a file in which to save the key (/home/you/.ssh/id_rsa): [Press enter]
+</code></pre>
+
+<p>At the prompt, type a secure passphrase. For more information, see <a href="https://help.github.com/en/articles/working-with-ssh-key-passphrases">Working with SSH key passphrases</a>.</p>
+<pre><code class="bash">Enter passphrase (empty for no passphrase): [Type a passphrase]&gt; Enter same passphrase again: [Type passphrase again]
+</code></pre>
+
+<p>[2]. <a href="https://help.github.com/en/enterprise/2.14/user/articles/adding-a-new-ssh-key-to-your-github-account">Add public key to git account</a> or <a href="https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys">Add public key to git repo</a> </p>
 <h2 id="branching">Branching</h2>
 <p>Branches are used to develop features isolated from each other. The master branch is the "default" branch when you create a repository. Use other branches for development and merge them back to the master branch upon completion.</p>
 <p><img alt="Branching Image" src="/notes/git/branches.png" /></p>
@@ -260,12 +275,12 @@ git reset --hard origin/master
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+      <a href="../sub_trees/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
-        AWS
+      <a href="../sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
       </a>
     </div>
     
