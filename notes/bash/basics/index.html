@@ -40,6 +40,7 @@
               {title: "bash or sh or dash?", url: "#bash-or-sh-or-dash" },
               {title: "Moving and Copying", url: "#moving-and-copying" },
               {title: "Check OS Version", url: "#check-os-version" },
+              {title: "make files", url: "#make-files" },
           ]},
         ];
 
@@ -333,6 +334,19 @@ Use the <code>rsync</code> command to move things. Use the <em>-a</em> flag to a
 <h2 id="check-os-version">Check OS Version</h2>
 <pre><code>$ cat /etc/os-release
 </code></pre>
+
+<h2 id="make-files">make files</h2>
+<blockquote>
+<p>Courtesty of <a href="https://stackoverflow.com/questions/3915067/what-are-makefiles-make-install">stackoverflow</a></p>
+</blockquote>
+<p><code>make</code> is part of the build system commonly used in unix type systems - <a href="http://www.gnu.org/software/binutils/">binutils</a>.</p>
+<p>It looks at make files which hold configuration information and build targets.</p>
+<p>Specifically:</p>
+<ul>
+<li>./configure - this is a script that sets up the environment for the build  </li>
+<li>make - calls <code>make</code> with the default build target. Normally builds the app.  </li>
+<li>make install - calls <code>make</code> with the <code>install</code> build target. Normally installs the app.  </li>
+</ul>
 
   <br>
     

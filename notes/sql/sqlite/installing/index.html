@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>SQL server - Ben's Code Journal</title>
+    <title>Installing - Ben's Code Journal</title>
     <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,8 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "SQL Server", url: "#_top", children: [
+          {title: "Installing", url: "#_top", children: [
+              {title: "Installation of SQLite", url: "#installation-of-sqlite" },
           ]},
         ];
 
@@ -60,20 +61,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-default pull-right">
+      <a href="../Basics/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-link">
-        Installing
+      <a href="../Basics/" class="btn btn-xs btn-link">
+        Basics
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../postgres/Postgres/" class="btn btn-xs btn-default pull-left">
+      <a href="../../sql_server/Sql Server/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../postgres/Postgres/" class="btn btn-xs btn-link">
-        Postgres
+        Previous</a><a href="../../sql_server/Sql Server/" class="btn btn-xs btn-link">
+        SQL server
       </a>
     </div>
     
@@ -81,12 +82,38 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="sql-server">SQL Server</h1>
-<p>Testing the addition of a new language</p>
-<pre><code class="sql">SELECT TOP 10000 sum(colC) FROM DB_Server.dbo.DB_Table
-WHERE colA = 'some value'
-GROUP BY colB 
+    <h1 id="installing">Installing</h1>
+<blockquote>
+<p>Courtest of <a href="http://www.linuxfromscratch.org/blfs/view/svn/server/sqlite.html">linuxfromscratch</a></p>
+</blockquote>
+<h2 id="installation-of-sqlite">Installation of SQLite</h2>
+<p>If you downloaded the optional documentation, issue the following command to install the documentation into the source tree:</p>
+<pre><code class="bash">unzip -q ../sqlite-doc-3300100.zip
+</code></pre>
 
+<p>Install SQLite by running the following commands:</p>
+<pre><code class="bash">./configure --prefix=/usr     \
+            --disable-static  \
+            --enable-fts5     \
+            CFLAGS=&quot;-g -O2                    \
+            -DSQLITE_ENABLE_FTS3=1            \
+            -DSQLITE_ENABLE_FTS4=1            \
+            -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+            -DSQLITE_ENABLE_UNLOCK_NOTIFY=1   \
+            -DSQLITE_ENABLE_DBSTAT_VTAB=1     \
+            -DSQLITE_SECURE_DELETE=1          \
+            -DSQLITE_ENABLE_FTS3_TOKENIZER=1&quot; &amp;&amp;
+make
+</code></pre>
+
+<p>This package does not come with a test suite.</p>
+<p>Now, as the root user:</p>
+<pre><code class="bash">make install
+</code></pre>
+
+<p>If you downloaded the optional documentation, issue the following commands as the root user to install it:</p>
+<pre><code class="bash">install -v -m755 -d /usr/share/doc/sqlite-3.30.1 &amp;&amp;
+cp -v -R sqlite-doc-3300100/* /usr/share/doc/sqlite-3.30.1
 </code></pre>
 
   <br>
@@ -100,20 +127,20 @@ GROUP BY colB
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-default pull-right">
+      <a href="../Basics/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-link">
-        Installing
+      <a href="../Basics/" class="btn btn-xs btn-link">
+        Basics
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../postgres/Postgres/" class="btn btn-xs btn-default pull-left">
+      <a href="../../sql_server/Sql Server/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../postgres/Postgres/" class="btn btn-xs btn-link">
-        Postgres
+        Previous</a><a href="../../sql_server/Sql Server/" class="btn btn-xs btn-link">
+        SQL server
       </a>
     </div>
     
