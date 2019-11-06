@@ -34,6 +34,7 @@
         
         var pageToc = [
           {title: "Installing", url: "#_top", children: [
+              {title: "Introduction to SQLite", url: "#introduction-to-sqlite" },
               {title: "Installation of SQLite", url: "#installation-of-sqlite" },
           ]},
         ];
@@ -86,12 +87,33 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Courtest of <a href="http://www.linuxfromscratch.org/blfs/view/svn/server/sqlite.html">linuxfromscratch</a></p>
 </blockquote>
+<h2 id="introduction-to-sqlite">Introduction to SQLite</h2>
+<p>The SQLite package is a software library that implements a self-contained, serverless, zero-configuration, transactional SQL database engine.</p>
+<p>This package is known to build and work properly using an LFS-9.0 platform.</p>
+<h3 id="package-information">Package Information</h3>
+<ul>
+<li>Download (HTTP): <a href="https://sqlite.org/2019/sqlite-autoconf-3300100.tar.gz">https://sqlite.org/2019/sqlite-autoconf-3300100.tar.gz</a></li>
+<li>Download MD5 sum: 51252dc6bc9094ba11ab151ba650ff3c  </li>
+<li>Download size: 2.7 MB  </li>
+<li>Estimated disk space required: 73 MB  </li>
+<li>Estimated build time: 0.4 SBU (Using parallelism=4)  </li>
+</ul>
+<h3 id="additional-downloads">Additional Downloads</h3>
+<h4 id="optional-documentation">Optional Documentation</h4>
+<ul>
+<li>Download (HTTP): <a href="https://sqlite.org/2019/sqlite-doc-3300100.zip">https://sqlite.org/2019/sqlite-doc-3300100.zip</a></li>
+<li>Download MD5 sum: 0a631f0f293167c82be0c10831642469  </li>
+<li>Download size: 9.1 MB  </li>
+</ul>
 <h2 id="installation-of-sqlite">Installation of SQLite</h2>
 <p>If you downloaded the optional documentation, issue the following command to install the documentation into the source tree:</p>
 <pre><code class="bash">unzip -q ../sqlite-doc-3300100.zip
 </code></pre>
 
 <p>Install SQLite by running the following commands:</p>
+<blockquote>
+<p>before that unzip with <code>tar zxvf sqlite-autoconf-3300100.tar.gz</code> and <code>cd sqlite-autoconf-3300100</code></p>
+</blockquote>
 <pre><code class="bash">./configure --prefix=/usr     \
             --disable-static  \
             --enable-fts5     \
@@ -107,10 +129,60 @@ make
 </code></pre>
 
 <p>This package does not come with a test suite.</p>
-<p>Now, as the root user:</p>
-<pre><code class="bash">make install
+<p>Now, as the root user run <code>sudo make install</code>:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Downloads/sqlite-autoconf-3300100$ sudo make install
+make[1]: Entering directory '/home/bbearce/Downloads/sqlite-autoconf-3300100'
+ /bin/mkdir -p '/usr/lib'
+ /bin/bash ./libtool   --mode=install /usr/bin/install -c   libsqlite3.la '/usr/lib'
+libtool: install: /usr/bin/install -c .libs/libsqlite3.so.0.8.6 /usr/lib/libsqlite3.so.0.8.6
+libtool: install: (cd /usr/lib &amp;&amp; { ln -s -f libsqlite3.so.0.8.6 libsqlite3.so.0 || { rm -f libsqlite3.so.0 &amp;&amp; ln -s libsqlite3.so.0.8.6 libsqlite3.so.0; }; })
+libtool: install: (cd /usr/lib &amp;&amp; { ln -s -f libsqlite3.so.0.8.6 libsqlite3.so || { rm -f libsqlite3.so &amp;&amp; ln -s libsqlite3.so.0.8.6 libsqlite3.so; }; })
+libtool: install: /usr/bin/install -c .libs/libsqlite3.lai /usr/lib/libsqlite3.la
+libtool: install: /usr/bin/install -c .libs/libsqlite3.a /usr/lib/libsqlite3.a
+libtool: install: chmod 644 /usr/lib/libsqlite3.a
+libtool: install: ranlib /usr/lib/libsqlite3.a
+libtool: warning: remember to run 'libtool --finish /usr/local/lib'
+ /bin/mkdir -p '/usr/bin'
+  /bin/bash ./libtool   --mode=install /usr/bin/install -c sqlite3 '/usr/bin'
+libtool: install: /usr/bin/install -c sqlite3 /usr/bin/sqlite3
+ /bin/mkdir -p '/usr/include'
+ /usr/bin/install -c -m 644 sqlite3.h sqlite3ext.h '/usr/include'
+ /bin/mkdir -p '/usr/share/man/man1'
+ /usr/bin/install -c -m 644 sqlite3.1 '/usr/share/man/man1'
+ /bin/mkdir -p '/usr/lib/pkgconfig'
+ /usr/bin/install -c -m 644 sqlite3.pc '/usr/lib/pkgconfig'
+make[1]: Leaving directory '/home/bbearce/Downloads/sqlite-autoconf-3300100'
+
 </code></pre>
 
+<blockquote>
+<p>Not sure what <code>warning: remember to run 'libtool --finish /usr/local/lib'</code> is for but I ran it and it didn't break anything and output this message:</p>
+</blockquote>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Downloads/sqlite-autoconf-3300100$ libtool --finish /usr/local/lib
+libtool: finish: PATH=&quot;/home/bbearce/gems/bin:/home/bbearce/bin:/home/bbearce/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/sbin&quot; ldconfig -n /usr/local/lib
+----------------------------------------------------------------------
+Libraries have been installed in:
+   /usr/local/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the '-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the 'LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the 'LD_RUN_PATH' environment variable
+     during linking
+   - use the '-Wl,-rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to '/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+----------------------------------------------------------------------
+
+</code></pre>
+
+<p>...a little background from <a href="https://www.gnu.org/software/libtool/">gnu</a>:</p>
+<p><em>GNU libtool is a generic library support script. Libtool hides the complexity of using shared libraries behind a consistent, portable interface.</em></p>
 <p>If you downloaded the optional documentation, issue the following commands as the root user to install it:</p>
 <pre><code class="bash">install -v -m755 -d /usr/share/doc/sqlite-3.30.1 &amp;&amp;
 cp -v -R sqlite-doc-3300100/* /usr/share/doc/sqlite-3.30.1
