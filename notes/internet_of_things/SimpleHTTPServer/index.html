@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>SimpleHTTPServer - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "SimpleHTTPServer", url: "#_top", children: [
+              {title: "Using SimpleHTTPServer", url: "#using-simplehttpserver" },
+              {title: "Customizing SimpleHTTPServer", url: "#customizing-simplehttpserver" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../nginx/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../nginx/" class="btn btn-xs btn-link">
+        Nginx
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../General Notes/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../General Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="simplehttpserver">SimpleHTTPServer</h1>
+<blockquote>
+<p>Courtesy of <a href="https://2ality.com/2014/06/simple-http-server.html">2ality</a></p>
+</blockquote>
+<p><strong>SimpleHTTPServer: a quick way to serve a directory</strong></p>
+<h2 id="using-simplehttpserver">Using SimpleHTTPServer</h2>
+<p>SimpleHTTPServer is invoked like this (the parameter <port> is optional):</p>
+<pre><code class="bash">python -m SimpleHTTPServer &lt;port&gt;
+</code></pre>
+
+<p>(On OS X, Python is pre-installed and this command works out of the box.)</p>
+<p>Let’s look at an example of using SimpleHTTPServer: During the following Unix shell interaction, I first list the files in the current directory and then start SimpleHTTPServer to serve it.</p>
+<pre><code class="bash">$ ls .
+foo.html
+$ python -m SimpleHTTPServer
+Serving HTTP on 0.0.0.0 port 8000 ...
+</code></pre>
+
+<p>Afterwards, I can access the following URLs:</p>
+<ul>
+<li>http://localhost:8000/ lists the files in the current directory (namely, just foo.html). If there were a file index.html, it would be displayed, instead.  </li>
+<li>http://localhost:8000/foo.html displays the file foo.html in the current directory.  </li>
+</ul>
+<h2 id="customizing-simplehttpserver">Customizing SimpleHTTPServer</h2>
+<p>The following Unix shell script demonstrates how to customize SimpleHTTPServer so that it serves files that have a given file name extension with a given media type. One case where that matters is Firefox being picky about the media type of the webapp.manifest.</p>
+<pre><code class="python">#!/usr/bin/python
+
+import SimpleHTTPServer
+import SocketServer
+
+PORT = 8000
+
+Handler = SimpleHTTPServer.SimpleHTTPRequestHandler
+Handler.extensions_map.update({
+    '.webapp': 'application/x-web-app-manifest+json',
+});
+
+httpd = SocketServer.TCPServer((&quot;&quot;, PORT), Handler)
+
+print &quot;Serving at port&quot;, PORT
+httpd.serve_forever()
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../nginx/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../nginx/" class="btn btn-xs btn-link">
+        Nginx
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../General Notes/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../General Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

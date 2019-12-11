@@ -41,6 +41,7 @@
               {title: "Moving and Copying", url: "#moving-and-copying" },
               {title: "Check OS Version", url: "#check-os-version" },
               {title: "make files", url: "#make-files" },
+              {title: "sshfs", url: "#sshfs" },
           ]},
         ];
 
@@ -347,6 +348,28 @@ Use the <code>rsync</code> command to move things. Use the <em>-a</em> flag to a
 <li>make - calls <code>make</code> with the default build target. Normally builds the app.  </li>
 <li>make install - calls <code>make</code> with the <code>install</code> build target. Normally installs the app.  </li>
 </ul>
+<h2 id="sshfs">sshfs</h2>
+<blockquote>
+<p>Courtesy of <a href="https://github.com/libfuse/sshfs">github</a></p>
+</blockquote>
+<h3 id="about">About</h3>
+<p>SSHFS allows you to mount a remote filesystem using SFTP. Most SSH servers support and enable this SFTP access by default, so SSHFS is very simple to use - there's nothing to do on the server-side.</p>
+<h3 id="development-status">Development Status</h3>
+<p>SSHFS is shipped by all major Linux distributions and has been in production use across a wide range of systems for many years. However, at present SSHFS does not have any active, regular contributors, and there are a number of known issues (see the bugtracker). The current maintainer continues to apply pull requests and makes regular releases, but unfortunately has no capacity to do any development beyond addressing high-impact issues. When reporting bugs, please understand that unless you are including a pull request or are reporting a critical issue, you will probably not get a response.</p>
+<h3 id="how-to-use">How to use</h3>
+<p>Once sshfs is installed (see next section) running it is very simple:</p>
+<pre><code class="bash">$ sshfs [user@]hostname:[directory] mountpoint
+</code></pre>
+
+<p>It is recommended to run SSHFS as regular user (not as root). For this to work the mountpoint must be owned by the user. If username is omitted SSHFS will use the local username. If the directory is omitted, SSHFS will mount the (remote) home directory. If you need to enter a password sshfs will ask for it (actually it just runs ssh which ask for the password if needed).</p>
+<p>Also many ssh options can be specified (see the manual pages for sftp(1) and ssh_config(5)), including the remote port number (-oport=PORT)</p>
+<p>To unmount the filesystem:</p>
+<pre><code class="bash">fusermount -u mountpoint
+</code></pre>
+
+<p>On BSD and macOS, to unmount the filesystem:</p>
+<pre><code class="bash">umount mountpoint
+</code></pre>
 
   <br>
     

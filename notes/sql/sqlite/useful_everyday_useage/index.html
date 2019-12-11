@@ -34,6 +34,8 @@
         
         var pageToc = [
           {title: "Useful Everyday Code", url: "#_top", children: [
+              {title: "Drop If Exists", url: "#drop-if-exists" },
+              {title: "Select Into", url: "#select-into" },
               {title: "Ranks / Row_Number", url: "#ranks-row_number" },
           ]},
         ];
@@ -83,13 +85,23 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="useful-everyday-code">Useful Everyday Code</h1>
+<h2 id="drop-if-exists">Drop If Exists</h2>
+<pre><code class="sql">DROP TABLE [IF EXISTS] [schema_name.]table_name;
+</code></pre>
+
+<h2 id="select-into">Select Into</h2>
+<p><em>source <a href="https://stackoverflow.com/questions/2361921/select-into-statement-in-sqlite">stackoverflow</a></em></p>
+<pre><code class="sql">CREATE TABLE equipments_backup AS SELECT * FROM equipments
+</code></pre>
+
 <h2 id="ranks-row_number">Ranks / Row_Number</h2>
 <blockquote>
 <p>Courtest of <a href="https://www.sqlitetutorial.net/sqlite-window-functions/sqlite-rank/">sqlitetutorial</a></p>
 </blockquote>
+<p><em>Window function support was first added to SQLite with release version 3.25.0 (2018-09-15). The SQLite developers used the PostgreSQL window function documentation as their primary reference for how window functions ought to behave.</em></p>
 <p>The <code>RANK()</code> function is a window function that assigns a rank to each row in a query’s result set. The rank of a row is calculated by one plus the number of ranks that comes before it.</p>
 <p>The following shows the syntax of the <code>RANK()</code> function:</p>
-<pre><code>RANK() OVER (
+<pre><code class="sql">RANK() OVER (
     PARTITION BY &lt;expression1&gt;[{,&lt;expression2&gt;...}]
     ORDER BY &lt;expression1&gt; [ASC|DESC], [{,&lt;expression1&gt;...}]
 )
