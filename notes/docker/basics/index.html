@@ -66,12 +66,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../git/git_basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../remote_registry/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../git/git_basics/" class="btn btn-xs btn-link">
-        Basics
+      <a href="../remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
       </a>
     </div>
     
@@ -223,6 +223,34 @@ On Linux, you can also run the following command to activate the changes to grou
        │Name                  │ &quot;evil_ptolemy&quot;|   
 </code></pre>
 
+<p><em>--restart=" "</em>
+To configure the restart policy for a container, use the <code>--restart</code> flag when using the docker run command. The value of the <code>--restart</code> flag can be any of the following:</p>
+<table>
+<thead>
+<tr>
+<th>Flag</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>no</td>
+<td>Do not automatically restart the container. (the default)</td>
+</tr>
+<tr>
+<td>on-failure</td>
+<td>Restart the container if it exits due to an error, which manifests as a non-zero exit code.</td>
+</tr>
+<tr>
+<td>always</td>
+<td>Always restart the container if it stops. If it is manually stopped, it is restarted only when Docker daemon restarts or the container itself is manually restarted. (See the second bullet listed in  <a href="https://docs.docker.com/config/containers/start-containers-automatically/#restart-policy-details">restart policy details</a>)</td>
+</tr>
+<tr>
+<td>unless-stopped</td>
+<td>Similar to  <code>always</code>, except that when the container is stopped (manually or otherwise), it is not restarted even after Docker daemon restarts.</td>
+</tr>
+</tbody>
+</table>
 <h2 id="managing-and-removing">Managing and Removing</h2>
 <p>Good <a href="https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/">discussion</a></p>
 <p><strong>Summary</strong></p>
@@ -322,12 +350,12 @@ codalab/codalab-legacy   latest              432ce2829707        20 months ago  
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../git/git_basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../remote_registry/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../git/git_basics/" class="btn btn-xs btn-link">
-        Basics
+      <a href="../remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
       </a>
     </div>
     
