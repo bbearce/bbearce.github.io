@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>SQL server - Ben's Code Journal</title>
+    <title>pgAdmin - Ben's Code Journal</title>
     <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,8 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "SQL Server", url: "#_top", children: [
+          {title: "pgAdmin", url: "#_top", children: [
+              {title: "Running the program", url: "#running-the-program" },
           ]},
         ];
 
@@ -60,20 +61,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-default pull-right">
+      <a href="../../sql_server/Sql Server/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-link">
-        Installing
+      <a href="../../sql_server/Sql Server/" class="btn btn-xs btn-link">
+        SQL server
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../postgres/pgadmin/" class="btn btn-xs btn-default pull-left">
+      <a href="../Postgres/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../postgres/pgadmin/" class="btn btn-xs btn-link">
-        pgAdmin
+        Previous</a><a href="../Postgres/" class="btn btn-xs btn-link">
+        Postgres
       </a>
     </div>
     
@@ -81,12 +82,21 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="sql-server">SQL Server</h1>
-<p>Testing the addition of a new language</p>
-<pre><code class="sql">SELECT TOP 10000 sum(colC) FROM DB_Server.dbo.DB_Table
-WHERE colA = 'some value'
-GROUP BY colB 
+    <h1 id="pgadmin">pgAdmin</h1>
+<h2 id="running-the-program">Running the program</h2>
+<p>Navigate to:  </p>
+<pre><code class="bash">/home/bbearce/pgAdmin4/pgAdmin4 
+</code></pre>
 
+<blockquote>
+<p>note: <em>pgAdmin4/pgAdmin4</em> is a virtual environment(venv).</p>
+</blockquote>
+<p>Activate venv:</p>
+<pre><code class="bash"> $ . bin/activate 
+</code></pre>
+
+<p>Run pgAdmin:</p>
+<pre><code class="bash">$ python lib/python2.7/site-packages/pgadmin4/pgAdmin4.py 
 </code></pre>
 
   <br>
@@ -100,20 +110,20 @@ GROUP BY colB
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-default pull-right">
+      <a href="../../sql_server/Sql Server/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../sqlite/installing/" class="btn btn-xs btn-link">
-        Installing
+      <a href="../../sql_server/Sql Server/" class="btn btn-xs btn-link">
+        SQL server
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../postgres/pgadmin/" class="btn btn-xs btn-default pull-left">
+      <a href="../Postgres/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../postgres/pgadmin/" class="btn btn-xs btn-link">
-        pgAdmin
+        Previous</a><a href="../Postgres/" class="btn btn-xs btn-link">
+        Postgres
       </a>
     </div>
     

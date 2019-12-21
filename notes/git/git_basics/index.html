@@ -210,6 +210,34 @@ Generating public/private rsa key pair.
 </code></pre>
 
 <p>[2]. <a href="https://help.github.com/en/enterprise/2.14/user/articles/adding-a-new-ssh-key-to-your-github-account">Add public key to git account</a> or <a href="https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys">Add public key to git repo</a> </p>
+<h3 id="possible-issues">Possible Issues:</h3>
+<p>If you get this error:</p>
+<pre><code class="bash">ERROR: Permission to bbearce/code-journal.git denied to deploy key
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+</code></pre>
+
+<p>You need to add your ssh key to the ssh-agent. Before adding a new SSH key to the ssh-agent to manage your keys, you should have <a href="https://help.github.com/en/articles/checking-for-existing-ssh-keys">checked for existing SSH keys and generated a new SSH key</a>.</p>
+<p>If you have checked for existing SSH keys and find one you want to use, follow the below instructions.</p>
+<ol>
+<li>Start the ssh-agent in the background.</li>
+</ol>
+<pre><code class="bash">$ eval &quot;$(ssh-agent -s)&quot;
+&gt; Agent pid 59566
+</code></pre>
+
+<ol>
+<li>Add your SSH private key to the ssh-agent. If you created your key with a different name, or if you are adding an existing key that has a different name, replace id_rsa in the command with the name of your private key file.</li>
+</ol>
+<pre><code class="bash">$ ssh-add ~/.ssh/&lt;your_ssh_key&gt;
+</code></pre>
+
+<blockquote>
+<p>not the <your_ssh_key>.pub file but the <your_ssh_key> file with no extension.</p>
+</blockquote>
+<p>Add the SSH key to your GitHub account.</p>
 <h2 id="branching">Branching</h2>
 <p>Branches are used to develop features isolated from each other. The master branch is the "default" branch when you create a repository. Use other branches for development and merge them back to the master branch upon completion.</p>
 <p><img alt="Branching Image" src="/notes/git/branches.png" /></p>

@@ -86,7 +86,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Courtesy of these resources:<br />
 <em> <a href="https://docs.aws.amazon.com/cli/latest/userguide/cl[i-chap-configure.html">https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html</a><br />
 </em> <a href="https://aws.amazon.com/cli/">https://aws.amazon.com/cli/</a><br />
-<em> <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/qu[ickstart.html">https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html</a><br />
+<em> <a href="https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html">https://boto3.amazonaws.com/v1/documentation/api/latest/guide/quickstart.html</a><br />
 </em> <a href="https://devcenter.heroku.com/articles/s3-upload-python">https://devcenter.heroku.com/articles/s3-upload-python</a>  </p>
 </blockquote>
 <pre><code class="python">import boto3
@@ -99,7 +99,7 @@ for bucket in s3.buckets.all():
 
 # Upload a new file
 data = open('favicon-32x32.png', 'rb')
-s3.Bucket('thegratefulbrauer').put_object(Key='favicon-32x32.png', Body=data)
+s3.Bucket('thegratefulbrauer/recipe_description_images').put_object(Key='favicon-32x32.png', Body=data)
 </code></pre>
 
   <br>
