@@ -371,6 +371,17 @@ Use the <code>rsync</code> command to move things. Use the <em>-a</em> flag to a
 <pre><code class="bash">umount mountpoint
 </code></pre>
 
+<p><em>If you get an error:</em></p>
+<pre><code class="bash">fuse: mountpoint is not empty
+fuse: if you are sure this is safe, use the 'nonempty' mount option
+</code></pre>
+
+<p>You might need to kill all sshfs processes and restart:</p>
+<pre><code class="bash">~$ killall sshfs
+</code></pre>
+
+<p><em>Then restart your sshfs mounting procedure</em></p>
+
   <br>
     
 
