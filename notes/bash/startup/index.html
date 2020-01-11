@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>SSH - Ben's Code Journal</title>
+    <title>On Startup - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -33,9 +33,7 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "SSH", url: "#_top", children: [
-              {title: "Useage", url: "#useage" },
-              {title: "Keys", url: "#keys" },
+          {title: "Run On Startup", url: "#_top", children: [
           ]},
         ];
 
@@ -62,20 +60,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../environment_variables/" class="btn btn-xs btn-default pull-right">
+      <a href="../../docker/basics/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../environment_variables/" class="btn btn-xs btn-link">
-        Environment Variables
+      <a href="../../docker/basics/" class="btn btn-xs btn-link">
+        Basics
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../screen/" class="btn btn-xs btn-default pull-left">
+      <a href="../processes/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../screen/" class="btn btn-xs btn-link">
-        Screen
+        Previous</a><a href="../processes/" class="btn btn-xs btn-link">
+        Processes
       </a>
     </div>
     
@@ -83,62 +81,42 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="ssh">SSH</h1>
-<h2 id="useage">Useage</h2>
-<pre><code class="bash">$ ssh &lt;username&gt;@&lt;host-ip&gt;
-</code></pre>
-
-<h2 id="keys">Keys</h2>
+    <h1 id="run-on-startup">Run On Startup</h1>
 <blockquote>
-<p>Courtesty of <a href="https://unix.stackexchange.com/questions/337465/username-and-password-in-command-line-with-sshfs/381331">stackexchange</a></p>
+<p>Courtesy of <a href="https://www.ghacks.net/2009/04/04/get-to-know-linux-the-etcinitd-directory/">ghacks</a></p>
 </blockquote>
-<p><strong>Generating a Key Pair the Proper way</strong></p>
-<ul>
-<li>On Local server</li>
-</ul>
-<pre><code class="bash">ssh-keygen -t rsa
-</code></pre>
+<p>Find file <code>/etc/rc.local</code>. You can place scripts that you want to run at startup.</p>
+<p><em>/etc/rc.local</em></p>
+<pre><code class="bash">#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will &quot;exit 0&quot; on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
 
-<ul>
-<li>On remote Server</li>
-</ul>
-<pre><code class="bash">ssh root@remote_servers_ip &quot;mkdir -p .ssh&quot;
-</code></pre>
 
-<ul>
-<li>Uploading Generated Public Keys to the Remote Server</li>
-</ul>
-<pre><code class="bash">cat ~/.ssh/id_rsa.pub | ssh root@remote_servers_ip &quot;cat &gt;&gt; ~/.ssh/authorized_keys&quot;
-</code></pre>
 
-<ul>
-<li>Set Permissions on Remote server</li>
-</ul>
-<pre><code class="bash">ssh root@remote_servers_ip &quot;chmod 700 ~/.ssh; chmod 640 ~/.ssh/authorized_keys&quot;
-</code></pre>
+### BB - 01/11/2020 - Add startup commands here ###
 
-<ul>
-<li>Login</li>
-</ul>
-<pre><code class="bash">ssh root@remote_servers_ip
-</code></pre>
+# Mounting via sshfs
+sshfs bbearce@medici-codalab-master.eastus.cloudapp.azure.com:/home/bbearce/src/MedICI/codalab-competitions /home/bbearce/mounts/medici;
+sshfs azureuser@cbibop3.cloudapp.net:/home/azureuser/codalab-competitions /home/bbearce/mounts/cbibop3;
 
-<ul>
-<li>Enabling SSH Protocol v2</li>
-</ul>
-<pre><code class="bash">uncomment &quot;Protocol 2&quot; in /etc/ssh/sshd_config
-</code></pre>
+# add github ssh key to agent
+eval &quot;$(ssh-agent -s)&quot;;
+ssh-add ~/.ssh/github;
 
-<ul>
-<li>Enabling public key authorization in sshd</li>
-</ul>
-<pre><code class="bash">uncomment &quot;PubkeyAuthentication yes&quot; in /etc/ssh/sshd_config
-</code></pre>
+### BB - Add startup commands here ###
 
-<ul>
-<li>If StrictModes is set to yes in /etc/ssh/sshd_config then</li>
-</ul>
-<pre><code class="bash">restorecon -Rv ~/.ssh
+
+exit 0
+
 </code></pre>
 
   <br>
@@ -152,20 +130,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../environment_variables/" class="btn btn-xs btn-default pull-right">
+      <a href="../../docker/basics/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../environment_variables/" class="btn btn-xs btn-link">
-        Environment Variables
+      <a href="../../docker/basics/" class="btn btn-xs btn-link">
+        Basics
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../screen/" class="btn btn-xs btn-default pull-left">
+      <a href="../processes/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../screen/" class="btn btn-xs btn-link">
-        Screen
+        Previous</a><a href="../processes/" class="btn btn-xs btn-link">
+        Processes
       </a>
     </div>
     
