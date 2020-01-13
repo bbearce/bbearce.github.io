@@ -83,6 +83,50 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="run-on-startup">Run On Startup</h1>
 <blockquote>
+<p>Proper instructions aren't working so I made a <code>run.sh</code> script that I can run from <code>/home/bbearce</code></p>
+</blockquote>
+<pre><code class="bash">#!/bin/bash
+
+### BB - 01/11/2020 - Add startup commands here ###
+
+# Mounting via sshfs
+if [ &quot;$1&quot; == mount ]; then
+  sshfs bbearce@medici-codalab-master.eastus.cloudapp.azure.com:/home/bbearce/src/MedICI/codalab-competitions /home/bbearce/mounts/medici;
+
+  sshfs azureuser@cbibop3.cloudapp.net:/home/azureuser/codalab-competitions /home/bbearce/mounts/cbibop3;
+
+# Postgres and pgAdmin
+elif [ &quot;$1&quot; == postgres ]; then
+
+  cd /home/bbearce/pgAdmin4/pgAdmin4;
+  . bin/activate;
+  python lib/python2.7/site-packages/pgadmin4/pgAdmin4.py;
+
+elif [ &quot;$1&quot; == code-journal ]; then
+  cd /home/bbearce/Documents/code-journal;
+  . venv/bin/activate;
+  mkdocs serve;
+
+elif [ &quot;$1&quot; == github_key ] || [ &quot;$1&quot; == gk ]; then
+  # add github ssh key to agent
+  eval &quot;$(ssh-agent -s)&quot;;
+  ssh-add ~/.ssh/github;
+
+elif [ &quot;$1&quot; == thegratefulbrauer ] || [ &quot;$1&quot;  == tgb ]; then
+  cd /home/bbearce/Documents/thegratefulbrauer;
+  . venv3.6/bin/activate;
+  python app.py;
+
+else
+  echo &quot;not sure what you want...&quot;
+
+fi
+
+
+### BB - Add startup commands here ###
+</code></pre>
+
+<blockquote>
 <p>Courtesy of <a href="https://www.ghacks.net/2009/04/04/get-to-know-linux-the-etcinitd-directory/">ghacks</a></p>
 </blockquote>
 <p>Find file <code>/etc/rc.local</code>. You can place scripts that you want to run at startup.</p>

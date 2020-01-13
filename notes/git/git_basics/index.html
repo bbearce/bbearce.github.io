@@ -242,7 +242,10 @@ and the repository exists.
 <p>Branches are used to develop features isolated from each other. The master branch is the "default" branch when you create a repository. Use other branches for development and merge them back to the master branch upon completion.</p>
 <p><img alt="Branching Image" src="/notes/git/branches.png" /></p>
 <p>Create a new branch named "feature_x" and switch to it using:</p>
-<p><code>git checkout -b feature_x</code></p>
+<p><code>git checkout -b feature_x</code> or <code>git branch feature_x</code></p>
+<blockquote>
+<p>When switching to a new branch commit changes to master before switching. Also same for the new branch when switching to back to master. </p>
+</blockquote>
 <p>Switch back to master:</p>
 <p><code>git checkout master</code></p>
 <p>Delete the branch again:</p>
