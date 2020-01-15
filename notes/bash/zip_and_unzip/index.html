@@ -98,6 +98,7 @@ NAME
 .
 </code></pre>
 
+<h3 id="zipping-files">zipping files</h3>
 <p>To zip files into a <em>.zip</em> file run this command:</p>
 <pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
 something.txt  wheel.py
@@ -111,6 +112,7 @@ example.zip  something.txt  wheel.py
 
 </code></pre>
 
+<h3 id="zipping-folder-contents">zipping folder contents</h3>
 <p>To zip eveything in a directory into zip file use <code>./*</code></p>
 <blockquote>
 <p>This is useful for pointing to <code>&lt;some directory&gt;/*</code></p>
@@ -146,7 +148,8 @@ updating: wheel.py (deflated 79%)
 </code></pre>
 
 <blockquote>
-<p>Notice how zipping to <em>example.zip</em> again updates pre-existing files and adds new ones.</p>
+<p>Notice how zipping to <em>example.zip</em> again updates pre-existing files and adds new ones.
+Also flag <code>-j</code> can be used to make sure a folder's contents only get zipped. By default if you include a folder name, the folder is included in the zip file. Using <code>-j</code> will explicitly exclude the folder.</p>
 </blockquote>
 <h3 id="unzip">unzip</h3>
 <pre><code class="bash">$ man unzip
