@@ -89,7 +89,6 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
 ### BB - 01/11/2020 - Add startup commands here ###
 
-
 # Mounting via sshfs
 if [ &quot;$1&quot; == mount ]; then
   sshfs bbearce@medici-codalab-master.eastus.cloudapp.azure.com:/home/bbearce/srr
@@ -111,15 +110,15 @@ elif [ &quot;$1&quot; == code-journal ]; then
   mkdocs serve;
 
 elif [ &quot;$1&quot; == cj-commit ]; then
-  git add /home/bbearce/Documents/code-journal/.;
+  cd /home/bbearce/Documents/code-journal/;
+  git add .;
   git commit -m &quot;&quot;$2&quot;&quot;;
   echo &quot;$2&quot;
   git push origin master;
   cd /home/bbearce/Documents/code-journal;
   . venv/bin/activate;
   cd /home/bbearce/Documents/bbearce.github.io;
-  mkdocs gh-deploy --config-file ../code-journal/mkdocs.yml --remote-branch mastt
-er;
+  mkdocs gh-deploy --config-file ../code-journal/mkdocs.yml --remote-branch master;
 
 elif [ &quot;$1&quot; == key_github ] || [ &quot;$1&quot; == gk ]; then
   # add github ssh key to agent
@@ -149,6 +148,7 @@ fi
 
 
 ### BB - Add startup commands here ###
+
 </code></pre>
 
 <blockquote>
