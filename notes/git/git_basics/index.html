@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Basics - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Git Basics", url: "#_top", children: [
+              {title: "Create a Repo", url: "#create-a-repo" },
+              {title: "Checkout a Repo", url: "#checkout-a-repo" },
+              {title: "Workflow", url: "#workflow" },
+              {title: "Add and Commit", url: "#add-and-commit" },
+              {title: "Adding a New Remote", url: "#adding-a-new-remote" },
+              {title: "Pushing Changes", url: "#pushing-changes" },
+              {title: "Push Without User:Pass", url: "#push-without-userpass" },
+              {title: "Branching", url: "#branching" },
+              {title: "Update and Merge", url: "#update-and-merge" },
+              {title: "Tagging", url: "#tagging" },
+              {title: "Log", url: "#log" },
+              {title: "Replace Local Changes", url: "#replace-local-changes" },
+              {title: "Useful Hints", url: "#useful-hints" },
+              {title: "Clone Single Branch", url: "#clone-single-branch" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../git_sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../docker/remote_registry/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../docker/remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="git-basics">Git Basics</h1>
+<blockquote>
+<p>Courtesy of <a href="https://rogerdudler.github.io/git-guide/">rogerdudler.github.io</a></p>
+</blockquote>
+<h2 id="create-a-repo">Create a Repo</h2>
+<p>Create a new repo with <code>git init</code>:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop/git_practice$ git init
+Initialized empty Git repository in /home/bbearce/Desktop/git_practice/.git/
+
+</code></pre>
+
+<h2 id="checkout-a-repo">Checkout a Repo</h2>
+<p>Checkout a repo with <code>git clone</code>:</p>
+<pre><code class="bash">$ git clone /path/to/repository
+</code></pre>
+
+<p>When using a remote server, your command will be:</p>
+<pre><code class="bash">git clone username@host:/path/to/repository
+</code></pre>
+
+<h2 id="workflow">Workflow</h2>
+<p>Your local repository consists of three "trees" maintained by git. the first one is your <code>Working Directory</code> which holds the actual files. The second one is the <code>Index</code> which acts as a staging area and finally the <code>HEAD</code> which points to the last commit you've made.</p>
+<p><img alt="Basic Git Workflow" src="/notes/git/git_trees.png" /></p>
+<h2 id="add-and-commit">Add and Commit</h2>
+<p>You can propose changes (add it to the Index) using:</p>
+<pre><code class="bash">git add &lt;filename&gt;
+</code></pre>
+
+<p>or</p>
+<pre><code>git add *
+</code></pre>
+
+<p>This is the first step in the basic git workflow. To actually commit these changes use:</p>
+<pre><code class="bash">git commit -m &quot;Commit message&quot;
+</code></pre>
+
+<p>Now the file is committed to the <code>HEAD</code>, but not in your remote repository yet.</p>
+<blockquote>
+<p><code>git remote -v</code> will tell you which remote you are connected to.</p>
+</blockquote>
+<pre><code>SYNOPSIS
+       git remote [-v | --verbose]
+
+...
+
+OPTIONS
+       -v, --verbose
+           Be a little more verbose and show remote url after name. NOTE: This must be placed between remote and subcommand.
+</code></pre>
+
+<h2 id="adding-a-new-remote">Adding a New Remote</h2>
+<blockquote>
+<p>Courtesy of <a href="https://articles.assembla.com/en/articles/1136998-how-to-add-a-new-remote-to-your-git-repo#targetText=To%20add%20a%20new%20remote%2C%20use%20the%20git%20remote%20add,tab%20of%20your%20Git%20repo">articles.assembla.com</a></p>
+</blockquote>
+<p>To add a new remote, use the <code>git remote add</code> command on the terminal, in the directory your repository is stored at.</p>
+<p>The git remote add command takes two arguments:</p>
+<ul>
+<li>A remote name, for example, “origin”  </li>
+<li>A remote URL, which you can find on the Source sub-tab of your Git repo  </li>
+</ul>
+<pre><code class="bash">#set a new remote
+git remote add origin git@git.assembla.com:portfolio/space.space_name.git
+
+#Verify new remote
+git remote -v
+
+origin  git@git.assembla.com:portfolio/space.space_name.git (fetch)
+origin  git@git.assembla.com:portfolio/space.space_name.git (push)
+</code></pre>
+
+<h2 id="pushing-changes">Pushing Changes</h2>
+<p>Your changes are now in the <code>HEAD</code> of your local working copy. To send those changes to your remote repository, execute:</p>
+<pre><code class="bash">git push origin master
+</code></pre>
+
+<p>Change master to whatever branch you want to push your changes to.</p>
+<p>If you have not cloned an existing repository and want to connect your repository to a remote server, you need to add it with:</p>
+<pre><code class="bash">git remote add origin &lt;server&gt;
+</code></pre>
+
+<p>Now you are able to push your changes to the selected remote server.</p>
+<h2 id="push-without-userpass">Push Without User:Pass</h2>
+<blockquote>
+<p>Courtesy of <a href="https://medium.com/@amanze.ogbonna/accessing-pushing-to-github-without-username-and-password-3022feb077fb">medium.com</a></p>
+</blockquote>
+<p>A way to skip typing my username/password when using https://github, is by changing the HTTPs origin remote which pointing to an HTTP url into an SSH url.</p>
+<p>For example:</p>
+<p>https url: <code>https://github.com/&lt;Username&gt;/&lt;Project&gt;.git</code><br />
+ssh url: <code>git@github.com:&lt;Username&gt;/&lt;Project&gt;.git</code>  </p>
+<p>You can do:</p>
+<pre><code class="bash">git remote set-url origin git@github.com:&lt;Username&gt;/&lt;Project&gt;.git
+</code></pre>
+
+<p>to change the url.</p>
+<blockquote>
+<p>You need to have an ssh key pair generated and added to github</p>
+</blockquote>
+<p>Steps:  </p>
+<p>[1]. <a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key">Generate Key Pair</a>  </p>
+<p>Open Terminal.</p>
+<p>Paste the text below, substituting in your GitHub email address.</p>
+<pre><code class="bash">$ ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
+
+Generating public/private rsa key pair.
+</code></pre>
+
+<p>This creates a new ssh key, using the provided email as a label. When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location.</p>
+<pre><code class="bash">Enter a file in which to save the key (/home/you/.ssh/id_rsa): [Press enter]
+</code></pre>
+
+<p>At the prompt, type a secure passphrase. For more information, see <a href="https://help.github.com/en/articles/working-with-ssh-key-passphrases">Working with SSH key passphrases</a>.</p>
+<pre><code class="bash">Enter passphrase (empty for no passphrase): [Type a passphrase]&gt; Enter same passphrase again: [Type passphrase again]
+</code></pre>
+
+<p>[2]. <a href="https://help.github.com/en/enterprise/2.14/user/articles/adding-a-new-ssh-key-to-your-github-account">Add public key to git account</a> or <a href="https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys">Add public key to git repo</a> </p>
+<h3 id="possible-issues">Possible Issues:</h3>
+<p>If you get this error:</p>
+<pre><code class="bash">ERROR: Permission to bbearce/code-journal.git denied to deploy key
+fatal: Could not read from remote repository.
+
+Please make sure you have the correct access rights
+and the repository exists.
+</code></pre>
+
+<p>You need to add your ssh key to the ssh-agent. Before adding a new SSH key to the ssh-agent to manage your keys, you should have <a href="https://help.github.com/en/articles/checking-for-existing-ssh-keys">checked for existing SSH keys and generated a new SSH key</a>.</p>
+<p>If you have checked for existing SSH keys and find one you want to use, follow the below instructions.</p>
+<ol>
+<li>Start the ssh-agent in the background.</li>
+</ol>
+<pre><code class="bash">$ eval &quot;$(ssh-agent -s)&quot;
+&gt; Agent pid 59566
+</code></pre>
+
+<ol>
+<li>Add your SSH private key to the ssh-agent. If you created your key with a different name, or if you are adding an existing key that has a different name, replace id_rsa in the command with the name of your private key file.</li>
+</ol>
+<pre><code class="bash">$ ssh-add ~/.ssh/&lt;your_ssh_key&gt;
+</code></pre>
+
+<blockquote>
+<p>not the <your_ssh_key>.pub file but the <your_ssh_key> file with no extension.</p>
+</blockquote>
+<p>Add the SSH key to your GitHub account.</p>
+<h2 id="branching">Branching</h2>
+<p>Branches are used to develop features isolated from each other. The master branch is the "default" branch when you create a repository. Use other branches for development and merge them back to the master branch upon completion.</p>
+<p><img alt="Branching Image" src="/notes/git/branches.png" /></p>
+<p>Create a new branch named "feature_x" and switch to it using:</p>
+<p><code>git checkout -b feature_x</code> or <code>git branch feature_x</code></p>
+<blockquote>
+<p>When switching to a new branch commit changes to master before switching. Also same for the new branch when switching to back to master. </p>
+</blockquote>
+<p>Switch back to master:</p>
+<p><code>git checkout master</code></p>
+<p>Delete the branch again:</p>
+<p><code>git branch -d feature_x</code></p>
+<p>A branch is not available to others unless you push the branch to your remote repository:</p>
+<p><code>git push origin &lt;branch&gt;</code></p>
+<h2 id="update-and-merge">Update and Merge</h2>
+<p>To update your local repository to the newest commit, execute:</p>
+<p><code>git pull</code></p>
+<p>In your working directory to fetch and merge remote changes. To merge another branch into your active branch (e.g. master), use:</p>
+<p><code>git merge &lt;branch&gt;</code></p>
+<p>In both cases git tries to auto-merge changes. Unfortunately, this is not always possible and results in conflicts. You are responsible to merge those conflicts manually by editing the files shown by git. After changing, you need to mark them as merged with:</p>
+<p><code>git add &lt;filename&gt;</code></p>
+<p>Before merging changes, you can also preview them by using:</p>
+<p><code>git diff &lt;source_branch&gt; &lt;target_branch&gt;</code></p>
+<h2 id="tagging">Tagging</h2>
+<p>It's recommended to create tags for software releases. This is a known concept, which also exists in SVN. You can create a new tag named 1.0.0 by executing:</p>
+<p><code>git tag 1.0.0 1b2e1d63ff</code></p>
+<p>The 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag. You can get the commit id by looking at the...log.</p>
+<h2 id="log">Log</h2>
+<p>In its simplest form, you can study repository history using:</p>
+<p><code>git log</code></p>
+<p>You can add a lot of parameters to make the log look like what you want. To see only the commits of a certain author:</p>
+<p><code>git log --author=bob</code></p>
+<p>To see a very compressed log where each commit is one line:</p>
+<p><code>git log --pretty=oneline</code></p>
+<p>Or maybe you want to see an ASCII art tree of all the branches, decorated with the names of tags and branches:</p>
+<p><code>git log --graph --oneline --decorate --all</code></p>
+<p>See only which files have changed:</p>
+<p><code>git log --name-status</code></p>
+<p>These are just a few of the possible parameters you can use. For more, see <code>git log --help</code></p>
+<h2 id="replace-local-changes">Replace Local Changes</h2>
+<p>In case you did something wrong, which for sure never happens ;), you can replace local changes using the command:</p>
+<p><code>git checkout -- &lt;filename&gt;</code></p>
+<p>This replaces the changes in your working tree with the last content in <code>HEAD</code>. Changes already added to the index, as well as new files, will be kept.</p>
+<p>If you instead want to drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this:</p>
+<pre><code class="bash">git fetch origin
+git reset --hard origin/master
+</code></pre>
+
+<h2 id="useful-hints">Useful Hints</h2>
+<p>If you want a built-in git GUI, use:</p>
+<p><code>gitk</code></p>
+<p>Use colorful git output:</p>
+<p><code>git config color.ui true</code></p>
+<p>To show log on just one line per commit, use:</p>
+<p><code>git config format.pretty oneline</code></p>
+<p>Use interactive adding:</p>
+<p><code>git add -i</code></p>
+<h2 id="clone-single-branch">Clone Single Branch</h2>
+<blockquote>
+<p>Courtesy of <a href="https://stackoverflow.com/questions/4811434/clone-only-one-branch/14930421#14930421">stackoverflow</a></p>
+</blockquote>
+<pre><code class="bash">git clone -b &lt;mybranch&gt; --single-branch &lt;git-url&gt;
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../git_sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../docker/remote_registry/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../docker/remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

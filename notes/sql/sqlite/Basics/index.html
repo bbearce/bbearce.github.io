@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Basics - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Sqlite", url: "#_top", children: [
+              {title: ".tables", url: "#tables" },
+              {title: ".schema / create table", url: "#schema-create-table" },
+              {title: "bulk insert", url: "#bulk-insert" },
+              {title: "csv export", url: "#csv-export" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../useful_everyday_useage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../useful_everyday_useage/" class="btn btn-xs btn-link">
+        Useful Code
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../installing/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../installing/" class="btn btn-xs btn-link">
+        Installing
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="sqlite">Sqlite</h1>
+<h2 id="tables">.tables</h2>
+<p>The following notes are from <a href="https://www.sqlitetutorial.net/sqlite-tutorial/sqlite-show-tables/">sqlitetutorial.net</a></p>
+<p>List tables after connecting using <code>.tables</code></p>
+<pre><code class="bash">$ sqlite3 kaggle_rsna
+SQLite version 3.11.0 2016-02-15 17:29:24
+Enter &quot;.help&quot; for usage hints.
+sqlite&gt; .tables
+all_images                         final_annotation_list            
+all_images_corrected               remove_exams                     
+annotations                        remove_series                    
+annotations_corrected              study_and_instance_annotation_ids
+
+</code></pre>
+
+<p>The .tables command also can be used to show temporary tables. See the following example:</p>
+<p>First, <a href="https://www.sqlitetutorial.net/sqlite-create-table/">create a new temporary</a> table named temp_table1:</p>
+<pre><code class="bash">sqlite&gt; CREATE TEMPORARY TABLE temp_table1( name TEXT );
+</code></pre>
+
+<p>Second, list all tables from the database:</p>
+<pre><code class="bash">sqlite&gt; .tables
+</code></pre>
+
+<p>The following shows the output:</p>
+<pre><code class="bash">albums            employees         invoices          playlists
+artists           genres            media_types       temp.temp_table1
+customers         invoice_items     playlist_track    tracks
+</code></pre>
+
+<p>Because the schema of temporary tables is temp, the command showed the names of schema and table of the temporary table such as <code>temp.temp_table1</code>.</p>
+<p>If you want to show tables with the specific name, you can add a matching pattern:</p>
+<pre><code class="bash">.tables pattern
+</code></pre>
+
+<p>The command works the same as LIKE operator. The pattern must be surrounded by single quotation marks (').</p>
+<p>For example, to find tables whose names start with the letter ‘a’, you use the following command:</p>
+<pre><code class="bash">sqlite&gt; .table 'a%'
+</code></pre>
+
+<p>Here is the output:</p>
+<pre><code class="bash">albums   artists
+</code></pre>
+
+<p>To shows the tables whose name contains the string  ck, you use the %ck% pattern as shown in the following command:</p>
+<pre><code class="bash">sqlite&gt; .tables '%ck%'
+</code></pre>
+
+<p>The output is as follows:</p>
+<pre><code class="bash">playlist_track  tracks
+</code></pre>
+
+<p>Showing tables using SQL statement:</p>
+<p>Another way to list all tables in a database is to query them from the sqlite_master table.</p>
+<pre><code class="sql">SELECT 
+    name
+FROM 
+    sqlite_master 
+WHERE 
+    type ='table' AND 
+    name NOT LIKE 'sqlite_%';
+</code></pre>
+
+<p>Here is the output:</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>albums</td>
+</tr>
+<tr>
+<td>customers</td>
+</tr>
+<tr>
+<td>employees</td>
+</tr>
+<tr>
+<td>genres</td>
+</tr>
+<tr>
+<td>invoices</td>
+</tr>
+<tr>
+<td>invoice_items</td>
+</tr>
+<tr>
+<td>media_types</td>
+</tr>
+<tr>
+<td>playlists</td>
+</tr>
+<tr>
+<td>playlist_track</td>
+</tr>
+<tr>
+<td>tracks</td>
+</tr>
+</tbody>
+</table>
+<h2 id="schema-create-table">.schema / create table</h2>
+<p>View the schema of a particular table:</p>
+<pre><code class="bash">sqlite&gt; .schema table
+sqlite&gt; .schema all_images
+CREATE TABLE all_images(
+  &quot;InstanceID&quot; TEXT,
+  &quot;SeriesID&quot; TEXT,
+  &quot;StudyID&quot; TEXT
+);
+
+</code></pre>
+
+<h2 id="bulk-insert">bulk insert</h2>
+<p>If the table doesn't exist, sqlite will try to create it and it's scheme assuming a header.</p>
+<pre><code class="bash">sqlite&gt; .mode csv all_images 
+sqlite&gt; .import &lt;path_to_csv&gt; all_images
+</code></pre>
+
+<h2 id="csv-export">csv export</h2>
+<p>An example export from the <code>rad</code> table.</p>
+<blockquote>
+<p>Any query can be used as the basis for the export, including multi-line complex ones.</p>
+</blockquote>
+<pre><code class="bash">sqlite&gt; .headers on
+sqlite&gt; .mode csv
+sqlite&gt; .output rad_data.csv
+sqlite&gt; select * from rad;
+sqlite&gt; 
+
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../useful_everyday_useage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../useful_everyday_useage/" class="btn btn-xs btn-link">
+        Useful Code
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../installing/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../installing/" class="btn btn-xs btn-link">
+        Installing
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

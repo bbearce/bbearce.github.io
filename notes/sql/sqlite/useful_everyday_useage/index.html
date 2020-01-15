@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Useful Code - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Useful Everyday Code", url: "#_top", children: [
+              {title: "Drop If Exists", url: "#drop-if-exists" },
+              {title: "Select Into", url: "#select-into" },
+              {title: "Ranks / Row_Number", url: "#ranks-row_number" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../mysql/mySQL/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../mysql/mySQL/" class="btn btn-xs btn-link">
+        mySQL
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="useful-everyday-code">Useful Everyday Code</h1>
+<h2 id="drop-if-exists">Drop If Exists</h2>
+<pre><code class="sql">DROP TABLE [IF EXISTS] [schema_name.]table_name;
+</code></pre>
+
+<h2 id="select-into">Select Into</h2>
+<p><em>source <a href="https://stackoverflow.com/questions/2361921/select-into-statement-in-sqlite">stackoverflow</a></em></p>
+<pre><code class="sql">CREATE TABLE equipments_backup AS SELECT * FROM equipments
+</code></pre>
+
+<h2 id="ranks-row_number">Ranks / Row_Number</h2>
+<blockquote>
+<p>Courtest of <a href="https://www.sqlitetutorial.net/sqlite-window-functions/sqlite-rank/">sqlitetutorial</a></p>
+</blockquote>
+<p><em>Window function support was first added to SQLite with release version 3.25.0 (2018-09-15). The SQLite developers used the PostgreSQL window function documentation as their primary reference for how window functions ought to behave.</em></p>
+<p>The <code>RANK()</code> function is a window function that assigns a rank to each row in a query’s result set. The rank of a row is calculated by one plus the number of ranks that comes before it.</p>
+<p>The following shows the syntax of the <code>RANK()</code> function:</p>
+<pre><code class="sql">RANK() OVER (
+    PARTITION BY &lt;expression1&gt;[{,&lt;expression2&gt;...}]
+    ORDER BY &lt;expression1&gt; [ASC|DESC], [{,&lt;expression1&gt;...}]
+)
+</code></pre>
+
+<blockquote>
+<p>Courtesty of <a href="https://www.sqlite.org/windowfunctions.html">sqlite</a></p>
+</blockquote>
+<p>SQLite supports the following 11 built-in window functions:</p>
+<ul>
+<li>
+<p>row_number()  </p>
+<p>The number of the row within the current partition. Rows are numbered starting from 1 in the order defined by the ORDER BY clause in the window definition, or in arbitrary order otherwise.</p>
+</li>
+<li>
+<p>rank()  </p>
+<p>The row_number() of the first peer in each group - the rank of the current row with gaps. If there is no ORDER BY clause, then all rows are considered peers and this function always returns 1.</p>
+</li>
+<li>
+<p>dense_rank()  </p>
+<p>The number of the current row's peer group within its partition - the rank of the current row without gaps. Partitions are numbered starting from 1 in the order defined by the ORDER BY clause in the window definition. If there is no ORDER BY clause, then all rows are considered peers and this function always returns 1.</p>
+</li>
+<li>
+<p>percent_rank()  </p>
+<p>Despite the name, this function always returns a value between 0.0 and 1.0 equal to (rank - 1)/(partition-rows - 1), where rank is the value returned by built-in window function rank() and partition-rows is the total number of rows in the partition. If the partition contains only one row, this function returns 0.0.</p>
+</li>
+<li>
+<p>cume_dist()  </p>
+<p>The cumulative distribution. Calculated as row-number/partition-rows, where row-number is the value returned by row_number() for the last peer in the group and partition-rows the number of rows in the partition.</p>
+</li>
+<li>
+<p>ntile(N)  </p>
+<p>Argument N is handled as an integer. This function divides the partition into N groups as evenly as possible and assigns an integer between 1 and N to each group, in the order defined by the ORDER BY clause, or in arbitrary order otherwise. If necessary, larger groups occur first. This function returns the integer value assigned to the group that the current row is a part of.</p>
+</li>
+</ul>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../mysql/mySQL/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../mysql/mySQL/" class="btn btn-xs btn-link">
+        mySQL
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

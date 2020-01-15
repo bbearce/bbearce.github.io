@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>On Startup - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Run On Startup", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../docker/basics/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../docker/basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../processes/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../processes/" class="btn btn-xs btn-link">
+        Processes
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="run-on-startup">Run On Startup</h1>
+<blockquote>
+<p>Proper instructions aren't working so I made a <code>run.sh</code> script that I can run from <code>/home/bbearce</code></p>
+</blockquote>
+<pre><code class="bash">#!/bin/bash
+
+### BB - 01/11/2020 - Add startup commands here ###
+
+
+# Mounting via sshfs
+if [ &quot;$1&quot; == mount ]; then
+  sshfs bbearce@medici-codalab-master.eastus.cloudapp.azure.com:/home/bbearce/srr
+c/MedICI/codalab-competitions /home/bbearce/mounts/medici;
+
+  sshfs azureuser@cbibop3.cloudapp.net:/home/azureuser/codalab-competitions /homm
+e/bbearce/mounts/cbibop3;
+
+# Postgres and pgAdmin
+elif [ &quot;$1&quot; == postgres ] || [ &quot;$1&quot; == pg ]; then
+
+  cd /home/bbearce/pgAdmin4/pgAdmin4;
+  . bin/activate;
+  python lib/python2.7/site-packages/pgadmin4/pgAdmin4.py;
+
+elif [ &quot;$1&quot; == code-journal ]; then
+  cd /home/bbearce/Documents/code-journal;
+  . venv/bin/activate;
+  mkdocs serve;
+
+elif [ &quot;$1&quot; == cj-commit ]; then
+  git add /home/bbearce/Documents/code-journal/.;
+  git commit -m &quot;&quot;$2&quot;&quot;;
+  echo &quot;$2&quot;
+  git push origin master;
+  cd /home/bbearce/Documents/code-journal;
+  . venv/bin/activate;
+  cd /home/bbearce/Documents/bbearce.github.io;
+  mkdocs gh-deploy --config-file ../code-journal/mkdocs.yml --remote-branch mastt
+er;
+
+elif [ &quot;$1&quot; == key_github ] || [ &quot;$1&quot; == gk ]; then
+  # add github ssh key to agent
+  eval &quot;$(ssh-agent -s)&quot;;
+  ssh-add ~/.ssh/github;
+
+
+elif [ &quot;$1&quot; == qtim-site ] || [ &quot;$1&quot;  == qs ]; then
+  cd /home/bbearce/Documents/qtim-lab.github.io;
+  bundle exec jekyll serve;
+
+elif [ &quot;$1&quot; == qs-commit ]; then
+  cd /home/bbearce/Documents/qtim-lab.github.io;
+  git add .;
+  git commit -m &quot;&quot;$2&quot;&quot;;
+  git push origin master;
+
+elif [ &quot;$1&quot; == thegratefulbrauer ] || [ &quot;$1&quot;  == tgb ]; then
+  cd /home/bbearce/Documents/thegratefulbrauer;
+  . venv3.6/bin/activate;
+  python app.py;
+
+else
+  echo &quot;not sure what you want...&quot;
+
+fi
+
+
+### BB - Add startup commands here ###
+</code></pre>
+
+<blockquote>
+<p>Courtesy of <a href="https://www.ghacks.net/2009/04/04/get-to-know-linux-the-etcinitd-directory/">ghacks</a></p>
+</blockquote>
+<p>Find file <code>/etc/rc.local</code>. You can place scripts that you want to run at startup.</p>
+<p><em>/etc/rc.local</em></p>
+<pre><code class="bash">#!/bin/sh -e
+#
+# rc.local
+#
+# This script is executed at the end of each multiuser runlevel.
+# Make sure that the script will &quot;exit 0&quot; on success or any other
+# value on error.
+#
+# In order to enable or disable this script just change the execution
+# bits.
+#
+# By default this script does nothing.
+
+
+
+### BB - 01/11/2020 - Add startup commands here ###
+
+# Mounting via sshfs
+sshfs bbearce@medici-codalab-master.eastus.cloudapp.azure.com:/home/bbearce/src/MedICI/codalab-competitions /home/bbearce/mounts/medici;
+sshfs azureuser@cbibop3.cloudapp.net:/home/azureuser/codalab-competitions /home/bbearce/mounts/cbibop3;
+
+# add github ssh key to agent
+eval &quot;$(ssh-agent -s)&quot;;
+ssh-add ~/.ssh/github;
+
+### BB - Add startup commands here ###
+
+
+exit 0
+
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../docker/basics/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../docker/basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../processes/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../processes/" class="btn btn-xs btn-link">
+        Processes
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

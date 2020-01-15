@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Zip and Unzip - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Zipping and Unzipping", url: "#_top", children: [
+              {title: "zip, unzip", url: "#zip-unzip" },
+              {title: "Tar Files", url: "#tar-files" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../screen/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../screen/" class="btn btn-xs btn-link">
+        Screen
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="zipping-and-unzipping">Zipping and Unzipping</h1>
+<h2 id="zip-unzip">zip, unzip</h2>
+<blockquote>
+<p>Courtesty of <a href="https://www.geeksforgeeks.org/zip-command-in-linux-with-examples/">geeksforgeeks.org</a></p>
+</blockquote>
+<h3 id="zip">zip</h3>
+<pre><code class="bash">$ man zip
+NAME
+       zip - package and compress (archive) files
+
+.
+.
+.
+</code></pre>
+
+<p>To zip files into a <em>.zip</em> file run this command:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+something.txt  wheel.py
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ zip example.zip wheel.py something.txt 
+  adding: wheel.py (deflated 79%)
+  adding: something.txt (stored 0%)
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip  something.txt  wheel.py
+
+</code></pre>
+
+<p>To zip eveything in a directory into zip file use <code>./*</code></p>
+<blockquote>
+<p>This is useful for pointing to <code>&lt;some directory&gt;/*</code></p>
+</blockquote>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+something.txt  wheel.py
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ zip example.zip ./*
+  adding: something.txt (stored 0%)
+  adding: wheel.py (deflated 79%)
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip  something.txt  wheel.py
+</code></pre>
+
+<p>Folders will be picked up but <strong>not</strong> their contents without <code>-r</code>:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+directory  something.txt  wheel.py
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls directory/
+test.txt
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ zip example.zip ./*
+  adding: directory/ (stored 0%)
+  adding: something.txt (stored 0%)
+  adding: wheel.py (deflated 79%)
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ zip -r example.zip ./*
+updating: directory/ (stored 0%)
+updating: something.txt (stored 0%)
+updating: wheel.py (deflated 79%)
+  adding: directory/test.txt (stored 0%)
+</code></pre>
+
+<blockquote>
+<p>Notice how zipping to <em>example.zip</em> again updates pre-existing files and adds new ones.</p>
+</blockquote>
+<h3 id="unzip">unzip</h3>
+<pre><code class="bash">$ man unzip
+NAME
+       unzip - list, test and extract compressed files in a ZIP archive
+
+.
+.
+.
+</code></pre>
+
+<p>To unzip simply use the <code>unzip</code> command:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ unzip example.zip 
+Archive:  example.zip
+   creating: directory/
+ extracting: something.txt           
+  inflating: wheel.py                
+ extracting: directory/test.txt      
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+directory  example.zip  something.txt  wheel.py
+</code></pre>
+
+<p>We can unzip to a specific directory with the <code>-d</code> flag:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ unzip example.zip -d test
+Archive:  example.zip
+   creating: test/directory/
+ extracting: test/something.txt      
+  inflating: test/wheel.py           
+ extracting: test/directory/test.txt
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip  test
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls test
+directory  something.txt  wheel.py
+</code></pre>
+
+<p>If the directory already exists, we can dump the contents into it:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ mkdir test
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip  test
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ unzip example.zip -d test
+Archive:  example.zip
+   creating: test/directory/
+ extracting: test/something.txt      
+  inflating: test/wheel.py           
+ extracting: test/directory/test.txt 
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+example.zip  test
+
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls test
+directory  something.txt  wheel.py
+
+</code></pre>
+
+<h2 id="tar-files">Tar Files</h2>
+<h3 id="tar">.tar</h3>
+<p>The <code>tar</code> command is used to create tar archives by converting a group of files into an archive. It supports a vast range of compression programs such as <code>gzip</code>, <code>bzip2</code>, <code>lzip</code>, <code>lzma</code>, <code>lzop</code>, <code>xz</code> and <code>compress</code>. Tar was originally designed for creating archives to store files on magnetic tape which is why it has its name “<strong>T</strong>ape <strong>AR</strong>chive”.</p>
+<h4 id="create-a-tar">Create a .tar</h4>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ tar -cvf test.tar test.txt
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar  test.txt
+</code></pre>
+
+<blockquote>
+<p>Here <code>-cvf</code> means <em>c: create; v: verbose; f: use archive file or device (we can and did specify a filename to use)</em>. Keep in mind we didn't use the <code>-z</code> flag which would make a <code>gzip</code>.</p>
+</blockquote>
+<h3 id="targz">.tar.gz</h3>
+<blockquote>
+<p><code>.tar.gz</code> files are just files that have been zipped with -z to make a gzip.</p>
+</blockquote>
+<p>Let's redo the above example with <code>-z</code>:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ tar -cvzf test.tar test.txt
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar  test.txt
+</code></pre>
+
+<blockquote>
+<p>Note that the archive name <code>test.tar</code> is a <code>.tar.gz</code> but you have to specify that explicitly. So a canonical way of diong this is: <code>tar -cvzf test.tar.gz test.txt</code>.
+Also the [-] is optional, so <code>tar cvzf test.tar.gz test.txt</code> would work too.</p>
+</blockquote>
+<p>We can see that the .tar.gz is smaller with <code>du</code></p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ du -BK ./*
+20K     ./test.tar
+4K      ./test.tar.gz
+12K     ./test.txt
+
+</code></pre>
+
+<h4 id="unzip-a-tar">Unzip a .tar</h4>
+<p>We need the <code>-x</code> option:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar
+bbearce@bbearce-XPS-15-9560:~/Desktop$ tar -xvf test.tar
+test.txt
+bbearce@bbearce-XPS-15-9560:~/Desktop$ ls
+test.tar  test.txt
+
+</code></pre>
+
+<p>When downloading 3DSlicer you get a *.tar.gz file. This command installs it.</p>
+<pre><code class="bash">tar zxvf Slicer-4.8.1-linux-amd64.tar.gz
+</code></pre>
+
+<p>FYI: (<a href="https://stackoverflow.com/questions/21929223/what-does-zxvf-mean-in-tar-zxvf-filename">Link</a>)</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../screen/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../screen/" class="btn btn-xs btn-link">
+        Screen
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

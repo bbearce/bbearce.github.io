@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Subtrees - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Subtrees", url: "#_top", children: [
+              {title: "Setting up the empty repository for a subtree merge", url: "#setting-up-the-empty-repository-for-a-subtree-merge" },
+              {title: "Adding a new repository as a subtree", url: "#adding-a-new-repository-as-a-subtree" },
+              {title: "Synchronizing with updates and changes", url: "#synchronizing-with-updates-and-changes" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../git_submodules/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../git_submodules/" class="btn btn-xs btn-link">
+        Submodules
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../git_basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../git_basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="subtrees">Subtrees</h1>
+<blockquote>
+<p>Courtesty of <a href="https://help.github.com/en/github/using-git/about-git-subtree-merges">github</a></p>
+</blockquote>
+<p>Typically, a subtree merge is used to contain a repository within a repository. The "subrepository" is stored in a folder of the main repository.</p>
+<p>The best way to explain subtree merges is to show by example. We will:</p>
+<ul>
+<li>Make an empty repository called <code>test</code> that represents our project  </li>
+<li>Merge another repository into it as a subtree called <code>Spoon-Knife</code>.  </li>
+<li>The <code>test</code> project will use that subproject as if it were part of the same repository.  </li>
+<li>Fetch updates from <code>Spoon-Knife</code> into our <code>test</code> project.  </li>
+</ul>
+<h2 id="setting-up-the-empty-repository-for-a-subtree-merge">Setting up the empty repository for a subtree merge</h2>
+<p>Open Terminal.</p>
+<p>Create a new directory and navigate to it.</p>
+<pre><code class="bash">$ mkdir test
+$ cd test
+</code></pre>
+
+<p>Initialize a new Git repository.</p>
+<pre><code class="bash">$ git init
+&gt; Initialized empty Git repository in /Users/octocat/tmp/test/.git/
+</code></pre>
+
+<p>Create and commit a new file.</p>
+<pre><code class="bash">$ touch .gitignore
+$ git add .gitignore
+$ git commit -m &quot;initial commit&quot;
+&gt; [master (root-commit) 3146c2a] initial commit
+&gt;  0 files changed, 0 insertions(+), 0 deletions(-)
+&gt;  create mode 100644 .gitignore
+</code></pre>
+
+<h2 id="adding-a-new-repository-as-a-subtree">Adding a new repository as a subtree</h2>
+<p>Add a new remote URL pointing to the separate project that we're interested in.</p>
+<pre><code class="bash">$ git remote add -f spoon-knife git@github.com:octocat/Spoon-Knife.git
+&gt; Updating spoon-knife
+&gt; warning: no common commits
+&gt; remote: Counting objects: 1732, done.
+&gt; remote: Compressing objects: 100% (750/750), done.
+&gt; remote: Total 1732 (delta 1086), reused 1558 (delta 967)
+&gt; Receiving objects: 100% (1732/1732), 528.19 KiB | 621 KiB/s, done.
+&gt; Resolving deltas: 100% (1086/1086), done.
+&gt; From git://github.com/octocat/Spoon-Knife
+&gt;  * [new branch]      master     -&gt; Spoon-Knife/master
+</code></pre>
+
+<p>Merge the <code>Spoon-Knife</code> project into the local Git project. This doesn't change any of your files locally, but it does prepare Git for the next step.</p>
+<p>If you're using Git 2.9 or above:</p>
+<pre><code class="bash">$ git merge -s ours --no-commit --allow-unrelated-histories spoon-knife/master
+&gt; Automatic merge went well; stopped before committing as requested
+</code></pre>
+
+<p>If you're using Git 2.8 or below:</p>
+<pre><code class="bash">$ git merge -s ours --no-commit spoon-knife/master
+&gt; Automatic merge went well; stopped before committing as requested
+</code></pre>
+
+<p>Create a new directory called <strong>spoon-knife</strong>, and copy the Git history of the Spoon-Knife project into it.</p>
+<pre><code class="bash">$ git read-tree --prefix=spoon-knife/ -u spoon-knife/master
+</code></pre>
+
+<p>Commit the changes to keep them safe.</p>
+<pre><code class="bash">$ git commit -m &quot;Subtree merged in spoon-knife&quot;
+&gt; [master fe0ca25] Subtree merged in spoon-knife
+</code></pre>
+
+<p>Although we've only added one subproject, any number of subprojects can be incorporated into a Git repository.</p>
+<blockquote>
+<p>Tip: If you create a fresh clone of the repository in the future, the remotes you've added will not be created for you. You will have to add them again using the <code>git remote add</code> command.</p>
+</blockquote>
+<h2 id="synchronizing-with-updates-and-changes">Synchronizing with updates and changes</h2>
+<p>When a subproject is added, it is not automatically kept in sync with the upstream changes. You will need to update the subproject with the following command:</p>
+<pre><code class="bash">$ git pull -s subtree remotename branchname
+</code></pre>
+
+<p>For the example above, this would be:</p>
+<pre><code class="bash">$ git pull -s subtree spoon-knife master
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../git_submodules/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../git_submodules/" class="btn btn-xs btn-link">
+        Submodules
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../git_basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../git_basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Postgres - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Postgres", url: "#_top", children: [
+              {title: "Installation", url: "#installation" },
+              {title: "First Time Use and Setup", url: "#first-time-use-and-setup" },
+              {title: "Display all DBs:", url: "#display-all-dbs" },
+              {title: "Display Tables", url: "#display-tables" },
+              {title: "Display Connection Information", url: "#display-connection-information" },
+              {title: "Switch DBs:", url: "#switch-dbs" },
+              {title: "Delete Database:", url: "#delete-database" },
+              {title: "Create Database:", url: "#create-database" },
+              {title: "Create User:", url: "#create-user" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../pgadmin/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../pgadmin/" class="btn btn-xs btn-link">
+        pgAdmin
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../python/s3/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../python/s3/" class="btn btn-xs btn-link">
+        S3
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="postgres">Postgres</h1>
+<blockquote>
+<p>Courtesy of <a href="https://stackoverflow.com/questions/1471571/how-to-configure-postgresql-for-the-first-time">Stackoverflow</a></p>
+</blockquote>
+<h2 id="installation">Installation</h2>
+<p>Whoops...I'm sure this is easy...I'll get to it eventually.</p>
+<h2 id="first-time-use-and-setup">First Time Use and Setup</h2>
+<p>Here's what worked for postgresql-9.1 on Xubuntu 12.04.1 LTS.</p>
+<p>Connect to the default database with user <code>postgres</code>: </p>
+<p><code>sudo -u postgres psql template1</code></p>
+<p>Set the password for user <code>postgres</code>, then exit psql (Ctrl-D) : </p>
+<pre><code class="sql">postgres=# ALTER USER postgres with encrypted password 'xxxxxxx';
+</code></pre>
+
+<p>Edit the <em>pg_hba.conf</em> file: </p>
+<p><code>sudo vim /etc/postgresql/9.1/main/pg_hba.conf</code></p>
+<p>And change <code>peer</code> to <code>md5</code> on the line concerning postgres : </p>
+<pre><code>local      all     postgres     peer md5 
+</code></pre>
+
+<blockquote>
+<p>Note: you need sudo or the file will appear blank </p>
+</blockquote>
+<p>Restart the database: </p>
+<p><code>postgres=# sudo /etc/init.d/postgresql restart\</code> </p>
+<p>(Here you can check it worked with <code>psql -U postgres</code>.) </p>
+<p>Create a user having the same name as you (to find it, you can type <code>whoami</code>) : </p>
+<pre><code class="sql">postgres=# createuser -U postgres -d -e -E -l -P -r -s &lt;my_name&gt; 
+</code></pre>
+
+<p>The options tell postgresql to create a user that can login, create databases, create new roles, is a superuser, and will have an encrypted password. The really important ones are <code>-P</code> <code>-E</code>, so that you're asked to type the password that will be encrypted, and <code>-d</code> so that you can do a <code>createdb</code>. </p>
+<p>Beware of passwords : it will first ask you twice the new password (for the new user), repeated, and then once the postgres password (the one specified on step 2). </p>
+<p>Again, edit the <em>pg_hba.conf </em>file (see step 3 above), and change <code>peer</code> to <code>md5</code> on the line concerning "all" other users : </p>
+<pre><code>local      all     all     peer md5 
+</code></pre>
+
+<p>Restart (like in step 4), and check that you can login without <code>-U postgres</code>: </p>
+<pre><code>psql template1 
+</code></pre>
+
+<blockquote>
+<p>Note that if you do a mere psql, it will fail since it will try to connect you to a default database having the same name as you (ie. <code>whoami</code>). <code>template1</code> is the admin database that is here from the start. </p>
+</blockquote>
+<p>Now <code>createdb &lt;dbname&gt;</code> should work. </p>
+<h2 id="display-all-dbs">Display all DBs:</h2>
+<p>Use <code>\list</code> or <code>\l</code> to display databases.</p>
+<pre><code class="sql">postgres=# \list
+                                    List of databases
+      Name       |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
+-----------------+----------+----------+------------+------------+-----------------------
+ codalab_website | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ postgres        | postgres | UTF8     | en_US.utf8 | en_US.utf8 | 
+ template0       | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+                 |          |          |            |            | postgres=CTc/postgres
+ template1       | postgres | UTF8     | en_US.utf8 | en_US.utf8 | =c/postgres          +
+                 |          |          |            |            | postgres=CTc/postgres
+(4 rows)
+
+</code></pre>
+
+<h2 id="display-tables">Display Tables</h2>
+<p>Use <code>\dt</code> to list all public tables, and <code>\dt *</code> for all tables in the current DB you are connected to.  </p>
+<pre><code class="sql">postgres=# \dt
+
+                      List of relations
+ Schema |                Name                 | Type  | Owner 
+--------+-------------------------------------+-------+-------
+ public | account_emailaddress                | table | root
+ public | account_emailconfirmation           | table | root
+ public | auth_group                          | table | root
+ public | auth_group_permissions              | table | root
+ public | auth_permission                     | table | root
+ public | authenz_cluser                      | table | root
+ public | authenz_cluser_groups               | table | root
+ public | authenz_cluser_user_permissions     | table | root
+ public | captcha_captchastore                | table | root
+ public | coopetitions_dislike                | table | root
+ public | coopetitions_downloadrecord         | table | root
+ public | coopetitions_like                   | table | root
+ public | customizer_configuration            | table | root
+ public | django_admin_log                    | table | root
+...
+
+codalab_website=# \dt *
+                          List of relations
+   Schema   |                Name                 | Type  |  Owner   
+------------+-------------------------------------+-------+----------
+ pg_catalog | pg_aggregate                        | table | postgres
+ pg_catalog | pg_am                               | table | postgres
+ pg_catalog | pg_amop                             | table | postgres
+ pg_catalog | pg_amproc                           | table | postgres
+ pg_catalog | pg_attrdef                          | table | postgres
+ pg_catalog | pg_attribute                        | table | postgres
+ pg_catalog | pg_auth_members                     | table | postgres
+ pg_catalog | pg_authid                           | table | postgres
+ pg_catalog | pg_cast                             | table | postgres
+ pg_catalog | pg_class                            | table | postgres
+...
+
+</code></pre>
+
+<h2 id="display-connection-information">Display Connection Information</h2>
+<pre><code class="sql">codalab_website-# \conninfo
+You are connected to database &quot;codalab_website&quot; as user &quot;root&quot; via socket in &quot;/var/run/postgresql&quot; at port &quot;5432&quot;.
+
+</code></pre>
+
+<blockquote>
+<p>You will never see tables in other databases, these tables aren't visible. You have to connect to the correct database to see its tables (and other objects). </p>
+</blockquote>
+<h2 id="switch-dbs">Switch DBs:</h2>
+<p>To switch databases: </p>
+<pre><code class="sql">postgres=# \connect database_name 
+</code></pre>
+
+<p>Selects all non-template DBs: </p>
+<pre><code class="sql">postgres=# SELECT datname FROM pg_database 
+WHERE datistemplate = false; 
+</code></pre>
+
+<p>Select all tables in current DB connection </p>
+<pre><code class="sql">postgres=# SELECT table_schema,table_name 
+FROM information_schema.tables 
+ORDER BY table_schema,table_name; 
+</code></pre>
+
+<h2 id="delete-database">Delete Database:</h2>
+<pre><code class="sql">postgres=# DROP DATABASE [ IF EXISTS ] name 
+</code></pre>
+
+<h2 id="create-database">Create Database:</h2>
+<pre><code class="sql">postgres=# CREATE DATABASE testdb; 
+</code></pre>
+
+<h2 id="create-user">Create User:</h2>
+<h3 id="see-all-current-users">See all current users:</h3>
+<pre><code class="sql">postgres=# SELECT usename FROM pg_user; 
+</code></pre>
+
+<h3 id="create-new-user">Create New User:</h3>
+<p>Bash:</p>
+<pre><code class="bash">$ createuser name  
+</code></pre>
+
+<p>or<br />
+Postgres:</p>
+<pre><code class="sql">postgres=# CREATE USER testuser; 
+</code></pre>
+
+<h3 id="drop-user">Drop User:</h3>
+<p>Bash:</p>
+<pre><code class="bash">$ dropuser name 
+</code></pre>
+
+<p>or<br />
+Postgres:</p>
+<pre><code class="sql">postgres=# DROP USER testuser; 
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../pgadmin/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../pgadmin/" class="btn btn-xs btn-link">
+        pgAdmin
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../python/s3/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../python/s3/" class="btn btn-xs btn-link">
+        S3
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

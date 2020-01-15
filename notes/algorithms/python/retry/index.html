@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Retry - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "retry()", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../stairs/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../stairs/" class="btn btn-xs btn-link">
+        Stairs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../crossing_rects/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../crossing_rects/" class="btn btn-xs btn-link">
+        Crossing Rects
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="retry">retry()</h1>
+<p><strong>Retry a GET request a maximum of 5 times.</strong></p>
+<p>Let's assume you want to get some response from a get command. For all intensive purposes we will assume this is all happening inside a function called <code>get_response(choice)</code></p>
+<p>Next youy want to make a function <code>try_again(response='pass')</code> that will keep trying to execute <code>get_response(choice)</code> if we get a '401' response, which means that the client could not be authenticated. The catch is that we want the maximum retries to be 5 before accepting the failed authentication. Furthermore each time the retry function is called the function should sleep for n^2 seconds. It shouldn't wait anytime to execute the first <code>get_response(choice)</code>, which is the one initially passed to <code>try_again()</code>. Finally if we get '404' then return a '404 Not Found Error'.</p>
+<p>We start by defining get_response()</p>
+<pre><code>def get_response(choice=3):
+    choices = {1:'404',2:'pass',3:'401'}
+    return choices[choice]
+</code></pre>
+
+<p>Now we need try_again(). I have to give credit to <a href="https://zagaran.com/">Zagaran</a> which you can find a link to on the Sources tab for this algorithm. During an interview I attempted a recursive solution, but they said a for loop would of done. So for extra practice I implemented both.</p>
+<pre><code class="python">def try_again_recursive(response, try_count=1):
+    &quot;&quot;&quot;
+    This function will take a response object
+    and do the following:
+
+    - If we get 'pass', return 'we connected!'
+    - If we get '404', return '404 Not Found Error'
+    - If we get '401', try again, however each time
+      you try again wait the square of the try 
+      seconds before trying again. Try a maximum of 5 
+      times before returning 'client could not be authenticated.'
+
+    Example:
+        try1: wait 1 seconds to retry
+        try2: wait 4 seconds to retry
+        try3: wait 9 seconds to retry
+        try4: wait 16 seconds to retry
+        try5: wait 0 seconds to retry! Since the max tries is 5,
+              there is no need to wait the additional 25 seconds
+              before exiting.
+    &quot;&quot;&quot;
+
+    if response == '404':
+        return '404 Not Found Error'
+    elif response == '401':
+        if try_count == 5:
+            print('for n = {0}, waiting {1} seconds.'.format(try_count, 0))
+            print('client could not be authenticated.')
+        else:
+            print('for n = {0}, waiting {1} seconds.'.format(try_count, try_count**2))
+            time.sleep(try_count**2)
+            try_again_recursive(get_response(), try_count=try_count+1)
+    else:
+        return 'we connected!'
+
+    return response
+</code></pre>
+
+<p>Check out the output below</p>
+<pre><code class="python"># Tests
+# &gt;&gt;&gt;try_again_recursive(get_response())
+# for n = 1, waiting 1 seconds.
+# for n = 2, waiting 4 seconds.
+# for n = 3, waiting 9 seconds.
+# for n = 4, waiting 16 seconds.
+# for n = 5, waiting 0 seconds.
+# client could not be authenticated.
+# '401'
+</code></pre>
+
+<p>One thing to note, I cheated a little. For the sake of practicing the multiple calls, I made sure the get_response() function always returned a '401'. We will address this a little later. For now let's implement the for loop version.</p>
+<pre><code class="python"># For Loop Solution:
+def try_again_for_loop(response):
+    &quot;&quot;&quot;
+    This function will take a response object
+    and do the following:
+
+    - If we get 'pass', return 'we connected!'
+    - If we get '404', return '404 Not Found Error'
+    - If we get '404', try again, however each time
+      you try again wait the square of the try 
+      seconds before trying again. Try a maximum of 5 
+      times before returning 'client could not be authenticated.'
+
+    Example:
+        try1: wait 1 seconds to retry
+        try2: wait 4 seconds to retry
+        try3: wait 9 seconds to retry
+        try4: wait 16 seconds to retry
+        try5: wait 0 seconds to retry! Since the max tries is 5,
+              there is no need to wait the additional 25 seconds
+              before exiting.
+    &quot;&quot;&quot;
+    for i in range(1,6): # [1,2,3,4,5]
+
+        if response == '404':
+            return '404 Not Found Error'
+        elif response == '401':
+            if i == 5:
+                print('for n = {0}, waiting {1} seconds.'.format(i, 0))
+                print('client could not be authenticated.')
+            else:
+                # pdb.set_trace()
+                print('for n = {0}, waiting {1} seconds.'.format(i, i**2))
+                time.sleep(i**2)
+                response = get_response()
+        else:
+            return 'we connected!'
+
+    return response
+</code></pre>
+
+<p>Output:</p>
+<pre><code class="python"># &gt;&gt;&gt; try_again_for_loop(get_response())
+# for n = 1, waiting 1 seconds.
+# for n = 2, waiting 4 seconds.
+# for n = 3, waiting 9 seconds.
+# for n = 4, waiting 16 seconds.
+# for n = 5, waiting 0 seconds.
+# client could not be authenticated.
+# '401'
+</code></pre>
+
+<p>Now we need to simulate reality a little better to give the other logic a chance to be executed. Let's make it so get_response() could return any of the other values ('pass','404').</p>
+<p>Go into the recursive version of <code>try_again()</code> and find this line <code>try_again_recursive(get_response(), try_count=try_count+1)</code>, and change it to <code>try_again_recursive(get_response(random.randint(1,3)), try_count=try_count+1)</code>. You will need to <code>import random</code> at the top of your script. Then also add to your call of <code>try_again_recursive()</code></p>
+<p>Results:</p>
+<pre><code class="python"># Simulation
+# &gt;&gt;&gt; try_again_recursive(get_response(random.randint(1,3)))
+# for n = 1, waiting 1 seconds.
+# '401'
+# &gt;&gt;&gt; try_again_recursive(get_response(random.randint(1,3)))
+# for n = 1, waiting 1 seconds.
+# '401'
+# &gt;&gt;&gt; try_again_recursive(get_response(random.randint(1,3)))
+# 'we connected!'
+# &gt;&gt;&gt; try_again_recursive(get_response(random.randint(1,3)))
+# for n = 1, waiting 1 seconds.
+# '401'
+# &gt;&gt;&gt; try_again_recursive(get_response(random.randint(1,3)))
+# '404 Not Found Error'
+# &gt;&gt;&gt; try_again_recursive(get_response(random.randint(1,3)))
+# for n = 1, waiting 1 seconds.
+# for n = 2, waiting 4 seconds.
+# for n = 3, waiting 9 seconds.
+# for n = 4, waiting 16 seconds.
+# for n = 5, waiting 0 seconds.
+# client could not be authenticated.
+# '401'
+</code></pre>
+
+<p>Again, the for loop version changes the same thing, ie. <code>response = get_response(</code> to this <code>response = get_response(random.rendint(1,3))</code>.</p>
+<pre><code class="python"># &gt;&gt;&gt; try_again_for_loop(get_response(random.randint(1,3)))
+# for n = 1, waiting 1 seconds.
+# for n = 2, waiting 4 seconds.
+# '404 Not Found Error'
+# &gt;&gt;&gt; try_again_for_loop(get_response(random.randint(1,3)))
+# for n = 1, waiting 1 seconds.
+# for n = 2, waiting 4 seconds.
+# for n = 3, waiting 9 seconds.
+# 'we connected!'
+# &gt;&gt;&gt; try_again_for_loop(get_response(random.randint(1,3)))
+# for n = 1, waiting 1 seconds.
+# for n = 2, waiting 4 seconds.
+# for n = 3, waiting 9 seconds.
+# 'we connected!'
+# &gt;&gt;&gt; try_again_for_loop(get_response(random.randint(1,3)))
+# '404 Not Found Error'
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../stairs/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../stairs/" class="btn btn-xs btn-link">
+        Stairs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../crossing_rects/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../crossing_rects/" class="btn btn-xs btn-link">
+        Crossing Rects
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

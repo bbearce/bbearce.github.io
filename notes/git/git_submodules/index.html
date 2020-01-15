@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Submodules - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Submodules", url: "#_top", children: [
+              {title: "Why submodules?", url: "#why-submodules" },
+              {title: "Basics", url: "#basics" },
+              {title: "Adding a submodule", url: "#adding-a-submodule" },
+              {title: "Getting the submodule's code", url: "#getting-the-submodules-code" },
+              {title: "Pushing updates in the submodule", url: "#pushing-updates-in-the-submodule" },
+              {title: "Keeping your submodules up-to-date", url: "#keeping-your-submodules-up-to-date" },
+              {title: "Making it easier for everyone", url: "#making-it-easier-for-everyone" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../git_sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="submodules">Submodules</h1>
+<blockquote>
+<p>Courtesy of <a href="https://gist.github.com/gitaarik/8735255">github</a></p>
+</blockquote>
+<p>Git Submodules basic explanation</p>
+<h2 id="why-submodules">Why submodules?</h2>
+<p>In Git you can add a submodule to a repository. This is basically a repository embedded in your <strong>main</strong> repository. This can be very useful. A couple of advantages of using submodules:</p>
+<ul>
+<li>
+<p>You can separate the code into different repositories.</p>
+<p>Useful if you have a codebase with big components, you could make a component a submodule. This way you'll have a cleaner Git log (commits are specific to a certain component).</p>
+</li>
+<li>
+<p>You can add the submodule to multiple repositories.</p>
+<p>Useful if you have multiple repositories that share the same components. With this approach you can easily update those components in all the repositories that added them as a submodule. This is a lot more convienient than copy-pasting the code into the repositories.</p>
+</li>
+</ul>
+<h2 id="basics">Basics</h2>
+<p>When you add a submodule in Git, you don't add the <strong>code</strong> of the submodule to the main repository, you only add <strong>information about the submodule</strong> that is added to the main repository. This information describes which <strong>commit the submodule is pointing</strong> at. This way, the submodule's <strong>code</strong> won't automatically be updated if the submodule's <strong>repository</strong> is updated. This is good, because your code might not work with the latest commit of the submodule, it prevents unexpected behaviour.</p>
+<h2 id="adding-a-submodule">Adding a submodule</h2>
+<p>You can add a submodule to a repository like this:</p>
+<p><code>git submodule add git@github.com:url_to/awesome_submodule.git path_to_awesome_submodule</code></p>
+<p>With default configuration, this will check out the <strong>code</strong> of the <code>awesome_submodule.git</code> repository to the path_to_awesome_submodule directory, and will <strong>add information to the main repository</strong> about this submodule, which contains the <strong>commit the submodule points to</strong>, which will be the current commit of the default branch (usually the <code>master</code> branch) at the time this command is executed.</p>
+<p>After this operation, if you do a <code>git status</code> you'll see two files in the <code>Changes to be committed</code> list: the <code>.gitmodules</code> file and the path to the submodule. When you commit and push these files you commit/push the submodule to the origin.</p>
+<h2 id="getting-the-submodules-code">Getting the submodule's code</h2>
+<p>If a new submodule is created by one person, the other people in the team need to initiate this submodule. First you have to get the <strong>information</strong> about the submodule, this is retrieved by a normal <code>git pull</code>. If there are new submodules you'll see it in the output of <code>git pull</code>. Then you'll have to initiate them with:</p>
+<p><code>git submodule init</code></p>
+<p>This will pull all the <strong>code</strong> from the submodule and place it in the directory that it's configured to.</p>
+<p>If you've cloned a repository that makes use of submodules, you should also run this command to get the submodule's code. This is not automatically done by <code>git clone</code>.</p>
+<h2 id="pushing-updates-in-the-submodule">Pushing updates in the submodule</h2>
+<p>The submodule is just a separate resository. If you want to make changes to it, you should make the changes in this repository and push them like in a regular Git repository (just execute the git commands in the submodule's directory). However, you should also let the <strong>main</strong> repository know that you've updated the submodule's repository, and make it use the latest commit of the repository of the submodule. Because if you make new commits inside a submodule, the main repository will still <strong>point to the old commit</strong>.</p>
+<p>So, if you want to have these changes in your <strong>main</strong> repository too, you should tell the <strong>main</strong> repository to use the latest commit of the submodule. Now how do you do this?</p>
+<p>So you've made changes in the submodule's repository and committed them in its repository. If you now do a <code>git status</code> in the <strong>main</strong> repository, you'll see that the submodule is in the list <code>Changes not staged for commit</code> and it has the text <code>(modified content)</code> behind it. This means that the <strong>code</strong> of the submodule is checked out on a different commit than the <strong>main</strong> repository is <strong>pointing to</strong>. To make the <strong>main</strong> repository <strong>point to</strong> this new commit, you just add this change with <code>git add</code> and then commit and push it.</p>
+<h2 id="keeping-your-submodules-up-to-date">Keeping your submodules up-to-date</h2>
+<p>If someone updated a submodule, the other team-members should update the code of their submodules. This is not automatically done by <code>git pull</code>, because with <code>git pull</code> it only retrieves the <strong>information</strong> that the submodule is <strong>pointing</strong> to another <strong>commit</strong>, but doesn't update the submodule's <strong>code</strong>. To update the <strong>code</strong> of your submodules, you should run:</p>
+<p><code>git submodule update</code></p>
+<h3 id="what-happens-if-you-dont-run-this-command">What happens if you don't run this command?</h3>
+<p>If you don't run this command, the code of your submodule is checked out to an old commit. When you do git status you will see the submodule in the Changes not staged for commit list with the text (modified content) behind it. This is not because you changed the submodule's code, but because its code is checked out to a different commit. So Git sees this as a change, but actually you just didn't update the submodule's code. So if you're working with submodules, don't forget to keep your submodules up-to-date.</p>
+<h2 id="making-it-easier-for-everyone">Making it easier for everyone</h2>
+<p>It is sometimes annoying if you forget to initiate and update your submodules. Fortunately, there are some tricks to make it easier:</p>
+<p><code>git submodule update --init</code>
+This will update the submodules, and if they're not initiated yet, will initiate them.</p>
+<p>You can also have submodules inside of submodules. In this case you'll want to update/initiate the submodules recursively:</p>
+<p><code>git submodule update --init --recursive</code></p>
+<p>This is a lot to type, so you can make an alias:</p>
+<p><code>git config --global alias.update '!git pull &amp;&amp; git submodule update --init --recursive'</code></p>
+<p>Now whenever you execute <code>git update</code>, it will execute a <code>git pull</code> and a <code>git submodule update --init --recursive</code>, thus updating all the code in your project.</p>
+<blockquote>
+<p>Courtesy of <a href="https://gist.github.com/myusuf3/7f645819ded92bda6677">github</a></p>
+</blockquote>
+<p>To remove a submodule you need to:</p>
+<p>Delete the relevant section from the <em>.gitmodules</em> file.<br />
+Stage the <em>.gitmodules</em> changes <code>git add .gitmodules</code><br />
+Delete the relevant section from <em>.git/config</em>.<br />
+Run <code>git rm --cached path_to_submodule</code> (no trailing slash).<br />
+Run <code>rm -rf .git/modules/path_to_submodule</code> (no trailing slash).<br />
+Commit <code>git commit -m "Removed submodule "</code><br />
+Delete the now untracked submodule files <code>rm -rf path_to_submodule</code>  </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../internet_of_things/AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../git_sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

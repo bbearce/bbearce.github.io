@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Processes - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Processes", url: "#_top", children: [
+              {title: "Kill a process (TL;DR)", url: "#kill-a-process-tldr" },
+              {title: "killall", url: "#killall" },
+              {title: "pkill", url: "#pkill" },
+              {title: "kill", url: "#kill" },
+              {title: "Using top", url: "#using-top" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../startup/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../startup/" class="btn btn-xs btn-link">
+        On Startup
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../users/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../users/" class="btn btn-xs btn-link">
+        Users
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="processes">Processes</h1>
+<h2 id="kill-a-process-tldr">Kill a process (TL;DR)</h2>
+<p><code>$ kill &lt;pid&gt;</code></p>
+<p>Ex: <code>$ kill 1234</code></p>
+<blockquote>
+<p>Courtesy of <a href="booleanworld.com/kill-process-linux/#targetText=It%20is%20very%20easy%20to,that%20you%20want%20to%20kill.">booleanworld.com</a></p>
+</blockquote>
+<p>...more...below:</p>
+<p>Use <code>top</code> to see running processes.</p>
+<pre><code>azureuser@miccai:~$ top
+
+top - 19:14:36 up 28 min,  1 user,  load average: 0.00, 0.02, 0.05
+Tasks: 115 total,   1 running, 114 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st
+KiB Mem:   3514568 total,   715812 used,  2798756 free,    32776 buffers
+KiB Swap:        0 total,        0 used,        0 free.   336792 cached Mem
+
+   PID USER      PR  NI    VIRT    RES    SHR S  %CPU %MEM     TIME+ COMMAND                                                                                                                                     
+     2 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kthreadd                                                                                                                                    
+     3 root      20   0       0      0      0 S   0.0  0.0   0:00.10 ksoftirqd/0                                                                                                                                 
+     5 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/0:0H                                                                                                                                
+     6 root      20   0       0      0      0 S   0.0  0.0   0:00.19 kworker/u256:0                                                                                                                              
+     7 root      20   0       0      0      0 S   0.0  0.0   0:00.90 rcu_sched                                                                                                                                   
+     8 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcu_bh                                                                                                                                      
+     9 root      20   0       0      0      0 S   0.0  0.0   0:00.99 rcuos/0                                                                                                                                     
+    10 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcuob/0                                                                                                                                     
+    11 root      rt   0       0      0      0 S   0.0  0.0   0:00.07 migration/0                                                                                                                                 
+    12 root      rt   0       0      0      0 S   0.0  0.0   0:00.02 watchdog/0                                                                                                                                  
+    13 root      rt   0       0      0      0 S   0.0  0.0   0:00.02 watchdog/1                                                                                                                                  
+    14 root      rt   0       0      0      0 S   0.0  0.0   0:00.03 migration/1                                                                                                                                 
+    15 root      20   0       0      0      0 S   0.0  0.0   0:00.11 ksoftirqd/1                                                                                                                                 
+    17 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kworker/1:0H                                                                                                                                
+    18 root      20   0       0      0      0 S   0.0  0.0   0:00.42 rcuos/1                                                                                                                                     
+    19 root      20   0       0      0      0 S   0.0  0.0   0:00.00 rcuob/1                                                                                                                                     
+    20 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 khelper                                                                                                                                     
+    21 root      20   0       0      0      0 S   0.0  0.0   0:00.00 kdevtmpfs                                                                                                                                   
+    22 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 netns                                                                                                                                       
+    23 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 perf                                                                                                                                        
+    24 root      20   0       0      0      0 S   0.0  0.0   0:00.00 khungtaskd                                                                                                                                  
+    25 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 writeback                                                                                                                                   
+    26 root      25   5       0      0      0 S   0.0  0.0   0:00.00 ksmd                                                                                                                                        
+    27 root      39  19       0      0      0 S   0.0  0.0   0:00.03 khugepaged                                                                                                                                  
+    28 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 crypto                                                                                                                                      
+    29 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kintegrityd                                                                                                                                 
+    30 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 bioset                                                                                                                                      
+    31 root       0 -20       0      0      0 S   0.0  0.0   0:00.00 kblockd                                
+    ...
+    ...
+    ...
+</code></pre>
+
+<p>The other option is <code>$ ps aux</code>. This will give the command used to run the process (this can sometimes be more helpful).</p>
+<pre><code>azureuser@miccai:~$ ps aux
+USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root          1  0.2  0.1  35080  5100 ?        Ss   18:46   0:04 /sbin/init
+root          2  0.0  0.0      0     0 ?        S    18:46   0:00 [kthreadd]
+root          3  0.0  0.0      0     0 ?        S    18:46   0:00 [ksoftirqd/0]
+root          5  0.0  0.0      0     0 ?        S&lt;   18:46   0:00 [kworker/0:0H]
+root          6  0.0  0.0      0     0 ?        S    18:46   0:00 [kworker/u256:0]
+root          7  0.0  0.0      0     0 ?        S    18:46   0:00 [rcu_sched]
+root          8  0.0  0.0      0     0 ?        S    18:46   0:00 [rcu_bh]
+root          9  0.0  0.0      0     0 ?        S    18:46   0:01 [rcuos/0]
+root         10  0.0  0.0      0     0 ?        S    18:46   0:00 [rcuob/0]
+root         11  0.0  0.0      0     0 ?        S    18:46   0:00 [migration/0]
+root         12  0.0  0.0      0     0 ?        S    18:46   0:00 [watchdog/0]
+root         13  0.0  0.0      0     0 ?        S    18:46   0:00 [watchdog/1]
+root         14  0.0  0.0      0     0 ?        S    18:46   0:00 [migration/1]
+...
+...
+...
+</code></pre>
+
+<p>The advantage of using ps is that you can easily filter this list with the grep command. For example, to find a process associated with the term "SCREEN", you can use:</p>
+<pre><code>azureuser@miccai:~$ ps aux | grep -i SCREEN
+azureus+   1813  0.0  0.0  26104  2756 ?        Ss   19:02   0:00 SCREEN -S mysql
+azureus+   2058  0.0  0.0   8212  2148 pts/0    S+   19:17   0:00 grep --color=auto -i SCREEN
+</code></pre>
+
+<p>Thus, even when there are no “vnstat” related processes running, we would get one entry showing the grep process:</p>
+<pre><code>azureuser@miccai:~$ ps aux | grep -i &quot;vnstat&quot;
+azureus+   2070  0.0  0.0   8212  2212 pts/0    S+   19:18   0:00 grep --color=auto -i vnstat
+</code></pre>
+
+<p>Killing a process:</p>
+<p>There are various commands you can use to kill a process — <code>kill</code>, <code>killall</code>, <code>pkill</code> and <code>top</code>. We will begin from the simplest one: the <code>killall</code> command.</p>
+<h2 id="killall">killall</h2>
+<p>Killing processes with the <code>killall</code> command:</p>
+<p>The killall command is one of the easiest ways to kill a process. If you know the exact name of a process, and you know that it’s not running as another user and it is not in the Z or D states, then you can use this command directly; there’s no need to manually locate the process as we described above.</p>
+<p>By default,  For example, to kill a process named “firefox”, run:</p>
+<p><code>$ killall firefox</code></p>
+<p>To forcibly kill the process with <code>SIGKILL</code>, run:</p>
+<p><code>$ killall -9 firefox</code></p>
+<p>You can also use <code>-SIGKILL</code> instead of <code>-9</code>.</p>
+<p>If you want to kill processes interactively, you can use -i like so:</p>
+<p><code>$ killall -i firefox</code></p>
+<p>If you want to kill a process running as a different user, you can use <strong>sudo</strong>:</p>
+<p><code>$ sudo killall firefox</code></p>
+<p>You can also kill a process that has been running for a certain period of time with the <code>-o</code> and <code>-y</code> flags. So, if you want to kill a process that has been running for more than 30 minutes, use:</p>
+<p><code>$ killall -o 30m &lt;process-name&gt;</code></p>
+<p>If you want to kill a process that has been running for less than 30 minutes, use:</p>
+<p><code>$ killall -y 30m &lt;process-name&gt;</code></p>
+<p>Similarly, use the following abbreviations for the respective units of time:</p>
+<pre><code>s   seconds
+m   minutes
+h   hours
+d   days
+w   weeks
+M   months
+y   years
+
+</code></pre>
+
+<h2 id="pkill">pkill</h2>
+<p>Killing processes with the <code>pkill</code> command
+Sometimes, you only know part of a program’s name. Just like <code>pgrep</code>, <code>pkill</code> allows you to kill processes based on partial matches. For example, if you want to kill all processes containing the name apache in the name, run:</p>
+<p><code>pkill apache</code></p>
+<p>If you want to use a <code>SIGKILL</code> instead of a <code>SIGTERM</code>, use:</p>
+<p><code>pkill -9 apache</code></p>
+<p>Again, you can also use <code>-SIGKILL</code> instead of <code>-9</code>.</p>
+<h2 id="kill">kill</h2>
+<p>Killing processes with the <code>kill</code> command:</p>
+<p>Using the <code>kill</code> command is straightforward. Once you have found out the PID of the process that you want to <code>kill</code>, you can terminate it using the <code>kill</code> command. For example, if you want to kill a process having a PID of 1234, then use the following command:</p>
+<p><code>kill 1234</code></p>
+<p>As we mentioned previously, the default is to use a <code>SIGTERM</code>. To use a <code>SIGKILL</code>, use <code>-9</code> or <code>-SIGKILL</code> as we have seen before:</p>
+<p><code>kill -9 1234</code></p>
+<h2 id="using-top">Using top</h2>
+<p>Killing processes with the <code>top</code> command:</p>
+<p>It is very easy to kill processes using the <code>top</code> command. First, search for the process that you want to kill and note the PID. Then, press <code>k</code> while top is running (this is case sensitive). It will prompt you to enter the PID of the process that you want to kill.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../startup/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../startup/" class="btn btn-xs btn-link">
+        On Startup
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../users/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../users/" class="btn btn-xs btn-link">
+        Users
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

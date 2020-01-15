@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Users - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Users", url: "#_top", children: [
+              {title: "$ adduser", url: "#adduser" },
+              {title: "$ userdel", url: "#userdel" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../processes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../processes/" class="btn btn-xs btn-link">
+        Processes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../vi/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../vi/" class="btn btn-xs btn-link">
+        VI
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="users">Users</h1>
+<blockquote>
+<p>Courtesy of <a href="https://www.cyberciti.biz/faq/create-a-user-account-on-ubuntu-linux/">cyberciti.biz</a></p>
+</blockquote>
+<p><em>Introduction</em>: By default, the cloud server comes with a user named <code>ubuntu</code>. You can use such primary user account for sysadmin tasks on Ubuntu. However, sometimes you need to add a user account on Ubuntu for additional sysadmin tasks. This page shows how to create a regular user account or sysadmin account on the Ubuntu server.</p>
+<h2 id="adduser">$ adduser</h2>
+<p><strong>Steps to create a user account on Ubuntu Linux</strong>
+1. Open the terminal application<br />
+2. Log in to remote box by running the ssh user@your-ubuntu-box-ip<br />
+3. To add a new user in Ubuntu run <code>sudo adduser userNameHere</code>
+4. Enter password and other needed info to create a user account on Ubuntu server<br />
+5. New username would be added to /etc/passwd file, and encrypted password stored in the /etc/shadow file  </p>
+<h3 id="example">Example</h3>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ sudo adduser vivek
+[sudo] password for bbearce: 
+Adding user `vivek' ...
+Adding new group `vivek' (1001) ...
+Adding new user `vivek' (1001) with group `vivek' ...
+Creating home directory `/home/vivek' ...
+Copying files from `/etc/skel' ...
+Enter new UNIX password: 
+Retype new UNIX password: 
+passwd: password updated successfully
+Changing the user information for vivek
+Enter the new value, or press ENTER for the default
+    Full Name []: 
+    Room Number []: 
+    Work Phone []: 
+    Home Phone []: 
+    Other []: 
+Is the information correct? [Y/n] y
+
+</code></pre>
+
+<h3 id="verification">Verification</h3>
+<p>Use the grep command or cat command as follows:</p>
+<pre><code class="bash">$ cat /etc/passwd
+.
+.
+.
+vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
+</code></pre>
+
+<p>or</p>
+<pre><code class="bash">$ grep '^vivek' /etc/passwd
+vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
+</code></pre>
+
+<h2 id="userdel">$ userdel</h2>
+<h3 id="remove-the-user">Remove the user</h3>
+<ol>
+<li>Log in to your server via SSH.  </li>
+<li>Switch to the root user:<br />
+<code>$ sudo su -</code>  </li>
+<li>Use the userdel command to remove the old user:<br />
+<code>$ userdel &lt;user's username&gt;</code>  </li>
+<li>Optional: You can also delete that user's home directory and mail spool by using the -r flag with the command:<br />
+<code>$ userdel -r user's username</code>  </li>
+</ol>
+<blockquote>
+<p>Warning: Only delete a user's home directory if you are certain you no longer need their files or mail.</p>
+</blockquote>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../processes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../processes/" class="btn btn-xs btn-link">
+        Processes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../vi/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../vi/" class="btn btn-xs btn-link">
+        VI
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

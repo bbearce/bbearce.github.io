@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Screen - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Screen", url: "#_top", children: [
+              {title: "Basics:", url: "#basics" },
+              {title: "Windows:", url: "#windows" },
+              {title: "Run Commands with Screen:", url: "#run-commands-with-screen" },
+              {title: "Problems", url: "#problems" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../ssh/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../ssh/" class="btn btn-xs btn-link">
+        SSH
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../zip_and_unzip/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../zip_and_unzip/" class="btn btn-xs btn-link">
+        Zip and Unzip
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="screen">Screen</h1>
+<blockquote>
+<p>Courtesy of <a href="https://linuxize.com/post/how-to-use-linux-screen/">linuxize.com</a> and this <a href="https://www.youtube.com/watch?v=I4xVn6Io5Nw">video</a> by <strong>Linux Leech</strong>.</p>
+</blockquote>
+<h2 id="basics">Basics:</h2>
+<p><code>C-a</code> means <code>Control+a</code> and seems to be the basis of most commands.  </p>
+<p><code>C-a ?</code> Means to press <code>control+a</code> and then the <code>?</code> for help about other command for screen. </p>
+<p>Start a new screen with the word <code>screen</code>. </p>
+<p>Name a screen session with <code>screen –S secondscreen</code> </p>
+<h3 id="rename-screen">Rename Screen:</h3>
+<p>To list running screen sessions, use <code>screen -ls</code> </p>
+<p><code>$screen -ls</code></p>
+<pre><code>There is a screen on: 
+        12129.testsession       (Detached) 
+1 Socket in /var/run/screen/S-root. 
+</code></pre>
+
+<p>Yeah, here we go!! Renaming the screen session name <code>testsession</code> to something else. Here is the command to rename the existing session. </p>
+<blockquote>
+<p>Note: <code>sessionname</code> as used below is a command so it is always necessary </p>
+</blockquote>
+<pre><code>$ screen -S 12129.testsession -X sessionname newname 
+</code></pre>
+
+<p><code>C-a d</code> is to detach. </p>
+<p>Once you detach you can see all screens with <code>screen –ls</code></p>
+<p>Now connect to a screen... </p>
+<pre><code>bbearce@bbearce-XPS-15-9560:~$ screen -ls 
+
+There are screens on: 
+
+    530.new_screen    (05/28/2019 03:27:17 PM)    (Detached) 
+
+    370.pts-4.bbearce-XPS-15-9560    (05/28/2019 03:24:18 PM)    (Detached) 
+
+2 Sockets in /var/run/screen/S-bbearce. 
+</code></pre>
+
+<p>Connect to either with the name of the screen or the PID (prefacing numbers {530, 370}) </p>
+<h3 id="to-get-rid-of-a-screen">To get rid of a screen:</h3>
+<pre><code>bbearce@bbearce-XPS-15-9560:~$ screen -X -S 370 quit 
+</code></pre>
+
+<p>The <code>–X</code> is for sending a command to a screen and <code>–S</code> is to identify the name of the screen to send the command. The command is <code>quit</code>. </p>
+<p>Now use <code>screen –ls</code>: </p>
+<pre><code>bbearce@bbearce-XPS-15-9560:~$ screen -ls 
+
+There is a screen on: 
+
+    530.new_screen    (05/28/2019 03:27:17 PM)    (Detached) 
+
+1 Socket in /var/run/screen/S-bbearce. 
+</code></pre>
+
+<p>The other way to kill a screen is from within it.</p>
+<blockquote>
+<p>Keep in mind this is technically for windows and not screens, but will kill a screen if there is only 1 window</p>
+</blockquote>
+<p><code>C-a k</code></p>
+<p>This will prompt you for whether or not you are sure. <code>(y/n)</code></p>
+<p>Now <code>screen –ls</code>: </p>
+<pre><code>bbearce@bbearce-XPS-15-9560:~$ screen -ls 
+
+No Sockets found in /var/run/screen/S-bbearce. 
+</code></pre>
+
+<h2 id="windows">Windows:</h2>
+<p>Once in a screen use <code>C-a c</code> to create a new window. </p>
+<p><code>C-a n</code>  is for <em>next</em><br />
+<code>C-a p</code>  is for <em>previous</em><br />
+<code>C-a w</code>  is for <em>listing windows</em><br />
+<code>C-a "</code> is for <em>showing a menu of windows</em>  </p>
+<p>Don't forget <code>C-a k</code> will kill a window and eventually the screen if there is only one window. </p>
+<p>If you make 4 screens and echo 0-3 in them, we can jump to each with these commands: </p>
+<p><code>C-a 0</code> will jump to the first window with <code>echo 0</code> in in it<br />
+<code>C-a 1</code> will jump to the first window with <code>echo 1</code> in in it<br />
+<code>C-a 2</code> will jump to the first window with <code>echo 2</code> in in it<br />
+<code>C-a 3</code> will jump to the first window with <code>echo 3</code> in in it  </p>
+<p><code>C-a "</code> will show them all and notice they are all named bash. We can rename them to be more useful. </p>
+<p>Ex: </p>
+<pre><code>Num Name 
+
+
+
+  0 bash 
+  1 bash 
+  2 bash 
+  3 bash 
+
+</code></pre>
+
+<p>If you press <code>C-a A</code> we can rename our windows. Notice what happens during <code>C-a "</code> now after renaming: </p>
+<p>Ex: </p>
+<pre><code>Num Name 
+
+
+
+  0 bash 
+  1 bash 
+  2 window-2 
+  3 bash 
+
+</code></pre>
+
+<h3 id="panes">Panes:</h3>
+<p><code>C-a |</code> will split the window <em>vertically</em><br />
+<code>C-a S</code> will split the window <em>horizontally</em><br />
+<code>C-a tab</code> to <em>change panes</em><br />
+<code>C-a X</code> to <em>exit panes</em><br />
+<code>C-a x</code> to <em>lock the terminal\screen</em> - <strong>you will need a password to get back in.</strong><br />
+<code>C-a t</code> to to get the <em>time and load</em> on the system  </p>
+<blockquote>
+<p>Tab over to a new pane that is empty and open a window with the general window commands. </p>
+</blockquote>
+<p><code>C-a X</code> will close a pane as well as performing <code>C-a :</code> which will bring up a prompt starting with <code>:</code>. At the prompt type <code>remove</code> and press enter. This removes the pane as well. </p>
+<h2 id="run-commands-with-screen">Run Commands with Screen:</h2>
+<p>Use VI to make counter.py file as such: </p>
+<pre><code>$ vi counter.py 
+</code></pre>
+
+<p>...write the code below </p>
+<pre><code class="python">import time  
+
+for i in range(5): 
+
+    print(time.ctime(time.time())) 
+
+    time.sleep(1) 
+
+</code></pre>
+
+<p>Now we can run this program in a screen but will kill the screen when complete </p>
+<pre><code>$ screen -d -m counter.py 
+</code></pre>
+
+<p>You can see the screen momentarily before it quits by running <code>screen –r</code>. Also we can run this in a screen and not have it automatically quit by connecting first.  </p>
+<h2 id="problems">Problems</h2>
+<p><a href="https://unix.stackexchange.com/questions/187001/there-are-screens-in-the-list-but-no-screen-to-be-resumed">There is no screen to be resumed matching &lt;screen-name></a></p>
+<pre><code>azureuser@cbibop3:~$ screen -r codalab
+There is a screen on:
+    8967.codalab    (10/18/2019 06:56:52 PM)    (Attached)
+There is no screen to be resumed matching codalab.
+</code></pre>
+
+<p>As <code>screen -r</code> says, there is one screen, but it is attached. To resume it on your current terminal, you have to detach it from the other one first: <code>screen -d -r 8967</code>, see manpage <code>-d</code>.</p>
+<p>Edit: use <code>-d</code> instead of <code>-x</code>.</p>
+<p>Edit2: @alex78191: When using <code>-x</code>, screen attaches to the currently running session, resulting in a "multi-display mode": you see the session on both terminals simultaneously, i.e., when entering a command on one terminal, it also appears on the second. However, detaching from a multi-display mode just detaches the current terminal. You hence get the message that it is still attached (on the other terminal).</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../ssh/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../ssh/" class="btn btn-xs btn-link">
+        SSH
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../zip_and_unzip/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../zip_and_unzip/" class="btn btn-xs btn-link">
+        Zip and Unzip
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
