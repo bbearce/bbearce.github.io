@@ -91,11 +91,9 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
 # Mounting via sshfs
 if [ &quot;$1&quot; == mount ]; then
-  sshfs bbearce@medici-codalab-master.eastus.cloudapp.azure.com:/home/bbearce/srr
-c/MedICI/codalab-competitions /home/bbearce/mounts/medici;
+  sshfs bbearce@medici-codalab-master.eastus.cloudapp.azure.com:/home/bbearce/src/MedICI/codalab-competitions /home/bbearce/mounts/medici;
 
-  sshfs azureuser@cbibop3.cloudapp.net:/home/azureuser/codalab-competitions /homm
-e/bbearce/mounts/cbibop3;
+  sshfs azureuser@cbibop3.cloudapp.net:/home/azureuser/codalab-competitions /home/bbearce/mounts/cbibop3;
 
 # Postgres and pgAdmin
 elif [ &quot;$1&quot; == postgres ] || [ &quot;$1&quot; == pg ]; then
