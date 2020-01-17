@@ -43,6 +43,7 @@
               {title: "Delete Database:", url: "#delete-database" },
               {title: "Create Database:", url: "#create-database" },
               {title: "Create User:", url: "#create-user" },
+              {title: "Bulk Insert:", url: "#bulk-insert" },
           ]},
         ];
 
@@ -248,6 +249,24 @@ Postgres:</p>
 Postgres:</p>
 <pre><code class="sql">postgres=# DROP USER testuser; 
 </code></pre>
+
+<h2 id="bulk-insert">Bulk Insert:</h2>
+<blockquote>
+<p>https://stackoverflow.com/questions/12856377/the-correct-copy-command-to-load-postgresql-data-from-csv-file-that-has-single-q</p>
+</blockquote>
+<p>Double single quotes (if standard_conforming_strings is on, see the docs)</p>
+<pre><code class="sql">COPY my_table FROM 'c:\downloads\file.csv' DELIMITERS ',' CSV QUOTE '''';
+</code></pre>
+
+<p>or use the non-standard PostgreSQL-specific escape string:</p>
+<pre><code class="sql">COPY my_table FROM 'c:\downloads\file.csv' DELIMITERS ',' CSV QUOTE E'\'';
+</code></pre>
+
+<p>If you have a header:
+COPY my_table FROM 'c:\downloads\file.csv' WITH DELIMITER ',' CSV HEADER;</p>
+<blockquote>
+<p>use \copy in bash</p>
+</blockquote>
 
   <br>
     
