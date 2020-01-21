@@ -34,6 +34,7 @@
         
         var pageToc = [
           {title: "Sqlite", url: "#_top", children: [
+              {title: "create database", url: "#create-database" },
               {title: ".tables", url: "#tables" },
               {title: ".schema / create table", url: "#schema-create-table" },
               {title: "bulk insert", url: "#bulk-insert" },
@@ -86,6 +87,45 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="sqlite">Sqlite</h1>
+<h2 id="create-database">create database</h2>
+<p>Syntax
+Following is the basic syntax of sqlite3 command to create a database:</p>
+<pre><code class="bash">$sqlite3 DatabaseName.db
+</code></pre>
+
+<p>Always, database name should be unique within the RDBMS.</p>
+<p>Example
+If you want to create a new database <testDB.db>, then SQLITE3 statement would be as follows −</p>
+<pre><code class="bash">$sqlite3 testDB.db
+SQLite version 3.7.15.2 2013-01-09 11:53:05
+Enter &quot;.help&quot; for instructions
+Enter SQL statements terminated with a &quot;;&quot;
+sqlite&gt;
+</code></pre>
+
+<p>The above command will create a file <strong>testDB.db</strong> in the current directory. This file will be used as database by SQLite engine. If you have noticed while creating database, sqlite3 command will provide a sqlite&gt; prompt after creating a database file successfully.</p>
+<p>Once a database is created, you can verify it in the list of databases using the following SQLite <strong>.databases</strong> command.</p>
+<pre><code class="bash">sqlite&gt;.databases
+seq  name             file
+---  ---------------  ----------------------
+0    main             /home/sqlite/testDB.db
+</code></pre>
+
+<p>You will use SQLite <code>.quit</code> command to come out of the sqlite prompt as follows:</p>
+<pre><code class="bash">sqlite&gt;.quit
+$
+</code></pre>
+
+<h3 id="the-dump-command">The <code>.dump</code> Command</h3>
+<p>You can use <code>.dump</code> dot command to export complete database in a text file using the following SQLite command at the command prompt.</p>
+<pre><code class="bash">$sqlite3 testDB.db .dump &gt; testDB.sql
+</code></pre>
+
+<p>The above command will convert the entire contents of <strong>testDB.db</strong> database into SQLite statements and dump it into ASCII text file testDB.sql. You can perform restoration from the generated <strong>testDB.sql</strong> in a simple way as follows:</p>
+<pre><code class="bash">$sqlite3 testDB.db &lt; testDB.sql
+</code></pre>
+
+<p>At this moment your database is empty, so you can try above two procedures once you have few tables and data in your database. For now, let's proceed to the next chapter.</p>
 <h2 id="tables">.tables</h2>
 <p>The following notes are from <a href="https://www.sqlitetutorial.net/sqlite-tutorial/sqlite-show-tables/">sqlitetutorial.net</a></p>
 <p>List tables after connecting using <code>.tables</code></p>
