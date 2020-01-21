@@ -242,10 +242,34 @@ CREATE TABLE all_images(
 
 <h2 id="bulk-insert">bulk insert</h2>
 <p>If the table doesn't exist, sqlite will try to create it and it's scheme assuming a header.</p>
-<pre><code class="bash">sqlite&gt; .mode csv all_images 
-sqlite&gt; .import &lt;path_to_csv&gt; all_images
+<blockquote>
+<p>.mode csv assumes a ',' separator.</p>
+</blockquote>
+<pre><code class="bash">sqlite&gt; .mode csv &lt;table_name&gt; 
+sqlite&gt; .import &lt;path_to_csv&gt; &lt;table_name&gt;
 </code></pre>
 
+<blockquote>
+<p>if you want to specify a different separator use this instead (I used a specific csv for this...):</p>
+</blockquote>
+<pre><code class="bash">sqlite&gt; .separator ,
+sqlite&gt; .import &lt;path_to_csv&gt; &lt;table_name&gt;
+sqlite&gt; .schema
+CREATE TABLE measurements(
+  &quot;seriesUID&quot; TEXT,
+  &quot;instanceUID&quot; TEXT,
+  &quot;length&quot; TEXT,
+  &quot;start_x&quot; TEXT,
+  &quot;start_y&quot; TEXT,
+  &quot;end_x&quot; TEXT,
+  &quot;end_y&quot; TEXT,
+  &quot;annotator&quot; TEXT
+);
+</code></pre>
+
+<blockquote>
+<p>I noticed that it was lazy about assigning data types.</p>
+</blockquote>
 <h2 id="csv-export">csv export</h2>
 <p>An example export from the <code>rad</code> table.</p>
 <blockquote>
