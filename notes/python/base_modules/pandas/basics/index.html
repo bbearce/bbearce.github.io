@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>default_dict() - Ben's Code Journal</title>
+    <title>Pandas - Ben's Code Journal</title>
     <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,9 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "Default Dict", url: "#_top", children: [
+          {title: "Pandas", url: "#_top", children: [
+              {title: "Display", url: "#display" },
+              {title: "Making DataFrames", url: "#making-dataframes" },
           ]},
         ];
 
@@ -60,20 +62,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../pandas/basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../../Pdb/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../pandas/basics/" class="btn btn-xs btn-link">
-        Pandas
+      <a href="../../Pdb/" class="btn btn-xs btn-link">
+        Pdb
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../Counter/" class="btn btn-xs btn-default pull-left">
+      <a href="../../collections/Default Dict/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../Counter/" class="btn btn-xs btn-link">
-        Counter
+        Previous</a><a href="../../collections/Default Dict/" class="btn btn-xs btn-link">
+        default_dict()
       </a>
     </div>
     
@@ -81,56 +83,56 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="default-dict">Default Dict</h1>
-<p>Initialize dictionary values with a data type.</p>
-<p>Returns a new dictionary-like object. defaultdict is a subclass of the built-in dict class.</p>
-<p>The first argument provides the initial value for the default_factory attribute; it defaults to <code>None</code>. All remaining arguments are treated the same as if they were passed to the dict constructor, including keyword arguments.</p>
-<pre><code class="python">from collections import defaultdict
-
-# Try to append all numbers in a list to their descriptions
-s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
-d = {}
-for k, v in s:
-    d[k].append(v)
-
-# You can't because there is no default data type for the values of the keys being created.
-&gt;&gt;&gt; Traceback (most recent call last):
-  File &quot;&quot;, line 1, in 
-  File &quot;&quot;, line 6, in 
-KeyError: 'yellow'
-
-# Use a default dict to accomplish this:
-s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
-d = defaultdict(list)
-for k, v in s:
-    d[k].append(v)
-
-&gt;&gt;&gt; d
-defaultdict(, {'yellow': [1, 3], 'blue': [2, 4], 'red': [1]})
-
-# You can accomplish this with the base dictionary like this:
-&gt;&gt;&gt; d = {}
-&gt;&gt;&gt; d.setdefault('yellow', [])
-[]
-&gt;&gt;&gt; d
-{'yellow': []}
+    <h1 id="pandas">Pandas</h1>
+<blockquote>
+<p>Some Notes <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html">pandas.pydata...</a></p>
+</blockquote>
+<h2 id="display">Display</h2>
+<pre><code class="python">pd.set_option('display.max_columns', 50) # How many to show
+pd.set_option('display.max_rows', 25) # How many to show
+pd.set_option('display.width', 1000) # How far across the screen
+pd.set_option('display.max_colwidth', 1) # Column width in px
+pd.set_option('display.max_colwidth', 40) # Column width in px
 </code></pre>
 
-<p>or</p>
-<pre><code class="python">&gt;&gt;&gt; d = {}
-&gt;&gt;&gt; d.setdefault('yellow', list)
+<h2 id="making-dataframes">Making DataFrames</h2>
+<h3 id="from-dictionaries">From Dictionaries</h3>
+<pre><code class="python"># Method 1: each key is a column with array datatype for values
+&gt;&gt;&gt; data = {'a':[1,4], 'b':[2,5], 'c':[3,6]}
+&gt;&gt;&gt; pandas.DataFrame(data)
+   a  b  c
+0  1  2  3
+1  4  5  6
 
-&gt;&gt;&gt; d
-{'yellow': }
+# Use 'columns' to specify order
+&gt;&gt;&gt; pandas.DataFrame(data, columns=['b','c','a'])
+   b  c  a
+0  2  3  1
+1  5  6  4
 
-# ...and our previous example:
-s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
-d = {}
-for k, v in s:
-    d.setdefault(k, []).append(v)
+# Method 2: Creating Dataframe from list of dicts
+&gt;&gt;&gt; data = [{'a': 1, 'b': 2, 'c': 3}, {'a': 10, 'b': 20, 'c': 30}]
+&gt;&gt;&gt; pandas.DataFrame(data) 
+    a   b   c
+0   1   2   3
+1  10  20  30
 
-&gt;&gt;&gt; d
-{'yellow': [1, 3], 'blue': [2, 4], 'red': [1]}
+</code></pre>
+
+<h3 id="from-lists">From lists</h3>
+<pre><code class="python">&gt;&gt;&gt; rows = [[1,2,3],[4,5,6]]
+&gt;&gt;&gt; pandas.DataFrame(rows, columns=['a','b','c'])
+   a  b  c
+0  1  2  3
+1  4  5  6
+</code></pre>
+
+<h3 id="from-excel">From excel</h3>
+<pre><code class="python">import pandas as pd
+
+cars = pd.read_excel(r'C:\Users\Ron\Desktop\Cars.xlsx')
+df = pd.DataFrame(cars, columns = ['Brand', 'Price'])
+
 </code></pre>
 
   <br>
@@ -144,20 +146,20 @@ for k, v in s:
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../pandas/basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../../Pdb/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../pandas/basics/" class="btn btn-xs btn-link">
-        Pandas
+      <a href="../../Pdb/" class="btn btn-xs btn-link">
+        Pdb
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../Counter/" class="btn btn-xs btn-default pull-left">
+      <a href="../../collections/Default Dict/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../Counter/" class="btn btn-xs btn-link">
-        Counter
+        Previous</a><a href="../../collections/Default Dict/" class="btn btn-xs btn-link">
+        default_dict()
       </a>
     </div>
     
