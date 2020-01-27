@@ -37,6 +37,7 @@
               {title: "Drop If Exists", url: "#drop-if-exists" },
               {title: "Select Into", url: "#select-into" },
               {title: "Ranks / Row_Number", url: "#ranks-row_number" },
+              {title: "Add/Change Column Data Type", url: "#addchange-column-data-type" },
           ]},
         ];
 
@@ -137,6 +138,40 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Argument N is handled as an integer. This function divides the partition into N groups as evenly as possible and assigns an integer between 1 and N to each group, in the order defined by the ORDER BY clause, or in arbitrary order otherwise. If necessary, larger groups occur first. This function returns the integer value assigned to the group that the current row is a part of.</p>
 </li>
 </ul>
+<h2 id="addchange-column-data-type">Add/Change Column Data Type</h2>
+<blockquote>
+<p>Source <a href="https://www.techonthenet.com/sqlite/tables/alter_table.php">techonthenet</a></p>
+</blockquote>
+<h3 id="add-column">Add Column</h3>
+<p>The syntax to ADD A COLUMN in a table in SQLite (using the ALTER TABLE statement) is:</p>
+<pre><code class="sql">ALTER TABLE table_name
+  ADD new_column_name column_definition;
+</code></pre>
+
+<h3 id="change-column">Change Column</h3>
+<p>You can not use the ALTER TABLE statement to modify a column in SQLite. Instead you will need to rename the table, create a new table, and copy the data into the new table.</p>
+<p>Syntax
+The syntax to MODIFY A COLUMN in a table in SQLite is:</p>
+<pre><code class="sql">PRAGMA foreign_keys=off;
+
+BEGIN TRANSACTION;
+
+ALTER TABLE table1 RENAME TO _table1_old;
+
+CREATE TABLE table1 (
+( column1 datatype [ NULL | NOT NULL ],
+  column2 datatype [ NULL | NOT NULL ],
+  ...
+);
+
+INSERT INTO table1 (column1, column2, ... column_n)
+  SELECT column1, column2, ... column_n
+  FROM _table1_old;
+
+COMMIT;
+
+PRAGMA foreign_keys=on;
+</code></pre>
 
   <br>
     
