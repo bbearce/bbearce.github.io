@@ -34,8 +34,9 @@
         
         var pageToc = [
           {title: "Users", url: "#_top", children: [
-              {title: "$ adduser", url: "#adduser" },
-              {title: "$ userdel", url: "#userdel" },
+              {title: "Add User", url: "#add-user" },
+              {title: "Delete User", url: "#delete-user" },
+              {title: "Change Password", url: "#change-password" },
           ]},
         ];
 
@@ -88,7 +89,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Courtesy of <a href="https://www.cyberciti.biz/faq/create-a-user-account-on-ubuntu-linux/">cyberciti.biz</a></p>
 </blockquote>
 <p><em>Introduction</em>: By default, the cloud server comes with a user named <code>ubuntu</code>. You can use such primary user account for sysadmin tasks on Ubuntu. However, sometimes you need to add a user account on Ubuntu for additional sysadmin tasks. This page shows how to create a regular user account or sysadmin account on the Ubuntu server.</p>
-<h2 id="adduser">$ adduser</h2>
+<h2 id="add-user">Add User</h2>
 <p><strong>Steps to create a user account on Ubuntu Linux</strong>
 1. Open the terminal application<br />
 2. Log in to remote box by running the ssh user@your-ubuntu-box-ip<br />
@@ -131,7 +132,7 @@ vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 </code></pre>
 
-<h2 id="userdel">$ userdel</h2>
+<h2 id="delete-user">Delete User</h2>
 <h3 id="remove-the-user">Remove the user</h3>
 <ol>
 <li>Log in to your server via SSH.  </li>
@@ -145,6 +146,19 @@ vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 <blockquote>
 <p>Warning: Only delete a user's home directory if you are certain you no longer need their files or mail.</p>
 </blockquote>
+<h2 id="change-password">Change Password</h2>
+<blockquote>
+<p>Source: <a href="https://www.cyberciti.biz/faq/linux-set-change-password-how-to/">cyberciti</a></p>
+</blockquote>
+<p>Type following passwd command to change your own password:
+<code>$ passwd</code></p>
+<p>Sample Outputs:</p>
+<pre><code class="bash">Changing password for vivek
+(current) UNIX password:
+Enter new UNIX password:
+Retype new UNIX password:
+passwd: password updated successfully
+</code></pre>
 
   <br>
     
