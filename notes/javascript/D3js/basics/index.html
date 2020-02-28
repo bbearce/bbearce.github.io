@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>D3js - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Basics of D3", url: "#_top", children: [
+              {title: "DOM API versus the D3 API", url: "#dom-api-versus-the-d3-api" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../layouts/holy_grail/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../layouts/holy_grail/" class="btn btn-xs btn-link">
+        Holy Grail
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="basics-of-d3">Basics of D3</h1>
+<blockquote>
+<p>Source <a href="https://square.github.io/intro-to-d3/web-standards/">square.github.io</a> and the version of D3 is <code>v5</code> from <a href="https://d3js.org/">https://d3js.org/</a></p>
+</blockquote>
+<p>I'll be using this template that you can use as well. Paste <code>html</code> code into the <code>&lt;body&gt;</code> and the <code>css</code> and <code>js</code> will be in separate files.</p>
+<p>Example:</p>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;styles.css&quot;&gt;
+    &lt;script src=&quot;https://d3js.org/d3.v5.min.js&quot;&gt;&lt;/script&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;!-- Insert HTML here!!! --&gt;
+
+&lt;sbcript type=&quot;text/javascript&quot; src=&quot;javascript.js&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h2 id="dom-api-versus-the-d3-api">DOM API versus the D3 API</h2>
+<p>A comparison of the DOM API for the regular javascript and D3:</p>
+<h3 id="ex-1-basic-selection">Ex 1: Basic Selection</h3>
+<p>HTML</p>
+<pre><code class="html">&lt;div&gt;
+  &lt;p&gt;Normal paragraph&lt;/p&gt;
+
+  &lt;p class=&quot;red&quot;&gt;Red paragraph&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;ol&gt;
+  &lt;li id=&quot;some-id&quot;&gt;Unique element&lt;/li&gt;
+  &lt;li&gt;Another list element&lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;Paragraph inside list element&lt;/p&gt;
+    &lt;p&gt;Second paragraph&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ol&gt;
+</code></pre>
+
+<p>DOM API</p>
+<pre><code class="javascript">d3.select('#some-id')['_groups'][0][0]
+// &lt;li id=&quot;some-id&quot;&gt;Unique element&lt;/li&gt;
+d3.select('p').size(); // select() only finds one
+// 1
+d3.selectAll('p').size(); // selectAll() finds all
+// 4
+var reds = d3.selectAll('.red');
+// [ &gt; Array[1] ]
+reds.text();
+// &quot;Red paragraph&quot;
+</code></pre>
+
+<p>D3 API</p>
+<pre><code>d3.select('p').size(); // select() only finds one
+// 1
+d3.selectAll('p').size(); // selectAll() finds all
+// 4
+var reds = d3.selectAll('.red');
+// [ &gt; Array[1] ]
+reds.text();
+// &quot;Red paragraph&quot;
+</code></pre>
+
+<h3 id="ex-2-css">Ex 2: CSS</h3>
+<p>HTML</p>
+<pre><code class="html">&lt;h1 id=&quot;click-me&quot;&gt;
+  Click on me!
+&lt;/h1&gt;
+
+&lt;p class=&quot;hover-me&quot;&gt;
+  Hover over me!
+&lt;/p&gt;
+
+&lt;p class=&quot;hover-me&quot;&gt;
+  OK now hover over here!
+&lt;/p&gt;
+
+&lt;p class=&quot;hover-me&quot;&gt;
+  Hover here too!
+&lt;/p&gt;
+</code></pre>
+
+<p>DOM API</p>
+<pre><code class="javascript">// DOM API
+var clickMe = document.getElementById('click-me');
+clickMe.onclick = function() {
+  if (this.style.backgroundColor) {
+    this.style.backgroundColor = '';
+  } else {
+    this.style.backgroundColor = 'red';
+  }
+}
+
+var hoverMe = document.getElementsByClassName('hover-me');
+
+for(var i=0; i&lt;hoverMe.length;i++){
+    hoverMe[i].onmouseover = function(){
+        if (this.style.backgroundColor) {
+            this.style.backgroundColor = '';
+          } else {
+            this.style.backgroundColor = 'yellow';
+          }
+        }
+}
+</code></pre>
+
+<p>D3 DOM</p>
+<pre><code class="javascript">// D3 Selection API. Note: it attaches the
+// callbacks to each element in the selection
+d3.selectAll('.hover-me')
+  .on('mouseover', function() {
+    this.style.backgroundColor = 'yellow';
+  })
+  .on('mouseleave', function() {
+    this.style.backgroundColor = '';
+  });
+</code></pre>
+
+<blockquote>
+<p>Note: In the D3 examples, the methods on the selection can chain (that is, they return themselves, so we can group them visually).</p>
+</blockquote>
+<h3 id="ex-3-svg">Ex 3: SVG</h3>
+<p>SVG (Scalable Vector Graphics) is an XML format used for drawing. You can think of SVG in a lot of the same terms as the DOM – there are elements with parents and children and attributes, and you can respond to the same mouse/touch events.</p>
+<p>Even CSS styles and selectors can apply to SVG elements. The CSS attribute names for SVG come from the SVG definition, so they are sometimes different from their HTML brethren. (For example, to change the background color of a div to red you would select it then set background-color: red but to get the same effect on an SVG rectangle you would instead use the attribute fill: red since an SVG rect doesn’t respond to background-color for styling.)</p>
+<p>SVG defines tags for lots of basic shapes, like <code>&lt;rect&gt;</code> and <code>&lt;circle&gt;</code> and <code>&lt;line&gt;</code>.</p>
+<p>HTML</p>
+<pre><code class="html">&lt;svg width=&quot;300&quot; height=&quot;180&quot;&gt;
+  &lt;circle cx=&quot;30&quot;  cy=&quot;50&quot; r=&quot;25&quot; /&gt;
+  &lt;circle cx=&quot;90&quot;  cy=&quot;50&quot; r=&quot;25&quot; class=&quot;red&quot; /&gt;
+  &lt;circle cx=&quot;150&quot; cy=&quot;50&quot; r=&quot;25&quot; class=&quot;fancy&quot; /&gt;
+
+  &lt;rect x=&quot;10&quot;  y=&quot;80&quot; width=&quot;40&quot; height=&quot;40&quot;
+    fill=&quot;steelBlue&quot; /&gt;
+  &lt;rect x=&quot;70&quot;  y=&quot;80&quot; width=&quot;40&quot; height=&quot;40&quot;
+    style=&quot;fill: steelBlue&quot; /&gt;
+  &lt;rect x=&quot;130&quot; y=&quot;80&quot; width=&quot;40&quot; height=&quot;40&quot;
+    class=&quot;fancy&quot; /&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>CSS</p>
+<pre><code class="css">.red {
+  fill: red; /* not background-color! */
+}
+
+.fancy {
+  fill: none;
+  stroke: black; /* similar to border-color */
+  stroke-width: 3pt; /* similar to border-width */
+  stroke-dasharray: 3,5,10;
+}
+</code></pre>
+
+<p><img alt="basic_shapes" src="../figure1.jpg" /></p>
+<h3 id="ex4-ltggt-tag">Ex4: <code>&lt;g&gt;</code> tag</h3>
+<p>Where HTML has the <div> and <span> tags, SVG has the <g> tag for an arbitrary group. You’ll see <g> a lot in D3 examples. They’re great for applying styles to a group (including re-positioning the groups).</p>
+<p>The <text> tag is good for simple labels. The <path> tag is powerful but complex, it can be used for either lines or arbitrary filled-in shapes depending on the styling.</p>
+<pre><code class="html">&lt;svg width=&quot;300&quot; height=&quot;180&quot;&gt;
+  &lt;g transform=&quot;translate(5, 15)&quot;&gt;
+    &lt;text x=&quot;0&quot; y=&quot;0&quot;&gt;Howdy!&lt;/text&gt;
+  &lt;/g&gt;
+
+  &lt;g transform=&quot;translate(5, 55)&quot;&gt;
+    &lt;!-- M: move to (jump)
+         L: line to
+         Q: curve to (quadratic) --&gt;
+    &lt;path d=&quot;M0,50 L50,0 Q100,0 100,50&quot;
+      fill=&quot;none&quot; stroke-width=&quot;3&quot; stroke=&quot;black&quot; /&gt;
+  &lt;/g&gt;
+
+  &lt;g transform=&quot;translate(5, 105)&quot;&gt;
+    &lt;!-- C: curve to (cubic)
+         Z: close shape --&gt;
+    &lt;path d=&quot;M0,100 C0,0 25,0 125,100 Z&quot; fill=&quot;black&quot; /&gt;
+  &lt;/g&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p><img alt="g_tag_demo" src="../figure2.jpg" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../layouts/holy_grail/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../layouts/holy_grail/" class="btn btn-xs btn-link">
+        Holy Grail
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
