@@ -93,8 +93,71 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <li><code>Shift+Enter</code> to run a cell and proceed to next  </li>
 <li><code>Cntl+Enter</code> runs a cell and does not proceed to next  </li>
 </ul>
+<blockquote>
+<p>Key function to remember: <code>untar_data</code> is an unzip utility</p>
+</blockquote>
 <h3 id="transfer-learning">Transfer Learning</h3>
 <p>Take a pre-trained model and then further learn for your specific task. In the course we downloaded "resnet34-333f7ec4.pth", which is a re-trained model and then further train it on cats and dogs. The point of this is that this model was previously trained on "image net" which is a giant repository of general images like planes, houses, animals and other objects so that the model is already pretty good at general classification. We will then use the fact that it already knows about "animals" to further train it to detect species of pet or other more specifc things.</p>
+<blockquote>
+<p>Key function to remember: <code>get_image_files</code> will get PosixPath file path-to/image-names.jpg...</p>
+<p>Key function to remember: <code>get_image_files</code> will get PosixPath file path-to/image-names.jpg...</p>
+</blockquote>
+<h4 id="train-it">Train it</h4>
+<p>After they setup the resnet model we atually kick offf the learn step:</p>
+<pre><code class="python">learn = cnn_learner(data, models.resnet34, metrics=error_rate)
+learn.model # prints the architecture
+learn.fit_one_cycle(4)
+</code></pre>
+
+<p>When looking at the cycles 4 is a good start. Cycles and Epochs are the same thing. They are passes throught the data. Each pass the model gets more and more accurate. Here is an example:</p>
+<table>
+<thead>
+<tr>
+<th>epoch</th>
+<th>train_loss</th>
+<th>valid_loss</th>
+<th>error_rate</th>
+<th>time</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>1.372660</td>
+<td>0.296747</td>
+<td>0.096076</td>
+<td>01:33</td>
+</tr>
+<tr>
+<td>1</td>
+<td>0.605791</td>
+<td>0.287795</td>
+<td>0.092016</td>
+<td>01:32</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.393741</td>
+<td>0.237194</td>
+<td>0.078484</td>
+<td>01:32</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.277990</td>
+<td>0.229392</td>
+<td>0.066306</td>
+<td>01:32</td>
+</tr>
+</tbody>
+</table>
+<h4 id="save-it">Save it</h4>
+<p>Now we want to save the model, and this means save the weights or in a classical sense, the coefficients.</p>
+<pre><code class="python">learn.save('stage-1')
+</code></pre>
+
+<h4 id="interpret-it">Interpret it</h4>
+<p>We need to look at the loss functions, which tell you how well did you predict what you tried to. Incorrect predictions have high losses and good predictions have low losses</p>
 
   <br>
     

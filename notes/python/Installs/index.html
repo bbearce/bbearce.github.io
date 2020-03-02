@@ -34,7 +34,8 @@
         
         var pageToc = [
           {title: "Installs", url: "#_top", children: [
-              {title: "Installing", url: "#installing" },
+              {title: "Installing python3.6", url: "#installing-python36" },
+              {title: "Installing python3.7+", url: "#installing-python37" },
               {title: "Build Instructions", url: "#build-instructions" },
               {title: "Installing multiple versions", url: "#installing-multiple-versions" },
           ]},
@@ -85,7 +86,61 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="installs">Installs</h1>
-<h2 id="installing">Installing</h2>
+<h2 id="installing-python36">Installing python3.6</h2>
+<blockquote>
+<p>Source <a href="https://realpython.com/installing-python/">realpython</a></p>
+</blockquote>
+<p>Ubuntu 17.10, Ubuntu 18.04 (and above) come with Python 3.6 by default. You should be able to invoke it with the command <code>python3</code>.</p>
+<p>Ubuntu 16.10 and 17.04 do not come with Python 3.6 by default, but it is in the Universe repository. You should be able to install it with the following commands:</p>
+<pre><code class="bash">$ sudo apt-get update
+$ sudo apt-get install python3.6
+</code></pre>
+
+<p>You can then invoke it with the command <code>python3.6</code>.</p>
+<p>If you are using Ubuntu 14.04 or 16.04, Python 3.6 is not in the Universe repository, and you need to get it from a Personal Package Archive (PPA). For example, to install Python from the “deadsnakes” PPA, do the following:</p>
+<pre><code class="bash">$ sudo add-apt-repository ppa:deadsnakes/ppa
+$ sudo apt-get update
+$ sudo apt-get install python3.6
+</code></pre>
+
+<p>As above, invoke with the command <code>python3.6</code>.</p>
+<h2 id="installing-python37">Installing python3.7+</h2>
+<blockquote>
+<p>Source <a href="https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/">linuxize</a></p>
+</blockquote>
+<h3 id="install-with-apt">Install with Apt</h3>
+<p>Installing Python 3.7 on Ubuntu with apt is a relatively straightforward process and will only take a few minutes:</p>
+<p>Start by updating the packages list and installing the prerequisites:</p>
+<pre><code class="bash">sudo apt update
+sudo apt install software-properties-common
+</code></pre>
+
+<p>Next, add the deadsnakes PPA to your sources list:</p>
+<pre><code class="bash">sudo add-apt-repository ppa:deadsnakes/ppa
+</code></pre>
+
+<p>When prompted press Enter to continue:</p>
+<pre><code class="bash">Press [ENTER] to continue or Ctrl-c to cancel adding it.
+</code></pre>
+
+<p>Once the repository is enabled, install Python 3.7 with:</p>
+<pre><code class="bash">sudo apt install python3.7
+</code></pre>
+
+<p>At this point, Python 3.7 is installed on your Ubuntu system and ready to be used. You can verify it by typing:</p>
+<pre><code class="bash">python3.7 --version
+Python 3.7.3
+</code></pre>
+
+<h3 id="install-from-source">Install from source</h3>
+<blockquote>
+<p>Source <a href="https://linuxize.com/post/how-to-install-python-3-7-on-ubuntu-18-04/">linuxize</a></p>
+</blockquote>
+<p>This first step may or may not be necessary but is probably a good idea. First, update the packages list and install the packages necessary to build Python source:</p>
+<pre><code class="bash">sudo apt update
+sudo apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget
+</code></pre>
+
 <p>You an use <code>wget</code> to grab the latest like so:</p>
 <pre><code class="bash">cd /usr/src
 sudo wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
@@ -129,6 +184,9 @@ intend to install multiple versions using the same prefix you must decide which
 version (if any) is your "primary" version.  Install that version using <code>make
 install</code>.  Install all other versions using <code>make altinstall</code>.</p>
 <p>To continue run <code>make</code>:</p>
+<blockquote>
+<p>Note that </p>
+</blockquote>
 <pre><code class="bash">$ ./configure
 $ make
 $ make test
