@@ -146,6 +146,365 @@ svg.append(&quot;circle&quot;).attr(&quot;cx&quot;, 50).attr(&quot;cy&quot;, 50)
 svg.append(&quot;circle&quot;).attr(&quot;cx&quot;, 400).attr(&quot;cy&quot;, 300).attr(&quot;r&quot;, 50);
 </code></pre>
 
+<h3 id="fills-and-strokes">Fills and Strokes</h3>
+<p>Shapes have default black fill colors and transparent stroke borders, unless you assign different color strings to the SVG attributes (or CSS properties) fill and stroke.</p>
+<p>In the following SVG, three straight lines were drawn using the mandatory x1/y1 and x2/y2 attributes for <line> elements. They would be invisible it the stroke attribute wasn't present. A stroke-width has a default value of 1.</p>
+<pre><code class="html">&lt;svg width=&quot;400&quot; height=&quot;300&quot;&gt;
+    &lt;line x2=&quot;400&quot; stroke=&quot;red&quot;  stroke-width=&quot;5&quot;/&gt;
+    &lt;line y2=&quot;150&quot; stroke=&quot;blue&quot; stroke-width=&quot;5&quot;/&gt;
+    &lt;line x2=&quot;200&quot; y2=&quot;150&quot; stroke=&quot;black&quot; stroke-width=&quot;1&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p><img alt="lines" src="../lines.png" /></p>
+<blockquote>
+<p>You can also style with css:</p>
+</blockquote>
+<pre><code class="css">line {
+    stroke-width: 20px; /* Overrides attr */
+}
+</code></pre>
+
+<blockquote>
+<p>Note lines at edge of screen might appear thinner as half the width could be off screen</p>
+</blockquote>
+<p>You can also apply CSS class and style attributes to different SVG objects. For example, consider the following CSS class declarations:</p>
+<pre><code class="css">.reds {
+    fill: red;
+}
+.semitr {
+    fill-opacity: 0.5;
+}
+</code></pre>
+
+<p>Since the following rectangles each belong to one or more of these classes, they will inherit the style properties declared for each class:</p>
+<pre><code class="html">&lt;svg width=&quot;600&quot; height=&quot;200&quot;&gt;
+    &lt;rect x=&quot;50&quot; y=&quot;50&quot; width=&quot;90&quot; height=&quot;90&quot; class=&quot;semitr&quot;/&gt;
+    &lt;rect x=&quot;200&quot; y=&quot;50&quot; width=&quot;175&quot; height=&quot;100&quot; rx=&quot;40&quot; ry=&quot;40&quot; 
+          class=&quot;reds semitr&quot;/&gt;
+    &lt;rect x=&quot;450&quot; y=&quot;25&quot; width=&quot;100&quot; height=&quot;150&quot; class=&quot;reds&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>One class applies the red fill, the other applies 50% transparency. The rectangle in the middle belongs to both classes, so it's both red and semi-transparent, as follows:</p>
+<p><img alt="rects" src="../rects.png" /></p>
+<h3 id="transparency">Transparency</h3>
+<p>Transparency
+When objects overlap in SVG, the code order determines which element will appear over the other. Preceding siblings are always overlapped by siblings that are declared after them. The CSS z-index property doesn’t work in SVG. To move an object to the front, you have to modify the DOM tree.</p>
+<p>You can see through objects that overlap by changing their transparency. You can apply opacity levels to fills and strokes separately, using fill-opacity or stroke-opacity, or for the entire object using opacity. All attributes require a value between 0 (invisible) and 1 (opaque). An alternative, which achieves the same result, is to use the alpha component in rgba or hsla color strings (for example, ‘rgba(255, 0, 0, 0.5)’).</p>
+<p>The three squares below apply different transparency parameters on fills and strokes:</p>
+<pre><code class="html">&lt;rect x=&quot;50&quot; y=&quot;50&quot; height=&quot;100&quot; width=&quot;100&quot; rx=&quot;10&quot; ry=&quot;10&quot;
+      stroke=&quot;red&quot; stroke-width=&quot;10&quot; fill-opacity=&quot;0&quot;/&gt;
+&lt;rect x=&quot;75&quot; y=&quot;75&quot; height=&quot;100&quot; width=&quot;100&quot; rx=&quot;10&quot; ry=&quot;10&quot;
+      fill=&quot;gray&quot; stroke=&quot;black&quot; stroke-width=&quot;10&quot; fill-opacity=&quot;.7&quot;/&gt;
+&lt;rect x=&quot;100&quot; y=&quot;100&quot; height=&quot;100&quot; width=&quot;100&quot; rx=&quot;10&quot; ry=&quot;10&quot;
+      fill=&quot;yellow&quot; stroke=&quot;blue&quot; stroke-width=&quot;10&quot; stroke-opacity=&quot;.6&quot;/&gt;
+</code></pre>
+
+<p>In the following code, two thin vertical rectangles appear behind a wide horizontal rectangle, and two other vertical rectangles appear in front of it:</p>
+<pre><code class="html">&lt;rect x=&quot;300&quot; y=&quot;50&quot; height=&quot;150&quot; width=&quot;25&quot;/&gt;
+&lt;rect x=&quot;400&quot; y=&quot;50&quot; height=&quot;150&quot; width=&quot;25&quot; fill-opacity=&quot;.5&quot;/&gt;
+
+&lt;rect x=&quot;250&quot; y=&quot;100&quot; height=&quot;50&quot; width=&quot;300&quot;
+      fill=&quot;red&quot; stroke=&quot;orange&quot; stroke-width=&quot;10&quot; stroke-opacity=&quot;.5&quot; /&gt;
+
+&lt;rect x=&quot;350&quot; y=&quot;50&quot; height=&quot;150&quot; width=&quot;25&quot;/&gt;
+&lt;rect x=&quot;450&quot; y=&quot;50&quot; height=&quot;150&quot; width=&quot;25&quot; fill-opacity=&quot;.5&quot;/&gt;
+</code></pre>
+
+<p>The following image shows the result:
+<img alt="transparency" src="../transparency.png" /></p>
+<p>Drawing rectangles with different fills, strokes and transparency. Code: 7-rect-opacity.html.</p>
+<h3 id="ellipses">Ellipses</h3>
+<p>Ellipses have a center in cx and cy like circles, but also have two radii, which are set with rx and ry. The following code creates three ellipses in different positions.</p>
+<pre><code class="html">&lt;svg width=&quot;600&quot; height=&quot;300&quot;&gt;
+    &lt;ellipse cx=&quot;150&quot; cy=&quot;100&quot; rx=&quot;150&quot; ry=&quot;100&quot;
+             fill=&quot;yellow&quot; fill-opacity=&quot;0.5&quot;
+             stroke=&quot;blue&quot; stroke-width=&quot;1&quot; stroke-dasharray=&quot;5 5&quot;/&gt;
+    &lt;ellipse cx=&quot;400&quot; cy=&quot;150&quot; rx=&quot;75&quot; ry=&quot;125&quot;
+             fill=&quot;red&quot; fill-opacity=&quot;0.2&quot;
+             stroke=&quot;red&quot; stroke-width=&quot;5&quot; stroke-opacity=&quot;0.5&quot;/&gt;
+    &lt;ellipse cx=&quot;400&quot; cy=&quot;250&quot; rx=&quot;150&quot; ry=&quot;40&quot;
+             fill=&quot;black&quot; fill-opacity=&quot;0&quot;
+             stroke=&quot;green&quot; stroke-width=&quot;20&quot; stroke-opacity=&quot;0.2&quot; /&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The preceding code produces the following result:
+<img alt="ellipses" src="../ellipses.png" />
+Ellipses created with SVG. Code: SVG/8-ellipse.html.</p>
+<h3 id="polygons-and-polylines">Polygons and polylines</h3>
+<p>Polygons (<code>&lt;polygon&gt;</code>) and polylines (<code>&lt;polyline&gt;</code>) render closed or open shapes using straight lines specified by a list of vertices passed in the points attribute. The only difference between them is that polygons close the shape. To close a polyline you need to repeat the initial coordinates. They also have a fill-rule attribute that controls the winding order, and determines if a hole will be drawn inside the shape when an outline crosses with itself.</p>
+<p>The following code creates two polygons. The second one has a fill-rule that will reveal a hole:</p>
+<pre><code class="html">&lt;svg width=&quot;600&quot; height=&quot;300&quot;&gt;
+  &lt;polygon  
+      points=&quot;150,150 50,150 100,20 150,50 200,200 50,200 20,154 48,82 32,20&quot;
+      fill=&quot;blue&quot;/&gt;
+  &lt;polygon  
+     points=&quot;450,150 350,150 400,20 450,50 500,200 350,200 320,154 348,82 332,20&quot;
+     fill=&quot;red&quot; fill-rule=&quot;evenodd&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The result is shown as follows:
+<img alt="polygons" src="../polygons.png" /></p>
+<p>Polygons created with SVG. The second polygon uses fill-rule=”even-odd” and reveals a hole. Code: SVG/10-polygon.</p>
+<h3 id="paths">Paths</h3>
+<p>With paths you can draw open and closed shapes mixing lines, curves and arcs using a compact drawing language in the d attribute of the <code>&lt;path&gt;</code> element. It can be used to create arbitrary paths mixing straight lines and curves:</p>
+<pre><code class="html">&lt;path d=&quot;M100,200 C200,50 300,100 300,200 L400,250 500,100&quot;
+      fill=&quot;yellow&quot;
+      stroke=&quot;red&quot;
+      stroke-width=&quot;4&quot;/&gt;
+</code></pre>
+
+<p>Don't worry about all those numbers and letters in the d attribute. It's the most important part of the path, but it can always be generated for you. Most of the shape generators you will use in D3 to create lines, pie slices and other arbitrary shapes generate path strings that you can use in the d attribute.</p>
+<p>The simple <code>&lt;path&gt;</code> above renders the image below (the dots are added separately and show the control points):</p>
+<p><img alt="paths" src="../paths.png" /></p>
+<p>A curve described by a <path> element. Code: SVG/11-path-line.html.</p>
+<h3 id="text">Text</h3>
+<p>Unlike HTML, you can't simply insert text inside any element. You have to create text objects using the <code>&lt;text&gt;</code> element with text contents. You can position text using x and y attributes, but you must remember that y is actually the baseline (default). If y is zero or not present, only the parts of the text that extend below the baseline will be visible inside the graphics context.</p>
+<p>This example places both text and a rectangle in the same position:</p>
+<pre><code class="html">&lt;rect x=&quot;0&quot; y=&quot;0&quot; height=&quot;36&quot; width=&quot;200&quot;/&gt;
+&lt;text font-size=&quot;36&quot; x=&quot;0&quot; y=&quot;0&quot; fill=&quot;lightgray&quot;&gt;ghijklmnop&lt;/text&gt;
+</code></pre>
+
+<p>The following illustration shows the result, at left. Note that only the parts of the text that extend below the baseline actually appear over the rectangle. The other two examples show text with a different baseline alignment: alignment-baseline="middle" and alignment-baseline="hanging".</p>
+<p><img alt="text" src="../text.png" /></p>
+<p>Drawing text in SVG and the baseline. Code: SVG/14-text.html.</p>
+<p>You can also align text horizontally using the text-anchor attribute. The following illustration describes properties and values used to align text horizontally or vertically. If you intend to rotate text relative to its position, these parameters will affect the result.</p>
+<p>Properties for aligning text. Code: SVG/15-text-align.html.</p>
+<p>It's best to configure baselines and alignments in CSS instead of using XML attributes.</p>
+<p>If your text spans multiple lines, you can use the <code>&lt;tspan&gt;</code> element inside <code>&lt;text&gt;</code> to move words or letters to positions relative to the parent <code>&lt;text&gt;</code> element (see SVG/16-tspan.html).</p>
+<h3 id="group-containers">Group containers</h3>
+<p>You can group several shapes in SVG with the <code>&lt;g&gt;</code> element. It's analogous to a <code>&lt;div&gt;</code> in HTML. This is an invisible element and it's positioned at the center of coordinates. CSS properties applied to a group affect all the objects it contains. You can also apply matrix transforms to groups to move, rotate and scale all its contents. A group container can also contain other group containers.</p>
+<p>In the following SVG, circles and ellipses are in a group, and rectangles are in another. The color of the elements is each group is declared in CSS, and they are translated, scaled and rotated together:</p>
+<pre><code class="html">&lt;style&gt;
+    svg { border: solid 1px lightgray; }
+    #bars { fill: red;}
+    #round { opacity: .7; fill: blue; }
+&lt;/style&gt;
+&lt;body&gt;
+&lt;svg width=&quot;600&quot; height=&quot;300&quot;&gt;
+    &lt;g id=&quot;bars&quot; transform=&quot;translate(0,100) rotate(-90, 100, 150)&quot;&gt;
+        &lt;rect x=&quot;100&quot; y=&quot;150&quot; height=&quot;20&quot; width=&quot;150&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;100&quot; y=&quot;180&quot; height=&quot;20&quot; width=&quot;100&quot;&gt;&lt;/rect&gt;
+        &lt;rect x=&quot;100&quot; y=&quot;210&quot; height=&quot;20&quot; width=&quot;200&quot;&gt;&lt;/rect&gt;
+    &lt;/g&gt;
+    &lt;g id=&quot;round&quot; transform=&quot;translate(200,100) scale(.3) &quot;&gt;
+        &lt;circle cx=&quot;280&quot; cy=&quot;220&quot; r=&quot;50&quot;&gt;&lt;/circle&gt;
+        &lt;ellipse cx=&quot;150&quot; cy=&quot;90&quot; rx=&quot;80&quot; ry=&quot;50&quot;&gt;&lt;/ellipse&gt;
+    &lt;/g&gt;
+&lt;/svg&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>The following screenshot shows the groups before applying any transforms or styles to their groups (at left), and after applying the transforms and styles from the code above (right):</p>
+<p><img alt="grouped_containers" src="../grouped_containers.png" /></p>
+<p>Applying styles and transforms to grouped shapes. Code: SVG/18-groups-transforms.html.</p>
+<p>Styles applied directly to individual elements in the groups have precedence and will override any styles declared at the group level. Positions of elements inside the group are always relative to the coordinate system introduced by any transforms applied to the group.</p>
+<h3 id="reusing-objects-use-and-defs">Reusing objects: use and defs</h3>
+<p>An SVG can have a <code>&lt;defs&gt;</code> header containing shapes, groups and other elements that will not be displayed. Filters, clipping masks, gradients and reusable shapes are usually declared in the <code>&lt;defs&gt;</code> header. You will need to assign an id to each element you wish to reuse later.</p>
+<p>The element can be displayed later declaring the <code>&lt;use&gt;</code> element outside the <code>&lt;defs&gt;</code> block. This element references an existing element by id using standard xlink notation.</p>
+<p>In the following example, two rectangles are created at 0.0. Since they are in the <code>&lt;defs&gt;</code> header, they will not be displayed. Each is previously configured with colors, dimensions and position. Outside the <code>&lt;defs&gt;</code> header, each element is displayed twice when referenced by each <code>&lt;use&gt;</code> element, translating each one to a different position:</p>
+<pre><code class="html">&lt;svg width=&quot;600&quot; height=&quot;200&quot;&gt;
+    &lt;defs&gt;
+        &lt;rect id=&quot;black&quot;  x=&quot;0&quot; y=&quot;0&quot; width=&quot;20&quot; height=&quot;20&quot; 
+              fill=&quot;rgb(64,32,32)&quot; /&gt;
+        &lt;rect id=&quot;white&quot; x=&quot;0&quot; y=&quot;0&quot; width=&quot;20&quot; height=&quot;20&quot; 
+              fill=&quot;rgb(255,225,200)&quot; /&gt;
+    &lt;/defs&gt;
+    &lt;g transform=&quot;translate(10,10) scale(3)&quot;&gt;
+        &lt;use xlink:href=&quot;#black&quot; /&gt;
+        &lt;use xlink:href=&quot;#white&quot; transform=&quot;translate(20)&quot;/&gt;
+        &lt;use xlink:href=&quot;#white&quot; transform=&quot;translate(0,20)&quot;/&gt;
+        &lt;use xlink:href=&quot;#black&quot;  transform=&quot;translate(20,20)&quot;/&gt;
+    &lt;/g&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The result is shown in the following image. You can use this to create a checkerboard.
+<img alt="reuse" src="../reuse.png" /></p>
+<p>Reusing objects with <code>&lt;defs&gt;</code> and <code>&lt;use&gt;</code>. Code: SVG/22-defs-use.html.</p>
+<p>You will rarely use <code>&lt;defs&gt;</code> and <code>&lt;use&gt;</code> in D3, but placing reusable code such as clipping masks, filters and gradients in a <code>&lt;defs&gt;</code> header is good practice.</p>
+<p>Matrix transforms
+Matrix transforms are used to scale, translate, skew or rotate any shape or group, or the entire SVG viewport. Transform commands are functions used in the transform XML attribute, in text notation and separated by spaces, for example:</p>
+<pre><code class="html">&lt;g transform=&quot;translate(100,100) scale(3) rotate(-90)&quot;&gt; … &lt;/g&gt;
+</code></pre>
+
+<p>The order is significant. If you call scale(.5) and then rotate(90), the result will be different if you call them in the reverse order.</p>
+<p>In translate(), scale() and skew(), the first parameter is an x coordinate value, and the second, if present, the y coordinate. In rotate(), the first parameter is an angle in degrees, and the next two parameters, if present, are the coordinates of the center of rotation (if not present, the object will rotate around 0,0 and may disappear from the viewport if the angle is big enough). Flipping an object can be achieved by scaling with negative values for x and/or y.</p>
+<p>The translate() transform can be used to move groups to different positions. In this case, the x and y coordinates of each object should be considered relative to the group. When creating objects that will be treated as a group, you might also choose to position all objects at the origin (not declaring any x or y coordinates, or use only values relative to the group) to later control the position using translate()</p>
+<p>You can also apply transforms as CSS styles, but you will need to use explicit units for degrees and distances, for example:</p>
+<pre><code class="html">&lt;g style=&quot;transform: translate(100px,100px) scale(3) rotate(-90deg)&quot;&gt; … &lt;/g&gt;
+</code></pre>
+
+<p>Consider the following SVG drawing of a pair of SVG coordinate axes:</p>
+<pre><code class="html">&lt;g id=&quot;coords&quot;&gt;
+    &lt;line x1=&quot;10&quot; y1=&quot;10&quot; x2=&quot;200&quot; y2=&quot;10&quot; /&gt;
+    &lt;line x1=&quot;10&quot; y1=&quot;10&quot; x2=&quot;10&quot; y2=&quot;150&quot; /&gt;
+    &lt;text x=&quot;200&quot; y=&quot;20&quot;&gt;x&lt;/text&gt;
+    &lt;text x=&quot;20&quot; y=&quot;150&quot;&gt;y&lt;/text&gt;
+&lt;/g&gt;
+</code></pre>
+
+<p>The following images show the results of applying translate, rotate/scale and skew to an image of the SVG coordinate axes, compared to the original object(in black):
+<img alt="translate" src="../translate.png" /></p>
+<p>Applying transforms to shapes and groups. Code: SVG/19-translate.html, 20-scale-rotate.html, 21-skew.html.</p>
+<h3 id="configuring-the-svg-viewport">Configuring the SVG viewport</h3>
+<p>You can configure the SVG viewport by changing the values in the viewBox attribute (which can also be used in some reusable SVG elements). The viewBox attribute contains four numbers separated by spaces. The first two are the center of coordinates, which default to 0 0, and the last two are the width and height, which default to the declared or default height and width of the SVG. If present, this attribute can move the viewport to a different position and its scale.</p>
+<p>For example, if you have an SVG with dimensions 400x300, the default viewport will be 0 0 400 300. If you declare a viewBox of 0 0 800 600, all the objects inside the SVG will be displayed at half the size, since a declared value of 100 is no longer 1/4 of the viewport's width, but 1/8. You can also change the origin of coordinates. For example, you can move it to the center of the SVG and position elements with negative coordinates if you have a viewBox of -200 -150 400 300 (remember that the coordinates start at the top-left corner).</p>
+<p>Consider the following SVG:</p>
+<pre><code class="html">&lt;svg width=&quot;400&quot; height=&quot;300&quot; viewBox=&quot;...&quot;&gt;
+   &lt;line x1=&quot;0&quot; y1=&quot;-300&quot; x2=&quot;0&quot; y2=&quot;300&quot;/&gt;
+   &lt;line y1=&quot;0&quot; x1=&quot;-400&quot; y2=&quot;0&quot; x2=&quot;400&quot;/&gt;
+   &lt;rect x=&quot;-130&quot; y=&quot;-130&quot; height=&quot;20&quot; width=&quot;200&quot; fill=&quot;red&quot;/&gt;
+   &lt;rect x=&quot;130&quot; y=&quot;-130&quot; height=&quot;200&quot; width=&quot;20&quot; fill=&quot;blue&quot;/&gt;
+   &lt;rect x=&quot;0&quot; y=&quot;100&quot; height=&quot;20&quot; width=&quot;200&quot; fill=&quot;green&quot;/&gt;
+   &lt;rect x=&quot;-130&quot; y=&quot;-65&quot; height=&quot;200&quot; width=&quot;20&quot; fill=&quot;orange&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The images below show what would appear on the screen, depending on the values you include for the viewBox attribute. The first one is the default.
+<img alt="viewbox" src="../viewbox.png" /></p>
+<p>Scaling and translating the viewport with the viewBox attribute. Code: SVG/26-viewBox-default.html, 28-viewBox-center.html, 28-viewBox-scaled.html</p>
+<p>You may rarely use viewBox with D3 since you can achieve the same results using matrix transforms, which are simpler.</p>
+<h3 id="gradients">Gradients</h3>
+<p>Linear gradients are created perpendicular to a line, so it requires the same attributes as the <code>&lt;line&gt;</code> element. Radial gradients use circle attributes. Gradients should declare at least one child <code>&lt;stop&gt;</code> with a non-zero offset and stop-color different than black, since the default color is black and the default offset is zero. Typically, gradients declare two or more stop colors. Gradients are used used as a fill or stroke value. They are usually defined in <code>&lt;defs&gt;</code> with an id that can be referenced later using url(#id).</p>
+<p>The following SVG code declares two gradients and applies one of them to a square, and the other to a circle:</p>
+<pre><code class="html">&lt;svg width=&quot;600&quot; height=&quot;300&quot;&gt;
+    &lt;defs&gt;
+        &lt;linearGradient x2=&quot;1&quot; id=&quot;rainbow&quot;&gt;
+            &lt;stop offset=&quot;0&quot; stop-color=&quot;rgb(255,0,0)&quot; /&gt;
+            &lt;stop offset=&quot;0.25&quot; stop-color=&quot;rgb(255,255,64)&quot; /&gt;
+            &lt;stop offset=&quot;0.5&quot; stop-color=&quot;rgb(64,255,64)&quot; /&gt;
+            &lt;stop offset=&quot;0.75&quot; stop-color=&quot;rgb(64,64,255)&quot; /&gt;
+           &lt;stop offset=&quot;1&quot; stop-color=&quot;rgb(128,0,255)&quot; /&gt;
+        &lt;/linearGradient&gt;
+        &lt;radialGradient cx=&quot;0.35&quot; cy=&quot;0.35&quot; r=&quot;1&quot; id=&quot;glow&quot;&gt;
+            &lt;stop offset=&quot;0&quot; stop-color=&quot;rgb(255,255,255)&quot; /&gt;
+            &lt;stop offset=&quot;0.5&quot; stop-color=&quot;rgb(0,128,255)&quot; /&gt;
+            &lt;stop offset=&quot;1&quot; stop-color=&quot;rgb(128,0,255)&quot; /&gt;
+        &lt;/radialGradient&gt;
+    &lt;/defs&gt;
+
+    &lt;rect x=&quot;0&quot; y=&quot;0&quot; width=&quot;200&quot; height=&quot;200&quot; 
+          fill=&quot;url(#rainbow)&quot; transform=&quot;translate(50,50)&quot;/&gt;
+    &lt;circle cx=&quot;100&quot; cy=&quot;100&quot; r=&quot;100&quot; 
+          fill=&quot;url(#glow)&quot; transform=&quot;translate(300,50)&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The result is shown in the following screenshot:
+<img alt="gradient" src="../gradient.png" /></p>
+<p>Linear and radial gradients. Code: SVG/23-gradient.html.</p>
+<h3 id="clipping">Clipping</h3>
+<p>A clipping mask is created with any shape declared inside the <code>&lt;clipPath&gt;</code> element. This is usually done in <code>&lt;defs&gt;</code>, setting an id for the clipping mask that can be referenced in the object that should be clipped, using url(#id) inside a clip-path attribute, as shown below:</p>
+<pre><code class="html">&lt;svg width=&quot;425&quot; height=&quot;425&quot;&gt;
+    &lt;defs&gt;
+        &lt;clipPath id=&quot;poly&quot;&gt;
+            &lt;circle r=&quot;139&quot; cx=&quot;200&quot; cy=&quot;199&quot;/&gt;
+        &lt;/clipPath&gt;
+    &lt;/defs&gt;
+
+    &lt;!-- Clipped image --&gt;
+    &lt;image x=&quot;25&quot; y=&quot;25&quot;
+           height=&quot;350&quot; width=&quot;350&quot;
+           xlink:href=&quot;../Data/Images/pluto.jpg&quot;
+           clip-path=&quot;url(#poly)&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The following SVG screenshots show the circular clipping mask above applied to an image. The SVG at left shows the original image and the clipped image is shown at right.</p>
+<p><img alt="clipping" src="../clipping.png" /></p>
+<p>Clipping an image in SVG. Code: SVG/24-clipping.html.</p>
+<h3 id="filters">Filters</h3>
+<p>SVG filters can be applied to any shapes, text or images. They are usually created in the <code>&lt;defs&gt;</code> header with an id that can be referenced via url(#id) using the filter attribute. The <code>&lt;filter&gt;</code> element can contain several different filter types and you can also create composite filters. The following example creates two different configurations for the <code>&lt;feGaussianBlur&gt;</code> filter, applied to a text element and a circle:</p>
+<pre><code class="html">&lt;svg width=&quot;600&quot; height=&quot;300&quot;&gt;
+    &lt;defs&gt;
+        &lt;filter id=&quot;filter1&quot;&gt;
+            &lt;feGaussianBlur stdDeviation=&quot;7&quot; /&gt;
+        &lt;/filter&gt;
+        &lt;filter id=&quot;filter2&quot; x=&quot;-100&quot; y=&quot;-100&quot; height=&quot;200&quot; width=&quot;200&quot;&gt;
+            &lt;feGaussianBlur stdDeviation=&quot;0,5&quot; in=&quot;SourceGraphic&quot; /&gt;
+        &lt;/filter&gt;
+    &lt;/defs&gt;
+    &lt;text id=&quot;text&quot; font-size=&quot;40&quot; fill=&quot;black&quot; x=&quot;50&quot; y=&quot;60&quot; 
+          filter=&quot;url(#filter2)&quot;&gt;Do you need glasses?&lt;/text&gt;
+
+    &lt;g id=&quot;stardot&quot; transform=&quot;translate(100,25) scale(0.5)&quot;&gt;
+        &lt;polygon id=&quot;star&quot; points=&quot;250,0 400,500 0,200 500,200 100,500&quot; 
+                 fill=&quot;red&quot; fill-rule=&quot;evenodd&quot;/&gt;
+        &lt;circle  id=&quot;circ&quot; cx=&quot;250&quot; cy=&quot;283&quot; r=&quot;75&quot; fill=&quot;blue&quot; 
+                 filter=&quot;url(#filter1)&quot; /&gt;
+    &lt;/g&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>The result is shown as follows:
+<img alt="filters" src="../filters.png" /></p>
+<p>A Gaussian blur filter applied to different shapes. Code: SVG/25-filter.html.</p>
+<p>An SVG example
+The following code uses several SVG elements described in this section to draw some shapes, shadows, gradients and text:</p>
+<pre><code class="html">&lt;svg width=&quot;300&quot; height=&quot;300&quot;&gt;
+    &lt;defs&gt;
+        &lt;filter id=&quot;shadow&quot;&gt;
+            &lt;feDropShadow style=&quot;flood-color: green&quot; 
+                          dx=&quot;5&quot; dy=&quot;5&quot; stdDeviation=&quot;3&quot;/&gt;
+        &lt;/filter&gt;
+        &lt;linearGradient id=&quot;grad&quot; x1=&quot;0&quot; y1=&quot;0&quot; x2=&quot;100%&quot; y2=&quot;0&quot;&gt;
+            &lt;stop offset=&quot;0%&quot; stop-color=&quot;magenta&quot;/&gt;
+            &lt;stop offset=&quot;100%&quot; stop-color=&quot;yellow&quot;/&gt;
+        &lt;/linearGradient&gt;
+        &lt;clipPath id=&quot;circle&quot;&gt;
+            &lt;circle r=&quot;40&quot; cx=&quot;175&quot; cy=&quot;75&quot;/&gt;
+        &lt;/clipPath&gt;
+    &lt;/defs&gt;
+
+    &lt;!-- rectangle --&gt;
+    &lt;rect x=&quot;50&quot; y=&quot;50&quot; height=&quot;50&quot; width=&quot;50&quot;
+          fill=&quot;red&quot;
+          stroke=&quot;blue&quot;
+          stroke-width=&quot;10&quot;
+          stroke-opacity=&quot;0.5&quot;/&gt;
+
+    &lt;!-- dashed shape --&gt;
+    &lt;path id=&quot;path1&quot;
+          d=&quot;M150,200 L150,150 L100,150 C100,200 150,250 200,250 L200,200 Z&quot;
+          stroke-dasharray=&quot;5 2 1 2&quot;
+          stroke-width=&quot;2&quot;
+          stroke=&quot;blue&quot;
+          fill=&quot;none&quot;
+          style=&quot;filter:url(#shadow)&quot;/&gt;
+
+    &lt;!-- gray quarter-circle --&gt;
+    &lt;path d=&quot;M0,0 L0,-100 A100,100 0 0,0 -100,0 L0,0 Z&quot;
+          transform=&quot;translate(100,250) scale(0.5) &quot;
+          stroke=&quot;red&quot;
+          stroke-opacity=&quot;.5&quot;
+          stroke-width=&quot;4&quot;
+          fill-opacity=&quot;.2&quot;/&gt;
+
+    &lt;text fill=&quot;url(#grad)&quot; font-size=&quot;20&quot; x=&quot;200&quot; y=&quot;100&quot;&gt;
+        Scalable
+        &lt;tspan dy=&quot;20&quot; x=&quot;200&quot;&gt;Vector&lt;/tspan&gt;
+        &lt;tspan dy=&quot;20&quot; x=&quot;200&quot;&gt;Graphics&lt;/tspan&gt;
+    &lt;/text&gt;
+
+    &lt;image x=&quot;125&quot; y=&quot;25&quot; height=&quot;100&quot; width=&quot;100&quot;
+           xlink:href=&quot;../Data/Images/pluto.jpg&quot;
+           clip-path=&quot;url(#circle)&quot;
+           opacity=&quot;0.75&quot;/&gt;
+
+    &lt;!-- raindow half-circle --&gt;
+    &lt;path d=&quot;M100,200 C100,100 250,100 250,200&quot;
+          transform=&quot;scale(0.6) rotate(180,295,225) &quot;
+          fill=&quot;url(#grad)&quot;/&gt;
+&lt;/svg&gt;
+</code></pre>
+
+<p>Compare this code and the following image it generates it with an identical image created using D3 (SVG-with-D3/29-example.html) and HTML Canvas (Canvas/1-canvas-svg-compare.html):</p>
+<p><img alt="canvas" src="../canvas.png" /></p>
+<p>An image created using SVG. Code: SVG/29-example.html.</p>
 <h2 id="essential-javascript-data-structures">Essential JavaScript data structures</h2>
 <h2 id="html-canvas">HTML Canvas</h2>
 <h2 id="data-formats">Data Formats</h2>
