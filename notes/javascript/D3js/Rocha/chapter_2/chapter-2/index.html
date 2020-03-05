@@ -34,10 +34,10 @@
         
         var pageToc = [
           {title: "Technical Fundamentals", url: "#_top", children: [
-              {title: "SVG", url: "#svg" },
-              {title: "Essential JavaScript data structures", url: "#essential-javascript-data-structures" },
-              {title: "HTML Canvas", url: "#html-canvas" },
-              {title: "Data Formats", url: "#data-formats" },
+              {title: "1) SVG", url: "#1-svg" },
+              {title: "2) Essential JavaScript data structures", url: "#2-essential-javascript-data-structures" },
+              {title: "3) HTML Canvas", url: "#3-html-canvas" },
+              {title: "4) Data Formats", url: "#4-data-formats" },
           ]},
         ];
 
@@ -91,7 +91,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h1 id="technical-fundamentals">Technical Fundamentals</h1>
 <p>This chapter covers fundamental standard web technologies used by D3: SVG, JavaScript (ES 2015), HTML Canvas and standard data formats such as JSON and CSV. It is intended as a general reference to these topics.</p>
 <p>Most data visualizations created with D3.js generate SVG graphics. Good knowledge of SVG is important to make the most of D3, but you only really need to know the basics.</p>
-<h2 id="svg">SVG</h2>
+<h2 id="1-svg">1) SVG</h2>
 <p>SVG stands for Scalable Vector Graphics. It’s an XML-based image format that describes graphics using geometrical attributes. Unlike HTML5 Canvas, which is another standard for vector graphics, SVG primitives are made of individual XML elements described using tags and attributes. It is also object-based and provides a DOM, which allows CSS styling, dynamic shape creation and manipulation, and coordinate transforms using JavaScript or CSS.</p>
 <p>Scalable Vector Graphics (SVG)
 SVG stands for Scalable Vector Graphics. It’s an XML-based image format that describes graphics using geometrical attributes. Unlike HTML5 Canvas, which is another standard for vector graphics, SVG primitives are made of individual XML elements described using tags and attributes. It is also object-based and provides a DOM, which allows CSS styling, dynamic shape creation and manipulation, and coordinate transforms using JavaScript or CSS.</p>
@@ -273,11 +273,11 @@ Ellipses created with SVG. Code: SVG/8-ellipse.html.</p>
 <p>Drawing text in SVG and the baseline. Code: SVG/14-text.html.</p>
 <p>You can also align text horizontally using the text-anchor attribute. The following illustration describes properties and values used to align text horizontally or vertically. If you intend to rotate text relative to its position, these parameters will affect the result.</p>
 <p>Properties for aligning text. Code: SVG/15-text-align.html.</p>
-<p>It's best to configure baselines and alignments in CSS instead of using XML attributes.</p>
+<p><strong>It's best to configure baselines and alignments in CSS instead of using XML attributes.</strong></p>
 <p>If your text spans multiple lines, you can use the <code>&lt;tspan&gt;</code> element inside <code>&lt;text&gt;</code> to move words or letters to positions relative to the parent <code>&lt;text&gt;</code> element (see SVG/16-tspan.html).</p>
 <h3 id="group-containers">Group containers</h3>
 <p>You can group several shapes in SVG with the <code>&lt;g&gt;</code> element. It's analogous to a <code>&lt;div&gt;</code> in HTML. This is an invisible element and it's positioned at the center of coordinates. CSS properties applied to a group affect all the objects it contains. You can also apply matrix transforms to groups to move, rotate and scale all its contents. A group container can also contain other group containers.</p>
-<p>In the following SVG, circles and ellipses are in a group, and rectangles are in another. The color of the elements is each group is declared in CSS, and they are translated, scaled and rotated together:</p>
+<p>In the following SVG, circles and ellipses are in a group, and rectangles are in another. The color of the elements in each group is declared in CSS, and they are translated, scaled and rotated together:</p>
 <pre><code class="html">&lt;style&gt;
     svg { border: solid 1px lightgray; }
     #bars { fill: red;}
@@ -299,6 +299,9 @@ Ellipses created with SVG. Code: SVG/8-ellipse.html.</p>
 </code></pre>
 
 <p>The following screenshot shows the groups before applying any transforms or styles to their groups (at left), and after applying the transforms and styles from the code above (right):</p>
+<blockquote>
+<p>Left pic is without the <code>&lt;g&gt;</code> tags or with no arguments to them if they are there.</p>
+</blockquote>
 <p><img alt="grouped_containers" src="../grouped_containers.png" /></p>
 <p>Applying styles and transforms to grouped shapes. Code: SVG/18-groups-transforms.html.</p>
 <p>Styles applied directly to individual elements in the groups have precedence and will override any styles declared at the group level. Positions of elements inside the group are always relative to the coordinate system introduced by any transforms applied to the group.</p>
@@ -505,9 +508,11 @@ The following code uses several SVG elements described in this section to draw s
 <p>Compare this code and the following image it generates it with an identical image created using D3 (SVG-with-D3/29-example.html) and HTML Canvas (Canvas/1-canvas-svg-compare.html):</p>
 <p><img alt="canvas" src="../canvas.png" /></p>
 <p>An image created using SVG. Code: SVG/29-example.html.</p>
-<h2 id="essential-javascript-data-structures">Essential JavaScript data structures</h2>
-<h2 id="html-canvas">HTML Canvas</h2>
-<h2 id="data-formats">Data Formats</h2>
+<h2 id="2-essential-javascript-data-structures">2) Essential JavaScript data structures</h2>
+<p>I'm actually going to organize this somewhere else to help with my code journal.</p>
+<p><a href="../../../../basics/">Link to the Basics</a></p>
+<h2 id="3-html-canvas">3) HTML Canvas</h2>
+<h2 id="4-data-formats">4) Data Formats</h2>
 
   <br>
     

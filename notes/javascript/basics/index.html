@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Basics - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Basics", url: "#_top", children: [
+              {title: "Arrays", url: "#arrays" },
+              {title: "Strings", url: "#strings" },
+              {title: "Functions", url: "#functions" },
+              {title: "Objects", url: "#objects" },
+              {title: "Maps and Sets", url: "#maps-and-sets" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../layouts/holy_grail/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../layouts/holy_grail/" class="btn btn-xs btn-link">
+        Holy Grail
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../D3js/Rocha/chapter_3/chapter-3/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../D3js/Rocha/chapter_3/chapter-3/" class="btn btn-xs btn-link">
+        Chapter 3
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="basics">Basics</h1>
+<p>All JavaScript examples use ES2015 syntax, which include:</p>
+<ul>
+<li><code>const</code> and <code>let</code> instead of <code>var</code></li>
+<li>Arrow functions (<code>d =&gt; d</code> instead of <code>function(d) { return d; }</code>) where appropriate</li>
+<li>Spread operators <code>[... iterable]</code>, chained expressions, maps, sets and promises</li>
+<li>Template strings literals, defined using backticks</li>
+<li>Iterable collections, such as maps and sets</li>
+</ul>
+<h2 id="arrays">Arrays</h2>
+<pre><code class="js">const colors = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;];
+const geocoords = [27.2345, 34.9937]; 
+const numbers = [1,2,3,4,5,6]; 
+const empty = [];
+</code></pre>
+
+<p>Each array has a <code>length</code> property that returns the number of elements. It's very useful to iterate using the array index:</p>
+<pre><code class="js">for(let i = 0; i &lt; colors.length; i++) {
+    console.log(colors[i]); 
+}
+</code></pre>
+
+<p>You can also loop over the elements of an array using the of operator (introduced in ES2015), when you don't need the index:</p>
+<pre><code class="js">for(let color of colors) {
+    console.log(color); 
+}
+</code></pre>
+
+<p>And you can use the <code>forEach()</code> method, which runs a function for each element and also allows access to the <strong>index</strong>, <strong>item</strong> and <strong>array</strong> inside the function:</p>
+<pre><code class="js">colors.forEach(function(i, color, colors) {
+    console.log((i+1) + &quot;: &quot; + color);
+})
+</code></pre>
+
+<blockquote>
+<p>You need to pass something into the funtion and most by default use index, item, array, but as you can see other more descriptive placeholders can be used.</p>
+</blockquote>
+<p>Multi-dimensional arrays are created in JavaScript as arrays of arrays:</p>
+<pre><code class="js">const points = [[200,300], [150,100], [100,300]];
+</code></pre>
+
+<p>You can retrieve individual items like this:</p>
+<pre><code class="js">const firstPoint = points[0];
+const middleX = points[1][0];
+</code></pre>
+
+<p>JavaScript provides many ways to extract and insert data into an array. It's usually recommended to use methods whenever possible. The following table lists useful methods you can use on arrays. Some modify the array; others return new arrays and other types. The examples provided use the <code>colors</code> and <code>numbers</code> arrays as declared above. Try them out using your browser's JavaScript console:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>push(item)</td>
+<td>Modifies the array adding an item to the end.</td>
+<td><code>colors.push("yellow"); // ["red", "blue", "green", "yellow"];</code></td>
+</tr>
+<tr>
+<td>pop()</td>
+<td>Modifies the array, removing and returning the last item.</td>
+<td><code>const green = colors.pop(); // ["red", "blue"];</code></td>
+</tr>
+<tr>
+<td>unshift(item)</td>
+<td>Modifies the array inserting an item at the beginning.</td>
+<td><code>colors.unshift("yellow"); // ["yellow", "red", "blue", "green"];</code></td>
+</tr>
+<tr>
+<td>shift()</td>
+<td>Modifies the array, removing and returning the first item.</td>
+<td><code>const red = colors.shift(); // ["blue", "green"];</code></td>
+</tr>
+<tr>
+<td>splice(p, n, i)</td>
+<td>Modifies the array, starting at position p. Can be used to delete items, insert or replace.</td>
+<td><code>const s = numbers.splice(2,3);  // s = [3,4,5]  // numbers = [1,2,6]</code></td>
+</tr>
+<tr>
+<td>reverse()</td>
+<td>Modifies the array, reversing its order.</td>
+<td><code>numbers.reverse(); // [6,5,4,3,2,1]</code></td>
+</tr>
+<tr>
+<td>sort()</td>
+<td>Modifies the array sorting by string order (if no args) or by a comparator function.</td>
+<td><code>numbers.sort((a,b) =&gt; b – a); // numbers = [6,5,4,3,2,1]</code></td>
+</tr>
+<tr>
+<td>slice(b,e)</td>
+<td>Returns a shallow copy of the array between b and e.</td>
+<td><code>const mid = numbers.slice(2,4)  // mid = [3,4]</code></td>
+</tr>
+<tr>
+<td>filter(function)</td>
+<td>Returns  new array where the elements pass the test implemented by the function.</td>
+<td><code>const even = numbers.filter(n =&gt; n%2==0); // [2,4,6]</code></td>
+</tr>
+<tr>
+<td>find(function)</td>
+<td>Returns the first element that satisfies the test function</td>
+<td><code>const two = numbers.find(n =&gt; n%2==0); // 2</code></td>
+</tr>
+<tr>
+<td>indexOf(item)</td>
+<td>Returns the index of the first occurrence of item in the array.</td>
+<td><code>const n = numbers.indexOf(3); // 4</code></td>
+</tr>
+<tr>
+<td>includes(item)</td>
+<td>Returns true if an array contains item among its entries.</td>
+<td><code>const n = numbers.includes(3); // true</code></td>
+</tr>
+<tr>
+<td>lastIndexOf(item)</td>
+<td>Returns the index of the last occurrence of the item in the array.</td>
+<td><code>const n = colors.lastIndexOf("blue"); // 1</code></td>
+</tr>
+<tr>
+<td>concat(other)</td>
+<td>Returns a new array that merges the current array with another.</td>
+<td><code>const eight = numbers.concat([7,8]); // [1,2,3,4,5,6,7,8]</code></td>
+</tr>
+<tr>
+<td>join()join(delim)</td>
+<td>Returns a comma-separated string of the elements in the array (an optional delimiter may be used)</td>
+<td><code>const csv = numbers.join(); // "1,2,3,4,5,6"Copyconst conc = numbers.join(""); // "123456"</code></td>
+</tr>
+<tr>
+<td>map(function)</td>
+<td>Returns new array with each element modified by function.</td>
+<td><code>const squares = numbers.map(n =&gt; n*n); // [1,4,9,16,25,36]</code></td>
+</tr>
+<tr>
+<td>reduce(function)</td>
+<td>Returns the result of an accumulation operation using the values in the array.</td>
+<td><code>const sum =    numbers.reduce((a, n) =&gt; a + n);</code></td>
+</tr>
+<tr>
+<td>forEach(function)</td>
+<td>Executes the provided function once for each element in the array.</td>
+<td><code>const squares = [];  numbers.forEach(n =&gt; squares.push(n*n) // squares = [1,4,9,16,26,36]</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="strings">Strings</h2>
+<p>Strings are primitive types in JavaScript that can be created with single quotes or double quotes. There is no difference. It's only a matter of style. ES2015 introduced two new string features: <strong>template literals</strong> and <strong>multiline strings</strong>.</p>
+<p>Multiline strings can be created adding a backslash at the end of each line:</p>
+<pre><code class="js">const line = &quot;Multiline strings can be \
+reated adding a backslash \
+at the end of each line&quot;;
+</code></pre>
+
+<p>Template literals are strings created with <strong>backticks</strong>. They allow the inclusion of JavaScript expressions inside <code>${}</code> placeholders. The result is concatenated as a single string.</p>
+<pre><code class="js">const template = `The square root of 2 is ${Math.sqrt(2)}`;
+</code></pre>
+
+<p>If you need to use a special character in a string, such as a double quote in a double quoted string, or a backslash, you need to precede it with a backslash:</p>
+<pre><code class="js">const s = &quot;This is a backslash \\ and this is a double quote \&quot;&quot;;
+</code></pre>
+
+<p>There are several methods for string manipulation. They all return new strings or other types. No methods modify the original strings.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>startsWith(s)</td>
+<td>Returns true if string starts with the string passed as a parameter</td>
+<td><code>const s = "This is a test string" const r = s.startsWith("This"); // true</code></td>
+</tr>
+<tr>
+<td>endsWith(s)</td>
+<td>Returns true if string ends with the string passed as a parameter</td>
+<td><code>const s = "This is a test string"  const r = s.endsWith("This"); // false</code></td>
+</tr>
+<tr>
+<td>substring(s,e)</td>
+<td>Returns a substring between start (incl.) and end indexes (not incl.)</td>
+<td><code>const k = "Aardvark"  const ardva = k.substring(1,6);</code></td>
+</tr>
+<tr>
+<td>split(regx)split(delim)</td>
+<td>Splits a string by a delimiter character or regular expression and returns an array</td>
+<td><code>const result = s.split(" ");  // result =  //   ["This","is","a","test","string"]</code></td>
+</tr>
+<tr>
+<td>indexOf(s)</td>
+<td>Returns the index of the first occurrence of a substring</td>
+<td><code>const k = "Aardvark"  const i = k.indexOf("ar"); // i = 1</code></td>
+</tr>
+<tr>
+<td>lastIndexOf(s)</td>
+<td>Returns the index of the last occurrence of a substring</td>
+<td><code>const k = "Aardvark"  const i = k.lastIndexOf("ar"); // i = 5</code></td>
+</tr>
+<tr>
+<td>charAt(i)</td>
+<td>Returns char at index i. Also supported as ‘string’[i]</td>
+<td><code>const k = "Aardvark"  const v = k.charAt(4);</code></td>
+</tr>
+<tr>
+<td>trim()</td>
+<td>Removes whitespace from both ends of a string.</td>
+<td><code>const text = "   data   "  const r = data.trim(); // r = "data"</code></td>
+</tr>
+<tr>
+<td>match(regx)</td>
+<td>Returns an array as the result of matchin a regular expression against the string.</td>
+<td><code>const k = "Aardvark"  const v = k.match(/[a-f]/g);  // v = ["a", "d", "a"]</code></td>
+</tr>
+<tr>
+<td>replace(regx,r)replace(s,t)</td>
+<td>Returns new string replacing match of regexp applied to the string with replacement, or all occurrences of source string with a target string.</td>
+<td><code>const k = "Aardvark"  const a = k.replace(/a/gi, 'u')</code> <code>// a = "uurdvurk"  const b = k.replace('ardv', 'ntib')  // b = "Antibark"</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="functions">Functions</h2>
+<p>Functions are typically created in JavaScript using the <code>function</code> keyword, using one of the forms below:</p>
+<pre><code class="js">function f() {
+     console.log('function1', this);
+ }
+const g = function(name) {
+     console.log('function ' + name, this);
+ }
+f(); // calls f
+g('test'); // calls g() with a parameter
+</code></pre>
+
+<blockquote>
+<p>The <code>this</code> keyword refers to the object that owns the function. If this code runs in a browser, and this is a top-level function created in the <code>&lt;script&gt;</code> block, the owner is the global <code>window</code> object. Any properties accessed via this refer to that object.</p>
+</blockquote>
+<pre><code class="js">const obj = {a: 5, b: 6}
+ obj.method = function() {
+     console.log('method', this)
+ }
+obj.method()
+</code></pre>
+
+<p>output:
+<code>method {a: 5, b: 6, method: ƒ}</code></p>
+<p>Arrow functions were introduced in ES2015. They are much more compact and can lead to cleaner code, but the scope of <code>this</code> is no longer retained by the object. In the code below, it refers to the global <code>window</code> object. Code that uses <code>this.a</code> and <code>this.b</code> will not find any data in the object and will return <strong>undefined</strong>.</p>
+<pre><code class="js">obj.arrow = () =&gt; console.log('arrow', this)
+obj.arrow()
+</code></pre>
+
+<p>output:
+<code>arrow Window {parent: Window, opener: null, top: Window, length: 0, frames: Window, …}</code></p>
+<h2 id="objects">Objects</h2>
+<p>An object is an unordered collection of data. Values in an object are stored as key-value pairs. You can create an object by declaring a comma-separated list of <code>key:value</code> pairs within curly braces, or simply a pair of opening-closing curly braces if you want to start with an empty object:</p>
+<pre><code class="js">const color = {name: &quot;red&quot;, code: &quot;ff0000&quot;};
+const empty = {};
+</code></pre>
+
+<p>Objects can contain other objects and arrays, which can also contain objects. They can also contain functions (which have access to local properties and behave as methods):</p>
+<pre><code class="js">const city = {name: &quot;Sao Paulo&quot;, 
+              location: {latitude: 23.555, longitude: 46.63},
+              airports: [&quot;SAO&quot;,&quot;CGH&quot;,&quot;GRU&quot;,&quot;VCP&quot;]};
+const circle = {
+    x: 200, 
+    y: 100, 
+    r: 50, 
+    area: function() { 
+        return this.r * this.r * 3.14; 
+    }
+}
+</code></pre>
+
+<p>A typical dataset used by a simple chart usually consists of an array of objects.</p>
+<pre><code class="js">var array2 = [
+    {continent: &quot;Asia&quot;, areakm2: 43820000}, 
+    {continent: &quot;Europe&quot;, areakm2: 10180000},
+    {continent: &quot;Africa&quot;, areakm2: 30370000},
+    {continent: &quot;South America&quot;, areakm2: 17840000},
+    {continent: &quot;Oceania&quot;, areakm2: 9008500},
+    {continent: &quot;North America&quot;, areakm2:24490000}
+];
+</code></pre>
+
+<p>You can access the properties of an object using the dot operator or brackets containing the key as a string. You can run its methods using the dot operator:</p>
+<pre><code class="js">const latitude = city.location.latitude; 
+const oceania = array2[4].continent;
+const code = color[&quot;code&quot;];
+circle.r = 100; 
+const area = circle.area();
+</code></pre>
+
+<p>You can also loop over the properties of an object:</p>
+<pre><code class="js">for(let key in color) {
+    console.log(key + &quot;: &quot; + color[key]); 
+}
+</code></pre>
+
+<p>Properties and functions can be added to objects. It's common to write code that declares an empty object in a global context so that operations in other contexts add data to it:</p>
+<pre><code class="js">coords = {lat:34.342352435, lng: 108.98375984}
+
+const map = {};
+function getCoords(coords) {
+    map.latitude = coords.lat;
+    map.longitude = coords.lng;
+}
+
+console.log(map)
+</code></pre>
+
+<p>output:</p>
+<pre><code class="js">{lat:34.342352435, lng: 108.98375984}
+</code></pre>
+
+<p>Objects can also be created with a constructor. You can create an object that contains the current date/time using:</p>
+<pre><code class="js">const now = new Date();
+</code></pre>
+
+<p>JSON is a data format based on JavaScript objects. It has the same structure as JavaScript object but the property keys have to be placed within double quotes:</p>
+<pre><code class="html">{&quot;name&quot;: &quot;Sao Paulo&quot;, 
+              &quot;location&quot;: {&quot;latitude&quot;: 23.555, &quot;longitude&quot;: 46.63},
+              &quot;airports&quot;: [&quot;SAO&quot;,&quot;CGH&quot;,&quot;GRU&quot;,&quot;VCP&quot;]};
+</code></pre>
+
+<p>To use a JSON string in JavaScript you have to parse it.</p>
+<h2 id="maps-and-sets">Maps and Sets</h2>
+<p>Besides arrays, ES2015 also introduced two new data structures: <code>Map</code>, an associative array with key-value pairs easier to use than simple objects, and <code>Set</code>, which doesn't allow repeated values. Both can be transformed to and from arrays.</p>
+<p>You can create a new <code>Set</code> object using:</p>
+<pre><code class="js">const set = new Set();
+</code></pre>
+
+<p>And add elements to it using:</p>
+<pre><code class="js">set.add(5);
+set.add(7);
+</code></pre>
+
+<p>If you try to add elements that already exist, they won't be included in the set:</p>
+<pre><code class="js">set.add(1);
+set.add(5);   // not added
+set.add(7);   // not added
+console.log(set.size); // prints 3
+</code></pre>
+
+<p>You can check if a Set contains an element:</p>
+<pre><code class="js">console.log(set.has(3)); // false
+</code></pre>
+
+<p>And convert a Set object into an array:</p>
+<pre><code class="js">const array1 = [... set]; // spread operator
+</code></pre>
+
+<p>A Map can be more efficient than using an object to store key-value pairs in an associative array:</p>
+<pre><code class="js">const map = new Map();
+map.set(&quot;a&quot;, 123)
+map.set(&quot;b&quot;, 456);
+
+console.log(map)
+</code></pre>
+
+<p>output:</p>
+<pre><code class="js">Map(2) {&quot;a&quot; =&gt; 123, &quot;b&quot; =&gt; 456}
+</code></pre>
+
+<p>You can then retrieve the value for each key using get(key):</p>
+<pre><code class="js">console.log(map.get(&quot;b&quot;))
+</code></pre>
+
+<p>Or using iterative operations and the keys(), values() and entries() methods:</p>
+<pre><code class="js">for (let key of map.keys()) {
+    console.log(key, map.get(key))
+}
+
+for (let [key, value] of map.entries()) {
+    console.log(key, value)
+}
+
+map.forEach ((k, v) =&gt; console.log(k, v))
+</code></pre>
+
+<p>Maps can be converted into arrays with the spread operator or Arrays.from():</p>
+<pre><code class="js">const array2 = [... map.values()];  // an array of values
+const array3 = Array.from(map.values()); // an array of keys  
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../layouts/holy_grail/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../layouts/holy_grail/" class="btn btn-xs btn-link">
+        Holy Grail
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../D3js/Rocha/chapter_3/chapter-3/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../D3js/Rocha/chapter_3/chapter-3/" class="btn btn-xs btn-link">
+        Chapter 3
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
