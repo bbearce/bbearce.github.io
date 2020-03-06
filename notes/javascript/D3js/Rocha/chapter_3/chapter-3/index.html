@@ -33,6 +33,12 @@
       var is_top_frame = false;
         
         var pageToc = [
+          {title: "Selecting and Binding Data", url: "#_top", children: [
+              {title: "Selecting and appending", url: "#selecting-and-appending" },
+              {title: "Binding Data", url: "#binding-data" },
+          ]},
+          {title: "Creating a bar chart with D3 and HTML", url: "#creating-a-bar-chart-with-d3-and-html", children: [
+          ]},
         ];
 
     </script>
@@ -80,9 +86,215 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <blockquote>
-<p>Source <a href="https://github.com/PacktPublishing/Learn-D3.js/tree/master/Chapter02">github</a></p>
+<p>Source <a href="https://github.com/PacktPublishing/Learn-D3.js/tree/master/Chapter03">github</a></p>
 </blockquote>
-<h2 id="_1"></h2>
+<h2 id="selecting-and-binding-data">Selecting and Binding Data</h2>
+<h3 id="selecting-and-appending">Selecting and appending</h3>
+<p>The selection methods <code>select()</code> and <code>selectAll()</code> receive a CSS selector expression and return a D3 handle for a node or a set of nodes. You can convert the D3 handle into a DOM object calling <code>node()</code> or <code>nodes()</code>.</p>
+<p>Add the following HTML to the <code>&lt;body&gt;</code> of your HTML file (or use Selecting/1-select.html):</p>
+<pre><code class="html">&lt;p&gt;See results in console log.&lt;/p&gt;
+&lt;div id=&quot;section&quot;&gt;
+    &lt;p class=first&gt;Paragraph 1&lt;/p&gt;
+    &lt;p&gt;Paragraph 2&lt;/p&gt;
+&lt;/div&gt;
+&lt;p&gt;Paragraph 3&lt;/p&gt;
+</code></pre>
+
+<p>Now you can use the JavaScript console (or a <code>&lt;script&gt;</code> block in your page) to type in the following code, which shows how <code>select()</code> and <code>selectAll()</code> can be used:</p>
+<pre><code class="js">const div = d3.select(&quot;#section&quot;);       // selects element with the 
+                                         // &quot;section&quot; ID
+const domDiv = div.node();               // converts the object into a 
+                                         // DOM node
+const firstP = d3.select(&quot;p&quot;);           // selects the first &lt;p&gt; 
+                                         // in the page
+const allParagraphs = d3.selectAll(&quot;p&quot;); // selects all four &lt;p&gt; nodes 
+                                         // in the page
+const allPDom = allParagraphs.nodes();   // converts selection into 
+                                         // DOM nodelist
+
+const sectionParagraphs =
+         d3.select(&quot;div&quot;)
+                 .selectAll(&quot;p&quot;);       // selects the two &lt;p&gt; nodes 
+                                        // inside &lt;div&gt;
+</code></pre>
+
+<p>A selection object serves as a handle to elements in your page. You can use it to change their styles, properties, attributes, classes, and contents, using methods that can receive static or dynamic values (using functions) as parameters. The following examples demonstrate some of these methods (see <code>Selecting/2-attributes-styles.html</code>):</p>
+<pre><code class="js">div.style('border', 'solid blue 2px'); // draws blue border around &lt;div&gt;
+firstP.classed('big', true);           // adds class ‘.big’ to 
+                                         first paragraph 
+firstP.text('This is paragraph zero'); // replaces contents of 
+                                         first paragraph
+allParagraphs.style('font-weight', 'bold'); // applies style to set 
+                                              of paragraphs
+
+
+// this looks promising, however there is nothing tagged with class &quot;first&quot; so nothing happes
+d3.select('.first') // selects first element of class ‘.first’
+        .attr('title', 'Tooltip')                  // adds an attribute
+        .style('font-variant', 'small-caps')       // applies a style
+        .html('This is a &lt;b&gt;bold&lt;/b&gt; paragraph.'); // replaces contents with HTML
+</code></pre>
+
+<p>The <code>select()</code> method will always return only <strong>one</strong> object (if the selector matches more items, only the first will be returned). The <code>selectAll()</code> method returns a collection, which can be iterated with the <code>each()</code> method, which receives a callback function, which receives up to three parameters. Inside the function, <code>this</code> refers to the current DOM element, and <code>d3.select(this)</code> wraps it in a D3 selection object, which can be manipulated with selection methods, as follows:</p>
+<pre><code class="js">sectionParagraphs.each(function(d, i) {     // i is the index
+     d3.select(this).classed('red', true);
+     console.log(`Paragraph ${i}: `, this); // this refers to the current element
+ });
+ ```
+
+This code applies the class ```.red``` to each element of a collection. If you open the JavaScript console, it will print each element and its index (starting in zero).
+
+You can also use selection methods to modify the DOM tree. Calling ```remove()``` on a D3 selection removes elements in the selection. You can call ```append()``` on a selection to add an element as its last child, or use ```insert()``` to add the new element in a position determined by a selector passed as the second argument. These methods are demonstrated as follows (see ```Selecting/3-append-remove.html)```:
+
+```js
+d3.select(&quot;#section&quot;)     // current context is element with id #section
+  .insert(&quot;p&quot;, '.first') // add a &lt;p&gt; before the child being of class ‘.first’
+  .append('a')           // context is now &lt;p&gt;; inserts an &lt;a&gt; in &lt;p&gt;
+  .attr('href', 'https://d3js.org') // context is now &lt;a&gt; 
+  .text(&quot;D3 website&quot;);   // contents of the &lt;a&gt; element
+
+d3.select('div')            // context is first &lt;div&gt; in page
+   .select('p:last-of-type') // context is now last &lt;p&gt; in &lt;div&gt;
+   .remove(); // context is detached &lt;p&gt; (parentNode is null)
+
+const div = d3.select('div')
+
+div.append(&quot;p&quot;)             // adds a new &lt;p&gt; as last child of selected &lt;div&gt;
+    .text(&quot;New paragraph&quot;);  // sets the text contents of &lt;p&gt;
+
+d3.select(&quot;body&quot;)     // selects the &lt;body&gt; element of the page
+    .insert(&quot;h1&quot;, &quot;*&quot;)  // adds a new &lt;h1&gt; as the first child (before *)
+    .text(&quot;New title&quot;); // sets the text contents of &lt;h1&gt;
+
+d3.select(&quot;body&quot;)
+    .append(&quot;h2&quot;)       // adds a new &lt;h2&gt; as the last child
+    .text(&quot;Footer&quot;);
+</code></pre>
+
+<p>The <code>append()</code> and <code>insert()</code> methods can also be chained, since they return the nodes they added. You just have to pay attention to the current so you don't modify or add data to the wrong elements. The <code>remove()</code> method returns the removed selection (a node or a set of nodes) after it's detached from the DOM (<strong>null</strong> parent).</p>
+<p>D3 selections are not limited to HTML. In fact, they are most commonly applied to SVG elements, but can also be used with any embedded XML. This was a brief introduction. In Chapter 4, <strong>Data Binding</strong>, we will explore these methods in detail.</p>
+<h3 id="binding-data">Binding Data</h3>
+<p>D3 makes it almost trivial to bind data to DOM elements. Data binding requires calling at least two of the following four methods in the context of a selection:</p>
+<ul>
+<li><code>data(array)</code> or <code>datum(object)</code>: Receives an array or an object/value that contains data that should be mapped to DOM elements  </li>
+<li><code>join()</code>, <code>enter()</code> or <code>exit()</code>: Binds the data to DOM elements by populating an update array returned as a selection of elements that should be added or removed from the document  </li>
+</ul>
+<p>The <code>exit()</code> method returns a selection of unbound elements. After an <code>exit()</code>, <code>remove()</code> is usually called, which removes the entire selection. The <code>enter()</code> method returns a selection of placeholders for new elements that need to be created. After an <code>enter()</code>, either <code>append()</code> or <code>insert()</code> is called, which connects the elements to the DOM tree. The <code>join()</code> method is a magic method that replaces <code>enter()</code> and <code>exit()</code>, automatically updating, removing, or adding elements, as necessary.</p>
+<p>Once data is connected to an element, the attributes, style, and contents of each element can be modified using the <code>attr()</code>,<code>style()</code>,<code>text()</code>, and <code>html()</code> methods that take a callback function as the second argument. This binding process is illustrated as follows:</p>
+<p><img alt="architecture" src="../architecture.png" /></p>
+<p>Let's try an example. Create an HTML page with this code in the <code>&lt;body&gt;</code> and open it in a browser (or use <code>Binding/1-binding.html</code>):</p>
+<p>In a <code>&lt;script&gt;</code> block, create this array of numbers (or type it in your JavaScript console):</p>
+<pre><code class="js">const numbers = [6, 2, 5, 7, 9];
+</code></pre>
+
+<p>The following code will bind each number in the array to a paragraph. The data will be copied to an internal array and can be used to change the attributes, styles, or contents of the existing paragraphs:</p>
+<pre><code class="js">const selection = d3.select(&quot;#section&quot;)
+                    .selectAll(&quot;p&quot;)
+                    .data(numbers);
+</code></pre>
+
+<p>The <code>data()</code> method returns the current selection. The value of each item in the array is received as the first parameter of a callback function in attr(),style(),text(), and so on. The text() method is used in the following code that replaces the contents of each paragraph with the first two values of the array:</p>
+<pre><code class="js">selection.text(d =&gt; d); // binds to existing paragraphs (update)
+</code></pre>
+
+<p>But we need more paragraphs, since we have five elements of data. By calling <code>enter()</code>, a new selection is created with three more placeholder nodes, containing the remaining data, but not yet mapped to any element:</p>
+<pre><code class="js">const newSelection = 
+     selection.enter(); // binds data to a selection of placeholders
+</code></pre>
+
+<p>We can't just call <code>text()</code> on the selection yet. First, we need to append or insert those elements into the DOM tree. You call <code>append()</code> only once, and it will be executed three times. Now, you can use <code>text()</code> to print the paragraph with the data:</p>
+<pre><code class="js">newSelection.append(&quot;p&quot;)
+             .text(d =&gt; d); // binds to new paragraphs (enter)
+</code></pre>
+
+<p>Normally, the entire selecting-binding-appending process is written as a chain of commands. The following code achieves the same result, using the same array and paragraphs (see <code>Binding/3-chain-text.html</code>):</p>
+<pre><code class="js">d3.select(&quot;body&quot;)         // select the body element
+    .select(&quot;div&quot;)        // select the first div element inside &lt;body&gt;
+    .selectAll(&quot;p&quot;)       // select all &lt;p&gt; elements (there are two)
+    .data(numbers)        // load the data from the numbers array
+    .text(d =&gt; d)         // set contents of existing paragraphs
+    .enter()              // bind remaining data to array with 3 elements
+    .append(&quot;p&quot;)          // add 3 new &lt;p&gt; elements to end of &lt;div&gt;
+    .text(d =&gt; d);        // set the contents of the new paragraphs
+</code></pre>
+
+<p>It's simpler (and more common, when using D3) to use JavaScript  (and not HTML) to create <strong>all</strong> of the elements you need. After all, data is dynamic and you won't always know how many items you have to display. Most of the time, HTML is just used to provide the basic structure, such as the <code>&lt;body&gt;</code> tag, a container <code>&lt;div&gt;</code>, or <code>&lt;svg&gt;</code>.</p>
+<p>The following code achieves the same result starting with an empty <code>&lt;body&gt;</code> tag (and the same data array). The <code>&lt;div&gt;</code> and all the <code>&lt;p&gt;</code> are created using D3 commands (see <code>Binding/4-empty-binding.html</code>):</p>
+<pre><code class="js">d3.select(&quot;body&quot;)        // select the body element
+    .append(&quot;div&quot;)       // append a div element inside &lt;body&gt;
+    .selectAll(&quot;p&quot;)      // select all &lt;p&gt; elements (there are none)
+    .data(numbers)       // load the data from the numbers array
+    .enter()             // bind the data to enter array with 5 placeholders
+    .append(&quot;p&quot;)         // create 5 new &lt;p&gt; elements and add to end of &lt;div&gt;
+    .text(d =&gt; d);       // set the contents of the new paragraphs
+</code></pre>
+
+<p>Note that even though there are no <code>&lt;p&gt;</code> elements in the page, the <code>selectAll("p")</code> command is still necessary, since it provides the selection context for the data binding. The <code>selectAll()</code> command can use any CSS selectors to locate its elements, but it should return a selection containing the same type of elements added by the <code>append()</code> command.</p>
+<p>As you have seen, once you have data bound to DOM elements, you can use the data to change attributes, styles, classes, and properties, using callbacks. The callback function has a second parameter that contains the index of the data array, which is used in the following example to change the contents and style of list items:</p>
+<pre><code class="js">d3.select(&quot;body&quot;)         // select the body element
+    .append(&quot;ul&quot;)         // append an &lt;ul&gt; element inside &lt;body&gt;
+    .selectAll(&quot;li&quot;)      // select all &lt;li&gt; elements (there are none)
+    .data(numbers)        // load the data from the numbers array
+    .enter()              // create an enter array with 5 objects
+    .append(&quot;li&quot;)         // create 5 new &lt;li&gt; elements and append to &lt;ul&gt;
+    .text(function(d, i) {
+        return &quot;Item &quot; + (i+1) + &quot;: &quot; + d;
+    })
+    .style(&quot;font-size&quot;, function(d, i) {
+    return ((i+2) * 5) + &quot;pt&quot;;
+    });
+</code></pre>
+
+<p>The result is shown in the following screenshot:
+<img alt="list_example" src="../list_example.png" /></p>
+<p>D3 used to create and style new elements from data. Code: <code>Binding/5-callbacks.html</code>.</p>
+<p>Callback functions also have a third parameter that contains the array of elements in the selection. You might need it if you want to obtain the current element when using arrow functions, since the <code>this</code> reference in these functions doesn't refer to the current element:</p>
+<pre><code class="js">.text( (d, i, nodes) =&gt; console.log(&quot;Current element: &quot; + nodes[i]) );
+</code></pre>
+
+<p>You can easily reuse the preceding code with different types of data. If you have an array of objects containing values of different types, you don't need to convert it to an array of numbers. You can directly pass the entire object array to the <code>data()</code> method, and later select which properties of each object you wish to use. For example, you can use practically the same code that was shown previously to display the contents of the following array:</p>
+<pre><code class="js">const distances = [
+    {name: &quot;Mercury&quot;, distance: 0.387},
+    {name: &quot;Venus&quot;, distance: 0.723},
+    {name: &quot;Earth&quot;, distance: 1},
+    {name: &quot;Mars&quot;, distance: 1.52},
+    {name: &quot;Jupiter&quot;, distance: 5.2},
+    {name: &quot;Saturn&quot;, distance: 9.54},
+    {name: &quot;Uranus&quot;, distance: 19.2},
+    {name: &quot;Neptune&quot;, distance: 30.1},
+    {name: &quot;Ceres&quot;, distance: 2.765},
+    {name: &quot;Pluto&quot;, distance: 39.481},
+    {name: &quot;Eris&quot;, distance: 67.67},
+    {name: &quot;Haumea&quot;, distance: 43},
+    {name: &quot;Makemake&quot;, distance: 45.346}
+];
+</code></pre>
+
+<p>The object array is received by the <code>data()</code> command. Each array item is available as the first parameter of the callback, which can be used to extract the property that contains the data (see <code>Binding/6-object-array.html</code>):</p>
+<pre><code class="js">d3.select(&quot;body&quot;)    // select the body element
+    .append(&quot;ul&quot;)     // append an &lt;ul&gt; element inside &lt;body&gt;
+    .selectAll(&quot;li&quot;)  // select all &lt;li&gt; elements (there are none)
+    .data(distances)  // load the data from the numbers array
+    .enter()          // bind the data to enter array with 5 placeholders
+    .append(&quot;li&quot;)     // create &lt;li&gt; from enter selection and append to &lt;ul&gt;
+    .text(function(d, i) {
+        return d.name + &quot;: &quot; + d.distance;
+    });
+</code></pre>
+
+<p>Since D3 Version 5.8, you can replace <code>enter().append(element)</code> in simple binding operations, as shown with the <code>join(element)</code> method (see <code>Binding/7-join.html</code>):</p>
+<pre><code class="js">d3.select(&quot;body&quot;) 
+   .append(&quot;ul&quot;) 
+   .selectAll(&quot;li&quot;) 
+   .data(distances) 
+   .join(&quot;li&quot;)  // obtains enter selection and appends 5 new &lt;li&gt; elements
+   .text(function(d, i) {
+       return d.name + &quot;: &quot; + d.distance;
+   });
+</code></pre>
+
+<p>The preceding code will generate an HTML list with the data.</p>
+<h2 id="creating-a-bar-chart-with-d3-and-html">Creating a bar chart with D3 and HTML</h2>
 
   <br>
     

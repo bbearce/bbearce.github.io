@@ -37,7 +37,7 @@
               {title: "1) SVG", url: "#1-svg" },
               {title: "2) Essential JavaScript data structures", url: "#2-essential-javascript-data-structures" },
               {title: "3) HTML Canvas", url: "#3-html-canvas" },
-              {title: "4) Data Formats", url: "#4-data-formats" },
+              {title: "Data Formats", url: "#data-formats" },
           ]},
         ];
 
@@ -512,7 +512,421 @@ The following code uses several SVG elements described in this section to draw s
 <p>I'm actually going to organize this somewhere else to help with my code journal.</p>
 <p><a href="../../../../basics/">Link to the Basics</a></p>
 <h2 id="3-html-canvas">3) HTML Canvas</h2>
-<h2 id="4-data-formats">4) Data Formats</h2>
+<p>HTML5 Canvas
+Most of your D3 applications will render graphics using SVG, but several shape generators in SVG can also generate Canvas, and you may choose to use Canvas in all or part of your application to improve performance if you have memory problems due to excessive objects created in the DOM.</p>
+<p>To draw using Canvas you need to create a <code>&lt;canvas&gt;</code> element in your page. You can do that using plain HTML:</p>
+<pre><code class="html">&lt;body&gt;
+   &lt;canvas id=&quot;canvas&quot; width=&quot;400&quot; height=&quot;300&quot;&gt;&lt;/canvas&gt;
+&lt;/body&gt;
+</code></pre>
+
+<p>Or using D3:</p>
+<pre><code class="js">d3.select(&quot;body&quot;).append(&quot;canvas&quot;).attr(&quot;width&quot;, 400).attr(&quot;height&quot;, 300);
+</code></pre>
+
+<p>If you declare the Canvas element in HTML, you can reference it by its ID using the DOM or D3:</p>
+<pre><code class="js">const canvas = d3.select(&quot;#canvas&quot;).node(); // node() returns the DOM object
+</code></pre>
+
+<p>Once you have a canvas object, you obtain a 2D graphics context and start drawing:</p>
+<pre><code class="js">const ctx    = canvas.getContext(&quot;2d&quot;);
+</code></pre>
+
+<p>Practically all the Canvas API consists of methods and properties called from the graphics context. Before drawing, you set properties such as <code>font</code>, <code>fillStyle</code>, <code>strokeStyle</code>:</p>
+<pre><code class="js">ctx.fillStyle = &quot;red&quot;;
+ctx.strokeStyle = &quot;rgba(255,127,0,0.7)&quot;; 
+ctx.lineWidth = 10;
+</code></pre>
+
+<p>And then <strong>fill</strong> or <strong>stroke</strong> rectangles and arbitrary paths containing lines and curves. The following commands will draw a red 50x50 pixel square with a 10 pixel wide yellow semi-transparent border at position 50,50:</p>
+<pre><code class="js">ctx.fillRect(50,50,50,50); 
+ctx.strokeRect(50,50,50,50);
+</code></pre>
+
+<p>You can also draw other shapes, text and images on the same canvas. The context properties will not change unless they are redefined or a previously saved context is restored.</p>
+<p>It's a good practice to save the context to the stack before applying properties or transforms, and restore it when you are done drawing an object. This allows you to always start with a clean context:</p>
+<blockquote>
+<p>Note: So far the below code does nothing that I can see with my eyes.</p>
+</blockquote>
+<pre><code class="js">ctx.save();
+ctx.transform(50,60);
+ctx.scale(2);
+// …
+ctx.restore();
+// starting with a new context
+</code></pre>
+
+<table>
+<thead>
+<tr>
+<th>Property or method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fillStyle</td>
+<td>Sets the color to be used in fill() commands.</td>
+</tr>
+<tr>
+<td>strokeStyle</td>
+<td>Sets the color to be used in stroke() commands.</td>
+</tr>
+<tr>
+<td>lineWidth</td>
+<td>Sets the line width to be used in stroke() commands.</td>
+</tr>
+<tr>
+<td>lineCap</td>
+<td>Sets the style of the line caps: can be butt (default), round or square.</td>
+</tr>
+<tr>
+<td>textAlign</td>
+<td>Sets the alignment for text: can be start (default), center, end, left or right.</td>
+</tr>
+<tr>
+<td>textBaseline</td>
+<td>Sets the baseline for text: can be middle, hanging, top, bottom, ideographic or alphabetic (default).</td>
+</tr>
+<tr>
+<td>font</td>
+<td>Sets the font to be used in text commands, using the compact CSS font syntax.</td>
+</tr>
+<tr>
+<td>globalAlpha</td>
+<td>Sets the global opacity (0 = transparent, 1 = opaque) for the context.</td>
+</tr>
+<tr>
+<td>shadowBlur, shadowColor, shadowOffsetX, shadowOffsetY</td>
+<td>Sets shadow properties. Default shadow color is transparent black. Default numeric values are zero.</td>
+</tr>
+<tr>
+<td>setLineDash(dasharray)</td>
+<td>Sets the dash array (alternating line and space lengths) for strokes.</td>
+</tr>
+<tr>
+<td>translate(x,y)</td>
+<td>Sets the current translate transform for the context.</td>
+</tr>
+<tr>
+<td>scale(x,y)</td>
+<td>Sets the current scale transform for the context.</td>
+</tr>
+<tr>
+<td>rotate(angle)</td>
+<td>Sets the current rotate transform for the context.</td>
+</tr>
+<tr>
+<td>save()</td>
+<td>Saves the state of the current context (pushes into a stack).</td>
+</tr>
+<tr>
+<td>restore()</td>
+<td>Restores the state of the last context that was saved (pops it from the stack).</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>fillRect()</code> command is typically used to clear the entire canvas before redrawing, but you can also use it to draw arbitrary rectangles. The following table lists methods you can use to draw rectangles, draw text and images:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fillRect(x,y,w,h);</td>
+<td>Fills a rectangle. Typically used to clear the Canvas on redrawing.</td>
+</tr>
+<tr>
+<td>strokeRect(x,y,w,h)</td>
+<td>Draws a border around a rectangle.</td>
+</tr>
+<tr>
+<td>fillText(text,x,y);</td>
+<td>Fills text at position x, y (depends on current textAlign and textBaseline).</td>
+</tr>
+<tr>
+<td>strokeText(text, x, y);</td>
+<td>Draws a border around text.</td>
+</tr>
+<tr>
+<td>drawImage(image, x, y, w, h)</td>
+<td>Draws an image at x,y with width w and height h.</td>
+</tr>
+</tbody>
+</table>
+<p>Canvas context methods used to draw rectangles, text and images</p>
+<p>A path is a series of commands to move to points, draw lines, curves or arcs. To draw a path you need to first call <code>ctx.beginPath()</code>, then call a sequence of commands that move to points, draw lines and curves, and when you are done you can close the path (if it's a closed path) and call <code>fill()</code> and/or <code>stroke()</code> to draw it using the current styles. The following table lists several commands you can use in a path:</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>beginPath()</td>
+<td>Starts a path.</td>
+</tr>
+<tr>
+<td>closePath()</td>
+<td>Closes a path.</td>
+</tr>
+<tr>
+<td>moveTo(x,y)</td>
+<td>Moves the cursor to a position in the path.</td>
+</tr>
+<tr>
+<td>lineTo(x,y)</td>
+<td>Moves the cursor to a position in the path, drawing a line along the way.</td>
+</tr>
+<tr>
+<td>bezierCurveTo(c1x,c1y,c2x,c2y,x,y) quadraticCurveTo(cx,cy,x,y)</td>
+<td>Draws curves with one (quadratic) or two (Bezier) control points in a path.</td>
+</tr>
+<tr>
+<td>arc(x,y,r,sa,ea)</td>
+<td>Draws an arc by specifying the center, radius, start and end angles in a path.</td>
+</tr>
+<tr>
+<td>arcTo(sx,sy,r,ex,ey)</td>
+<td>Draws an arc by specifying the coordinates of the starting point, the radius and the coordinates of the ending point.</td>
+</tr>
+<tr>
+<td>rect(x,y,w,h)</td>
+<td>Draws a rectangle in a path with coordinates of top-left corner, width and height.</td>
+</tr>
+<tr>
+<td>clip()</td>
+<td>Creates a clipping region with the shapes drawn by the path that will affect objects that are drawn afterwards.</td>
+</tr>
+<tr>
+<td>fill()</td>
+<td>Fills a path with the current color. Call this to fill the path when done.</td>
+</tr>
+<tr>
+<td>stroke()</td>
+<td>Strokes the path with the current color. Call this to stroke the path when done.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a-canvas-example">A Canvas Example</h3>
+<p>The following code uses several of the methods above to draw different shapes on the same Canvas context. It draws some shapes, text, images and paths, and applies transforms, shadows, clipping and gradients. Compare it to the example shown before in SVG that draws the image (see  <code>Canvas/1-canvas-svg-compare.html</code>):</p>
+<pre><code class="js">const canvas = document.getElementById(&quot;canvas&quot;);
+const ctx    = canvas.getContext(&quot;2d&quot;);
+
+// rectangle
+ctx.save(); // save default context
+
+ctx.fillStyle = &quot;#ff0000&quot;;
+ctx.strokeStyle = &quot;blue&quot;;
+ctx.lineWidth = 10;
+
+ctx.fillRect(50,50,50,50);
+
+ctx.globalAlpha = 0.5;
+ctx.strokeRect(50,50,50,50);
+
+// dashed shape
+ctx.restore();
+ctx.save();
+
+ctx.strokeStyle = &quot;blue&quot;;
+ctx.lineWidth = 2;
+ctx.shadowBlur = 6;
+ctx.shadowColor = &quot;green&quot;;
+ctx.shadowOffsetX = ctx.shadowOffsetY = 5;
+ctx.setLineDash([5,2,1,2]);
+
+ctx.beginPath();
+ctx.moveTo(150,200);
+ctx.lineTo(150,150);
+ctx.lineTo(100,150);
+ctx.bezierCurveTo(100,200,150,250,200,250);
+ctx.lineTo(200,200);
+ctx.closePath();
+ctx.stroke();
+
+ctx.restore();
+ctx.save();
+
+// quarter-circle
+ctx.translate(100,250);
+ctx.scale(0.5, 0.5);
+ctx.strokeStyle = &quot;red&quot;;
+ctx.lineWidth = 4;
+ctx.globalAlpha = 0.5;
+
+ctx.beginPath();
+ctx.moveTo(0,0);
+ctx.lineTo(0,-100);
+ctx.arcTo(-100,-100,-100,0,100);
+ctx.lineTo(0,0);
+ctx.stroke();
+
+ctx.globalAlpha = 0.2;
+
+ctx.beginPath();
+ctx.arc(0,0,100,3.14,-1.57,false);
+ctx.lineTo(0,0);
+ctx.closePath();
+ctx.fill();
+
+ctx.restore();
+ctx.save();
+
+// text and half-circle
+const text = &quot;Canvas&quot;
+ctx.translate(250,150);
+ctx.font = &quot;24px monospace&quot;;
+const textWidth = ctx.measureText(text).width;
+const gradient = ctx.createLinearGradient(-50,-50,-50 + textWidth,-50);
+gradient.addColorStop(0,&quot;magenta&quot;);
+gradient.addColorStop(1, &quot;yellow&quot;);
+
+ctx.fillStyle = gradient;
+ctx.shadowColor = &quot;transparent&quot;;
+
+ctx.fillText(text, -45, -5);
+
+ctx.scale(1.1, 1.1)
+ctx.rotate(3.14);
+
+ctx.beginPath();
+ctx.arc(0,0,40,3.14,0,false);
+ctx.fill();
+
+ctx.restore();
+ctx.save();
+
+// image and clip
+ctx.beginPath();
+ctx.arc(175,75,40,0,6.28,false);
+ctx.clip();
+
+const image = new Image(100,100);
+image.onload = function() {
+    ctx.globalAlpha = 0.75;
+    ctx.drawImage(this, 125, 25, this.width, this.height);
+}
+image.src = &quot;reuse.png&quot;;
+ctx.save();
+</code></pre>
+
+<blockquote>
+<p>I don't have the pluto pic so the code won't show the planet.</p>
+</blockquote>
+<p><img alt="canvas_v_svg" src="../canvas_v_svg.png" /></p>
+<h2 id="data-formats">Data Formats</h2>
+<p>Data used in visualizations are usually distributed in a standard format that can be shared. Even when the data is served from a database, the data is usually delivered in some standard format. Popular proprietary formats such as Excel spreadsheets are common, but most statistical data is stored or delivered in CSV, XML or JSON formats.</p>
+<h3 id="csv">CSV</h3>
+<p>You can load and parse CSV in D3 using the <code>d3.csv()</code> function.</p>
+<pre><code class="js">const csv = d3.csv(&quot;Data/continents.csv&quot;)
+csv
+</code></pre>
+
+<p>output:</p>
+<pre><code class="js">Promise {&lt;resolved&gt;: Array(7)}
+__proto__: Promise
+[[PromiseStatus]]: &quot;resolved&quot;
+[[PromiseValue]]: Array(7)
+0: {continent: &quot;North America&quot;, population: &quot;579024000&quot;, areakm2: &quot;24490000&quot;}
+1: {continent: &quot;Asia&quot;, population: &quot;4436224000&quot;, areakm2: &quot;43820000&quot;}
+2: {continent: &quot;Europe&quot;, population: &quot;738849000&quot;, areakm2: &quot;10180000&quot;}
+3: {continent: &quot;Africa&quot;, population: &quot;1216130000&quot;, areakm2: &quot;30370000&quot;}
+4: {continent: &quot;South America&quot;, population: &quot;422535000&quot;, areakm2: &quot;17840000&quot;}
+5: {continent: &quot;Oceania&quot;, population: &quot;39901000&quot;, areakm2: &quot;9008500&quot;}
+6: {continent: &quot;Antarctica&quot;, population: &quot;1106&quot;, areakm2: &quot;13720000&quot;}
+columns: (3) [&quot;continent&quot;, &quot;population&quot;, &quot;areakm2&quot;]
+length: 7
+__proto__: Array(0)
+</code></pre>
+
+<h3 id="xml">XML</h3>
+<p><strong>XML – eXtensible Markup Language</strong> is a very popular data format. Ajax responses from web services are usually returned as text or XML. It has standard native support in JavaScript via the <strong>DOM (document object model)</strong> APIs and doesn't require additional parsing. Although it is still common to find data in XML format, CSV and JSON alternatives, if available, are usually smaller and easier to work with.</p>
+<pre><code class="xml">&lt;continents&gt;
+    &lt;continent&gt;
+        &lt;name&gt;North America&lt;/name&gt;
+        &lt;population&gt;579024000&lt;/population&gt;
+        &lt;area unit=&quot;km&quot;&gt;24490000&lt;/area&gt;
+    &lt;/continent&gt;
+    &lt;continent&gt;
+        &lt;name&gt;Asia&lt;/name&gt;
+        &lt;population&gt;4436224000&lt;/population&gt;
+        &lt;area unit=&quot;km&quot;&gt;43820000&lt;/area&gt;
+    &lt;/continent&gt;
+    &lt;continent&gt;
+        &lt;name&gt;Antarctica&lt;/name&gt;
+        &lt;population&gt;1106&lt;/population&gt;
+        &lt;area&gt;13720000&lt;/area&gt;
+    &lt;/continent&gt;
+&lt;/continents&gt;
+</code></pre>
+
+<pre><code class="js">const xml = d3.xml(&quot;Data/continents.xml&quot;)
+</code></pre>
+
+<blockquote>
+<p>Not sure how to parse but who uses XML anymore gosh!</p>
+</blockquote>
+<h3 id="json">JSON</h3>
+<p>JSON stands for JavaScript Object Notation. It looks a lot like a JavaScript Object, but it has stricter formation rules. It's probably the easiest format to work with. It's compact and easy to parse, and it's gradually replacing XML as a preferred data format in Web Services. The data file containing continent data is shown below in JSON format (<code>Data/continents.json</code>).</p>
+<pre><code class="bash">[
+    {
+        &quot;continent&quot;: &quot;North America&quot;,
+        &quot;population&quot;: 579024000,
+        &quot;areakm2&quot;: 24490000
+    },{
+        &quot;continent&quot;: &quot;Asia&quot;,
+        &quot;population&quot;: 4436224000,
+        &quot;areakm2&quot;: 43820000
+    },{
+        &quot;continent&quot;: &quot;Europe&quot;,
+        &quot;population&quot;: 738849000,
+        &quot;areakm2&quot;: 10180000
+    },{
+        &quot;continent&quot;: &quot;Africa&quot;,
+        &quot;population&quot;: 1216130000,
+        &quot;areakm2&quot;: 30370000
+    },{
+        &quot;continent&quot;: &quot;South America&quot;,
+        &quot;population&quot;: 422535000,
+        &quot;areakm2&quot;: 17840000
+    },{
+        &quot;continent&quot;: &quot;Oceania&quot;,
+        &quot;population&quot;: 39901000,
+        &quot;areakm2&quot;: 9008500
+    },{
+        &quot;continent&quot;: &quot;Antarctica&quot;,
+        &quot;population&quot;: 1106,
+        &quot;areakm2&quot;: 13720000
+    }
+]
+</code></pre>
+
+<p>JSON is the preferred format for data manipulation in JavaScript. There are many online tools you can use to transform CSV and XML files into JSON.</p>
+<p>You can load and parse JSON in D3 using the <code>d3.json()</code> function.</p>
+<pre><code class="js">Promise {&lt;resolved&gt;: Array(7)}
+__proto__: Promise
+[[PromiseStatus]]: &quot;resolved&quot;
+[[PromiseValue]]: Array(7)
+0: {continent: &quot;North America&quot;, population: 579024000, areakm2: 24490000}
+1: {continent: &quot;Asia&quot;, population: 4436224000, areakm2: 43820000}
+2: {continent: &quot;Europe&quot;, population: 738849000, areakm2: 10180000}
+3: {continent: &quot;Africa&quot;, population: 1216130000, areakm2: 30370000}
+4: {continent: &quot;South America&quot;, population: 422535000, areakm2: 17840000}
+5: {continent: &quot;Oceania&quot;, population: 39901000, areakm2: 9008500}
+6: {continent: &quot;Antarctica&quot;, population: 1106, areakm2: 13720000}
+length: 7
+__proto__: Array(0)
+</code></pre>
+
+<blockquote>
+<p>Note that both csv and json loaded an easy to work with object. Just try to xml code....It'll make you sick.</p>
+</blockquote>
 
   <br>
     

@@ -38,6 +38,7 @@
               {title: "Select Into", url: "#select-into" },
               {title: "Ranks / Row_Number", url: "#ranks-row_number" },
               {title: "Add/Change Column Data Type", url: "#addchange-column-data-type" },
+              {title: "Julian Day", url: "#julian-day" },
           ]},
         ];
 
@@ -190,6 +191,132 @@ PRAGMA foreign_keys=on;
        ) invoices
  GROUP BY year
 </code></pre>
+
+<h2 id="julian-day">Julian Day</h2>
+<blockquote>
+<p>Source <a href="https://www.techonthenet.com/sqlite/functions/julianday.php">techonthenet</a></p>
+</blockquote>
+<p>Syntax:</p>
+<p>The syntax for the julianday function in SQLite is:</p>
+<pre><code class="sql">julianday(timestring [, modifier1, modifier2, ... modifier_n ] )
+</code></pre>
+
+<p>More concrete example:</p>
+<pre><code class="sql">select
+mrn,
+date,
+julianday(date) as j_day
+from mrns_dates;
+</code></pre>
+
+<p>output:</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>mrn</th>
+<th>date</th>
+<th>j_day</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>#######</td>
+<td>2011-04-19</td>
+<td>2455670.5</td>
+</tr>
+<tr>
+<td>2</td>
+<td>#######</td>
+<td>2011-09-26</td>
+<td>2455830.5</td>
+</tr>
+<tr>
+<td>3</td>
+<td>#######</td>
+<td>2012-02-01</td>
+<td>2455958.5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>#######</td>
+<td>2012-03-19</td>
+<td>2456005.5</td>
+</tr>
+<tr>
+<td>5</td>
+<td>#######</td>
+<td>2012-04-24</td>
+<td>2456041.5</td>
+</tr>
+<tr>
+<td>6</td>
+<td>#######</td>
+<td>2014-07-30</td>
+<td>2456868.5</td>
+</tr>
+</tbody>
+</table>
+<p>Notes: A date value. It can be one of the following:</p>
+<table>
+<thead>
+<tr>
+<th>timestring</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>now</td>
+<td>now is a literal used to return the current date</td>
+</tr>
+<tr>
+<td>YYYY-MM-DD</td>
+<td>Date value formatted as 'YYYY-MM-DD'</td>
+</tr>
+<tr>
+<td>YYYY-MM-DD HH:MM</td>
+<td>Date value formatted as 'YYYY-MM-DD HH:MM'</td>
+</tr>
+<tr>
+<td>YYYY-MM-DD HH:MM:SS</td>
+<td>Date value formatted as 'YYYY-MM-DD HH:MM:SS'</td>
+</tr>
+<tr>
+<td>YYYY-MM-DD HH:MM:SS.SSS</td>
+<td>Date value formatted as 'YYYY-MM-DD HH:MM:SS.SSS'</td>
+</tr>
+<tr>
+<td>HH:MM</td>
+<td>Date value formatted as 'HH:MM'</td>
+</tr>
+<tr>
+<td>HH:MM:SS</td>
+<td>Date value formatted as 'HH:MM:SS'</td>
+</tr>
+<tr>
+<td>HH:MM:SS.SSS</td>
+<td>Date value formatted as 'HH:MM:SS.SSS'</td>
+</tr>
+<tr>
+<td>YYYY-MM-DDTHH:MM</td>
+<td>Date value formatted as 'YYYY-MM-DDTHH:MM' where T is a literal character separating the date and time portions</td>
+</tr>
+<tr>
+<td>YYYY-MM-DDTHH:MM:SS</td>
+<td>Date value formatted as 'YYYY-MM-DDTHH:MM:SS' where T is a literal character separating the date and time portions</td>
+</tr>
+<tr>
+<td>YYYY-MM-DDTHH:MM:SS.SSS</td>
+<td>Date value formatted as 'YYYY-MM-DDTHH:MM:SS.SSS' where T is a literal character separating the date and time portions</td>
+</tr>
+<tr>
+<td>DDDDDDDDDD</td>
+<td>Julian date number</td>
+</tr>
+</tbody>
+</table>
 
   <br>
     
