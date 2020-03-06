@@ -39,6 +39,7 @@
               {title: "Functions", url: "#functions" },
               {title: "Objects", url: "#objects" },
               {title: "Maps and Sets", url: "#maps-and-sets" },
+              {title: "Promises", url: "#promises" },
           ]},
         ];
 
@@ -472,6 +473,29 @@ map.forEach ((k, v) =&gt; console.log(k, v))
 <p>Maps can be converted into arrays with the spread operator or Arrays.from():</p>
 <pre><code class="js">const array2 = [... map.values()];  // an array of values
 const array3 = Array.from(map.values()); // an array of keys  
+</code></pre>
+
+<h2 id="promises">Promises</h2>
+<blockquote>
+<p>Source <a href="https://www.youtube.com/watch?v=DHvZLI7Db8E">Web Dev Simplified</a></p>
+</blockquote>
+<p>Define a promise. <code>1+1</code> is what we want the promise to do. The object itself accepts a function that has inputs <em>resolve</em> and <em>reject</em>.</p>
+<pre><code class="js">let p = new Promise((resolve, reject) =&gt; {
+    let a = 1 + 1 // if you change of one these to 2 to make it fail you have to have the p.then().catch() code implemented of you will get a &quot;Uncaught (in promise) Failed&quot; message
+    if (a == 2) {
+        resolve('Success')
+    } else {
+        reject('Failed')
+    }
+})
+</code></pre>
+
+<p>Interact with promises. the <code>.then</code> method runs if the promise <em>resolves</em>. If the promise rejects it runs the <em>.catch</em> method. </p>
+<pre><code class="js">p.then((message) =&gt; {
+    console.log('This is in the then ' + message)
+}).catch ((message) =&gt; {
+    console.log('This is in the catch '+ message)
+})
 </code></pre>
 
   <br>
