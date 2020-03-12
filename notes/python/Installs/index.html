@@ -38,6 +38,7 @@
               {title: "Installing python3.7+", url: "#installing-python37" },
               {title: "Build Instructions", url: "#build-instructions" },
               {title: "Installing multiple versions", url: "#installing-multiple-versions" },
+              {title: "Uninstall", url: "#uninstall" },
           ]},
         ];
 
@@ -88,7 +89,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     <h1 id="installs">Installs</h1>
 <h2 id="installing-python36">Installing python3.6</h2>
 <blockquote>
-<p>Source <a href="https://realpython.com/installing-python/">realpython</a></p>
+<p>Source1 <a href="https://realpython.com/installing-python/">realpython</a></p>
+<p>Source2 <a href="https://stackoverflow.com/questions/52656887/how-to-unistall-python3-5-and-re-install-python3-7/52657343">stackoverflow</a></p>
 </blockquote>
 <p>Ubuntu 17.10, Ubuntu 18.04 (and above) come with Python 3.6 by default. You should be able to invoke it with the command <code>python3</code>.</p>
 <p>Ubuntu 16.10 and 17.04 do not come with Python 3.6 by default, but it is in the Universe repository. You should be able to install it with the following commands:</p>
@@ -191,6 +193,29 @@ install</code>.  Install all other versions using <code>make altinstall</code>.<
 $ make
 $ make test
 $ sudo make altinstall
+</code></pre>
+
+<h2 id="uninstall">Uninstall</h2>
+<blockquote>
+<p>Source <a href="https://www.howtoinstall.co/en/ubuntu/xenial/python?action=remove">howtoinstall</a></p>
+</blockquote>
+<h3 id="uninstall-python">Uninstall python</h3>
+<p>To remove just python package itself from Ubuntu 16.04 (Xenial Xerus) execute on terminal:</p>
+<pre><code class="bash">sudo apt-get remove python
+</code></pre>
+
+<h3 id="uninstall-python-and-its-dependent-packages">Uninstall python and it's dependent packages</h3>
+<p>To remove the python package and any other dependant package which are no longer needed from Ubuntu Xenial.</p>
+<pre><code class="bash">sudo apt-get remove --auto-remove python
+</code></pre>
+
+<h3 id="purging-python">Purging python</h3>
+<p>If you also want to delete configuration and/or data files of python from Ubuntu Xenial then this will work:</p>
+<pre><code class="bash">sudo apt-get purge python
+</code></pre>
+
+<p>To delete configuration and/or data files of python and it's dependencies from Ubuntu Xenial then execute:</p>
+<pre><code class="bash">sudo apt-get purge --auto-remove python
 </code></pre>
 
   <br>
