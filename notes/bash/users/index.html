@@ -37,6 +37,7 @@
               {title: "Add User", url: "#add-user" },
               {title: "Delete User", url: "#delete-user" },
               {title: "Change Password", url: "#change-password" },
+              {title: "Add User to Sudo", url: "#add-user-to-sudo" },
           ]},
         ];
 
@@ -158,6 +159,13 @@ vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
+</code></pre>
+
+<h2 id="add-user-to-sudo">Add User to Sudo</h2>
+<blockquote>
+<p>Source <a href="https://phoenixnap.com/kb/how-to-create-sudo-user-on-ubuntu">phoenixnap</a></p>
+</blockquote>
+<pre><code class="bash">usermod –aG sudo newuser
 </code></pre>
 
   <br>
