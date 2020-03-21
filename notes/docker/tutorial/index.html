@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Tutorial - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Docker Command Sumamry", url: "#_top", children: [
+              {title: "We will go over these fundamental commands:", url: "#we-will-go-over-these-fundamental-commands" },
+              {title: "Lists images on machine", url: "#lists-images-on-machine" },
+              {title: "Lists running containers", url: "#lists-running-containers" },
+              {title: "Lists all containers stopped or otherwise", url: "#lists-all-containers-stopped-or-otherwise" },
+              {title: "Start a docker", url: "#start-a-docker" },
+              {title: "Delete a container", url: "#delete-a-container" },
+              {title: "Removes an image", url: "#removes-an-image" },
+              {title: "Run an interactive session", url: "#run-an-interactive-session" },
+              {title: "Detach from container and leave running", url: "#detach-from-container-and-leave-running" },
+              {title: "To attach back to a docker container", url: "#to-attach-back-to-a-docker-container" },
+              {title: "Stop a running docker like this (you'll need to to delete it)", url: "#stop-a-running-docker-like-this-youll-need-to-to-delete-it" },
+              {title: "To name a container", url: "#to-name-a-container" },
+              {title: "Tag existing image as a different name (repo/image:tag)", url: "#tag-existing-image-as-a-different-name-repoimagetag" },
+              {title: "Login to your dockerhub account", url: "#login-to-your-dockerhub-account" },
+              {title: "To push image online", url: "#to-push-image-online" },
+              {title: "To automatically remove container when exited", url: "#to-automatically-remove-container-when-exited" },
+              {title: "Use bash flag -v : to mount the host folder inside the docker.", url: "#use-bash-flag-v-to-mount-the-host-folder-inside-the-docker" },
+              {title: "from a Dockerfile", url: "#from-a-dockerfile" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../remote_registry/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="docker-command-sumamry">Docker Command Sumamry</h1>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/Yy549qywTQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+<h2 id="we-will-go-over-these-fundamental-commands">We will go over these fundamental commands:</h2>
+<pre><code class="bash">
+docker build -t friendlyhello .  # Create image using this directory's Dockerfile  
+docker run -d -p 4000:80 friendlyhello         # Same thing, but in detached mode  
+docker container ls                                # List all running containers  
+docker container ls -a             # List all containers, even those not running  
+docker container stop &lt;hash&gt;           # Gracefully stop the specified container  
+docker container kill &lt;hash&gt;         # Force shutdown of the specified container  
+docker container rm &lt;hash&gt;        # Remove specified container from this machine  
+docker container rm $(docker container ls -a -q)         # Remove all containers  
+docker image ls -a                             # List all images on this machine  
+docker image rm &lt;image id&gt;            # Remove specified image from this machine  
+docker image rm $(docker image ls -a -q)   # Remove all images from this machine  
+docker login             # Log in this CLI session using your Docker credentials  
+docker tag &lt;image&gt; username/repository:tag  # Tag &lt;image&gt; for upload to registry  
+docker push username/repository:tag            # Upload tagged image to registry  
+docker run username/repository:tag                   # Run image from a registry  
+</code></pre>
+
+<h2 id="lists-images-on-machine">Lists images on machine</h2>
+<pre><code class="bash">docker images
+</code></pre>
+
+<h2 id="lists-running-containers">Lists running containers</h2>
+<pre><code class="bash">docker ps
+</code></pre>
+
+<h2 id="lists-all-containers-stopped-or-otherwise">Lists all containers stopped or otherwise</h2>
+<pre><code class="bash">docker ps -a
+</code></pre>
+
+<h2 id="start-a-docker">Start a docker</h2>
+<pre><code class="bash">docker run bbearce/docker_demo:from_docker_file
+</code></pre>
+
+<h2 id="delete-a-container">Delete a container</h2>
+<pre><code class="bash">docker container rm 3e64bfa61b7e
+</code></pre>
+
+<h2 id="removes-an-image">Removes an image</h2>
+<pre><code class="bash">docker image rm 7a59e09539e4
+</code></pre>
+
+<h2 id="run-an-interactive-session">Run an interactive session</h2>
+<pre><code class="bash">docker run -it bbearce/docker_demo:from_docker_file bash
+</code></pre>
+
+<ul>
+<li><code>-i</code> - interactive sessoin</li>
+<li><code>-t</code> - join docker terminal to yours</li>
+<li><code>bash</code> - run <em>bash</em> inside the session instead of default program(s)</li>
+</ul>
+<h2 id="detach-from-container-and-leave-running">Detach from container and leave running</h2>
+<pre><code class="html">&lt;cntrl p+q&gt;
+</code></pre>
+
+<h2 id="to-attach-back-to-a-docker-container">To attach back to a docker container</h2>
+<pre><code class="bash">docker attach silly_wright
+</code></pre>
+
+<p>or</p>
+<pre><code class="bash">docker attach &lt;container_id&gt;
+</code></pre>
+
+<h2 id="stop-a-running-docker-like-this-youll-need-to-to-delete-it">Stop a running docker like this (you'll need to to delete it)</h2>
+<pre><code class="bash">docker stop &lt;container_id or name&gt;
+</code></pre>
+
+<h2 id="to-name-a-container">To name a container</h2>
+<p><code>--name=&lt;name&gt;</code></p>
+<pre><code class="bash">docker run -it --name=auto_remove bbearce/docker_demo:from_docker_file bash
+</code></pre>
+
+<h2 id="tag-existing-image-as-a-different-name-repoimagetag">Tag existing image as a different name (repo/image:tag)</h2>
+<pre><code class="bash">docker tag bbearce/docker_demo:from_docker_file bbearce/docker_demo:delete_me
+</code></pre>
+
+<h2 id="login-to-your-dockerhub-account">Login to your dockerhub account</h2>
+<pre><code class="bash">docker login --username=bbearce
+</code></pre>
+
+<h2 id="to-push-image-online">To push image online</h2>
+<pre><code class="bash">docker push bbearce/docker_demo:from_docker_file
+</code></pre>
+
+<h2 id="to-automatically-remove-container-when-exited">To automatically remove container when exited</h2>
+<pre><code class="bash">docker run -it --rm --name=auto_remove bbearce/docker_demo:from_docker_file bash
+</code></pre>
+
+<h2 id="use-bash-flag-v-to-mount-the-host-folder-inside-the-docker">Use bash flag <em>-v <host_machine_dir>:<docker_dir></em> to mount the host folder inside the docker.</h2>
+<pre><code class="bash">docker run -it --rm --name=auto_remove -v /home/bbearce/Desktop/Docker_Demo/mount:/app bbearce/docker_demo:from_docker_file bash
+</code></pre>
+
+<h2 id="from-a-dockerfile">from a Dockerfile</h2>
+<pre><code class="bash">docker build -t bbearce/docker_demo:from_docker_file .
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../remote_registry/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
