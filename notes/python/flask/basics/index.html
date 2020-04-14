@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Seaborn - Ben's Code Journal</title>
+    <title>Flask - Ben's Code Journal</title>
     <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../../css/base.css" rel="stylesheet">
@@ -33,10 +33,7 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "Seaborn", url: "#_top", children: [
-              {title: "Bar Plot", url: "#bar-plot" },
-              {title: "Heatmap", url: "#heatmap" },
-              {title: "Axes and Plot Options", url: "#axes-and-plot-options" },
+          {title: "Flask Setup", url: "#_top", children: [
           ]},
         ];
 
@@ -63,20 +60,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../flask/basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../flask/basics/" class="btn btn-xs btn-link">
-        Flask
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-link">
+        Decorators
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../pandas/basics/" class="btn btn-xs btn-default pull-left">
+      <a href="../../seaborn/basics/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../pandas/basics/" class="btn btn-xs btn-link">
-        Pandas
+        Previous</a><a href="../../seaborn/basics/" class="btn btn-xs btn-link">
+        Seaborn
       </a>
     </div>
     
@@ -84,50 +81,76 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="seaborn">Seaborn</h1>
+    <h1 id="flask-setup">Flask Setup</h1>
 <blockquote>
-<p>Source <a href=""></a></p>
+<p>Source <a href="https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-i-hello-world">Miguel Grinberg</a> and <a href="https://realpython.com/tutorials/flask/">Real Python</a></p>
 </blockquote>
-<pre><code class="python">import seaborn as sns
+<p><a href="https://realpython.com/flask-google-login/">This</a> is a great login tutorial</p>
+<p><img alt="Folder Structure" src="../folder_structure.png" /></p>
+<p><em>flask_cors_and_redesign.py</em>
+Here all we need to do is import the app</p>
+<p><em>app/<strong>init</strong>.py</em></p>
+<pre><code>from flask import Flask
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+from app import routes
+
 </code></pre>
 
-<h2 id="bar-plot">Bar Plot</h2>
-<blockquote>
-<p>Source <a href="https://seaborn.pydata.org/generated/seaborn.barplot.html">seaborn</a></p>
-</blockquote>
-<pre><code class="python">sns.set(style=&quot;whitegrid&quot;)
-tips = sns.load_dataset(&quot;tips&quot;)
-ax = sns.barplot(x=&quot;day&quot;, y=&quot;total_bill&quot;, data=tips)
+<p><em>app/routes.py</em></p>
+<pre><code class="python">from app import app
+from flask import render_template, jsonify
+
+import math
+
+@app.route('/', methods=['GET'])
+def index():
+    return render_template('index.html', variable='test_variable')
+
+@app.route('/api', methods=['GET'])
+def api():
+    return jsonify({'data' : 'Hello World!'})
+
+@app.route('/map', methods=['GET'])
+def map():
+    return render_template('maps.html')
+    # return jsonify({'data' : 'Hello World!'})
+
+@app.route('/get_latlngs', methods=['GET'])
+def get_latlngs():
+
+    zip_latlng = {
+        'lat': 42.3601,
+        'lng': -71.0589,
+    }
+
+    post_latlngs = [
+        {'lat': 0, 'lng': 0},
+        {'lat': 0, 'lng': 0},
+        {'lat': 0, 'lng': 0},
+        {'lat': 0, 'lng': 0},
+    ]
+
+    num_of_posts = len(post_latlngs)
+    rad_spacing = 2*math.pi/num_of_posts
+    radius = 1
+
+    for i,v in enumerate(post_latlngs):
+        post_latlngs[i]['lat'] = zip_latlng['lat'] + radius*math.cos(i*rad_spacing)
+        post_latlngs[i]['lng'] = zip_latlng['lng'] + radius*math.sin(i*rad_spacing)
+
+
+
+    return jsonify(post_latlngs)
+
 </code></pre>
 
-<p><img alt="seaborn-barplot-1" src="../seaborn-barplot-1.png" /></p>
-<pre><code class="python">ax = sns.barplot(x=&quot;day&quot;, y=&quot;total_bill&quot;, hue=&quot;sex&quot;, data=tips)
+<p><em>app/models.py</em></p>
+<pre><code class="python"># Not shown, but this layout is for directory structure mainly.
 </code></pre>
-
-<p><img alt="seaborn-barplot-2" src="../seaborn-barplot-2.png" /></p>
-<pre><code class="python">ax = sns.barplot(x=&quot;day&quot;, y=&quot;tip&quot;, data=tips, capsize=.2)
-</code></pre>
-
-<p><img alt="seaborn-barplot-8" src="../seaborn-barplot-8.png" /></p>
-<pre><code class="python">ax = sns.barplot(&quot;size&quot;, y=&quot;total_bill&quot;, data=tips,
-                 palette=&quot;Blues_d&quot;)
-</code></pre>
-
-<p><img alt="seaborn-barplot-9" src="../seaborn-barplot-9.png" /></p>
-<h2 id="heatmap">Heatmap</h2>
-<p>ax = sns.heatmap(A_V_A)</p>
-<h2 id="axes-and-plot-options">Axes and Plot Options</h2>
-<blockquote>
-<p>Source <a href="https://www.drawingfromdata.com/setting-figure-size-using-seaborn-and-matplotlib">drawingfromdata</a></p>
-</blockquote>
-<h3 id="rotate-axes">Rotate Axes</h3>
-<pre><code class="python">import seaborn as sns
-planets = sns.load_dataset(&quot;planets&quot;)
-g = sns.factorplot(&quot;year&quot;, data=planets, aspect=1.5, kind=&quot;count&quot;, color=&quot;b&quot;)
-g.set_xticklabels(rotation=30)
-</code></pre>
-
-<p><img alt="rotated_axes" src="../rotated_axes.png" /></p>
 
   <br>
     
@@ -140,20 +163,20 @@ g.set_xticklabels(rotation=30)
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../flask/basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../flask/basics/" class="btn btn-xs btn-link">
-        Flask
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-link">
+        Decorators
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../pandas/basics/" class="btn btn-xs btn-default pull-left">
+      <a href="../../seaborn/basics/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../pandas/basics/" class="btn btn-xs btn-link">
-        Pandas
+        Previous</a><a href="../../seaborn/basics/" class="btn btn-xs btn-link">
+        Seaborn
       </a>
     </div>
     
