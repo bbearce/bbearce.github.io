@@ -38,6 +38,7 @@
               {title: "First Time Use and Setup", url: "#first-time-use-and-setup" },
               {title: "Display all DBs:", url: "#display-all-dbs" },
               {title: "Display Tables", url: "#display-tables" },
+              {title: "Display Schema", url: "#display-schema" },
               {title: "Display Connection Information", url: "#display-connection-information" },
               {title: "Switch DBs:", url: "#switch-dbs" },
               {title: "Delete Database:", url: "#delete-database" },
@@ -189,7 +190,13 @@ codalab_website=# \dt *
  pg_catalog | pg_cast                             | table | postgres
  pg_catalog | pg_class                            | table | postgres
 ...
+</code></pre>
 
+<h2 id="display-schema">Display Schema</h2>
+<blockquote>
+<p>Source <a href="https://kb.objectrocket.com/postgresql/connect-to-postgresql-and-show-the-table-schema-967">objectrocket</a></p>
+</blockquote>
+<pre><code class="sql">SELECT column_name FROM information_schema.columns WHERE TABLE_NAME = 'some_table';
 </code></pre>
 
 <h2 id="display-connection-information">Display Connection Information</h2>
