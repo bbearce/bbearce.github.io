@@ -37,6 +37,7 @@
               {title: "Display", url: "#display" },
               {title: "Making DataFrames", url: "#making-dataframes" },
               {title: "Apply Function", url: "#apply-function" },
+              {title: "sqlite3 Intgration", url: "#sqlite3-intgration" },
           ]},
         ];
 
@@ -157,6 +158,85 @@ def some_agg_function(df_group):
 print(x); print(x[['A','B']].groupby('A').apply(some_agg_function))
 print(y);print(y[['A','B']].groupby('A').apply(some_agg_function))
 print(z);print(z[['A','B']].groupby('A').apply(some_agg_function))
+</code></pre>
+
+<h2 id="sqlite3-intgration">sqlite3 Intgration</h2>
+<blockquote>
+<p>Source: <a href="https://www.dataquest.io/blog/python-pandas-databases/">dataquest</a></p>
+</blockquote>
+<h3 id="just-sqlite3-library">Just sqlite3 library</h3>
+<p>In order to work with a SQLite database from Python, we first have to connect to it. We can do that using the connect function, which returns a Connection object:</p>
+<pre><code class="python">import sqlite3
+conn = sqlite3.connect(&quot;flights.db&quot;)
+</code></pre>
+
+<p>Once we have a Connection object, we can then create a Cursor object. Cursors allow us to execute SQL queries against a database:</p>
+<pre><code class="python">cur = conn.cursor()
+</code></pre>
+
+<p>Once we have a Cursor object, we can use it to execute a query against the database with the aptly named execute method. The below code will fetch the first 5 rows from the airlines table:</p>
+<pre><code class="python">cur.execute(&quot;select * from airlines limit 5;&quot;)
+</code></pre>
+
+<p>You may have noticed that we didn’t assign the result of the above query to a variable. This is because we need to run another command to actually fetch the results. We can use the fetchall method to fetch all of the results of a query:</p>
+<pre><code class="python">results = cur.fetchall()
+print(results)
+</code></pre>
+
+<pre><code class="python">[(0, '1', 'Private flight', '\\N', '-', None, None, None, 'Y'), (1, '2', '135 Airways', '\\N', None, 'GNL', 'GENERAL', 'United States', 'N'), (2, '3', '1Time Airline', '\\N', '1T', 'RNX', 'NEXTIME', 'South Africa', 'Y'), (3, '4', '2 Sqn No 1 Elementary Flying Training School', '\\N', None, 'WYT', None, 'United Kingdom', 'N'), (4, '5', '213 Flight Unit', '\\N', None, 'TFU', None, 'Russia', 'N')]
+</code></pre>
+
+<p>As you can see, the results are formatted as a list of tuples. Each tuple corresponds to a row in the database that we accessed. Dealing with data this way is fairly painful. We’d need to manually add column heads, and manually parse the data. Luckily, the pandas library has an easier way, which we’ll look at in the next section.</p>
+<p>Before we move on, it’s good practice to close Connection objects and Cursor objects that are open. This prevents the SQLite database from being locked. When a SQLite database is locked, you may be unable to update the database, and may get errors. We can close the Cursor and the Connection like this:</p>
+<pre><code class="python">cur.close()
+conn.close()
+</code></pre>
+
+<h3 id="add-pandas">Add Pandas</h3>
+<pre><code class="python">import pandas as pd
+import sqlite3
+conn = sqlite3.connect(&quot;flights.db&quot;)
+df = pd.read_sql_query(&quot;select * from airlines limit 5;&quot;, conn)
+</code></pre>
+
+<h4 id="inserting-rows-with-python">Inserting rows with Python</h4>
+<p>To insert a row, we need to write an INSERT query. The below code will add a new row to the airlines table. We specify 9 values to insert, one for each column in airlines. This will add a new row to the table.</p>
+<pre><code class="python">cur = conn.cursor()
+cur.execute(&quot;insert into airlines values (6048, 19846, 'Test flight', '', '', null, null, null, 'Y')&quot;)
+conn.commit()
+</code></pre>
+
+<p>You want to avoid doing this! Inserting values with Python string formatting makes your program vulnerable to SQL Injection attacks. Luckily, sqlite3 has a straightforward way to inject dynamic values without relying on string formatting:</p>
+<pre><code class="python">cur = conn.cursor()
+values = ('Test Flight', 'Y')
+cur.execute(&quot;insert into airlines values (6049, 19847, ?, '', '', null, null, null, ?)&quot;, values)
+conn.commit()
+</code></pre>
+
+<h4 id="updating-rows">Updating rows</h4>
+<p>We can modify rows in a SQLite table using the execute method:</p>
+<pre><code class="python">cur = conn.cursor()
+values = ('USA', 19847)
+cur.execute(&quot;update airlines set country=? where id=?&quot;, values)
+conn.commit()
+</code></pre>
+
+<h4 id="deleting-rows">Deleting rows</h4>
+<p>Finally, we can delete the rows in a database using the execute method:</p>
+<pre><code class="python">cur = conn.cursor()values = (19847, )
+cur.execute(&quot;delete from airlines where id=?&quot;, values)conn.commit()
+</code></pre>
+
+<h4 id="creating-tables-with-pandas">Creating tables with pandas</h4>
+<p>The pandas package gives us a much faster way to create tables. We just have to create a DataFrame first, then export it to a SQL table. First, we’ll create a DataFrame:</p>
+<pre><code class="python">from datetime import datetime
+df = pd.DataFrame(
+[[1, datetime(2016, 9, 29, 0, 0) ,
+datetime(2016, 9, 29, 12, 0), 'T1', 1]],
+columns=[&quot;id&quot;, &quot;departure&quot;, &quot;arrival&quot;, &quot;number&quot;, &quot;route_id&quot;])
+Then, we’ll be able to call the to_sql method to convert df to a table in a database. We set the keep_exists parameter to replace to delete and replace any existing tables named daily_flights:
+
+df.to_sql(&quot;daily_flights&quot;, conn, if_exists=&quot;replace&quot;)
 </code></pre>
 
   <br>
