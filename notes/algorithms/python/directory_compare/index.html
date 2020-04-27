@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Folder\File Compare - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Directory and File Compare", url: "#_top", children: [
+              {title: "List out files appended to their paths:", url: "#list-out-files-appended-to-their-paths" },
+              {title: "You can use list comprehensions to compare, but it's slow compared to sets:", url: "#you-can-use-list-comprehensions-to-compare-but-its-slow-compared-to-sets" },
+              {title: "Use sets in python to make compares:", url: "#use-sets-in-python-to-make-compares" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../csv_loader/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../csv_loader/" class="btn btn-xs btn-link">
+        CSV Loader
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../fast.ai/lessons_part_1/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../fast.ai/lessons_part_1/" class="btn btn-xs btn-link">
+        Lessons (Part 1)
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="directory-and-file-compare">Directory and File Compare</h1>
+<blockquote>
+<p>Source <a href="https://stackoverflow.com/questions/19251993/comparing-two-directories-with-subdirectories-to-find-any-changes">stackoverflow</a></p>
+</blockquote>
+<h3 id="list-out-files-appended-to-their-paths">List out files appended to their paths:</h3>
+<pre><code class="python">import os
+
+def listfiles(path):
+    files = []
+    for dirName, subdirList, fileList in os.walk(path):
+        dir = dirName.replace(path, '')
+        for fname in fileList:
+            files.append(os.path.join(dir, fname))
+    return files
+
+x = listfiles('D:\\xfiles')
+y = listfiles('D:\\yfiles')
+</code></pre>
+
+<h3 id="you-can-use-list-comprehensions-to-compare-but-its-slow-compared-to-sets">You can use list comprehensions to compare, but it's slow compared to <em>sets</em>:</h3>
+<pre><code class="python">q = [filename for filename in x if filename not in y]
+</code></pre>
+
+<h3 id="use-sets-in-python-to-make-compares">Use <em>sets</em> in python to make compares:</h3>
+<pre><code class="python">files_only_in_x = set(x) - set(y) 
+files_only_in_y = set(y) - set(x)
+files_only_in_either = set(x) ^ set(y)
+files_in_both = set(x) &amp; set(y)
+all_files = set(x) | set(y)
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../csv_loader/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../csv_loader/" class="btn btn-xs btn-link">
+        CSV Loader
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../fast.ai/lessons_part_1/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../fast.ai/lessons_part_1/" class="btn btn-xs btn-link">
+        Lessons (Part 1)
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
