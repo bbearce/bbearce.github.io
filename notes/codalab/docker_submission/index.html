@@ -128,7 +128,7 @@ b93b3f7e0a3b        codalab-competitions_rabbit                    &quot;docker-
 
 <p>We need use manage.py from the django container to migrate the database. This will talk to the postgres container for us. Codalab has notes for how to do this so we will <a href="https://github.com/codalab/codalab-competitions/wiki/Dev_Database-Migrations">follow their lead</a>:</p>
 <blockquote>
-<p>Note, in the link from codalab then have a placeholder for <code>APPNAME</code>. Substitute <code>web</code> in for this.</p>
+<p>Note, in the link from codalab they have a placeholder for <code>APPNAME</code>. Substitute <code>web</code> in for this.</p>
 </blockquote>
 <pre><code class="bash">root@django:/app/codalab# ./manage schemamigration web --auto
 ./manage: line 3: ./config/generated/startup_env.sh: No such file or directory
@@ -192,9 +192,9 @@ Superuser created successfully.
             'published',
             'enable_medical_image_viewer',
             'enable_detailed_results',
-            # BB change start
+            # change start
             'enable_docker_submission',
-            # BB change end
+            # change end
             'admins',
 ...
 </code></pre>
@@ -208,7 +208,7 @@ Superuser created successfully.
 <p>Replace the inside of the else block with this code:</p>
 <pre><code class="html">{% if phase.competition.enable_docker_submission %}
 
-&lt;h1&gt;ENABLE DOCKER SUBMISSION&lt;/h1&gt;
+&lt;h1&gt;DOCKER SUBMISSION ENABLED &lt;/h1&gt;
 &lt;!-- Submit Docker Button --&gt;
 
 &lt;button id=submit-button type=&quot;button&quot; data-toggle=&quot;modal&quot; data-target=&quot;#submit-docker-dialog&quot; class=&quot;btn btn-secondary&quot;&gt;Submit Docker&lt;/button&gt;
@@ -217,7 +217,7 @@ Superuser created successfully.
 
 {% else %}
 
-&lt;h1&gt;DISABLED DOCKER SUBMISSION&lt;/h1&gt;
+&lt;h1&gt;DOCKER SUBMISSION DISABLED&lt;/h1&gt;
 &lt;!-- original code from codalab --&gt;
 
 &lt;button id=&quot;fileUploadButton&quot;
