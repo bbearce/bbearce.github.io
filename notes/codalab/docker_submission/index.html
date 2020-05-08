@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Docker Submission - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Docker Submission", url: "#_top", children: [
+              {title: "Introduction", url: "#introduction" },
+              {title: "Step 1: Install Codalab", url: "#step-1-install-codalab" },
+              {title: "Step 2: Add Database Option for Docker Submission", url: "#step-2-add-database-option-for-docker-submission" },
+              {title: "Step 3: Add Conditional Rendering for Docker\\Result Submission", url: "#step-3-add-conditional-rendering-for-dockerresult-submission" },
+              {title: "Step 4: Edit Site-Worker Code", url: "#step-4-edit-site-worker-code" },
+              {title: "Step 5: The Compute-Worker", url: "#step-5-the-compute-worker" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../MKDocs/Quick Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../MKDocs/Quick Notes/" class="btn btn-xs btn-link">
+        MKDocs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../algorithms/python/stairs/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../algorithms/python/stairs/" class="btn btn-xs btn-link">
+        Stairs
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="docker-submission">Docker Submission</h1>
+<p>This is a documentation for adding docker submissions to the open source project <a href="https://github.com/codalab/codalab-competitions">CodaLab</a>.</p>
+<h2 id="introduction">Introduction</h2>
+<p>Codalab comes with essentially 2 types of submissions from participants:</p>
+<ul>
+<li>Results Submission: Participants submit the "results" of their algorithms.  </li>
+<li>Code Submission: Participants submit actual code to be executed by the challenge organizer. The code can be executed directly as an executable ($ python sample.py...) or participants can define classes that the organizer calls themselves (hence the participants do not have to read the input data themselves).</li>
+</ul>
+<p>We will be adding a third option where participants can submit a docker image with their code and libraries baked in.</p>
+<h2 id="step-1-install-codalab">Step 1: Install Codalab</h2>
+<p>First we need a running instance installed. Setup the challenge to accept a results submission, as we will tweak this process to evaluate the output of a docker container. </p>
+<h2 id="step-2-add-database-option-for-docker-submission">Step 2: Add Database Option for Docker Submission</h2>
+<h3 id="add-new-column-in-competition-table">Add New Column in Competition Table</h3>
+<p>Find file <code>/codalab/apps/web/models.py</code>. Approximately on line 230 is the Competition model definition. It has definitions for the columns of this table. It looks like this:</p>
+<pre><code class="python">class Competition(ChaHubSaveMixin, models.Model):
+...
+</code></pre>
+
+<p>Add <code>enable_docker_submission</code> as a <code>BooleanField</code>:</p>
+<p><strong>Add this line:</strong></p>
+<pre><code class="python">enable_docker_submission = models.BooleanField(default=False, verbose_name=&quot;Allow participant docker submission&quot;)
+</code></pre>
+
+<p>It doesn't matter what order the columns are in, so if you are familiar with setting up models in Django or Flask projects, just add a column that we can reference later.</p>
+<h3 id="migrate-database-so-we-can-see-our-changes">Migrate Database So We Can See Our Changes</h3>
+<p>Codalab as of this writing (5/1/2020) is deployed with an orchestration of docker containers. One of these is the database (postgres). </p>
+<p>Using <code>docker ps</code> we can see our images:</p>
+<pre><code class="bash">bbearce@MedICI-CodaLab-Master:~/src$ docker ps
+CONTAINER ID        IMAGE                                          COMMAND                  CREATED             STATUS              PORTS                                                                                        NAMES
+b8196a2e9fc5        nginx                                          &quot;bash -x /app/docker…&quot;   4 months ago        Up 2 months         0.0.0.0:80-&gt;80/tcp, 0.0.0.0:443-&gt;443/tcp                                                     nginx
+528d2dc976a1        codalab-competitions_django                    &quot;bash /app/docker/ru…&quot;   4 months ago        Up 2 months         0.0.0.0:8000-&gt;8000/tcp                                                                       django
+c56dcc7fb3e2        codalab-competitions_worker_site               &quot;sh /app/docker/run_…&quot;   4 months ago        Up 2 months                                                                                                      worker_site
+23996bbcfbd0        codalab/competitions-v1-compute-worker:1.1.7   &quot;/bin/sh -c 'celery …&quot;   4 months ago        Up 2 months                                                                                                      worker_compute
+3f5a1df0f9ae        codalab-competitions_flower                    &quot;/usr/bin/dumb-init …&quot;   4 months ago        Up 2 months         0.0.0.0:5555-&gt;5555/tcp                                                                       flower
+b93b3f7e0a3b        codalab-competitions_rabbit                    &quot;docker-entrypoint.s…&quot;   4 months ago        Up 2 months         4369/tcp, 5671/tcp, 0.0.0.0:5672-&gt;5672/tcp, 15671/tcp, 25672/tcp, 0.0.0.0:15672-&gt;15672/tcp   rabbit
+5e3492959db1        postgres:9.6.3                                 &quot;docker-entrypoint.s…&quot;   4 months ago        Up 2 months         5432/tcp                                                                                     postgres
+
+</code></pre>
+
+<p>We need use manage.py from the django container to migrate the database. This will talk to the postgres container for us. Codalab has notes for how to do this so we will <a href="https://github.com/codalab/codalab-competitions/wiki/Dev_Database-Migrations">follow their lead</a>:</p>
+<blockquote>
+<p>Note, in the link from codalab then have a placeholder for <code>APPNAME</code>. Substitute <code>web</code> in for this.</p>
+</blockquote>
+<pre><code class="bash">root@django:/app/codalab# ./manage schemamigration web --auto
+./manage: line 3: ./config/generated/startup_env.sh: No such file or directory
+./manage: line 4: ../venv/bin/activate: No such file or directory
+/usr/local/lib/python2.7/site-packages/django_extensions/db/fields/__init__.py:425: DeprecationWarning: Django 1.8 features a native UUIDField, this UUIDField will be removed after Django 1.7 becomes unsupported.
+  warnings.warn(&quot;Django 1.8 features a native UUIDField, this UUIDField will be removed after Django 1.7 becomes unsupported.&quot;, DeprecationWarning)
+
+ + Added field enable_docker_submission on web.Competition
+Created 0085_auto__add_field_competition_enable_docker_submission.py. You can now apply this migration with: ./manage.py migrate web
+
+</code></pre>
+
+<p>Once you have that migrate the database.</p>
+<pre><code class="bash">./manage migrate
+</code></pre>
+
+<p>This will apply the migration and look for all changes to all tables. Looking in the results we can see our migration in action:</p>
+<pre><code class="bash">~
+~
+Running migrations for web:
+ - Migrating forwards to 0085_auto__add_field_competition_enable_docker_submission.
+ &gt; web:0085_auto__add_field_competition_enable_docker_submission
+~
+~
+</code></pre>
+
+<p>Now let's verify our change. First create a database superuser:</p>
+<pre><code class="bash">docker exec -it django python manage.py createsuperuser
+</code></pre>
+
+<p>This will prompt you to create a superuser:</p>
+<pre><code class="bash">bbearce@miccai2019:~/src/codalab-competitions/codalab$ docker exec -it django python manage.py createsuperuser
+/usr/local/lib/python2.7/site-packages/django_extensions/db/fields/__init__.py:425: DeprecationWarning: Django 1.8 features a native UUIDField, this UUIDField will be removed after Django 1.7 becomes unsupported.
+  warnings.warn(&quot;Django 1.8 features a native UUIDField, this UUIDField will be removed after Django 1.7 becomes unsupported.&quot;, DeprecationWarning)
+
+Username: admin
+Email address: bbearce@mgh.harvard.edu
+Password: 
+Password (again): 
+Superuser created successfully.
+
+</code></pre>
+
+<p>Now proceed to http://&lt;your domain>.com/admin and log in with the credentials you made. Find the "Web" app section and click "Competitions".</p>
+<p><img alt="django_admin_home" src="../django_admin_home.png" /></p>
+<p>Next scroll till you see "Allow participant docker submission" or whatever you put as your new column.</p>
+<p><img alt="django_admin_allow_docker_submission_checkbox" src="../django_admin_allow_docker_submission_checkbox.png" /></p>
+<h3 id="add-our-new-option-to-the-competitionform-class">Add Our new Option to the CompetitionForm Class</h3>
+<p>Django or CodaLab uses <code>apps.web.forms.CompetitionForm</code> to manage the edit competiton form. </p>
+<pre><code class="python">class CompetitionForm(forms.ModelForm):
+    class Meta:
+        model = models.Competition
+        fields = (
+            'title',
+            'description',
+            'queue',
+            'disallow_leaderboard_modifying',
+            'force_submission_to_leaderboard',
+            'image',
+            'end_date',
+            'published',
+            'enable_medical_image_viewer',
+            'enable_detailed_results',
+            # BB change start
+            'enable_docker_submission',
+            # BB change end
+            'admins',
+...
+</code></pre>
+
+<p>This will allow us to see this option in the edit competition view:</p>
+<p><img alt="codalab_edit_competition" src="../codalab_edit_competition.png" /></p>
+<p>This has the effect of allowing access to this option from multiple views so we can conditionally render a docker submission form or a regular result submission form.</p>
+<h2 id="step-3-add-conditional-rendering-for-dockerresult-submission">Step 3: Add Conditional Rendering for Docker\Result Submission</h2>
+<h3 id="add-ui-elements">Add UI Elements</h3>
+<p>Find template <code>apps/web/templates/web/competitions/_submit_results_page.html</code>. Roughly on line 70 there is a <code>{% if USE_AWS %}</code> block and in the <code>{% else %}</code> block we can add our code.</p>
+<p>Replace the inside of the else block with this code:</p>
+<pre><code class="html">{% if phase.competition.enable_docker_submission %}
+
+&lt;h1&gt;ENABLE DOCKER SUBMISSION&lt;/h1&gt;
+&lt;!-- Submit Docker Button --&gt;
+
+&lt;button id=submit-button type=&quot;button&quot; data-toggle=&quot;modal&quot; data-target=&quot;#submit-docker-dialog&quot; class=&quot;btn btn-secondary&quot;&gt;Submit Docker&lt;/button&gt;
+
+&lt;!-- Submit Docker Button --&gt;
+
+{% else %}
+
+&lt;h1&gt;DISABLED DOCKER SUBMISSION&lt;/h1&gt;
+&lt;!-- original code from codalab --&gt;
+
+&lt;button id=&quot;fileUploadButton&quot;
+        class=&quot;button btn btn-primary {% if not phase.reference_data %}disabled{% endif %}&quot;
+        {% if not phase.reference_data %}disabled=&quot;disabled&quot;{% endif %}&gt;
+    Submit
+&lt;/button&gt; 
+
+&lt;!-- original code from codalab --&gt;
+{% endif %}
+</code></pre>
+
+<blockquote>
+<p>Our If Else block has the original code in the else.</p>
+</blockquote>
+<p>At this point if you refresh the page and navigate to the "Participate" tab, you should see this.</p>
+<p><img alt="codalab_docker_submit_button_page" src="../codalab_docker_submit_button_page.png" /></p>
+<p>Now if we go to "Edit" and look at the competition options, we see that if we check the box "Allow participant docker submission" we can see the text change on the "Participate" tab.</p>
+<p><img alt="codalab_docker_submit_docker_page" src="../codalab_docker_submit_docker_page.png" /></p>
+<p>Next we need the "Submit Docker" button to do something. Let's add a modal that get's triggered when you click the button.</p>
+<p>Add this code just before the line that has <code>{% include "web/common/_submission_details_template.html" %}</code> on line ~160:</p>
+<pre><code class="html">&lt;div class=&quot;modal fade&quot; id=&quot;submit-docker-dialog&quot;&gt;
+    &lt;div class=&quot;modal-dialog&quot;&gt;
+
+        &lt;div class=&quot;modal-content&quot;&gt;
+            &lt;div class=&quot;modal-header&quot;&gt;
+                &lt;button type=&quot;button&quot; class=&quot;close&quot; data-dismiss=&quot;modal&quot; aria-hidden=&quot;true&quot;&gt;&amp;times;&lt;/button&gt;
+                &lt;h4 class=&quot;modal-title&quot;&gt;Submit Docker&lt;/h4&gt;
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-body&quot;&gt;
+                &lt;h4&gt;Submit Docker Run Command&lt;/h4&gt;
+
+                &lt;textarea id=&quot;docker-run-command&quot; type=text style=&quot;width: 500px; height: 250px;&quot;&gt;docker run -v /&lt;local-path&gt;:/&lt;docker-container-path-1&gt; -v /&lt;local-path&gt;:/&lt;docker-container-path-2&gt; user/repo:tag&lt;/textarea&gt;
+
+            &lt;/div&gt;
+            &lt;div class=&quot;modal-footer&quot;&gt;
+                &lt;button type=&quot;button&quot; class=&quot;btn btn-default&quot; data-dismiss=&quot;modal&quot;&gt;Close&lt;/button&gt;
+
+                 &lt;button id=&quot;submit-docker&quot; class=&quot;btn btn-primary&quot;&gt;Send&lt;/button&gt;    
+            &lt;/div&gt;
+        &lt;/div&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+
+</code></pre>
+
+<p>You should see this when you click the "Submit Docker" button:</p>
+<p><img alt="codalab_docker_submit_modal" src="../codalab_docker_submit_modal.png" /></p>
+<p>Now let's tie the "Send" button from the modal to some javascript so we can call the backend to process this for us. At the bottom of the same file we've been working in, add this code and create the file apps/web/static/js/submit_docker.js:</p>
+<pre><code class="html">&lt;!-- Docker Submission Front End --&gt;
+
+&lt;script type=&quot;text/javascript&quot; src=&quot;{{STATIC_URL}}js/submit_docker.js&quot;&gt;&lt;/script&gt;
+
+&lt;!-- Docker Submission Front End --&gt;
+</code></pre>
+
+<p>In submit_docker.js add this:</p>
+<pre><code class="js">$('#submit-docker').click(function(){
+
+  //copy from codalab/apps/web/static/js/Competition.js file
+
+  $('#details').html('Creating new submission...');
+
+  var competitionId = $(&quot;#competitionId&quot;).val()
+  var description = $('#submission_description_textarea').val() || '';
+  var method_name = $('#submission_method_name').val() || '';
+  var method_description = $('#submission_method_description').val() || '';
+  var project_url = $('#submission_project_url').val() || '';
+  var publication_url = $('#submission_publication_url').val() || '';
+  var bibtex = $('#submission_bibtex').val() || '';
+  var team_name = $('#submission_team_name').val() || '';
+  var organization_or_affiliation = $('#submission_organization_or_affiliation').val() || '';
+  var phase_id = $('#submission_phase_id').val();
+
+  // capture docker run command
+  var docker_run_cmd = $('#docker-run-command').val();
+  console.log(docker_run_cmd);
+  // capture docker run command
+
+  $('#submission_description_textarea').val('');
+
+  // console.log('/api/competition/' + competitionId + '/submission?description=' + encodeURIComponent(description) +
+  //                     '&amp;method_name=' + encodeURIComponent(method_name) +
+  //                     '&amp;method_description=' + encodeURIComponent(method_description) +
+  //                     '&amp;project_url=' + encodeURIComponent(project_url) +
+  //                     '&amp;publication_url=' + encodeURIComponent(publication_url) +
+  //                     '&amp;bibtex=' + encodeURIComponent(bibtex) +
+  //                     '&amp;team_name=' + encodeURIComponent(team_name) +
+  //                     '&amp;organization_or_affiliation=' + encodeURIComponent(organization_or_affiliation) +
+  //                     '&amp;phase_id=' + encodeURIComponent(phase_id)+
+  //                     '&amp;docker-run-command='+ encodeURIComponent(docker_run_cmd)
+  //             )
+
+  $.ajax({
+      url: '/api/competition/' + competitionId + '/submission?description=' + encodeURIComponent(description) +
+                      '&amp;method_name=' + encodeURIComponent(method_name) +
+                      '&amp;method_description=' + encodeURIComponent(method_description) +
+                      '&amp;project_url=' + encodeURIComponent(project_url) +
+                      '&amp;publication_url=' + encodeURIComponent(publication_url) +
+                      '&amp;bibtex=' + encodeURIComponent(bibtex) +
+                      '&amp;team_name=' + encodeURIComponent(team_name) +
+                      '&amp;organization_or_affiliation=' + encodeURIComponent(organization_or_affiliation) +
+                      '&amp;phase_id=' + encodeURIComponent(phase_id)+
+                      '&amp;docker-run-command='+ encodeURIComponent(docker_run_cmd),
+      type: 'post',
+      cache: false,
+      async: false,
+      data: {
+          'id': 'trackingid',
+          'name': '',
+          'type': '',
+          'size': ''
+      }
+  }).done(function(response) { 
+      $('#details').html('');
+      $('#user_results tr.noData').remove();
+      $('#user_results').append(Competition.displayNewSubmission(response, 
+                                                                 description, 
+                                                                 method_name, 
+                                                                 method_description, 
+                                                                 project_url, 
+                                                                 publication_url, 
+                                                                 bibtex, 
+                                                                 team_name, 
+                                                                 organization_or_affiliation));
+      $('#user_results #' + response.id + ' .glyphicon-plus').on('click', function() { Competition.showOrHideSubmissionDetails(this) });
+      //$('#fileUploadButton').removeClass('disabled');
+      //$('#fileUploadButton').text(&quot;Submit Results...&quot;);
+      $('#user_results #' + response.id + ' .glyphicon-plus').click();
+       location.reload(true);
+  }).fail(function(jqXHR) {
+      var msg = 'An unexpected error occurred.';
+      if (jqXHR.status == 403) {
+          msg = jqXHR.responseJSON.detail;
+      }
+      $('#details').html(msg);
+      //$('#fileUploadButton').text(&quot;Submit Results...&quot;);
+      $('#fileUploadButton').removeClass('disabled');
+  });
+
+  $('#submit-docker-dialog').modal('toggle');
+
+});
+
+</code></pre>
+
+<p>From looking at the <code>ajax</code> call you can see we are hitting the route for an api that ultimately triggers a <code>POST</code> request in view "CompetitionSubmissionViewSet" under the api app. The part we need to edit is the <code>post_save()</code> method.</p>
+<h2 id="step-4-edit-site-worker-code">Step 4: Edit Site-Worker Code</h2>
+<p>Replace the <code>post_save()</code> with this:</p>
+<pre><code class="python">def post_save(self, obj, created):
+    # Original Code
+    #if created:
+    #    evaluate_submission.apply_async((obj.pk, obj.phase.is_scoring_only))
+
+    if escape(self.request.QUERY_PARAMS.get('docker-run-command')) == 'None':
+        # submit_docker_command = None
+        submit_docker_command = &quot;this is not a docker submission&quot;
+
+    else:
+        submit_docker_command = escape(self.request.QUERY_PARAMS.get('docker-run-command', &quot;&quot;)).replace('&amp;lt;','&lt;').replace('&amp;gt;','&gt;')
+
+    ## - pass extra info to submission
+    if created:
+        evaluate_submission.apply_async((obj.pk, 
+                                         obj.phase.is_scoring_only, 
+                                         submit_docker_command))
+    ## - pass extra info to submission
+</code></pre>
+
+<p>At the bottom of <code>post_save()</code> is <code>evaluate_submission</code>. That is from apps/web/tasks.py. We are passing the <code>submit_docker_command</code> to <code>evaluate submission</code>. Change <code>evaluate_submission</code> to accept the <code>submit_docker_command</code>. Also edit it to pass the command to <code>task_func()</code></p>
+<p>Add <code>submit_docker_command</code> to these two sections:</p>
+<pre><code class="python">def evaluate_submission(submission_id, is_scoring_only, submit_docker_command):
+</code></pre>
+
+<p>and:</p>
+<pre><code class="python">task_func(submission, job_id, submit_docker_command)
+</code></pre>
+
+<p><code>task_func</code> is actually a user defined variable for <code>score</code>, a function in the same file above <code>evaluate_submission</code>. Add <code>submit_docker_command</code> to the input of <code>score</code>.</p>
+<pre><code class="python">def score(submission, job_id, submit_docker_command):
+</code></pre>
+
+<p>Towards the bottom of <code>score</code>, <code>_prepare_compute_worker_run</code> needs <code>submit_docker_command</code>. Pass it in, and subsequently add it to it's function definition at towards the top of the page:</p>
+<pre><code class="python">_prepare_compute_worker_run(job_id, submission, submit_docker_command, is_prediction=False)
+</code></pre>
+
+<p>and</p>
+<pre><code class="python">def _prepare_compute_worker_run(job_id, submission, submit_docker_command, is_prediction):
+</code></pre>
+
+<p>Inside this function you will find a <code>data</code> variable we need to add the docker command to:</p>
+<pre><code class="python">    data = {
+        &quot;id&quot;: job_id,
+        &quot;task_type&quot;: &quot;run&quot;,
+        &quot;task_args&quot;: {
+            &quot;submission_id&quot;: submission.pk,
+            &quot;docker_image&quot;: docker_image,
+            &quot;ingestion_program_docker_image&quot;: docker_image,
+            &quot;bundle_url&quot;: _make_url_sassy(bundle_url),
+            &quot;stdout_url&quot;: _make_url_sassy(stdout, permission='w'),
+            &quot;stderr_url&quot;: _make_url_sassy(stderr, permission='w'),
+            &quot;output_url&quot;: _make_url_sassy(output, permission='w'),
+            &quot;ingestion_program_output_url&quot;: _make_url_sassy(submission.ingestion_program_stdout_file.name, permission='w'),
+            &quot;ingestion_program_stderr_url&quot;: _make_url_sassy(submission.ingestion_program_stderr_file.name, permission='w'),
+            &quot;detailed_results_url&quot;: _make_url_sassy(submission.detailed_results_file.name, permission='w'),
+            &quot;private_output_url&quot;: _make_url_sassy(submission.private_output_file.name, permission='w'),
+            &quot;secret&quot;: submission.secret,
+            &quot;execution_time_limit&quot;: submission.phase.execution_time_limit,
+            &quot;predict&quot;: is_prediction,
+            'submit_docker_command':submit_docker_command, ## - Added submit_docker_command here
+        }
+</code></pre>
+
+<p>At this point the code hands off the data to the Compute-Worker with <code>compute_worker_run(data, soft_time_limit=time_limit, priority=2)</code>.</p>
+<h2 id="step-5-the-compute-worker">Step 5: The Compute-Worker</h2>
+<p>We need to enter the <strong>compute-worker</strong> docker container and edit "worker.py". On the machine where the compute-worker is running execute:</p>
+<pre><code class="bash">$ docker exec -it codalab/competitions-v1-compute-worker:latest
+</code></pre>
+
+<p>...or use the compute image that you need. </p>
+<p>Once inside you should be able to see "worker.py". Open it. Find function <code>run(task_id, task_args)</code>. This is where we will add our code. </p>
+<p>Add this:</p>
+<pre><code class="python">if task_args['submit_docker_command'] != 'this is not a docker submission':
+    print('@CUSTOM DOCKER START@')
+    participant_docker_cmd = task_args['submit_docker_command'].format(input_dir+&quot;/res&quot;)
+    logger.info(&quot;Invoking program %s&quot;, participant_docker_cmd)
+    participant_docker_process = Popen(participant_docker_cmd.split(&quot; &quot;))
+    participant_docker_process.wait() # This halts other actions till this run isfinished.
+    print('@CUSTOM DOCKER END@')
+
+</code></pre>
+
+<p>This is the important line:</p>
+<pre><code class="python">participant_docker_cmd = task_args['submit_docker_command'].format(input_dir+&quot;/res&quot;)
+</code></pre>
+
+<p>This line substitutes the results directory into a mount placeholder so that the container can put the results from the run into it. Then the compute-worker can consume the results.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../MKDocs/Quick Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../MKDocs/Quick Notes/" class="btn btn-xs btn-link">
+        MKDocs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../algorithms/python/stairs/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../algorithms/python/stairs/" class="btn btn-xs btn-link">
+        Stairs
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
