@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Run Remotely - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Jupyter", url: "#_top", children: [
+              {title: "Notebook", url: "#notebook" },
+              {title: "Lab", url: "#lab" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-link">
+        Decorators
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../seaborn/basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../seaborn/basics/" class="btn btn-xs btn-link">
+        Seaborn
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="jupyter">Jupyter</h1>
+<h2 id="notebook">Notebook</h2>
+<p>...Reference Lab for essentially the same behavior</p>
+<h2 id="lab">Lab</h2>
+<h3 id="run-jupyter-remotely-from-container">Run jupyter remotely from container</h3>
+<blockquote>
+<p>Source: <a href="https://benjlindsay.com/posts/running-jupyter-lab-remotely">benjlindsay</a></p>
+</blockquote>
+<p>To run Jupyter Lab on a login node, you need to open 2 terminal windows. In the first window:</p>
+<p>Note to self, when doing this for containers, run this remembering we are mapping the container port <code>5678</code> to server port <code>5678</code> with <code>-p 5678:5678</code>. Example command:</p>
+<pre><code class="bash">docker run -it --ipc=host --name=ben_pytorch_tutorial -p 5678:5678 --runtime=nvidia -v /home/bb927/Documents/pytorch:/workspace pytorch/pytorch:latest bash
+</code></pre>
+
+<blockquote>
+<p>Note, additional step to install jupyter could be required <code>$ pip install jupyterlab</code>. (You'll need a container with python in it)</p>
+</blockquote>
+<p>Then inside the container start jupyter:</p>
+<pre><code class="bash">$ jupyter lab --ip 0.0.0.0 --port 5678 --no-browser --allow-root
+
+</code></pre>
+
+<p>and see it running...</p>
+<pre><code class="bash">[I 22:05:13.843 LabApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
+[I 22:05:14.047 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
+[I 22:05:14.047 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[I 22:05:14.050 LabApp] Serving notebooks from local directory: /workspace
+[I 22:05:14.050 LabApp] The Jupyter Notebook is running at:
+[I 22:05:14.050 LabApp] http://353e1fa49ecd:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[I 22:05:14.050 LabApp]  or http://127.0.0.1:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+[I 22:05:14.050 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 22:05:14.053 LabApp] 
+
+    To access the notebook, open this file in a browser:
+        file:///root/.local/share/jupyter/runtime/nbserver-45-open.html
+    Or copy and paste one of these URLs:
+        http://353e1fa49ecd:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+     or http://127.0.0.1:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+</code></pre>
+
+<p>Then in the second terminal window run:</p>
+<pre><code class="bash">$ ssh -CNL localhost:5678:localhost:5678 username@hostname
+</code></pre>
+
+<p>Finally copy the link from the jupyter lab step into your browser (http://127.0.0.1:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX).</p>
+<h3 id="run-jupyter-remotely-from-server">Run jupyter remotely from server</h3>
+<p>Log into server and start jupyter:</p>
+<pre><code class="bash">$ ssh username@hostname
+$ jupyter lab --no-browser --port=5678
+...
+[I 10:17:14.160 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 10:17:14.160 LabApp]
+
+    Copy/paste this URL into your browser when you connect for the first time,
+    to login with a token:
+        http://localhost:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+</code></pre>
+
+<p>Then in the second window (local machine) run:</p>
+<pre><code class="bash">$ ssh -CNL localhost:5678:localhost:5678 username@hostname
+</code></pre>
+
+<p>You should be able to go to http://localhost:5678 to see jupyter lab now.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../advanced/Decorators/" class="btn btn-xs btn-link">
+        Decorators
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../seaborn/basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../seaborn/basics/" class="btn btn-xs btn-link">
+        Seaborn
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -35,6 +35,7 @@
         var pageToc = [
           {title: "Processes", url: "#_top", children: [
               {title: "Kill a process (TL;DR)", url: "#kill-a-process-tldr" },
+              {title: "By Port", url: "#by-port" },
               {title: "killall", url: "#killall" },
               {title: "pkill", url: "#pkill" },
               {title: "kill", url: "#kill" },
@@ -90,6 +91,18 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h2 id="kill-a-process-tldr">Kill a process (TL;DR)</h2>
 <p><code>$ kill &lt;pid&gt;</code></p>
 <p>Ex: <code>$ kill 1234</code></p>
+<h2 id="by-port">By Port</h2>
+<blockquote>
+<p>Source <a href="https://mr-khan.gitlab.io/linux/2018/05/02/kill-specific-port-on-linux.html">mr-khan.gitlab.io</a></p>
+</blockquote>
+<p>Sometimes I fed up with searching my program PID. As you know the port number so you can easily find the port PID and kill it. If you want to kill a process running on port number 8000 then first you need to find the PID and then kill it. Run the following command to find port number PID:</p>
+<pre><code class="bash">sudo lsof -t -i:8000
+</code></pre>
+
+<p>then kill:</p>
+<pre><code class="bash">sudo kill $(sudo lsof -t -i:8000)
+</code></pre>
+
 <blockquote>
 <p>Courtesy of <a href="booleanworld.com/kill-process-linux/#targetText=It%20is%20very%20easy%20to,that%20you%20want%20to%20kill.">booleanworld.com</a></p>
 </blockquote>
