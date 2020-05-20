@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>Basics - Ben's Code Journal</title>
+    <title>As container - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,7 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "Nginx", url: "#_top", children: [
+          {title: "From Container", url: "#_top", children: [
           ]},
         ];
 
@@ -60,20 +60,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../singularity/basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../../nginx/nginx/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../singularity/basics/" class="btn btn-xs btn-link">
+      <a href="../../nginx/nginx/" class="btn btn-xs btn-link">
         Basics
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-left">
+      <a href="../../docker/remote_registry/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../couchdb/container/" class="btn btn-xs btn-link">
-        As container
+        Previous</a><a href="../../docker/remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
       </a>
     </div>
     
@@ -81,7 +81,28 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="nginx">Nginx</h1>
+    <h1 id="from-container">From Container</h1>
+<blockquote>
+<p>Source <a href="https://hub.docker.com/_/couchdb?tab=description">docker</a></p>
+</blockquote>
+<pre><code class="bash">$ docker pull couchdb
+</code></pre>
+
+<p>This will get you latest. Then as per their instructoins run this command:</p>
+<pre><code class="bash">$ docker run -d --name my-couchdb couchdb:tag
+</code></pre>
+
+<p>If you want to expose the port to the outside world, run</p>
+<pre><code class="bash">$ docker run -p 5984:5984 -d couchdb
+</code></pre>
+
+<p>Start not in <em>Admin Party</em> mode:</p>
+<pre><code class="bash">$ docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -d couchdb
+</code></pre>
+
+<p>Example I used for a simple project:</p>
+<pre><code class="bash">$ docker run -d --name ben-couchdb2 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -p 5985:5984 couchdb:latest
+</code></pre>
 
   <br>
     
@@ -94,20 +115,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../singularity/basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../../nginx/nginx/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../singularity/basics/" class="btn btn-xs btn-link">
+      <a href="../../nginx/nginx/" class="btn btn-xs btn-link">
         Basics
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-left">
+      <a href="../../docker/remote_registry/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../couchdb/container/" class="btn btn-xs btn-link">
-        As container
+        Previous</a><a href="../../docker/remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
       </a>
     </div>
     
