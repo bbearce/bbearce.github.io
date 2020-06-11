@@ -156,8 +156,15 @@ def get_latlngs():
 </code></pre>
 
 <p>Before running it, though, Flask needs to be told how to import it, by setting the <code>FLASK_APP</code> environment variable:</p>
-<pre><code>(venv) $ export FLASK_APP=microblog.py
+<pre><code class="bash">(venv) $ export FLASK_APP=microblog.py
 </code></pre>
+
+<p>If you are using Microsoft Windows, use <code>set</code> instead of <code>export</code> in the command above.</p>
+<p>Are you ready to be blown away? You can run your first web application, with the following command:</p>
+<p><code>bash
+(venv) $ flask run
+ * Serving Flask app "microblog"
+ * Running on http://127.0.0.1:5000/ (Press CTRL+C to quit)</code></p>
 
   <br>
     
