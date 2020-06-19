@@ -36,6 +36,7 @@
           {title: "SSH", url: "#_top", children: [
               {title: "Useage", url: "#useage" },
               {title: "Keys", url: "#keys" },
+              {title: "Over Two ssh Hops", url: "#over-two-ssh-hops" },
           ]},
         ];
 
@@ -148,6 +149,15 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </code></pre>
 
 <p>...then run that</p>
+<h2 id="over-two-ssh-hops">Over Two ssh Hops</h2>
+<p><a href="https://www.larkinweb.co.uk/computing/mounting_file_systems_over_two_ssh_hops.html">larkinweb</a></p>
+<p>ssh from systemA trough systemB into systemC:</p>
+<pre><code class="bash">$ ssh -t user1@systemB &quot;ssh user2@systemC&quot;
+</code></pre>
+
+<p>Mount file system under similar circumstances:</p>
+<pre><code class="bash">
+</code></pre>
 
   <br>
     

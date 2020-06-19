@@ -38,6 +38,7 @@
               {title: "Windows:", url: "#windows" },
               {title: "Run Commands with Screen:", url: "#run-commands-with-screen" },
               {title: "Problems", url: "#problems" },
+              {title: "Resize Region", url: "#resize-region" },
           ]},
         ];
 
@@ -232,6 +233,24 @@ There is no screen to be resumed matching codalab.
 <p>As <code>screen -r</code> says, there is one screen, but it is attached. To resume it on your current terminal, you have to detach it from the other one first: <code>screen -d -r 8967</code>, see manpage <code>-d</code>.</p>
 <p>Edit: use <code>-d</code> instead of <code>-x</code>.</p>
 <p>Edit2: @alex78191: When using <code>-x</code>, screen attaches to the currently running session, resulting in a "multi-display mode": you see the session on both terminals simultaneously, i.e., when entering a command on one terminal, it also appears on the second. However, detaching from a multi-display mode just detaches the current terminal. You hence get the message that it is still attached (on the other terminal).</p>
+<h2 id="resize-region">Resize Region</h2>
+<p><a href="http://www.gnu.org/software/screen/manual/screen.html#Resize">gnu</a></p>
+<blockquote>
+<p>Find section "resize" under "9.5 - Regions"</p>
+</blockquote>
+<p>The amount of lines to add or remove can be expressed a couple of different ways. By specifying a number <code>n</code> by itself will resize the region by that absolute amount. You can specify a relative amount by prefixing a plus ‘+’ or minus ‘-’ to the amount, such as adding +n lines or removing -n lines. Resizing can also be expressed as an absolute or relative percentage by postfixing a percent sign ‘%’. Using zero ‘0’ is a synonym for min and using an underscore ‘_’ is a synonym for max.</p>
+<p>Some examples are:</p>
+<pre><code class="bash">resize +N       increase current region by N
+resize -N       decrease current region by N
+resize N        set current region to N
+resize 20%      set current region to 20% of original size
+resize +20%     increase current region by 20%
+resize -b =     make all windows equally
+resize max      maximize current region
+resize min      minimize current region
+</code></pre>
+
+<p>Without any arguments, screen will prompt for how you would like to resize the current region.</p>
 
   <br>
     
