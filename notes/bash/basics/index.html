@@ -332,6 +332,53 @@ exit
 <p>Use the <code>mv</code> command to move things or rename them.<br />
 Use the <code>cp</code> command to copy things.<br />
 Use the <code>rsync</code> command to move things. Use the <em>-a</em> flag to archive and retain permissions and time stamps.  </p>
+<h3 id="scp">scp</h3>
+<p>Local to local:</p>
+<pre><code class="bash">$ scp &lt;from&gt; &lt;to&gt; 
+</code></pre>
+
+<p>Local to Remote:</p>
+<pre><code class="bash">$ scp [-i identity_file] &lt;from_local&gt; user@remote:&lt;to_remote&gt; 
+</code></pre>
+
+<p>Remote to Local:</p>
+<pre><code class="bash">$ scp [-i identity_file] user@remote:&lt;from_remote&gt; &lt;to_local&gt; 
+</code></pre>
+
+<h3 id="rsync">rsync</h3>
+<p>Local to local:</p>
+<pre><code class="bash">$ rsync &lt;from&gt; &lt;to&gt; 
+</code></pre>
+
+<p>Local to Remote:</p>
+<pre><code class="bash">$ rsync [-e &quot;ssh -i &lt;path to identity_file&gt;&quot;] &lt;from_local&gt; user@remote:&lt;to_remote&gt; 
+</code></pre>
+
+<p>Remote to Local:</p>
+<pre><code class="bash">$ rsync [-e &quot;ssh -i &lt;path to identity_file&gt;&quot;] user@remote:&lt;from_remote&gt; &lt;to_local&gt; 
+</code></pre>
+
+<p>Most important flags:
+<code>-a -v -z</code></p>
+<pre><code class="bash">rsync -avz foo:src/bar /data/tmp
+
+This  would  recursively  transfer  all  files  from  the  directory src/bar on the machine foo into the
+/data/tmp/bar directory on the local machine. The files are transferred in &quot;archive&quot; mode, which ensures
+that  symbolic  links, devices, attributes, permissions, ownerships, etc. are preserved in the transfer.
+Additionally, compression will be used to reduce the size of data portions of the transfer.
+</code></pre>
+
+<p><em>-a</em>:
+<code>-a, --archive               archive mode; equals -rlptgoD (no -H,-A,-X)</code></p>
+<p><em>-v</em>:
+<code>-v, --verbose               increase verbosity</code></p>
+<p><em>-z</em>:
+<code>-z, --compress</code></p>
+<p><em>--progress</em>:</p>
+<pre><code class="--progress">              This option tells rsync to print information showing the progress of the transfer. This  gives  a
+              bored   user  something  to  watch.
+</code></pre>
+
 <h2 id="check-os-version">Check OS Version</h2>
 <pre><code>$ cat /etc/os-release
 </code></pre>

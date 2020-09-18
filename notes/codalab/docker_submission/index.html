@@ -100,7 +100,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>First we need a running instance installed. Setup the challenge to accept a results submission, as we will tweak this process to evaluate the output of a docker container. </p>
 <h2 id="step-2-add-database-option-for-docker-submission">Step 2: Add Database Option for Docker Submission</h2>
 <h3 id="add-new-column-in-competition-table">Add New Column in Competition Table</h3>
-<p>Find file <code>/codalab/apps/web/models.py</code>. Approximately on line 230 is the Competition model definition. It has definitions for the columns of this table. It looks like this:</p>
+<p>Find file <code>/codalab/apps/web/models.py</code>. Approximately on line 233 is the Competition model definition. It has definitions for the columns of this table. It looks like this:</p>
 <pre><code class="python">class Competition(ChaHubSaveMixin, models.Model):
 ...
 </code></pre>
@@ -238,7 +238,7 @@ Superuser created successfully.
 <p>Now if we go to "Edit" and look at the competition options, we see that if we check the box "Allow participant docker submission" we can see the text change on the "Participate" tab.</p>
 <p><img alt="codalab_docker_submit_docker_page" src="../codalab_docker_submit_docker_page.png" /></p>
 <p>Next we need the "Submit Docker" button to do something. Let's add a modal that get's triggered when you click the button.</p>
-<p>Add this code just before the line that has <code>{% include "web/common/_submission_details_template.html" %}</code> on line ~160:</p>
+<p>Add this code just before the line that has <code>{% include "web/common/_submission_details_template.html" %}</code> on line ~167:</p>
 <pre><code class="html">&lt;div class=&quot;modal fade&quot; id=&quot;submit-docker-dialog&quot;&gt;
     &lt;div class=&quot;modal-dialog&quot;&gt;
 
@@ -438,7 +438,7 @@ Superuser created successfully.
 </code></pre>
 
 <p>...or use the compute image that you need. </p>
-<p>Once inside you should be able to see "worker.py". Open it. Find function <code>run(task_id, task_args)</code>. This is where we will add our code. </p>
+<p>Once inside you should be able to see "worker.py". Open it. Find function <code>run(task_id, task_args)</code>. This is where we will add our code on approx line 500. </p>
 <p>Add this:</p>
 <pre><code class="python">if task_args['submit_docker_command'] != 'this is not a docker submission':
     print('@CUSTOM DOCKER START@')
@@ -455,6 +455,94 @@ Superuser created successfully.
 </code></pre>
 
 <p>This line substitutes the results directory into a mount placeholder so that the container can put the results from the run into it. Then the compute-worker can consume the results.</p>
+<p>Update (7/17/2020):</p>
+<p>Docker Image Submission only and resulting handling:</p>
+<pre><code class="python">                participant_docker_submission_cmd = [
+                    'docker',
+                    'run',
+                    # Ask all participants to add this user
+                    '-u',
+                    'participant',
+                    # Cut internet
+                    '--net',
+                    'none',
+                    # Remove it after run
+                    '--rm',
+                    # Add support for GPUs and nvidia
+                    '--gpus',
+                    'all',
+                    # Give it a name associated to task_id
+                    '--name={}'.format(&quot;participant_docker_submission_taskid_&quot;+str(task_id)),
+                    # Try the new timeout feature
+                    '--stop-timeout={}'.format(execution_time_limit),
+                    # Don't allow subprocesses to raise privileges
+                    '--security-opt=no-new-privileges',
+                    # Set the right volume
+                    '-v', '{0}:/mnt/in:ro'.format('/home/bbearce/Documents/docker_submissions/directory_of_files'), # :ro for read-only file system
+                    '-v', '{0}:/mnt/out'.format(input_dir+&quot;/res&quot;),
+                    # Set aside 512m memory for the host
+                    #'--memory', '{}MB'.format(available_memory_mib - 512),
+                    # Don't buffer python output, so we don't lose any
+                    #'-e', 'PYTHONUNBUFFERED=1',
+                    # Set current working directory
+                    #'-w', run_dir,
+                    # Note that hidden data dir is excluded here!
+                    # Set the right image
+                    task_args['submit_docker_command'],
+                ]
+
+                if task_args['submit_docker_command'] != 'this is not a docker submission':
+                  print('@CUSTOM DOCKER START@')
+                  logger.info(&quot;Invoking participant docker submission: %s&quot;, participant_docker_submission_cmd)
+                  participant_docker_process = Popen(participant_docker_submission_cmd)
+                  participant_docker_process.wait() # This halts other actions till this run isfinished.
+                  print('@CUSTOM DOCKER END@')
+
+</code></pre>
+
+<p>Below I will discuss some of the important options...</p>
+<blockquote>
+<p>Note, we need to mount two folders (<em>datain:/mnt/in</em>, <em>dataout:/mnt/out</em>). We don't need to change anything about <em>datain</em> because we can use <code>:ro</code> to make it read-only inside the docker container like so <em>/mnt/in:ro</em>. This keeps users from tampering with input data. <em>dataout</em> needs to be owned by user "participant". We do this like so...</p>
+</blockquote>
+<pre><code class="bash">$ chown participant:participant &lt;path to&gt;/dataout
+</code></pre>
+
+<p>and make it writable as well:</p>
+<pre><code class="bash">$ chmod 0777 &lt;path to&gt;/dataout
+</code></pre>
+
+<p>If participant is the user that will be using these mounts then we need the container to run as <em>participant</em>. Notice we run the docker with <code>-u participant</code>, but how do we get that user in the docker ahead of time. </p>
+<p>In the Dockerfile for a submission add this to the top:</p>
+<pre><code>ARG USER=participant
+ARG UID=1000
+ARG GID=1000
+# default password for user
+ARG PW=participant
+# Option1: Using unencrypted password/ specifying password
+RUN useradd -m ${USER} --uid=${UID} &amp;&amp; echo &quot;${USER}:${PW}&quot; | \
+      chpasswd
+
+</code></pre>
+
+<p>This should add user <em>participant</em> with password <em>participant</em>.</p>
+<p>Finally we need to make sure the container has no internet. We add flag <code>--net none</code> to cut internet to the docker rendering it unable to transfer data.</p>
+<p>Lastly if this is an nvidia compute worker <code>codalab/competitions-v1-nvidia-worker:latest</code> then we have a few extra things ot take care of. On lines 274-275 there are two variables that don't exist being referenced. </p>
+<pre><code>    max_execution_time_limit = task_args['max_execution_time_limit']
+    previous_execution_time = task_args['previous_execution_time']
+</code></pre>
+
+<p>to</p>
+<pre><code>    #max_execution_time_limit = task_args['max_execution_time_limit'] # -BB-
+    #previous_execution_time = task_args['previous_execution_time'] # -BB- 
+</code></pre>
+
+<p>and at the bottom of the file (~ line 700):</p>
+<pre><code>signal.alarm(int(math.fabs(math.ceil(max_execution_time_limit - time_difference - previous_execution_time)))) # Total Execution
+</code></pre>
+
+<p>to</p>
+<pre><code>#signal.alarm(int(math.fabs(math.ceil(max_execution_time_limit - time_difference - previous_execution_time)))) # Total Execution -BB-
+</code></pre>
 
   <br>
     
