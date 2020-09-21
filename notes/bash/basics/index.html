@@ -36,6 +36,7 @@
           {title: "Basic bash commands", url: "#_top", children: [
               {title: "Help from the man ;)", url: "#help-from-the-man" },
               {title: "Where are you?", url: "#where-are-you" },
+              {title: "Count files", url: "#count-files" },
               {title: "sudo, su", url: "#sudo-su" },
               {title: "bash or sh or dash?", url: "#bash-or-sh-or-dash" },
               {title: "Moving and Copying", url: "#moving-and-copying" },
@@ -246,6 +247,14 @@ drwxrwxr-x  3 bbearce bbearce 1M May 23 16:51 .azure-shell
 -rw-------  1 bbearce bbearce 1M Sep 19 18:05 .bash_history
 -rw-r--r--  1 bbearce bbearce 1M May 16 16:13 .bash_logout
 ...
+</code></pre>
+
+<h2 id="count-files">Count files</h2>
+<p>Use <code>wc</code> to count things and get their byte sizes. The <code>-l</code> flag stands for lines and can be used with <code>ls</code> and <code>|</code> to count files in a directory:</p>
+<p>Ex:</p>
+<pre><code class="bash">user@server:~/$ ls data/rsna | wc -l
+26684
+
 </code></pre>
 
 <h2 id="sudo-su">sudo, su</h2>
