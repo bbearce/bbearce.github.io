@@ -133,6 +133,16 @@ vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 </code></pre>
 
+<h3 id="check-group-groupid-and-userid-of-user">Check group, groupid and userid of user:</h3>
+<p>Use <code>id</code>:</p>
+<pre><code class="bash">$ id &lt;user&gt;
+</code></pre>
+
+<p>Ex:</p>
+<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ id bbearce
+uid=1000(bbearce) gid=1000(bbearce) groups=1000(bbearce),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),113(lpadmin),128(sambashare),130(docker),999(microk8s)
+</code></pre>
+
 <h2 id="delete-user">Delete User</h2>
 <h3 id="remove-the-user">Remove the user</h3>
 <ol>
