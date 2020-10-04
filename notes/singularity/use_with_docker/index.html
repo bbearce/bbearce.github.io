@@ -128,6 +128,9 @@ lrwxrwxrwx   1 root root    24 Jul  9 12:00 6 -&gt; /autofs/space/dotter_006
 <li>/tmp  </li>
 <li>$PWD  </li>
 </ul>
+<blockquote>
+<p>Update, I think there are more but it depends on Help Desk. See <a href="https://sylabs.io/guides/3.5/user-guide/bind_paths_and_mounts.html?highlight=home">docs</a></p>
+</blockquote>
 <p>I have a sanbox made from a regular ubuntu image (docker://ubuntu:latest) that was first pulled to <code>ubuntu.simg</code> and then the sandbox is called <code>s_ubuntu</code>. Let's try to shell into it.</p>
 <p>This is my current $PWD:</p>
 <pre><code class="bash">dotter[0]:bb927$ pwd
@@ -190,6 +193,9 @@ dotter[0]:bb927$
 </code></pre>
 
 <p>Ugh, what happend? Well the WARNINGS were sort of ignored but the FATAL error is because /homes doesn't exist in the container. We can work around this by creating it before hand:</p>
+<blockquote>
+<p>Note, see these <a href="https://sylabs.io/guides/3.5/user-guide/bind_paths_and_mounts.html?highlight=home#a-note-on-using-bind-with-the-writable-flag">notes</a></p>
+</blockquote>
 <pre><code class="bash">dotter[0]:bb927$ mkdir s_ubuntu/homes
 </code></pre>
 

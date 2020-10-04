@@ -35,6 +35,11 @@
         var pageToc = [
           {title: "Singularity", url: "#_top", children: [
               {title: "Build from Recipe", url: "#build-from-recipe" },
+              {title: "Build Images from Scratch", url: "#build-images-from-scratch" },
+              {title: "Run", url: "#run" },
+              {title: "Mounting", url: "#mounting" },
+              {title: "Inspect", url: "#inspect" },
+              {title: "Useful flags", url: "#useful-flags" },
           ]},
         ];
 
@@ -136,7 +141,7 @@ if __name__ == '__main__':
 <li>post: Run commands once container is created  </li>
 <li>runscript: A command to run by default   </li>
 </ul>
-<h3 id="build-images-from-scratch">Build Images from Scratch</h3>
+<h2 id="build-images-from-scratch">Build Images from Scratch</h2>
 <p>Use this command to build the recipe file into a <code>*.simg</code></p>
 <pre><code class="bash">sudo singularity build ubuntu.simg Singularity.recipe
 </code></pre>
@@ -147,7 +152,7 @@ if __name__ == '__main__':
 <blockquote>
 <p>Red arrows represent operations that must be carried out with root privileges. Also I believe looking at the documentation that --writable and --sandbox containers are now 1 type singularity v3+. The difference is that you can either be in a <code>--writable</code> or non <code>writable</code> sandbox.</p>
 </blockquote>
-<h4 id="interactive-builds">Interactive Builds</h4>
+<h3 id="interactive-builds">Interactive Builds</h3>
 <p>Singularity v3.0 and above produces immutable images in the Singularity Image File (SIF) format. This ensures
 reproducible and verifiable images and allows for many extra benefits such as the ability to sign and verify your
 containers.
@@ -183,7 +188,7 @@ touch: cannot touch '/mnt/anything.txt': Read-only file system
 </code></pre>
 
 <p>ahhh, there we go. So how do we write inside a singularity container?</p>
-<h5 id="enter-the-sandbox">Enter the --sandbox</h5>
+<h3 id="enter-the-sandbox">Enter the --sandbox</h3>
 <p>First we have to create a sandbox out of the original container:</p>
 <pre><code class="bash">bbearce@pop-os:~/$ singularity build --sandbox s_ubuntu ubuntu.simg
 INFO:    Starting build...
@@ -233,7 +238,7 @@ anything.txt
 </code></pre>
 
 <p>Boom! So to recap, you need to build a <code>--sandbox</code> image from just about any image source, be it a hub or recipe file. Then shell into that container directory with flag <code>--writable</code>.</p>
-<h3 id="run">Run</h3>
+<h2 id="run">Run</h2>
 <blockquote>
 <p>Continue from the Build section above with files test.py and Singularity.recipe.</p>
 </blockquote>
@@ -262,14 +267,14 @@ Hello World
 <blockquote>
 <p>This example works because hello-kitty.txt exists in the user’s home directory. By default singularity bind mounts <code>/home/$USER</code>, <code>/tmp</code>, and <code>$PWD</code> into your container at runtime.</p>
 </blockquote>
-<h3 id="mounting">Mounting</h3>
+<h2 id="mounting">Mounting</h2>
 <p>You can specify additional directories to bind mount into your container with the --bind option. In this example, the <code>/data</code> directory on the host system is bind mounted to the <code>/mnt</code> directory inside the container.</p>
 <pre><code class="bash">$ echo &quot;I am your father&quot; &gt;/data/vader.sez
 $ ~/sing-dev/bin/singularity exec --bind /data:/mnt hello-world.simg cat /mnt/vader.sez
 I am your father
 </code></pre>
 
-<h3 id="inspect">Inspect</h3>
+<h2 id="inspect">Inspect</h2>
 <p>Look at meta-data with <code>inspect</code>. Notice the <code>%labels</code> sections details shows up under <code>"CREATOR": "Ben"</code></p>
 <pre><code class="bash">bbearce@bryce:~/singularity$ singularity inspect ubuntu.simg
 {
@@ -285,6 +290,51 @@ I am your father
     &quot;org.label-schema.build-size&quot;: &quot;135MB&quot;
 }
 </code></pre>
+
+<h2 id="useful-flags">Useful flags</h2>
+<p>Here are some of the flags we will need routinely:</p>
+<h3 id="-b-or-bind"><code>-B</code> or <code>--bind</code></h3>
+<blockquote>
+<p>Note mounts can be specified as read only <code>ro</code> or read write <code>rw</code> (default).</p>
+</blockquote>
+<p>This is equivalent to dockers <code>-v</code> flag. Use this to mount directories:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell -B ./in:/mnt/in -B ./out:/mnt/out s_ubuntu/
+Singularity&gt; ls /mnt/in
+in.txt  new_file.txt  out.txt
+Singularity&gt; ls /mnt/out
+out.txt
+Singularity&gt; 
+</code></pre>
+
+<p>you can comma delimit multiple mounts:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell -B ./in:/mnt/in,./out:/mnt/out s_ubuntu/
+Singularity&gt; ls /mnt/in
+in.txt  new_file.txt  out.txt
+Singularity&gt; ls /mnt/out
+out.txt
+Singularity&gt; 
+</code></pre>
+
+<p>If you do not specify where in the container you mount to, the local mount will be mounted to the same directory inside the container:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell -B /opt s_ubuntu/
+Singularity&gt; ls /opt
+containerd  google  microsoft  rh
+Singularity&gt; exit 
+exit
+dotter[0]:bb927$ ls /opt
+containerd  google  microsoft  rh
+dotter[0]:bb927$ 
+</code></pre>
+
+<p>This is the same as <code>-B /opt:/opt</code></p>
+<h3 id="-fakeroot"><code>--fakeroot</code></h3>
+<p>This is important for interactive development because since you are not "root" normally you can't install stuff with apt-get. With this you can.</p>
+<h3 id="-net"><code>--net</code></h3>
+<p>Gives you internet access.</p>
+<h3 id="-nv"><code>--nv</code></h3>
+<p>Give ccontainer access to GPUs</p>
+<h3 id="-no-home"><code>--no-home</code></h3>
+<p>When shelling into your container image, Singularity allows you to mount your current working directory (<code>CWD</code>) without mounting your host <code>$HOME</code> directory with the <code>--no-home</code> flag.</p>
 
   <br>
     
