@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Use With Docker - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Use with docker", url: "#_top", children: [
+              {title: "Use on Martinos machines:", url: "#use-on-martinos-machines" },
+              {title: "Should we use Docker???", url: "#should-we-use-docker" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../couchdb/container/" class="btn btn-xs btn-link">
+        As container
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="use-with-docker">Use with docker</h1>
+<blockquote>
+<p>Spoiler, while using docker is possible, I think it's going to be harder in the long run. I believe there is nothing wrong with starting on docker on bryce and in fact I recommend that. Once on Carlsbad or Dotter, I believe that just using singularity is easier (than using docker on these machines).</p>
+</blockquote>
+<p>#I_Love_Docker</p>
+<h2 id="use-on-martinos-machines">Use on Martinos machines:</h2>
+<h3 id="setup-simlinks">Setup simlinks:</h3>
+<blockquote>
+<p>Source <a href="https://www.nmr.mgh.harvard.edu/martinos/userInfo/computer/docker.php">Martinos Docs</a></p>
+</blockquote>
+<pre><code class="bash">ls -la ~
+...
+
+lrwxrwxrwx   1 bb927 bb927    33 Sep 29 12:48 .share -&gt; /space/dotter/2/users/bb927/share
+lrwxrwxrwx   1 bb927 bb927    39 Sep 29 12:44 .singularity -&gt; /space/dotter/2/users/bb927/singularity
+
+...
+</code></pre>
+
+<p>Once you have this setup, you can proceed, otherwise you are in for a world of hurt if you accidentally fill up your real home dir.</p>
+<h3 id="martinos-gotchas">Martinos gotchas:</h3>
+<h4 id="dotter-for-example">Dotter for example:</h4>
+<h5 id="pure-singularity">Pure Singularity:</h5>
+<p>Your home directory and drive directories are actually simlinks and this will mess up singularity on dotter.</p>
+<pre><code class="bash">dotter[0]:bb927$ ls -la /homes/3
+lrwxrwxrwx 1 root root 17 Sep 17  2016 /homes/3 -&gt; /autofs/homes/003
+dotter[0]:bb927$ ls -la /space/dotter
+total 32
+drwxr-xr-x   2 root root  4096 Jul  9 12:00 .
+drwx--x--x 984 root root 24576 Sep 19 18:12 ..
+lrwxrwxrwx   1 root root    24 Jul  9 12:00 1 -&gt; /autofs/space/dotter_001
+lrwxrwxrwx   1 root root    24 Jul  9 12:00 2 -&gt; /autofs/space/dotter_002
+lrwxrwxrwx   1 root root    24 Jul  9 12:00 3 -&gt; /autofs/space/dotter_003
+lrwxrwxrwx   1 root root    24 Jul  9 12:00 4 -&gt; /autofs/space/dotter_004
+lrwxrwxrwx   1 root root    24 Jul  9 12:00 5 -&gt; /autofs/space/dotter_005
+lrwxrwxrwx   1 root root    24 Jul  9 12:00 6 -&gt; /autofs/space/dotter_006
+
+</code></pre>
+
+<p>Remember Singularity wants to auto <code>--bind</code> mount these 3 directories:</p>
+<ul>
+<li>/home/$USER  </li>
+<li>/tmp  </li>
+<li>$PWD  </li>
+</ul>
+<p>I have a sanbox made from a regular ubuntu image (docker://ubuntu:latest) that was first pulled to <code>ubuntu.simg</code> and then the sandbox is called <code>s_ubuntu</code>. Let's try to shell into it.</p>
+<p>This is my current $PWD:</p>
+<pre><code class="bash">dotter[0]:bb927$ pwd
+/space/dotter/2/users/bb927
+dotter[0]:bb927$ ls
+in  out  README.md  share  singularity  s_ubuntu  ubuntu.simg
+</code></pre>
+
+<p>After shelling in let's look at the mounts:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell s_ubuntu
+Singularity&gt; ls ~   
+Desktop    Downloads  Pictures  Templates  matlab
+
+Documents  Music      Public    Videos     matlab_crash_dump.224407-1
+Singularity&gt; ls /tmp
+hsperfdata_bb927
+hsperfdata_sra24
+idmap.sh.log
+krb5ccmachine_PARTNERS.ORG
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-bolt.service-eEU8AX
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-chronyd.service-YED8Bf
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-colord.service-yBgBOp
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-cups.service-eaN0xa
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-rtkit-daemon.service-AtHDqM
+
+Singularity&gt; pwd
+/space/dotter/2/users/bb927
+Singularity&gt; exit
+exit
+</code></pre>
+
+<p>Now outside the container:</p>
+<pre><code class="bash">dotter[0]:bb927$ ls ~
+Desktop    Downloads  matlab_crash_dump.224407-1  Pictures  Templates
+Documents  matlab     Music                       Public    Videos
+dotter[0]:bb927$ ls /tmp
+hsperfdata_bb927
+hsperfdata_sra24
+idmap.sh.log
+krb5ccmachine_PARTNERS.ORG
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-bolt.service-eEU8AX
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-chronyd.service-YED8Bf
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-colord.service-yBgBOp
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-cups.service-eaN0xa
+systemd-private-9eb3a577ab90415d9ff57c178714ca99-rtkit-daemon.service-AtHDqM
+dotter[0]:bb927$ pwd
+/space/dotter/2/users/bb927
+dotter[0]:bb927$ 
+</code></pre>
+
+<p>We see those three locations mounted perfectly! :)</p>
+<p>Now let's shell in with <code>--writable</code></p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable s_ubuntu
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+WARNING: By using --writable, Singularity can't create /homes destination automatically without overlay or underlay
+FATAL:   container creation failed: mount /var/singularity/mnt/session/homes-&gt;/homes error: while mounting /var/singularity/mnt/session/homes: destination /homes doesn't exist in container
+dotter[0]:bb927$ 
+
+</code></pre>
+
+<p>Ugh, what happend? Well the WARNINGS were sort of ignored but the FATAL error is because /homes doesn't exist in the container. We can work around this by creating it before hand:</p>
+<pre><code class="bash">dotter[0]:bb927$ mkdir s_ubuntu/homes
+</code></pre>
+
+<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable s_ubuntu
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+WARNING: Skipping mount /space/dotter/2/users/bb927 [cwd]: /autofs/space/dotter_002/users/bb927 doesn't exist in container
+Singularity&gt; ls /homes
+3
+Singularity&gt; ls /homes/3
+bb927
+Singularity&gt; ls /homes/3/bb927/
+Desktop    Downloads  Pictures  Templates  matlab
+Documents  Music      Public    Videos     matlab_crash_dump.224407-1
+Singularity&gt; 
+</code></pre>
+
+<p>Now even though the warning says we might not be able to write to our home directory, you can. This is probably because dotter has an environment variable HOME=/homes/3/bb927 and that is also set inside the singularity container. Even though that is a simlink you can access it inside the container.</p>
+<p>But we know that Help Desk has asked us not to use our home directories because they have limited storage, so let's create the drive mount location and get rid of another warning:</p>
+<pre><code class="bash">dotter[0]:bb927$ mkdir -p s_ubuntu/autofs/space/dotter_002/users/bb927
+dotter[0]:bb927$ singularity shell --writable s_ubuntu
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+Singularity&gt; 
+
+</code></pre>
+
+<p>So we know we can ignore the first WARNING because there isn't much we can do, and as far as the second one is concerned, you have the tools to make it disappear if you need it to. </p>
+<p><strong>Mounting, does it work?!?!?</strong></p>
+<p>In my $PWD I have <code>in</code>  and <code>out</code> folders:</p>
+<pre><code class="bash">dotter[0]:bb927$ ls
+in  out  README.md  share  singularity  s_ubuntu  ubuntu.simg
+dotter[0]:bb927$ ls in
+in.txt
+dotter[0]:bb927$ ls out
+out.txt
+
+</code></pre>
+
+<p>Let's see if we can read and write to them:</p>
+<blockquote>
+<p>Note: Just from playing around I've noticed in <code>--writable</code> mode you need to have created the mount points ahead of time. It seems that when running the container, you will not need to do this as the mounts will be made on the fly as shown below:</p>
+</blockquote>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu
+Singularity&gt; ls /mnt
+in  out
+Singularity&gt; ls /mnt/in
+in.txt
+Singularity&gt; ls /mnt/out
+out.txt
+
+</code></pre>
+
+<p>watch in <code>--writable</code> mode:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu/
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+WARNING: By using --writable, Singularity can't create /mnt/in destination automatically without overlay or underlay
+FATAL:   container creation failed: mount /autofs/space/dotter_002/users/bb927/in-&gt;/mnt/in error: while mounting /autofs/space/dotter_002/users/bb927/in: destination /mnt/in doesn't exist in container
+
+</code></pre>
+
+<p>So create them:</p>
+<pre><code class="bash">dotter[0]:bb927$ mkdir -p s_ubuntu/mnt/in
+dotter[0]:bb927$ mkdir -p s_ubuntu/mnt/out
+</code></pre>
+
+<p>and try again:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu/
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+Singularity&gt; ls /mnt
+in  out
+Singularity&gt; ls /mnt/in
+in.txt
+Singularity&gt; ls /mnt/out
+out.txt
+</code></pre>
+
+<p>Nice! Ok, now the 1st of two important questions; can we read/write?</p>
+<pre><code class="bash">Singularity&gt; cd /mnt/in
+Singularity&gt; touch new_file.txt
+Singularity&gt; ls
+in.txt  new_file.txt  out.txt
+Singularity&gt; pwd
+/mnt/in
+Singularity&gt; exit
+exit
+dotter[0]:bb927$ ls in
+in.txt  new_file.txt  out.txt
+dotter[0]:bb927$ ls -la in
+total 16
+drwxrwsr-x 2 bb927 pimi 4096 Oct  3 20:58 .
+drwxrwsr-x 7 bb927 pimi 4096 Oct  3 19:55 ..
+-rw-rw-r-- 1 bb927 pimi   10 Oct  3 20:56 in.txt
+-rw-r--r-- 1 bb927 pimi    0 Oct  3 20:58 new_file.txt
+-rw-rw-r-- 1 bb927 pimi   11 Oct  3 20:55 out.txt
+
+</code></pre>
+
+<p>Nice! Ok so now can we access GPUs?</p>
+<p>Let's pull pytorch:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity pull docker://pytorch/pytorch:latest
+INFO:    Converting OCI blobs to SIF format
+INFO:    Starting build...
+Getting image source signatures
+Copying blob 23884877105a done
+Copying blob bc38caa0f5b9 done
+Copying blob 2910811b6c42 done
+Copying blob 36505266dcc6 done
+Copying blob 3472d01858ba done
+Copying blob 4a98b57681ff done
+Copying blob f3b419d1e6d5 done
+Copying config c35e69071c done
+Writing manifest to image destination
+Storing signatures
+2020/10/03 21:02:21  info unpack layer: sha256:23884877105a7ff84a910895cd044061a4561385ff6c36480ee080b76ec0e771
+2020/10/03 21:02:23  info unpack layer: sha256:bc38caa0f5b94141276220daaf428892096e4afd24b05668cd188311e00a635f
+2020/10/03 21:02:23  info unpack layer: sha256:2910811b6c4227c2f42aaea9a3dd5f53b1d469f67e2cf7e601f631b119b61ff7
+2020/10/03 21:02:23  info unpack layer: sha256:36505266dcc64eeb1010bd2112e6f73981e1a8246e4f6d4e287763b57f101b0b
+2020/10/03 21:02:23  info unpack layer: sha256:3472d01858ba9ce89d2a493bb3964eaf26a63500a3b47ad0a4c72d5e5fe40e11
+2020/10/03 21:02:23  info unpack layer: sha256:4a98b57681ffdd1fcba82e9aeb95171dbe0837980deb82464e4893f4449c4459
+2020/10/03 21:03:08  info unpack layer: sha256:f3b419d1e6d54391719bc37b641b2c133915f207103d8dd28c776607e5d477d8
+INFO:    Creating SIF file...
+INFO:    Build complete: pytorch_latest.sif
+dotter[0]:bb927$ 
+
+</code></pre>
+
+<p>Alright deep breath:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell pytorch_latest.sif 
+Singularity&gt; python
+Python 3.7.7 (default, May  7 2020, 21:25:33) 
+[GCC 7.3.0] :: Anaconda, Inc. on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import torch
+&gt;&gt;&gt; torch.cuda.is_available()
+False
+&gt;&gt;&gt; 
+</code></pre>
+
+<p>NOOOOOooooooooooo...Ok there must be a flag:</p>
+<pre><code class="bash">dotter[0]:bb927$ singularity shell --nv pytorch_latest.sif 
+Singularity&gt; python
+Python 3.7.7 (default, May  7 2020, 21:25:33) 
+[GCC 7.3.0] :: Anaconda, Inc. on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import torch
+&gt;&gt;&gt; torch.cuda.is_available()
+True
+</code></pre>
+
+<p><em>Swish</em></p>
+<h2 id="should-we-use-docker">Should we use Docker???</h2>
+<p>Actually I think this could be a problem. See as root inside docker if you write to mounts it shows up ownded by either root or 10000..:1000..., some weird user of numbers...Anyways you won't be able to manipulate that data once you log out of the container as you are not them! It seems singularity is the best way to go mainly because you are the same user inside and outside the singularity...</p>
+<blockquote>
+<p>Note I haven't seen this per se, but Kevin has and DeepNeuro made files with a cron job that had those user characteristics...</p>
+<p>Update: tried it and actually you can't write even though you are root:</p>
+</blockquote>
+<pre><code class="bash">dotter[0]:bb927$ docker run -it --rm -v /space/dotter/2/users/bb927/in:/mnt/in pytorch/pytorch:latest bash
+root@7b3a11b77784:/workspace# ls /mnt/in
+in.txt  new_file.txt  out.txt
+root@7b3a11b77784:/workspace# touch /mnt/in/example_of_what_not_to_do.txt
+touch: cannot touch '/mnt/in/example_of_what_not_to_do.txt': Permission denied
+
+</code></pre>
+
+<p>So if you know how to add users in your Dockerfile, you could in theory make the user inside the image your Carlsbad or Dotter user, but that's a lot of work. I hope that using singularity just works smoothly...Stay tuned for how to use SHUB, Singularities Dockerhub...</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../couchdb/container/" class="btn btn-xs btn-link">
+        As container
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

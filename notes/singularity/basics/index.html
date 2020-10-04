@@ -35,7 +35,6 @@
         var pageToc = [
           {title: "Singularity", url: "#_top", children: [
               {title: "Build from Recipe", url: "#build-from-recipe" },
-              {title: "Build from ubuntu again but this time directly from bash command (not recipe file).", url: "#build-from-ubuntu-again-but-this-time-directly-from-bash-command-not-recipe-file" },
           ]},
         ];
 
@@ -62,20 +61,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../git/git_basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../use_with_docker/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../git/git_basics/" class="btn btn-xs btn-link">
-        Basics
+      <a href="../use_with_docker/" class="btn btn-xs btn-link">
+        Use With Docker
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../nginx/nginx/" class="btn btn-xs btn-default pull-left">
+      <a href="../install/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../nginx/nginx/" class="btn btn-xs btn-link">
-        Basics
+        Previous</a><a href="../install/" class="btn btn-xs btn-link">
+        Install
       </a>
     </div>
     
@@ -87,9 +86,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Source <a href="https://www.youtube.com/watch?v=SJHizTjwyFk">Sylabs Inc.</a></p>
 </blockquote>
+<p><strong>Why the name “Singularity”?</strong></p>
+<p>A “Singularity” is an astrophysics phenomenon in which a single point becomes infinitely dense. This type of a singularity can thus contain massive quantities of universe within it and thus encapsulating an infinite amount of data within it.</p>
 <h2 id="build-from-recipe">Build from Recipe</h2>
+<p><strong>Do you need administrator privileges to use Singularity?</strong></p>
+<p>You generally do not need admin/sudo to <em>use</em> Singularity containers but you do however need admin/root access to <em>install</em> Singularity and for some container <em>build</em> functions (for example, building from a recipe, or a writable image).</p>
 <h3 id="the-recipe-file">The Recipe File</h3>
-<p>Bootstrap let's us know that we are using a container from dockerhub to build off of. This should be similar to Dockerfile's from docker. Most of this should be self explainatory.</p>
+<p>Bootstrap let's us know that we are using a container from dockerhub to build off of. This should be similar to the Dockerfile from docker. Most of this should be self explainatory.</p>
 <pre><code class="bash">Bootstrap: docker
 From: ubuntu:18.04
 
@@ -115,24 +118,155 @@ From: ubuntu:18.04
 
 </code></pre>
 
-<p>Sections in recipe file:
-* help: Give some help 
-* labels: Impart meta-data into container
-* environment: Environment variables
-* files: Copy files into container 
-* post: Run commands once container is created
-* runscript: A command to run by default </p>
-<h3 id="build">Build</h3>
-<p>Use this command to build the recipe file into a <code>*.simg</code></p>
-<pre><code class="bash">sudo singularity build ubuntu.simg singularity.recipe
+<p>test.py:</p>
+<pre><code class="python">import os
+
+if __name__ == '__main__':
+    print('import os module and clearly python is installed!')
+    print(os.environ['MY_VAR'])
+
 </code></pre>
 
-<p>Here the "ubuntu.simg singularity.recipe" part of the command is "<image-name>.simg <recipe-file-name>.recipe"</p>
-<h3 id="help">Help</h3>
-<pre><code class="bash">bbearce@bryce:~/singularity$ singularity help ubuntu.simg
+<p>Sections in recipe file:</p>
+<ul>
+<li>help: Give some help   </li>
+<li>labels: Impart meta-data into container  </li>
+<li>environment: Environment variables  </li>
+<li>files: Copy files into container   </li>
+<li>post: Run commands once container is created  </li>
+<li>runscript: A command to run by default   </li>
+</ul>
+<h3 id="build-images-from-scratch">Build Images from Scratch</h3>
+<p>Use this command to build the recipe file into a <code>*.simg</code></p>
+<pre><code class="bash">sudo singularity build ubuntu.simg Singularity.recipe
+</code></pre>
 
+<p>Here the "ubuntu.simg singularity.recipe" part of the command is "&lt;image-name&gt;.simg &lt;recipe-file-name&gt;.recipe"</p>
+<p>You can build from multiple sources and even create interactive containers that you can add to. We will cover these soon, but here is a picture illustrating the many sources for singularity containers:</p>
+<p><img alt="build_sources" src="../build_input_output.svg" /></p>
+<blockquote>
+<p>Red arrows represent operations that must be carried out with root privileges. Also I believe looking at the documentation that --writable and --sandbox containers are now 1 type singularity v3+. The difference is that you can either a <code>--writable</code> or non <code>writable</code> sandbox.</p>
+</blockquote>
+<h4 id="interactive-builds">Interactive Builds</h4>
+<p>Singularity v3.0 and above produces immutable images in the Singularity Image File (SIF) format. This ensures
+reproducible and verifiable images and allows for many extra benefits such as the ability to sign and verify your
+containers.
+However, during testing and debugging you may want an image format that is writable. This way you can shell into
+the image and install software and dependencies until you are satisfied that your container will fulfill your needs. For
+these scenarios, Singularity also supports the sandbox format (which is really just a directory).</p>
+<p>Let's say I start with ubuntu:</p>
+<pre><code class="bash">singularity build ubuntu.simg docker://ubuntu:latest
+</code></pre>
 
-    This is where you can add some useful info.
+<pre><code class="bash">bbearce@pop-os:~/$ ls
+ubuntu.simg
+
+</code></pre>
+
+<p>Now this is read only and can just be run or you can shell into it:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ singularity shell ubuntu.simg 
+Singularity&gt; ls
+ubuntu.simg
+</code></pre>
+
+<p>Notice that since the user's home directory is automatically mounted it shows the *.simg with <code>ls</code>.</p>
+<p>Watch as writing anything triggers an error:</p>
+<pre><code class="bash">Singularity&gt; touch anything.txt
+Singularity&gt; ls
+anything.txt ubuntu.simg
+</code></pre>
+
+<p><strong>How come that worked?</strong> Well the mounted home directories are considered outside the container and you can read and write to those. Let's try again in <code>/mnt</code>:</p>
+<pre><code class="bash">Singularity&gt; touch /mnt/anything.txt
+touch: cannot touch '/mnt/anything.txt': Read-only file system
+
+</code></pre>
+
+<p>ahhh, there we go. So how do we write inside a singularity container?</p>
+<h5 id="enter-the-sandbox">Enter the --sandbox</h5>
+<p>First we have to create a sandbox out of the original container:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ singularity build --sandbox s_ubuntu ubuntu.simg
+INFO:    Starting build...
+INFO:    Creating sandbox directory...
+INFO:    Build complete: s_ubuntu
+
+</code></pre>
+
+<p>Notice how we build it out of the original *.simg container we had. You can base a sandbox on shub or dockerhub images as well.</p>
+<p>so let's see what is inside:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ ls s_ubuntu/
+bin          etc    lib64   opt   sbin         tmp
+boot         home   libx32  proc  singularity  usr
+dev          lib    media   root  srv          var
+environment  lib32  mnt     run   sys
+</code></pre>
+
+<p>An entire ubuntu os! Cool so now let's change stuff in it:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ singularity shell s_ubuntu 
+Singularity&gt; touch /mnt/anything.txt
+touch: cannot touch '/mnt/anything.txt': Read-only file system
+</code></pre>
+
+<p>So even though we made a sandbox which is desinged to be interactive, we still need the <code>--writable</code> flag.</p>
+<pre><code class="bash">bbearce@pop-os:~/$ singularity shell --writable s_ubuntu 
+Singularity&gt; touch /mnt/anything.txt
+Singularity&gt; ls /mnt
+anything.txt
+
+</code></pre>
+
+<p>We did it! Ok now how do we make this change into a new container:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ singularity build s_ubuntu_modified s_ubuntu
+INFO:    Starting build...
+INFO:    Creating SIF file...
+INFO:    Build complete: s_ubuntu_modified
+bbearce@pop-os:~/$ ls
+s_ubuntu_modified  ubuntu.simg
+s_ubuntu
+
+</code></pre>
+
+<p>Now let's see if our change made it:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ singularity shell s_ubuntu_modified 
+Singularity&gt; ls /mnt
+anything.txt
+</code></pre>
+
+<p>Boom! So to recap, you need to build a <code>--sandbox</code> image from just about any image source, be it a hub or recipe file. Then shell into that container directory with flag <code>--writable</code>.</p>
+<h3 id="run">Run</h3>
+<blockquote>
+<p>Continue from the Build section above with files test.py and Singularity.recipe.</p>
+</blockquote>
+<p>Run the image with <code>run</code>:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ singularity run ubuntu.simg 
+import os module and clearly python is installed!
+~~~~~some environment variable~~~~~
+</code></pre>
+
+<p>or treat as an executable:</p>
+<pre><code class="bash">bbearce@pop-os:~/$ ./ubuntu.simg 
+import os module and clearly python is installed!
+~~~~~some environment variable~~~~~
+</code></pre>
+
+<p>run also works with shub:// and docker:// URIs. This creates an ephemeral container that runs and then disappears.</p>
+<pre><code class="bash">$ singularity run shub://GodloveD/lolcow
+</code></pre>
+
+<p>Files on the host are reachable from within the container.</p>
+<pre><code class="bash">$ echo &quot;Hello World&quot; &gt; $HOME/hello-kitty.txt
+$ singularity exec vsoch-hello-world-master.simg cat $HOME/hello-kitty.txt
+Hello World
+</code></pre>
+
+<blockquote>
+<p>This example works because hello-kitty.txt exists in the user’s home directory. By default singularity bind mounts <code>/home/$USER</code>, <code>/tmp</code>, and <code>$PWD</code> into your container at runtime.</p>
+</blockquote>
+<h3 id="mounting">Mounting</h3>
+<p>You can specify additional directories to bind mount into your container with the --bind option. In this example, the <code>/data</code> directory on the host system is bind mounted to the <code>/mnt</code> directory inside the container.</p>
+<pre><code class="bash">$ echo &quot;I am your father&quot; &gt;/data/vader.sez
+$ ~/sing-dev/bin/singularity exec --bind /data:/mnt hello-world.simg cat /mnt/vader.sez
+I am your father
 </code></pre>
 
 <h3 id="inspect">Inspect</h3>
@@ -152,195 +286,6 @@ From: ubuntu:18.04
 }
 </code></pre>
 
-<h3 id="shell">Shell</h3>
-<p>Get inside container with <code>shell</code>. I got confused when I tried this because my machine didn't give the same results as the tutorial. Let's proceed.</p>
-<pre><code class="bash">bbearce@bryce:~/singularity$ singularity shell ubuntu.simg 
-Singularity: Invoking an interactive shell within container...
-
-bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-Singularity ubuntu.simg:~/singularity&gt;
-</code></pre>
-
-<p>Looks good right? Let's try an <code>ls</code> to see what's inside.</p>
-<pre><code class="bash">Singularity ubuntu.simg:~/singularity&gt; ls
-Singularity.recipe  test.py  ubuntu.simg
-Singularity ubuntu.simg:~/singularity&gt;
-</code></pre>
-
-<p>Hmm... I don't see the <em>test.py</em> file I was expecting. I also see my newly created image too. However the prompt is different and I can access my environment variable:</p>
-<pre><code class="bash">Singularity ubuntu.simg:~/singularity&gt; echo $MY_VAR
-~~~~~some environment variable~~~~~
-</code></pre>
-
-<p>So what is going on? Turns out by default the users <em>home</em> directory is auto mounted to the same location in the container. If you change directories to <em>/</em> you can see we are not on the computer anymore. We can see <em>test.py</em> 4th from the bottom!</p>
-<blockquote>
-<p>/home and /root are both bound by default</p>
-</blockquote>
-<pre><code class="bash">Singularity ubuntu.simg:/&gt; ls -l 
-total 1737
-drwxr-xr-x   2 root root    1146 Jan 12 16:10 bin
-drwxr-xr-x   2 root root       3 Apr 24  2018 boot
-drwxr-xr-x  17 root root    4640 Jan 24 11:16 dev
-lrwxrwxrwx   1 root root      36 Jan 28  2019 environment -&gt; .singularity.d/env/90-environment.sh
-drwxr-xr-x   1 root root      60 Feb  4 17:14 etc
-drwxr-xr-x   1 root root      60 Feb  4 17:14 home
-drwxr-xr-x   8 root root     117 May 23  2017 lib
-drwxr-xr-x   2 root root      43 Jan 12 16:10 lib64
-drwxr-xr-x   2 root root       3 Jan 12 16:09 media
-drwxr-xr-x   2 root root       3 Jan 12 16:09 mnt
-drwxr-xr-x   2 root root       3 Jan 12 16:09 opt
-dr-xr-xr-x 825 root root       0 Jan 24 11:02 proc
-drwx------   2 root root      46 Feb  4 17:00 root
-drwxr-xr-x   5 root root      67 Feb  4 17:00 run
-drwxr-xr-x   2 root root    1123 Feb  4 17:00 sbin
-lrwxrwxrwx   1 root root      24 Jan 28  2019 singularity -&gt; .singularity.d/runscript
-drwxr-xr-x   2 root root       3 Jan 12 16:09 srv
-dr-xr-xr-x  13 root root       0 Jan 24 15:49 sys
--rw-rw-r--   1 root root      70 Feb  4 17:00 test.py
-drwxrwxrwt  22 root root 1773568 Feb  4 17:17 tmp
-drwxr-xr-x  10 root root     150 Jan 12 16:09 usr
-drwxr-xr-x  11 root root     160 Jan 12 16:10 var
-</code></pre>
-
-<h3 id="sandbox">Sandbox</h3>
-<p>We can build a container without a recipe file (interactively).</p>
-<blockquote>
-<p>You should always record what you are doing in a recipe file so that you can remember the steps needed to create the file. We will write in <em>Singularity.recipe</em>.</p>
-</blockquote>
-<h2 id="build-from-ubuntu-again-but-this-time-directly-from-bash-command-not-recipe-file">Build from ubuntu again but this time directly from bash command (not recipe file).</h2>
-<pre><code class="bash">bbearce@bryce:~/singularity$ sudo singularity build --sandbox ubuntu_s docker://ubuntu
-Docker image path: index.docker.io/library/ubuntu:latest
-Cache folder set to /root/.singularity/docker
-Importing: base Singularity environment
-Exploding layer: sha256:5c939e3a4d1097af8d3292ad3a41d3caa846f6333b91f2dd22b972bc2d19c5b5.tar.gz
-Exploding layer: sha256:c63719cdbe7ae254b453dba06fb446f583b503f2a2c15becc83f8c5bc7a705e0.tar.gz
-Exploding layer: sha256:19a861ea6baff71b05cd577478984c3e62cf0177bf74468d0aca551f5fcb891c.tar.gz
-Exploding layer: sha256:651c9d2d6c4f37c56a221259e033e7e2353b698139c2ff950623ca28d64a9837.tar.gz
-Exploding layer: sha256:c6a9ef4b9995d615851d7786fbc2fe72f72321bee1a87d66919b881a0336525a.tar.gz
-Singularity container built: ubuntu_s
-Cleaning up...
-bbearce@bryce:~/singularity$ ls
-Singularity.recipe  test.py  ubuntu_s
-</code></pre>
-
-<p>So far the recipe file has this:</p>
-<p>"Singularity.recipe"</p>
-<pre><code class="bash">Bootstrap: docker
-From: ubuntu:18.04
-</code></pre>
-
-<p>Now let's try to run our <em>test.py</em> file in the container:</p>
-<pre><code class="bash">bbearce@bryce:~/singularity$ singularity exec ubuntu_s python test.py
-/.singularity.d/actions/exec: 9: exec: python: not found
-</code></pre>
-
-<p>We need to add python to the container... let's do thatin the sandbox.</p>
-<blockquote>
-<p>Since singularity doesn't allow root permissions, you will have to use sudo to do this. Setting up singularity containers will often require root permissions, but to run them you will not</p>
-</blockquote>
-<pre><code class="bash">sudo singularity shell --writable ubuntu_s
-</code></pre>
-
-<blockquote>
-<p>We need --writable to tell singularity that when we exit the container we want our changes to stay...otherwise they will be deleted.</p>
-</blockquote>
-<pre><code class="bash">Singularity ubuntu_s:~&gt; apt-get -y install python
-Reading package lists... Done
-Building dependency tree       
-Reading state information... Done
-E: Unable to locate package python
-</code></pre>
-
-<p>Ugh...we don't have python. So let's update the package list.</p>
-<pre><code class="bash">Singularity ubuntu_s:~&gt; apt-get -y update        
-Get:1 http://archive.ubuntu.com/ubuntu bionic InRelease [242 kB]
-Get:2 http://security.ubuntu.com/ubuntu bionic-security InRelease [88.7 kB]
-Get:3 http://archive.ubuntu.com/ubuntu bionic-updates InRelease [88.7 kB]
-Get:4 http://security.ubuntu.com/ubuntu bionic-security/restricted amd64 Packages [26.7 kB]
-...
-...
-...
-</code></pre>
-
-<p>Now let's install python</p>
-<pre><code class="bash">Singularity ubuntu_s:~&gt; apt-get -y install python
-Reading package lists... Done
-Building dependency tree       
-Reading state information... Done
-The following additional packages will be installed:
-...
-...
-...
-</code></pre>
-
-<p>Can we now run our file?</p>
-<pre><code class="bash">bbearce@bryce:~/singularity$ singularity exec ubuntu_s python test.py
-the singularity has happened!
-</code></pre>
-
-<blockquote>
-<p>Remember we haven't added test.py to the container so the only reason we can do what we just did was because <em>/home/<user>/singularity</em> was auto mapped inside the container, and that's where <em>test.py</em> is.</p>
-</blockquote>
-<p>Now let's record this in our recipe file.</p>
-<p>"Singularity.recipe"</p>
-<pre><code class="bash">Bootstrap: docker
-From: ubuntu:18.04
-
-%post
-    apt-get -y update
-    apt-get -y install python
-
-%files
-    test.py  /
-
-%runscript
-    python /test.py
-
-</code></pre>
-
-<p>The final step is to build another container named <em>ubuntu.simg</em> from the recipe file to show that we can now do it from that.</p>
-<pre><code class="bash">bbearce@bryce:~/singularity$ sudo singularity build ubuntu.simg Singularity.recipe 
-Using container recipe deffile: Singularity.recipe
-Sanitizing environment
-Adding base Singularity environment to container
-Docker image path: index.docker.io/library/ubuntu:18.04
-Cache folder set to /root/.singularity/docker
-Exploding layer: sha256:5c939e3a4d1097af8d3292ad3a41d3caa846f6333b91f2dd22b972bc2d19c5b5.tar.gz
-Exploding layer: sha256:c63719cdbe7ae254b453dba06fb446f583b503f2a2c15becc83f8c5bc7a705e0.tar.gz
-Exploding layer: sha256:19a861ea6baff71b05cd577478984c3e62cf0177bf74468d0aca551f5fcb891c.tar.gz
-Exploding layer: sha256:651c9d2d6c4f37c56a221259e033e7e2353b698139c2ff950623ca28d64a9837.tar.gz
-Exploding layer: sha256:c6a9ef4b9995d615851d7786fbc2fe72f72321bee1a87d66919b881a0336525a.tar.gz
-User defined %runscript found! Taking priority.
-Adding files to container
-Copying 'test.py' to '/'
-Running post scriptlet
-+ apt-get -y update
-...
-...
-...
-Reading package lists... Done
-+ apt-get -y install python
-...
-...
-...
-Processing triggers for libc-bin (2.27-3ubuntu1) ...
-Adding runscript
-Finalizing Singularity container
-Calculating final size for metadata...
-Skipping checks
-Building Singularity image...
-Singularity container built: ubuntu.simg
-Cleaning up...
-</code></pre>
-
-<p>Now we should be able to run the container directly:</p>
-<pre><code class="bash">bbearce@bryce:~/singularity$ ls
-Singularity.recipe  test.py  ubuntu_s  ubuntu.simg
-
-bbearce@bryce:~/singularity$ singularity run ubuntu.simg 
-the singularity has happened!
-</code></pre>
-
   <br>
     
 
@@ -352,20 +297,20 @@ the singularity has happened!
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../git/git_basics/" class="btn btn-xs btn-default pull-right">
+      <a href="../use_with_docker/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../git/git_basics/" class="btn btn-xs btn-link">
-        Basics
+      <a href="../use_with_docker/" class="btn btn-xs btn-link">
+        Use With Docker
       </a>
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../nginx/nginx/" class="btn btn-xs btn-default pull-left">
+      <a href="../install/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../nginx/nginx/" class="btn btn-xs btn-link">
-        Basics
+        Previous</a><a href="../install/" class="btn btn-xs btn-link">
+        Install
       </a>
     </div>
     

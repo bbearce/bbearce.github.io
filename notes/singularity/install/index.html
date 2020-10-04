@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>As container - Ben's Code Journal</title>
+    <title>Install - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,8 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "From Container", url: "#_top", children: [
+          {title: "Installing Singularity", url: "#_top", children: [
+              {title: "Terminal Install:", url: "#terminal-install" },
           ]},
         ];
 
@@ -70,10 +71,10 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../singularity/use_with_docker/" class="btn btn-xs btn-default pull-left">
+      <a href="../../docker/remote_registry/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../singularity/use_with_docker/" class="btn btn-xs btn-link">
-        Use With Docker
+        Previous</a><a href="../../docker/remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
       </a>
     </div>
     
@@ -81,27 +82,54 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     
 
-    <h1 id="from-container">From Container</h1>
+    <h1 id="installing-singularity">Installing Singularity</h1>
 <blockquote>
-<p>Source <a href="https://hub.docker.com/_/couchdb?tab=description">docker</a></p>
+<p>Source: <a href="https://sylabs.io/guides/3.6/admin-guide/installation.html">sylabs.io</a></p>
 </blockquote>
-<pre><code class="bash">$ docker pull couchdb
+<h2 id="terminal-install">Terminal Install:</h2>
+<h3 id="pre-requisites">Pre-requisites:</h3>
+<p>On Ubuntu or Debian install the following dependencies:</p>
+<pre><code class="bash">sudo apt-get update &amp;&amp; sudo apt-get install -y \
+    build-essential \
+    uuid-dev \
+    libgpgme-dev \
+    squashfs-tools \
+    libseccomp-dev \
+    wget \
+    pkg-config \
+    git \
+    cryptsetup-bin
 </code></pre>
 
-<p>This will get you latest. Then as per their instructoins run this command:</p>
-<pre><code class="bash">$ docker run -d --name my-couchdb couchdb:tag
+<p>Install Go:</p>
+<pre><code class="bash">export VERSION=1.5.12 OS=linux ARCH=amd64 &amp;&amp; \
+    wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz &amp;&amp; \
+    sudo tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz &amp;&amp; \
+    rm go$VERSION.$OS-$ARCH.tar.gz
 </code></pre>
 
-<p>If you want to expose the port to the outside world, run</p>
-<pre><code class="bash">$ docker run -p 5984:5984 -d couchdb
+<pre><code class="bash">echo 'export GOPATH=${HOME}/go' &gt;&gt; ~/.bashrc &amp;&amp; \
+    echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' &gt;&gt; ~/.bashrc &amp;&amp; \
+    source ~/.bashrc
 </code></pre>
 
-<p>Start not in <em>Admin Party</em> mode:</p>
-<pre><code class="bash">$ docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -d couchdb
+<h3 id="install-singularity">Install Singularity:</h3>
+<pre><code class="bash">export VERSION=3.6.3 &amp;&amp; # adjust this as necessary \
+    wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz &amp;&amp; \
+    tar -xzf singularity-${VERSION}.tar.gz &amp;&amp; \
+    cd singularity
 </code></pre>
 
-<p>Example I used for a simple project:</p>
-<pre><code class="bash">$ docker run -d --name ben-couchdb2 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -p 5985:5984 couchdb:latest
+<p>then check out code from git:</p>
+<pre><code class="bash">git clone https://github.com/sylabs/singularity.git &amp;&amp; \
+    cd singularity &amp;&amp; \
+    git checkout v3.6.3
+</code></pre>
+
+<p>Now compile Singularity:</p>
+<pre><code class="bash">./mconfig &amp;&amp; \
+    make -C ./builddir &amp;&amp; \
+    sudo make -C ./builddir install
 </code></pre>
 
   <br>
@@ -125,10 +153,10 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     </div>
     
     <div class="wm-article-nav">
-      <a href="../../singularity/use_with_docker/" class="btn btn-xs btn-default pull-left">
+      <a href="../../docker/remote_registry/" class="btn btn-xs btn-default pull-left">
         <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../singularity/use_with_docker/" class="btn btn-xs btn-link">
-        Use With Docker
+        Previous</a><a href="../../docker/remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
       </a>
     </div>
     
