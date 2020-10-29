@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Sample Deployment (Django) - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Sample Django Deployment", url: "#_top", children: [
+              {title: "Stack-Scope", url: "#stack-scope" },
+              {title: "Kubernetes Concepts", url: "#kubernetes-concepts" },
+              {title: "Step 1: Build Locally", url: "#step-1-build-locally" },
+              {title: "Step 2: Manage ACR", url: "#step-2-manage-acr" },
+              {title: "Step 3: Setting up a Kubernetes cluster with AKS", url: "#step-3-setting-up-a-kubernetes-cluster-with-aks" },
+              {title: "Step 4: Set up Helm 3", url: "#step-4-set-up-helm-3" },
+              {title: "Step 5: Configure additional Azure resources", url: "#step-5-configure-additional-azure-resources" },
+              {title: "Step 6: Create the NGINX Ingress controller", url: "#step-6-create-the-nginx-ingress-controller" },
+              {title: "Step 7: Manage Jetstack/Cert-Manager", url: "#step-7-manage-jetstackcert-manager" },
+              {title: "Step 8: Deploy the Django application", url: "#step-8-deploy-the-django-application" },
+              {title: "Step 9: Set up the Ingress routing", url: "#step-9-set-up-the-ingress-routing" },
+              {title: "Step 10: Clean up resources", url: "#step-10-clean-up-resources" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../sample-flask-deployment/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../sample-flask-deployment/" class="btn btn-xs btn-link">
+        Sample Deployment (Flask)
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../greenfield_deployment/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../greenfield_deployment/" class="btn btn-xs btn-link">
+        Greenfield
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="sample-django-deployment">Sample Django Deployment</h1>
+<blockquote>
+<p>Source <a href="https://medium.com/boilercode/deploying-a-django-application-in-azure-aks-with-an-ingress-controller-and-tls-266a1e2dc697">medium</a></p>
+</blockquote>
+<h2 id="stack-scope">Stack-Scope</h2>
+<p>As I already revealed we are going to deploy a Django web application on a managed Kubernetes cluster on Azure Kubernetes Service. The Django application is written in Python 3, and built locally with Docker. To manage some Azure resources, like Azure Container Registry (ACR), Load Balancer, static IP and the AKS cluster itself we will use the Azure CLI. In order to manage deployments and services within the cluster we use kubectl, the official Kubernetes command-line tool. For installing the NGINX Ingress controller and setting up Jetstack/Cert-Manager we utilize the power of Helm 3, a Kubernetes package manager.</p>
+<ul>
+<li>python3</li>
+<li>docker</li>
+<li>Azure Container Registry (ACR)</li>
+<li>Load Balancer</li>
+<li>Azure CLI</li>
+<li>kubectl</li>
+<li>helm 3</li>
+</ul>
+<h2 id="kubernetes-concepts">Kubernetes Concepts</h2>
+<p>Before we roll up our sleeves, let’s review some of the main Kubernetes concepts. Make sure to peek at the official documentation if you have some spare time, to obtain a better understanding of the various parts and abstractions of Kubernetes.</p>
+<ul>
+<li>
+<p>Pod — A Pod represents a single instance of an application in Kubernetes and is the basic used unit of deployment. In common use cases the “one-container-per-pod” model is the way to go, but you can also run multiple containers in a single Pod. You can think of the Pod as a wrapper around your — Docker — container which describes it’s resources, network configuration and other options.</p>
+</li>
+<li>
+<p>Service — A Service in Kubernetes is an abstract networking layer for multiple Pods. It has the ability to target multiple Pods by their label and defines the policy of how Pods can access each other, also known as microservice context management. The Service can be given an unique DNS name as a single Service internal access point.</p>
+</li>
+<li>
+<p>ReplicaSet — A ReplicaSet describes how many replica Pods of a specific Pod should be running at any given time. With the replica Pods of your application running you can make sure that your service will be available when one of the Pods crashes. Because a Kubernetes Deployment is a higher-level conceptual controller that manages ReplicaSets, you will most likely not use this controller directly in your projects. However, abstract knowledge about this concept helps understanding the basic concepts and utilities of Kubernetes.</p>
+</li>
+<li>
+<p>Deployment — A Deployment describes a desired state and can be applied as declarative update or release for Pods and ReplicaSets. Wait what? Imagine that your Django web application is running in a Pod on your Kubernetes cluster. When you decide to update your application with a newer version of your code, you can declare the new desired state — which most likely points to an updated container image — in a Deployment description which you can apply in your cluster. The native Kubernetes Deployment Controller will detect the changes and will handle the rollout by changing the current state of a Pod or ReplicaSet to the desired state.</p>
+</li>
+<li>
+<p>Ingress — An Ingress describes the routing rules for your cluster. It is an advanced routing layer between your cluster services and the internet. Next to the Ingress you need an Ingress controller to satisfy the rules that you described in the Ingress. Together they form a very powerful couple to expose your services. An Ingress also has many advantages relative to using other external traffic routing methods i.e. the primitive NodePort or costly LoadBalancer.</p>
+</li>
+<li>
+<p>Node — Last but not least, a Node represents a virtual or physical machine where Kubernetes will run your Pods’ container. Most of the time the nodes will be Linux machines, however Azure offers the possibility now to use Windows machines as well!
+Excellent! We learned to walk, now we can start to run!</p>
+</li>
+</ul>
+<h2 id="step-1-build-locally">Step 1: Build Locally</h2>
+<p>Clone:</p>
+<pre><code class="bash">$ git clone https://github.com/wmarcuse/django-azure-aks-ingress.git
+</code></pre>
+
+<p>Build:</p>
+<pre><code class="bash">$ docker build -t bbearce/django-aks:v1.0.0 .
+</code></pre>
+
+<p>Run:</p>
+<pre><code class="bash">$ docker run --rm -it -p 8010:8010 bbearce/django-aks:v1.0.0
+</code></pre>
+
+<p>Visit:</p>
+<pre><code class="bash">$ Visit http://127.0.0.1:8010 
+</code></pre>
+
+<h2 id="step-2-manage-acr">Step 2: Manage ACR</h2>
+<h3 id="login-to-azure">Login to Azure:</h3>
+<pre><code class="bash">$ az login
+
+Opening in existing browser session.
+[1009/183807.113943:ERROR:nacl_helper_linux.cc(308)] NaCl helper process running without a sandbox!
+Most likely you need to configure your SUID sandbox correctly
+You have logged in. Now let us find all the subscriptions to which you have access...
+[
+  {
+    &quot;cloudName&quot;: &quot;AzureCloud&quot;,
+    &quot;homeTenantId&quot;: &quot;####################################&quot;,
+    &quot;id&quot;: &quot;####################################&quot;,    
+    &quot;isDefault&quot;: true,
+    &quot;managedByTenants&quot;: [],
+    &quot;name&quot;: &quot;Pay-As-You-Go&quot;,
+    &quot;state&quot;: &quot;Enabled&quot;,
+    &quot;tenantId&quot;: &quot;####################################&quot;,
+    &quot;user&quot;: {
+      &quot;name&quot;: &quot;someone@mail.com&quot;,
+      &quot;type&quot;: &quot;user&quot;
+    }
+  }
+]
+
+</code></pre>
+
+<h3 id="create-a-resource-group">Create a resource group:</h3>
+<pre><code class="bash">$ az group create --name djangoAKS --location westeurope
+djangoAKS --location westeurope
+{
+  &quot;id&quot;: &quot;/subscriptions/####################################/resourceGroups/djangoAKS&quot;,
+  &quot;location&quot;: &quot;westeurope&quot;,
+  &quot;managedBy&quot;: null,
+  &quot;name&quot;: &quot;djangoAKS&quot;,
+  &quot;properties&quot;: {
+    &quot;provisioningState&quot;: &quot;Succeeded&quot;
+  },
+  &quot;tags&quot;: null,
+  &quot;type&quot;: &quot;Microsoft.Resources/resourceGroups&quot;
+}
+
+</code></pre>
+
+<h3 id="create-the-acr-resource">Create the ACR resource</h3>
+<p>Create the ACR resource in the newly created resource group specifying the basic <a href="https://docs.microsoft.com/nl-nl/azure/container-registry/container-registry-skus">service level</a>:</p>
+<pre><code class="bash">$ az acr create --resource-group djangoAKS --name djangoAksRegistryBB --sku Basic
+
+{- Finished ..
+  &quot;adminUserEnabled&quot;: false,
+  &quot;creationDate&quot;: &quot;2020-10-09T22:45:49.761838+00:00&quot;,
+  &quot;dataEndpointEnabled&quot;: false,
+  &quot;dataEndpointHostNames&quot;: [],
+  &quot;encryption&quot;: {
+    &quot;keyVaultProperties&quot;: null,
+    &quot;status&quot;: &quot;disabled&quot;
+  },
+  &quot;id&quot;: &quot;/subscriptions/####################################/resourceGroups/djangoAKS/providers/Microsoft.ContainerRegistry/registries/djangoAksRegistryBB&quot;,
+  &quot;identity&quot;: null,
+  &quot;location&quot;: &quot;westeurope&quot;,
+  &quot;loginServer&quot;: &quot;djangoaksregistrybb.azurecr.io&quot;,
+  &quot;name&quot;: &quot;djangoAksRegistryBB&quot;,
+  &quot;networkRuleSet&quot;: null,
+  &quot;policies&quot;: {
+    &quot;quarantinePolicy&quot;: {
+      &quot;status&quot;: &quot;disabled&quot;
+    },
+    &quot;retentionPolicy&quot;: {
+      &quot;days&quot;: 7,
+      &quot;lastUpdatedTime&quot;: &quot;2020-10-09T22:45:54.821697+00:00&quot;,
+      &quot;status&quot;: &quot;disabled&quot;
+    },
+    &quot;trustPolicy&quot;: {
+      &quot;status&quot;: &quot;disabled&quot;,
+      &quot;type&quot;: &quot;Notary&quot;
+    }
+  },
+  &quot;privateEndpointConnections&quot;: [],
+  &quot;provisioningState&quot;: &quot;Succeeded&quot;,
+  &quot;publicNetworkAccess&quot;: &quot;Enabled&quot;,
+  &quot;resourceGroup&quot;: &quot;djangoAKS&quot;,
+  &quot;sku&quot;: {
+    &quot;name&quot;: &quot;Basic&quot;,
+    &quot;tier&quot;: &quot;Basic&quot;
+  },
+  &quot;status&quot;: null,
+  &quot;storageAccount&quot;: null,
+  &quot;systemData&quot;: {
+    &quot;createdAt&quot;: &quot;2020-10-09T22:45:49.7618387+00:00&quot;,
+    &quot;createdBy&quot;: &quot;someone@mail.com&quot;,
+    &quot;createdByType&quot;: &quot;User&quot;,
+    &quot;lastModifiedAt&quot;: &quot;2020-10-09T22:45:49.7618387+00:00&quot;,
+    &quot;lastModifiedBy&quot;: &quot;someone@mail.com&quot;,
+    &quot;lastModifiedByType&quot;: &quot;User&quot;
+  },
+  &quot;tags&quot;: {},
+  &quot;type&quot;: &quot;Microsoft.ContainerRegistry/registries&quot;
+}
+
+</code></pre>
+
+<p>Take note of loginServer: <code>djangoaksregistrybb.azurecr.io</code>.</p>
+<h3 id="pushing-the-application-to-acr">Pushing the application to ACR:</h3>
+<p>Login:</p>
+<pre><code class="bash">$ az acr login --name djangoaksregistrybb
+</code></pre>
+
+<p>Tag image:</p>
+<pre><code class="bash">$ docker tag bbearce/django-aks:v1.0.0 djangoaksregistrybb.azurecr.io/django-aks:v1.0.0
+</code></pre>
+
+<p>Push image:</p>
+<pre><code class="bash">$ docker push djangoaksregistrybb.azurecr.io/django-aks:v1.0.0
+</code></pre>
+
+<h2 id="step-3-setting-up-a-kubernetes-cluster-with-aks">Step 3: Setting up a Kubernetes cluster with AKS</h2>
+<h3 id="creating-the-aks-cluster">Creating the AKS cluster</h3>
+<p>We specify a few parameters to let Azure know how we want to configure the Kubernetes cluster. We make sure that the AKS cluster is put in the same resource group as the ACR registry. </p>
+<pre><code class="bash">$ az aks create \
+  --resource-group djangoAKS \
+  --name djangoaks-cluster \
+  --node-count 2 \
+  --node-vm-size Standard_B2s \
+  --generate-ssh-keys \
+  --kubernetes-version 1.16.8
+</code></pre>
+
+<blockquote>
+<p>In western Europe (my resource location) kubernetes version 1.16.8 wasn't available. Using <code>az aks get-versions --location westeurope</code>, you can see what versions are available.</p>
+</blockquote>
+<p>So instead I used:</p>
+<pre><code class="bash">$ az aks create \
+  --resource-group djangoAKS \
+  --name djangoaks-cluster \
+  --node-count 2 \
+  --node-vm-size Standard_B2s \
+  --generate-ssh-keys \
+  --kubernetes-version 1.19.0
+</code></pre>
+
+<blockquote>
+<p>Also there is a section and or flag related to supplying your own ssh key. </p>
+</blockquote>
+<p>Brief example which doesn't apply to this tutorial as the <code>--generate-ssh-keys</code> worked for me...</p>
+<pre><code class="bash">$ ssh-keygen -f ~/.ssh/django-aks-ssh
+</code></pre>
+
+<p>Then create the AKS cluster with almost the same command as we tried before but now pointing towards the manually created SSH key.</p>
+<pre><code class="bash">$ az aks create \
+  --resource-group djangoAKS \
+  --name djangoaks-cluster \
+  --node-count 2 \
+  --node-vm-size Standard_B2s \
+  --ssh-key-value ~\.ssh\django-aks-ssh.pub \
+  --kubernetes-version 1.16.8
+</code></pre>
+
+<p>moving on...</p>
+<h3 id="connecting-to-the-aks-cluster">Connecting to the AKS cluster</h3>
+<pre><code class="bash">$ az aks install-cli
+</code></pre>
+
+<p>Now configure kubectl to connect to your AKS cluster, the credentials will be downloaded on the background and the context of the Kubernetes command-line tool will be set to your cluster.</p>
+<pre><code class="bash">$ az aks get-credentials --resource-group djangoAKS --name djangoaks-cluster
+</code></pre>
+
+<p>Verify that the connection from your development machine to the AKS cluster is working by checking the status of the nodes you created previously.</p>
+<pre><code class="bash">$ kubectl get nodes
+</code></pre>
+
+<h3 id="namespace">Namespace</h3>
+<p>Now as your first act as cluster-manager, create a Kubernetes namespace for the resources we are going to create in the next steps.</p>
+<pre><code class="bash">$ kubectl create namespace djaks
+</code></pre>
+
+<h2 id="step-4-set-up-helm-3">Step 4: Set up Helm 3</h2>
+<h3 id="install-helm-3">Install Helm 3</h3>
+<p>Helm 3 is a package manager for Kubernetes and helps you manage applications on your cluster. Helm 3 works with so called ‘charts’. <em>A chart describes the application resources and provides easy accessible and repeatable application installations, as well as very clever in-place application upgrades.</em>
+We will be needing Helm 3 to install Jetstack/Cert-Manager and the NGINX Ingress controller. Follow the official installation guide. I highly recommend Windows users to install Helm 3 with Chocolatey, as to prevent some first time installation problems.</p>
+<p>We will be needing Helm 3 to install Jetstack/Cert-Manager and the NGINX Ingress controller. Follow the official <a href="https://helm.sh/docs/intro/install/">installation guide</a>. I highly recommend Windows users to install Helm 3 with <a href="https://chocolatey.org/install">Chocolatey</a>, as to prevent some first time installation problems.</p>
+<h3 id="manage-helm-3">Manage Helm 3</h3>
+<p>Helm 3 has a variety of pre-created charts available in the official stable charts repository. Add the stable repository to your Helm 3 installation.</p>
+<pre><code class="bash">$ helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+</code></pre>
+
+<blockquote>
+<p>Also adding:</p>
+</blockquote>
+<pre><code class="bash">$ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+</code></pre>
+
+<p>Now update the list of charts you just added to your Helm 3 installation.</p>
+<pre><code class="bash">$ helm repo update
+Hang tight while we grab the latest from your chart repositories...
+...Successfully got an update from the &quot;ingress-nginx&quot; chart repository
+...Successfully got an update from the &quot;jetstack&quot; chart repository
+...Successfully got an update from the &quot;stable&quot; chart repository
+Update Complete. ⎈Happy Helming!⎈
+</code></pre>
+
+<h2 id="step-5-configure-additional-azure-resources">Step 5: Configure additional Azure resources</h2>
+<p>When we created the AKS cluster, Azure automatically created an additional resource group where it attaches specific infrastructural resources like virtual machine scale sets, virtual networks and managed disks. This extra resource group is also known as the node resource group. When you delete the AKS cluster, this node resource group is deleted as well. The resource group follows the following name convention: <strong>MC_&lt;resourceGroupName&gt;_&lt;clusterName&gt;_&lt;Region&gt;.</strong></p>
+<h3 id="create-a-static-ip-address">Create a static IP address</h3>
+<p>Let’s find out what the exact name of the node resource group is.</p>
+<pre><code class="bash">$ az aks show --resource-group djangoAKS --name djangoaks-cluster --query nodeResourceGroup -o tsv
+MC_djangoAKS_djangoaks-cluster_westeurope
+</code></pre>
+
+<p>Now create the public IP:</p>
+<pre><code class="bash">$ az network public-ip create \
+--resource-group MC_djangoAKS_djangoaks-cluster_westeurope \
+--name djangoAKSPublicIP \
+--sku Standard \
+--allocation-method static \
+--query publicIp.ipAdress \
+-o tsv
+</code></pre>
+
+<p>Now let’s find out what the actual IP address is. The static IPv4 address should be visible under ipAddress.</p>
+<pre><code class="bash">$ az network public-ip show \
+--resource-group MC_djangoAKS_djangoaks-cluster_westeurope \
+--name djangoAKSPublicIP
+
+
+
+...
+&quot;ipAddress&quot;: &quot;51.105.159.17&quot;,
+...
+&quot;name&quot;: &quot;djangoAKSPublicIP&quot;,
+...
+</code></pre>
+
+<h3 id="connect-aks-with-acr-with-azure-ad">Connect AKS with ACR with Azure AD</h3>
+<p>As we host some of our application container images in ACR, it is essential that the AKS cluster can communicate with the container registry. When we configure the communication between the two services, Active Directory will handle the authentication on the background.</p>
+<pre><code class="bash">$ az aks update -n djangoaks-cluster -g djangoAKS --attach-acr djangoaksregistrybb
+</code></pre>
+
+<h2 id="step-6-create-the-nginx-ingress-controller">Step 6: Create the NGINX Ingress controller</h2>
+<p>It is time to start using the magic from Helm 3. We can instantly deploy an nginx-ingress chart that is already available in de stable Helm repository!</p>
+<p>Here I'm trying something I found in Patrick's deploy_codalab.sh and sort of <a href="https://artifacthub.io/packages/helm/ingress-nginx/ingress-nginx/3.7.0#configuration">here</a>:</p>
+<pre><code class="bash">$ helm install --namespace djaks nginx-ingress nginx-stable/nginx-ingress --set controller.replicaCount=2 --set controller.service.annotations.&quot;service\.beta\.kubernetes\.io/azure-dns-label-name&quot;=&quot;django-aks-ingress&quot; --set controller.service.loadBalancerIP=&quot;51.105.159.17&quot;
+</code></pre>
+
+<p>another version from this <a href="https://github.com/HoussemDellai/kubernetes-ingress-tls-ssl-https">tutorial</a>:</p>
+<pre><code class="bash">$ helm install app-ingress ingress-nginx/ingress-nginx \
+     --namespace ingress \
+     --create-namespace \
+     --set controller.replicaCount=2 \
+     --set controller.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+     --set defaultBackend.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux
+</code></pre>
+
+<p>optionally:</p>
+<pre><code class="bash">$ helm install app-ingress ingress-nginx/ingress-nginx \
+     --namespace ingress \
+     --create-namespace \
+     --set controller.replicaCount=2 \
+     --set controller.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+     --set defaultBackend.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+     --set controller.service.loadBalancerIP=&quot;51.105.159.17&quot; \
+     --set controller.service.annotations.&quot;service\.beta\.kubernetes\.io/azure-dns-label-name&quot;=&quot;django-aks-ingress&quot;
+</code></pre>
+
+<p>This avoids the WARNING I show below...</p>
+<p>Below is original instructions from post I'm copying:</p>
+<ul>
+<li>Make sure that you replace the IP address in the command below under <code>--set controller.service.loadBalancerTP</code> with the static IP address you created in the previous step.</li>
+<li>Specify your preferable DNS name label under the <code>--set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"</code> Azure will create a Fully Qualified Domain Name (FQDN) with the provided DNS prefix.</li>
+<li>Note that we install the Ingress controller in the earlier created namespace <code>djaks</code>.</li>
+</ul>
+<pre><code class="bash">$ helm install nginx-ingress stable/nginx-ingress \
+  --namespace djaks \
+  --set controller.replicaCount=2 \
+  --set controller.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+  --set defaultBackend.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+  --set controller.service.loadBalancerIP=&quot;51.105.159.17&quot; \
+  --set controller.service.annotations.&quot;service\.beta\.kubernetes\.io/azure-dns-label-name&quot;=&quot;django-aks-ingress&quot;
+</code></pre>
+
+<blockquote>
+<p>Note if that above doesn't work, here it is flattened:</p>
+</blockquote>
+<pre><code class="bash">$ helm install nginx-ingress stable/nginx-ingress   --namespace djaks  --set controller.replicaCount=2  --set controller.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux  --set defaultBackend.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux  --set controller.service.loadBalancerIP=&quot;51.105.159.17&quot;  --set controller.service.annotations.&quot;service\.beta\.kubernetes\.io/azure-dns-label-name&quot;=&quot;django-aks-ingress&quot;
+</code></pre>
+
+<blockquote>
+<p>Temp: Output from my run of the above command...meant to be deleted at some point, but I'm doing the tutorial as we speak.</p>
+</blockquote>
+<pre><code>WARNING: This chart is deprecated
+NAME: nginx-ingress
+LAST DEPLOYED: Mon Oct 12 09:27:49 2020
+NAMESPACE: djaks
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+NOTES:
+*******************************************************************************************************
+* DEPRECATED, please use https://github.com/kubernetes/ingress-nginx/tree/master/charts/ingress-nginx *
+*******************************************************************************************************
+
+
+The nginx-ingress controller has been installed.
+It may take a few minutes for the LoadBalancer IP to be available.
+You can watch the status by running 'kubectl --namespace djaks get services -o wide -w nginx-ingress-controller'
+
+An example Ingress that makes use of the controller:
+
+  apiVersion: extensions/v1beta1
+  kind: Ingress
+  metadata:
+    annotations:
+      kubernetes.io/ingress.class: nginx
+    name: example
+    namespace: foo
+  spec:
+    rules:
+      - host: www.example.com
+        http:
+          paths:
+            - backend:
+                serviceName: exampleService
+                servicePort: 80
+              path: /
+    # This section is only required if TLS is to be enabled for the Ingress
+    tls:
+        - hosts:
+            - www.example.com
+          secretName: example-tls
+
+If TLS is enabled for the Ingress, a Secret containing the certificate and key must also be provided:
+
+  apiVersion: v1
+  kind: Secret
+  metadata:
+    name: example-tls
+    namespace: foo
+  data:
+    tls.crt: &lt;base64 encoded cert&gt;
+    tls.key: &lt;base64 encoded key&gt;
+  type: kubernetes.io/tls
+</code></pre>
+
+<p>You can monitor the progress to see when the EXTERNAL-IP is bound to the <code>nginx-ingress-controller</code>. Use CTRL-C to stop the monitoring.</p>
+<p>update:</p>
+<pre><code class="bash">$ kubectl --namespace djaks get services -o wide -w nginx-ingress-ingress-nginx-controller
+
+</code></pre>
+
+<p>old:</p>
+<pre><code class="bash">$ kubectl --namespace djaks get services -o wide -w nginx-ingress-nginx-ingress
+</code></pre>
+
+<blockquote>
+<p><strong>FDQN</strong> stands for fully qualified domain name.</p>
+</blockquote>
+<p>Azure has created a FQDN when we created the Ingress controller, we can access our service via this domain as well. Let’s find out what the domain name is.</p>
+<pre><code class="bash">$ az network public-ip list \
+  --resource-group MC_djangoAKS_djangoaks-cluster_westeurope \
+  --query &quot;[?name=='djangoAKSPublicIP'].[dnsSettings.fqdn]&quot; -o tsv
+</code></pre>
+
+<p>Awesome! Our service is available via <code>django-aks-ingress.westeurope.cloudapp.azure.com</code> as well!</p>
+<h2 id="step-7-manage-jetstackcert-manager">Step 7: Manage Jetstack/Cert-Manager</h2>
+<p>This was not in original tutorial but I will add a cert-manager namespace for the cert-manager pods:</p>
+<pre><code class="bash">$ kubectl create namespace cert-manager
+</code></pre>
+
+<h3 id="install-jetstackcert-manager">Install Jetstack/Cert-Manager</h3>
+<blockquote>
+<p>very useful <a href="https://github.com/HoussemDellai/kubernetes-ingress-tls-ssl-https">resource-HoussemDellai</a></p>
+<p>His <a href="https://www.youtube.com/watch?v=M7t0cpQyzKA">video</a></p>
+</blockquote>
+<p>In step 4 we configured Helm 3 and added their stable chart repository, in this repository resides a cert-manager chart as well. But this version is depreciated, therefore use the official chart repository of jetstack.io.</p>
+<pre><code class="bash">$ helm repo add jetstack https://charts.jetstack.io
+</code></pre>
+
+<p>Update the local Helm chart repository cache to fetch any updates.</p>
+<blockquote>
+<p>I was told I was up to date so...</p>
+</blockquote>
+<pre><code class="bash">$ helm repo update
+&quot;jetstack&quot; already exists with the same configuration, skipping
+</code></pre>
+
+<p>We have to apply the <a href="https://kubernetes.io/docs/concepts/extend-kubernetes/api-extension/custom-resources/">Custom Resource Definitions</a> (CRDs) to the cluster as part of the Helm 3 release.</p>
+<p>Note that it is important that you have the earlier defined Kubernetes version 1.16.8+ running on your cluster. Also don’t apply the CRDs manually to your cluster, they can have issues with custom namespace names.
+Install Jetstack/Cert-Manager.</p>
+<pre><code class="bash">$ helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace djaks \
+  --version v1.0.2 \
+  --set installCRDs=true
+
+$ helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace cert-manager \
+  --version v1.0.0 \
+  --set installCRDs=true
+
+$ helm install \
+  cert-manager jetstack/cert-manager \
+  --namespace djaks \
+  --set installCRDs=true
+</code></pre>
+
+<p>You can verify that the installation was successful by checking the namespace for running pods. You should see <strong>three</strong> cert-manager pods running!</p>
+<pre><code class="bash">$ kubectl get pods --namespace djaks
+</code></pre>
+
+<h3 id="create-an-acme-clusterissuer">Create an ACME ClusterIssuer</h3>
+<p>ACME stands for Automated Certificate Management Environment. As we want to issue the certificates for the scope of the cluster, let’s use a ClusterIssuer resource. You can find more on Issuers <a href="https://cert-manager.io/docs/concepts/issuer/">here</a>. Let’s checkout the ClusterIssuer manifest file.</p>
+<pre><code class="bash"># k8s/cluster-issuer.yaml
+apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  # name: letsencrypt-staging
+  name: letsencrypt-prod
+spec:
+  acme:
+    email: user@example.com
+    # server: https://acme-staging-v02.api.letsencrypt.org/directory
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      # name: letsencrypt-staging
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+</code></pre>
+
+<p>Create the ClusterIssuer in your cluster:</p>
+<pre><code class="bash">$ kubectl apply -f cluster-issuer.yaml --namespace djaks
+</code></pre>
+
+<blockquote>
+<p>Experimental command:</p>
+</blockquote>
+<pre><code class="bash">$ kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.2/cert-manager.yaml
+</code></pre>
+
+<pre><code class="bash">kubectl delete secret {NAME OF THE SECRET NAMED ON THE CERTIFICATE HERE}
+</code></pre>
+
+<p>...</p>
+<p>Next I listed the ingresses with,</p>
+<pre><code class="bash">$ kubectl --namespace djaks get ing
+NAME                     HOSTS             q                                 ADDRESS                 PORTS     AGE
+ingress-resource-rules   django-aks-ingress.westeurope.cloudapp.azure.com   10.240.0.4,10.240.0.5   80, 443   9m48s
+
+</code></pre>
+
+<p>and certificates with</p>
+<pre><code class="bash">$ kubectl get all --namespace cert-manager
+
+</code></pre>
+
+<pre><code class="bash">$ kubectl --namespace djaks describe certificate tls-secret
+</code></pre>
+
+<pre><code class="bash">$ kubectl --namespace djaks describe certificaterequest tls-secret-skgpp
+</code></pre>
+
+<pre><code class="bash">kubectl --namespace djaks describe clusterissuer letsencrypt-prod
+</code></pre>
+
+<pre><code class="bash">helm --namespace ingress uninstall nginx-ingress
+</code></pre>
+
+<p>....</p>
+<h2 id="step-8-deploy-the-django-application">Step 8: Deploy the Django application</h2>
+<h3 id="apply-the-deployment-manifest">Apply the Deployment manifest</h3>
+<blockquote>
+<p>Note, be sure to change <code>image:</code> in yours...</p>
+</blockquote>
+<pre><code class="bash"># k8s/webapp-deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: django-web-app
+  labels:
+    app: django-web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: django-web
+  template:
+    metadata:
+      labels:
+        app: django-web
+    spec:
+      containers:
+        - name: django-web-container
+          imagePullPolicy: Always
+          image: djangoaksregistrybb.azurecr.io/django-aks:v1.0.0
+          ports:
+          - containerPort: 8010
+          env:
+            - name: HOST_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+      imagePullSecrets:
+        - name: acr-secret
+</code></pre>
+
+<p>Apply the Deployment manifest to the cluster.</p>
+<pre><code class="bash">$ kubectl apply -f webapp-deployment.yaml --namespace djaks
+</code></pre>
+
+<p>You can verify that the django-web-app Pods are running correctly by checking them out:</p>
+<pre><code class="bash">kubectl get pods --namespace djaks
+</code></pre>
+
+<p>If something went wrong you can look at the events that happened in the Pod by asking kubectl to describe the Pod. You need to specify a specific Pod name of the Pods you listed in the previous command.</p>
+<pre><code class="bash">$ kubectl describe pod django-web-app-#########-##### --namespace djaks
+</code></pre>
+
+<h3 id="apply-the-service-manifest">Apply the Service manifest</h3>
+<pre><code class="bash"># k8s/webapp-service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8010
+  selector:
+    app: django-web
+</code></pre>
+
+<pre><code class="bash">$ kubectl apply -f webapp-service.yaml --namespace djaks
+</code></pre>
+
+<p>The service is exposed on an internal IP with the ClusterIP ServiceSpec. This means that the service is only accessible from within the cluster, the Ingress controller will be publicly exposed and route the traffic to your application as we will see in a moment.</p>
+<p>You can verify now that the webapp service is available.</p>
+<pre><code class="bash">$ kubectl get svc --namespace djaks
+</code></pre>
+
+<h2 id="step-9-set-up-the-ingress-routing">Step 9: Set up the Ingress routing</h2>
+<h3 id="define-the-ingress-rules">Define the Ingress rules</h3>
+<p>Let’s have a look at the Ingress routing file.</p>
+<pre><code class="bash"># k8s/ingress-routing.yaml
+
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-resource-rules
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    # cert-manager.io/cluster-issuer: letsencrypt-staging
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  tls:
+  - hosts:
+    - django-aks-ingress.westeurope.cloudapp.azure.com
+    secretName: tls-secret
+  rules:
+  - host: django-aks-ingress.westeurope.cloudapp.azure.com
+    http:
+      paths:
+      - backend:
+          serviceName: webapp
+          servicePort: 80
+        path: /(.*)
+</code></pre>
+
+<p>Apply the Ingress to your cluster.</p>
+<pre><code class="bash">$ kubectl apply -f ingress-routing.yaml --namespace djaks
+</code></pre>
+
+<h3 id="configure-the-django-allowed-host">Configure the Django allowed host</h3>
+<p>Go to the <code>settings.py</code> file and add your FQDN domain to the <code>ALLOWED_HOSTS</code> list.</p>
+<pre><code class="bash"># app/app/settings.py
+
+...
+
+ALLOWED_HOSTS = ['django-aks-ingress.westeurope.cloudapp.azure.com']
+
+...
+</code></pre>
+
+<p>Now re-build the Docker container image of your new application version locally.</p>
+<pre><code class="bash">$ docker build -f Dockerfile -t django-aks:v1.0.1 .
+</code></pre>
+
+<p>Tag the image for your remote ACR registry.</p>
+<pre><code class="bash">$ docker tag django-aks:v1.0.1 djangoaksregistrybb.azurecr.io/django-aks:v1.0.1
+</code></pre>
+
+<p>Push the image to the ACR registry.</p>
+<pre><code class="bash">$ docker push djangoaksregistrybb.azurecr.io/django-aks:v1.0.1
+</code></pre>
+
+<p>If you get an authentication error, login to the ACR registry and try again.</p>
+<pre><code class="bash">$ az acr login --name djangoaksregistrybb
+</code></pre>
+
+<p>Now we have to let the cluster know that we want to update our django-web-app Deployment.</p>
+<pre><code class="bash">$ kubectl set image deployment django-web-app django-web-container=djangoaksregistrybb.azurecr.io/django-aks:v1.0.1 --namespace djaks
+</code></pre>
+
+<h2 id="step-10-clean-up-resources">Step 10: Clean up resources</h2>
+<p>If you want to get rid of the created resources, you can clean them up. I will present two clean up options!</p>
+<h3 id="keep-the-azure-resources-wipe-the-cluster-namespace">Keep the Azure resources, wipe the cluster namespace</h3>
+<p>When you want to keep the Azure resources, then you are good to go by deleting the namespace in which we created the cluster resources.</p>
+<pre><code class="bash">$ kubectl delete namespace djaks
+</code></pre>
+
+<h3 id="delete-all-resources">Delete all resources</h3>
+<p>When you want to get back to a clean slate and make sure the paid Azure resources are removed as well, delete the Azure resource group we created in the beginning.</p>
+<pre><code class="bash">$ az group delete --name djangoAKS
+</code></pre>
+
+<p>That’s it, we are done!</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../sample-flask-deployment/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../sample-flask-deployment/" class="btn btn-xs btn-link">
+        Sample Deployment (Flask)
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../greenfield_deployment/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../greenfield_deployment/" class="btn btn-xs btn-link">
+        Greenfield
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

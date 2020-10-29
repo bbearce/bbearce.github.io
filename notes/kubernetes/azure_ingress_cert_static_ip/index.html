@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Azure Ingress\Cert\Static IP - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Azure Ingress\\Cert for Static IP", url: "#_top", children: [
+              {title: "Create an ingress controller", url: "#create-an-ingress-controller" },
+              {title: "Install cert-manager", url: "#install-cert-manager" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../couchdb/container/" class="btn btn-xs btn-link">
+        As container
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../sample-flask-deployment/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../sample-flask-deployment/" class="btn btn-xs btn-link">
+        Sample Deployment (Flask)
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="azure-ingresscert-for-static-ip">Azure Ingress\Cert for Static IP</h1>
+<h2 id="create-an-ingress-controller">Create an ingress controller</h2>
+<pre><code class="bash">myResourceGroup=&quot;flask_demo&quot;
+myAKSCluster=&quot;flaskAKSCluster&quot;
+az aks show --resource-group $myResourceGroup --name $myAKSCluster --query nodeResourceGroup -o tsv
+</code></pre>
+
+<p>Node Resource Group: <em>MC_flask_demo_flaskAKSCluster_eastus</em></p>
+<p>Next, create a public IP address with the static allocation method using the <a href="https://docs.microsoft.com/en-us/cli/azure/network/public-ip?view=azure-cli-latest#az_network_public_ip_create">az network public-ip create command</a>.</p>
+<pre><code class="bash">az network public-ip create --name
+                            --resource-group
+                            [--allocation-method {Dynamic, Static}]
+                            [--dns-name]
+                            [--idle-timeout]
+                            [--ip-tags]
+                            [--location]
+                            [--public-ip-prefix]
+                            [--reverse-fqdn]
+                            [--sku {Basic, Standard}]
+                            [--subscription]
+                            [--tags]
+                            [--version {IPv4, IPv6}]
+                            [--zone {1, 2, 3}]
+</code></pre>
+
+<p>The following example creates a public IP address named myAKSPublicIP in the AKS cluster resource group obtained in the previous step:</p>
+<pre><code class="bash">az network public-ip create --resource-group MC_flask_demo_flaskAKSCluster_eastus --name myAKSPublicIP --sku Standard --allocation-method static --query publicIp.ipAddress -o tsv
+</code></pre>
+
+<p>Public IP: <em>20.62.186.98</em></p>
+<blockquote>
+<p>The above commands create an IP address that will be deleted if you delete your AKS cluster.</p>
+</blockquote>
+<p>Now deploy the nginx-ingress chart with Helm.</p>
+<p>You must pass two additional parameters to the Helm release so the ingress controller is made aware both of the static IP address of the load balancer to be allocated to the ingress controller service, and of the DNS name label being applied to the public IP address resource. For the HTTPS certificates to work correctly, a DNS name label is used to configure an FQDN for the ingress controller IP address.</p>
+<ol>
+<li>
+<p>Add the <code>--set controller.service.loadBalancerIP</code> parameter. Specify your own public IP address that was created in the previous step.  </p>
+</li>
+<li>
+<p>Add the <code>--set controller.service.annotations."service\.beta\.kubernetes\.io/azure-dns-label-name"</code> parameter. Specify a DNS name label to be applied to the public IP address that was created in the previous step.  </p>
+</li>
+</ol>
+<blockquote>
+<p>Tip: The following example creates a Kubernetes namespace for the ingress resources named <code>ingress-basic</code>. Specify a namespace for your own environment as needed. If your AKS cluster is not RBAC enabled, add <code>--set rbac.create=false</code> to the Helm commands.</p>
+</blockquote>
+<pre><code class="bash"># Create a namespace for your ingress resources
+kubectl create namespace ingress-basic
+
+# Add the ingress-nginx repository
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+
+# Use Helm to deploy an NGINX ingress controller
+STATIC_IP=&quot;20.62.186.98&quot;
+helm install nginx-ingress ingress-nginx/ingress-nginx \
+    --namespace ingress-basic \
+    --set controller.replicaCount=2 \
+    --set controller.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+    --set defaultBackend.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+    --set controller.service.loadBalancerIP=$STATIC_IP \
+    --set rbac.create=false \
+    --set controller.service.annotations.&quot;service\.beta\.kubernetes\.io/azure-dns-label-name&quot;=&quot;anything-will-do&quot;
+</code></pre>
+
+<p>No ingress rules have been created yet, so the NGINX ingress controller's default 404 page is displayed if you browse to the public IP address. Ingress rules are configured in the following steps.</p>
+<pre><code class="bash">az network public-ip list --resource-group mc_flask_demo_flaskakscluster_eastus --query &quot;[?name=='myAKSPublicIP'].[dnsSettings.fqdn]&quot; -o tsv
+</code></pre>
+
+<p><em>anything-will-do.eastus.cloudapp.azure.com</em></p>
+<h2 id="install-cert-manager">Install cert-manager</h2>
+<pre><code class="bash"># Label the cert-manager namespace to disable resource validation
+kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
+
+# Add the Jetstack Helm repository
+helm repo add jetstack https://charts.jetstack.io
+
+# Update your local Helm chart repository cache
+helm repo update
+
+# Install the cert-manager Helm chart
+helm install \
+  cert-manager \
+  --namespace &quot;ingress-basic&quot; \
+  --version &quot;v0.16.1&quot; \
+  --set installCRDs=true \
+  --set rbac.create=false \
+  --set nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+  jetstack/cert-manager
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../couchdb/container/" class="btn btn-xs btn-link">
+        As container
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../sample-flask-deployment/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../sample-flask-deployment/" class="btn btn-xs btn-link">
+        Sample Deployment (Flask)
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

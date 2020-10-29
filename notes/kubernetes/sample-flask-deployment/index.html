@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Sample Deployment (Flask) - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Flask_Deploy", url: "#_top", children: [
+              {title: "Create resource group", url: "#create-resource-group" },
+              {title: "Create azure container registry", url: "#create-azure-container-registry" },
+              {title: "Create azure kubernetes cluster", url: "#create-azure-kubernetes-cluster" },
+              {title: "Install kubectl", url: "#install-kubectl" },
+              {title: "Connect to cluster using kubectl", url: "#connect-to-cluster-using-kubectl" },
+              {title: "Kubernetes Ingress with TLS/SSL", url: "#kubernetes-ingress-with-tlsssl" },
+              {title: "Cert Manager", url: "#cert-manager" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../azure_ingress_cert_static_ip/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../azure_ingress_cert_static_ip/" class="btn btn-xs btn-link">
+        Azure Ingress\Cert\Static IP
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../sample-django-deployment/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../sample-django-deployment/" class="btn btn-xs btn-link">
+        Sample Deployment (Django)
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="flask_deploy">Flask_Deploy</h1>
+<p>We're going to document this <a href="https://github.com/HoussemDellai/kubernetes-ingress-tls-ssl-https">demo</a>. First we need to create an aks cluster.</p>
+<blockquote>
+<p><a href="https://docs.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster">Source</a></p>
+<p>Be sure to login before beginning: <code>$ az login</code></p>
+</blockquote>
+<h2 id="create-resource-group">Create resource group</h2>
+<pre><code class="bash">myResourceGroup=&quot;flask_demo&quot;
+location=&quot;eastus&quot;
+az group create --name $myResourceGroup --location $location
+</code></pre>
+
+<h2 id="create-azure-container-registry">Create azure container registry</h2>
+<pre><code class="bash">az acr create --resource-group $myResourceGroup \
+  --name bbearcecontainerregistry --sku Basic
+</code></pre>
+
+<h2 id="create-azure-kubernetes-cluster">Create azure kubernetes cluster</h2>
+<p>By default, the Azure CLI automatically enables RBAC (Role Based Access Control) when you create an AKS cluster</p>
+<pre><code class="bash">myAKSCluster=&quot;flaskAKSCluster&quot;
+acrName=&quot;bbearcecontainerregistry&quot;
+
+az aks create \
+    --resource-group $myResourceGroup \
+    --name $myAKSCluster \
+    --node-count 1 \
+    --generate-ssh-keys \
+    --attach-acr $acrName
+</code></pre>
+
+<h2 id="install-kubectl">Install <code>kubectl</code></h2>
+<p>If not already installed, install with:</p>
+<pre><code class="bash">az aks install-cli
+</code></pre>
+
+<h2 id="connect-to-cluster-using-kubectl">Connect to cluster using kubectl</h2>
+<pre><code class="bash">az aks get-credentials --resource-group $myResourceGroup --name $myAKSCluster
+</code></pre>
+
+<p>Test connection:</p>
+<pre><code class="bash">kubectl get nodes
+</code></pre>
+
+<p>Now we are all setup to begin the real tutorial:</p>
+<h2 id="kubernetes-ingress-with-tlsssl">Kubernetes Ingress with TLS/SSL</h2>
+<p>git clone this <a href="https://github.com/HoussemDellai/kubernetes-ingress-tls-ssl-https">project</a>.</p>
+<p>You should have these files:</p>
+<ul>
+<li>app-namespace.yaml  </li>
+<li>app1-deploy-svc.yaml  </li>
+<li>app1-deploy-svc.yaml  </li>
+<li>app-ingress.yaml  </li>
+<li>ssl-tls-cluster-issuer.yaml  </li>
+<li>ssl-tls-ingress.yaml  </li>
+</ul>
+<h3 id="dockerfile">Dockerfile</h3>
+<p>Build an image for deployment:</p>
+<p>Dockerfile:</p>
+<pre><code class="bash">FROM python:latest
+
+WORKDIR /app
+
+COPY app.py .
+COPY requirements.txt .
+
+RUN pip install -r requirements.txt
+
+ENV FLASK_APP=app.py
+
+ENTRYPOINT [&quot;flask&quot;,&quot;run&quot;]
+CMD [&quot;--host&quot;,&quot;0.0.0.0&quot;, &quot;--port&quot;, &quot;5000&quot;]
+</code></pre>
+
+<h3 id="build">Build</h3>
+<p>Build Step:</p>
+<pre><code class="bash">docker build -t bbearcecontainerregistry.azurecr.io/flaskapp .
+</code></pre>
+
+<h3 id="push">Push</h3>
+<p>Login:</p>
+<pre><code class="bash">az acr login -n bbearcecontainerregistry
+</code></pre>
+
+<p>Push:</p>
+<pre><code class="bash">docker push bbearcecontainerregistry.azurecr.io/flaskapp
+</code></pre>
+
+<h3 id="deploy">Deploy</h3>
+<h4 id="app">App</h4>
+<p>Set these files up to get ready for deployment:</p>
+<blockquote>
+<p>I editied the app-deploy to this from the two that are default:</p>
+<p>It's important to run this file with <code>LoadBalancer</code> as the <code>type</code> in the <code>Service</code> section.</p>
+</blockquote>
+<p><strong>app-deploy-svc.yaml</strong>:</p>
+<pre><code class="bash">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deploy
+  namespace: app 
+spec:
+  selector:
+    matchLabels:
+      app: webapp
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: bbearcecontainerregistry.azurecr.io/flaskapp
+        ports:
+        - containerPort: 5000
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: webapp-svc
+  namespace: app
+spec:
+  selector:
+    app: webapp
+  ports:
+  - port: 80
+  type: LoadBalancer # ClusterIP # NodePort # 
+</code></pre>
+
+<h4 id="ingress">Ingress</h4>
+<p>Then I edited the <strong>app-ingress.yaml</strong> to this <strong>app-ingress-modified.yaml</strong>:</p>
+<pre><code class="bash">apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: webapp-ingress
+  namespace: app
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/ssl-redirect: &quot;false&quot;
+    nginx.ingress.kubernetes.io/use-regex: &quot;true&quot;
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: webapp-svc
+          servicePort: 80
+        path: /
+  - host: front.end.20.185.73.238.nip.io # change the IP address here
+
+</code></pre>
+
+<p>Now deploy everything. Note that we delete and re-apply the <strong>app-deploy-svc.yaml</strong> with <code>type: ClusterIP</code>.</p>
+<p>app-namespace.yaml:</p>
+<pre><code class="bash">apiVersion: v1
+kind: Namespace
+metadata:
+  name: app
+</code></pre>
+
+<pre><code class="bash"># Create a namespace for the apps
+kubectl apply -f app-namespace.yaml
+
+# Deploy flask app
+kubectl apply -f app-deploy-svc.yaml
+
+# Deploy the 2 sample apps into Kubernetes to follow original demo
+#kubectl apply -f app1-deploy-svc.yaml 
+#kubectl apply -f app2-deploy-svc.yaml
+
+# Get the 2 public IP addresses 
+kubectl get services --namespace app
+
+# Add the Helm chart for Nginx Ingress
+helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+helm repo update
+
+# Install the Helm (v3) chart for nginx ingress controller
+# (If using Bash instead of Powershell, replace ` with \)
+helm install app-ingress ingress-nginx/ingress-nginx \
+     --namespace ingress \
+     --create-namespace \
+     --set controller.replicaCount=2 \
+     --set controller.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+     --set defaultBackend.nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux
+
+# Get the Ingress Controller public IP address
+kubectl get services --namespace ingress
+
+# Update the service type to ClusterIP instead of LoadBalancer, ignore if it was always ClusterIP 
+# in app-deploy-svc.yaml file
+# Delete and redeploy the service for the update to take effect
+kubectl delete -f app-deploy-svc.yaml 
+kubectl apply -f app-deploy-svc.yaml 
+
+# This is the original tutorial:
+# kubectl delete -f app1-deploy-svc.yaml 
+# kubectl delete -f app2-deploy-svc.yaml
+# kubectl apply -f app1-dekubectl apply -f app-ingress-modified.yaml ploy-svc.yaml 
+# kubectl apply -f app2-deploy-svc.yaml
+
+# Deploy the Ingress resource into Kubernetes
+kubectl apply -f app-ingress-modified.yaml 
+
+# Cleanup resources
+kubectl delete -f app-deploy-svc.yaml 
+kubectl delete -f app-deploy-svc.yaml
+kubectl delete -f app-namespace.yaml
+helm delete app-ingress --namespace ingress
+kubectl delete namespace ingress
+</code></pre>
+
+<h2 id="cert-manager">Cert Manager</h2>
+<p>In this second part of the lab, we will enable HTTPS in Kubernetes using Cert Manager and Lets Encrypt. The Cert Manager is used to automatically generate and configure Let's Encrypt certificates.</p>
+<h3 id="create-a-namespace-for-cert-manager">Create a namespace for Cert Manager</h3>
+<pre><code class="bash">kubectl create namespace cert-manager
+</code></pre>
+
+<h3 id="get-the-helm-chart-for-cert-manager">Get the Helm Chart for Cert Manager</h3>
+<pre><code class="bash">helm repo add jetstack https://charts.jetstack.io
+helm repo update
+</code></pre>
+
+<h3 id="install-cert-manager-using-helm-charts">Install Cert Manager using Helm charts</h3>
+<blockquote>
+<p>Use option [3], [1] and [2] didn't work for me (10/27/2020)</p>
+</blockquote>
+<p>[1]</p>
+<blockquote>
+<p>Warning
+Install CRDs manually for v0.14.0</p>
+</blockquote>
+<pre><code class="bash">kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.14.1/cert-manager.crds.yaml
+</code></pre>
+
+<p>Then install cert-manager</p>
+<pre><code class="bash">helm install cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --set installCRDs=true \
+    --version v0.14.0
+</code></pre>
+
+<p>or maybe:</p>
+<p>[2]</p>
+<blockquote>
+<p>Warning
+Label the cert-manager namespace to disable resource validation</p>
+</blockquote>
+<pre><code class="bash">kubectl label namespace ingress cert-manager.io/disable-validation=true
+</code></pre>
+
+<pre><code class="bash">helm install \
+  cert-manager \
+  --namespace ingress \
+  --version v0.16.1 \
+  --set installCRDs=true \
+  --set nodeSelector.&quot;beta\.kubernetes\.io/os&quot;=linux \
+  jetstack/cert-manager
+</code></pre>
+
+<p>or maybe</p>
+<p>[3] Installing with regular manifests (tried at 8:15pm)</p>
+<blockquote>
+<p><a href="https://cert-manager.io/v0.16-docs/installation/kubernetes/">source</a></p>
+<p>Note: If you’re using a kubectl version below v1.19.0-rc.1 you will have issues updating the CRDs. For more info see the v0.16 upgrade notes</p>
+</blockquote>
+<p>Kubernetes 1.15+:</p>
+<pre><code class="bash">$ kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v0.16.1/cert-manager.yaml
+</code></pre>
+
+<h3 id="check-the-created-pods">Check the created Pods</h3>
+<pre><code class="bash">kubectl get pods --namespace cert-manager
+</code></pre>
+
+<h3 id="install-the-cluster-issuer">Install the Cluster Issuer</h3>
+<blockquote>
+<p>WARNING, you must change the email address to yours. The one in there might work if it is live, but only real email addresses are allowed.</p>
+<p>Also: Must install CRDs (disregard if you used step [3] during cert-manager install)</p>
+<p>What worked best for me was using the staging cert to practice and then the real one. I believe there is a limit for real certs so you don't want to make them make you wait for another real one to issue while you work out the kinks. </p>
+</blockquote>
+<p>Make sure <code>ssl-tls-cluster-issuer.yaml</code> has <code>-staging</code> appended to the <code>letsencrypt</code>  authority.</p>
+<p>sst-tls-cluster-issuer.yaml:</p>
+<pre><code class="bash">apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging
+spec:
+  acme:
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: bbearce@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt-staging
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+</code></pre>
+
+<p>Apply cluster issuer:</p>
+<pre><code class="bash">kubectl apply --namespace app -f ssl-tls-cluster-issuer.yaml
+</code></pre>
+
+<h3 id="install-the-ingress-resource-configured-with-tlsssl">Install the Ingress resource configured with TLS/SSL</h3>
+<p>[1] remove old non-https ingress <em>app-ingress-modified.yaml</em></p>
+<pre><code class="bash">kubectl delete -f app-ingress-modified.yaml
+</code></pre>
+
+<p>Then apply new ssl-tls for https certs. This is the same ingress yaml but we changed the parameters to make a more secure ingress.</p>
+<pre><code class="bash">kubectl apply --namespace app -f ssl-tls-ingress.yaml
+</code></pre>
+
+<p>[2]
+sync this deploy with the cert-manager by using <code>-staging</code>:</p>
+<pre><code class="bash">apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ssl-tls-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-staging
+spec:
+  tls:
+    - hosts:
+      - front.end.52.190.30.229.nip.io # update IP address here
+      secretName: app-web-cert
+  rules:
+  - host: front.end.52.190.30.229.nip.io # update IP address here
+    http:
+      paths:
+      - backend:
+          serviceName: webapp-svc
+          servicePort: 80
+        path: /
+</code></pre>
+
+<h3 id="verify-that-the-certificate-was-issued">Verify that the certificate was issued</h3>
+<pre><code class="bash">kubectl get certificate --namespace app
+</code></pre>
+
+<pre><code class="bash">kubectl describe cert app-web-cert --namespace app
+</code></pre>
+
+<p>If all this works go back and edit <code>ssl-tls-ingress.yaml</code> and <code>ssl-tls-cluster-issuer.yaml</code> and remove <code>-staging</code> from <code>letsencrypt</code> and re-apply them.</p>
+<p>ssl-tls-ingress.yaml:</p>
+<pre><code class="bash">apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: ssl-tls-ingress
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  tls:
+    - hosts:
+      - front.end.52.190.30.229.nip.io # update IP address here
+      secretName: app-web-cert
+  rules:
+  - host: front.end.52.190.30.229.nip.io # update IP address here
+    http:
+      paths:
+      - backend:
+          serviceName: webapp-svc
+          servicePort: 80
+        path: /
+
+</code></pre>
+
+<p>ssl-tls-cluster-issuer.yaml:</p>
+<pre><code class="bash">apiVersion: cert-manager.io/v1alpha2
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: bbearce@gmail.com
+    privateKeySecretRef:
+      name: letsencrypt
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+</code></pre>
+
+<p>Re-apply new ingress and cluser issuer:</p>
+<pre><code class="bash">kubectl apply --namespace app -f ssl-tls-ingress.yaml
+kubectl apply --namespace app -f ssl-tls-cluster-issuer.yaml
+</code></pre>
+
+<h3 id="check-the-services">Check the services</h3>
+<pre><code class="bash">kubectl get services -n app
+</code></pre>
+
+<p>Now test the app with HTTPS: https://frontend.&lt;ip-address&gt;.nip.io</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../azure_ingress_cert_static_ip/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../azure_ingress_cert_static_ip/" class="btn btn-xs btn-link">
+        Azure Ingress\Cert\Static IP
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../sample-django-deployment/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../sample-django-deployment/" class="btn btn-xs btn-link">
+        Sample Deployment (Django)
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

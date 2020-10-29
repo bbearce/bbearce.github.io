@@ -63,12 +63,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-right">
+      <a href="../greenfield_deployment/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../couchdb/container/" class="btn btn-xs btn-link">
-        As container
+      <a href="../greenfield_deployment/" class="btn btn-xs btn-link">
+        Greenfield
       </a>
     </div>
     
@@ -88,6 +88,32 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Source <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">kubernetes</a></p>
 </blockquote>
+<p><label>Namespace:</label>
+<input type="text" name="namespace"></p>
+<p><label>Pod:</label>
+<input type="text" name="pod"></p>
+<p><label>Container:</label>
+<input type="text" name="container"></p>
+<p><code>kubectl logs <span class="pod">my-pod</span></code>
+<code>kubectl logs <span class="pod">my-pod</span></code>
+<code>kubectl logs <span class="pod">my-pod</span></code>
+<code>kubectl logs <span class="pod">my-pod</span></code></p>
+<script type="text/javascript">
+    const pods = document.getElementsByClassName("pod")
+    setTimeout(function() {
+        const pods = document.getElementsByClassName("pod")
+        console.log(pods)
+        pods.forEach(function(i, pod, pods) {
+            console.log("pod")
+            pod.innerText = "asfasdfasdf"        
+        })    
+    }, 20)
+
+    // for all pods
+
+
+</script>
+
 <h2 id="viewing-finding-resources">Viewing, finding resources</h2>
 <pre><code class="bash"># Get commands with basic output
 kubectl get services                          # List all services in the namespace
@@ -217,12 +243,12 @@ kubectl taint nodes foo dedicated=special-user:NoSchedule
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../couchdb/container/" class="btn btn-xs btn-default pull-right">
+      <a href="../greenfield_deployment/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../couchdb/container/" class="btn btn-xs btn-link">
-        As container
+      <a href="../greenfield_deployment/" class="btn btn-xs btn-link">
+        Greenfield
       </a>
     </div>
     
