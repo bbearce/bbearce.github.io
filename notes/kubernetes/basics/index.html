@@ -34,6 +34,7 @@
         
         var pageToc = [
           {title: "Cheat Sheet", url: "#_top", children: [
+              {title: "My main commands:", url: "#my-main-commands" },
               {title: "Viewing, finding resources", url: "#viewing-finding-resources" },
               {title: "Deleting resources", url: "#deleting-resources" },
               {title: "Interacting with running Pods", url: "#interacting-with-running-pods" },
@@ -89,28 +90,65 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Source <a href="https://kubernetes.io/docs/reference/kubectl/cheatsheet/">kubernetes</a></p>
 </blockquote>
 <p><label>Namespace:</label>
-<input type="text" name="namespace"></p>
+<input type="text" style="color:black;" id="namespace" value="my-namespace"></p>
 <p><label>Pod:</label>
-<input type="text" name="pod"></p>
+<input type="text" style="color:black;" id="pod" value="my-pod"></p>
 <p><label>Container:</label>
-<input type="text" name="container"></p>
-<p><code>kubectl logs <span class="pod">my-pod</span></code>
-<code>kubectl logs <span class="pod">my-pod</span></code>
-<code>kubectl logs <span class="pod">my-pod</span></code>
-<code>kubectl logs <span class="pod">my-pod</span></code></p>
-<script type="text/javascript">
-    const pods = document.getElementsByClassName("pod")
-    setTimeout(function() {
-        const pods = document.getElementsByClassName("pod")
-        console.log(pods)
-        pods.forEach(function(i, pod, pods) {
-            console.log("pod")
-            pod.innerText = "asfasdfasdf"        
-        })    
-    }, 20)
+<input type="text" style="color:black;" id="container" value="my-container"></p>
+<h2 id="my-main-commands">My main commands:</h2>
+<p><pre><code class="bash hljs"><span class="hljs-comment"># List all pods in all namespaces</span>
+$ kubectl get pods -A
+$ kubectl get pods --all-namespaces
+<span class="hljs-comment"># Additional Info:</span>
+$ kubectl get pods -A -o wide
+<span class="hljs-comment"># Get logs for a pod</span>
+$ kubectl logs <span class="pod">my-pod</span>
+$ kubectl logs <span class="pod">my-pod</span> -c <span class="pod-container">my-container</span>
+$ kubectl logs -f <span class="pod">my-pod</span> -c <span class="pod-container">my-container</span><br />
+<span class="hljs-comment"># Get interactive bash shell</span>
+$ kubectl exec -it <span class="pod">my-pod</span> -c <span class="pod-container">my-container</span> -- bash
+$ kubectl get ingress</p>
+<p><span class="hljs-comment"># Get nodes</span>
+$ kubectl get nodes
+</code></pre></p>
+<script>
+    // get pods
+    var pods = document.getElementsByClassName("pod")
 
-    // for all pods
+    // get containers
+    var containers = document.getElementsByClassName("pod-container")
 
+    // get inputs
+    var namespace = document.getElementById("namespace");
+    var pod = document.getElementById('pod');
+    var container = document.getElementById('container');
+
+    // add listeners
+    namespace.addEventListener('input',updateValue)
+    pod.addEventListener('input',updateValue)
+    container.addEventListener('input',updateValue)
+
+    // define what to update
+    function updateValue(e) {
+        // debugger
+        // loop through both to switch in the new name
+        switch (e.currentTarget.id) {
+            case "namespace":
+                console.log("placeholder for namespaces")
+                break;
+            case "pod":
+                for(let i=0;i < pods.length;i++){
+                    pods[i].innerText = e.currentTarget.value
+                }
+                break;
+            case "container":
+                for(let j=0;j < containers.length;j++){
+                    containers[j].innerText = e.currentTarget.value
+                }
+                break;
+        }
+
+    }
 
 </script>
 
