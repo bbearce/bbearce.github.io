@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Demo for QTIM - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Demo Martinos Cluster", url: "#_top", children: [
+              {title: "Storage", url: "#storage" },
+              {title: "Setup simlinks:", url: "#setup-simlinks" },
+              {title: "Singularity", url: "#singularity" },
+              {title: "Run", url: "#run" },
+              {title: "Jupyter Example", url: "#jupyter-example" },
+              {title: "shub", url: "#shub" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../kubernetes/basics/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../kubernetes/basics/" class="btn btn-xs btn-link">
+        Cheat Sheet
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../use_with_docker/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../use_with_docker/" class="btn btn-xs btn-link">
+        Use With Docker
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="demo-martinos-cluster">Demo Martinos Cluster</h1>
+<h2 id="storage">Storage</h2>
+<p>We have storage (20TB) on Martinos accessible at:</p>
+<ul>
+<li><code>/cluster/qtim</code> (convenient path)</li>
+<li><code>/vault/cluster/qtim</code> (real path)</li>
+</ul>
+<p>Here is what is there:</p>
+<pre><code class="bash">(base) carlsbad[0]:qtim$ cd /cluster/qtim
+(base) carlsbad[0]:qtim$ ls -la
+total 2
+drwxrws--- 4 root  qtim 5 Nov 16 14:59 .
+drwxr-xr-x 4 root  root 0 Nov 16 14:57 ..
+-rw-r--r-- 1 root  root 0 Nov 12 23:24 ID-qtim
+drwxrwsr-x 4 bb927 qtim 4 Nov 16 14:59 machine_backups
+drwxrwsr-x 5 bb927 qtim 5 Nov 16 14:58 users
+
+(base) carlsbad[0]:qtim$ ls machine_backups/
+bryce  getafix
+
+(base) carlsbad[0]:qtim$ ls users
+bb927  kalpathy  yifen
+</code></pre>
+
+<blockquote>
+<p>For future use and organization I think we should keep users in a <code>users</code>folder. Other high level folders at the <code>users</code> or <code>machine_backups</code> level can be created as needed, but I'm proposing some best practices as of now. </p>
+</blockquote>
+<p>For general use we need to use this space when using machines managed by help desk (carlsbad, dotter, the new martinos GPU cluster). We have user accounts that are synced between all martinos machines and they all live on a drive managed by help desk. In order to keep space concerns down with 100s of users, they limit our space allowance to the point where it is unusable for more than configuratoin or tiny tests. </p>
+<p>It is because of this that the most important step is to symlink some important directories to change where the data stored for various programs (docker, singularity, python) will show up ultimately (not in <code>~/</code>). </p>
+<h2 id="setup-simlinks">Setup simlinks:</h2>
+<blockquote>
+<p>Source <a href="https://www.nmr.mgh.harvard.edu/martinos/userInfo/computer/docker.php">Martinos Docs</a></p>
+</blockquote>
+<p>The two places that need symlinking are <code>~/.singularity</code> and <code>~/.share/local/containers</code>. Here is an example:</p>
+<blockquote>
+<p>(make sure ~/.singularity does not already exist first)</p>
+</blockquote>
+<pre><code class="bash">ls -la ~
+...
+
+lrwxrwxrwx   1 bb927 bb927    33 Sep 29 12:48 .share -&gt; /cluster/qtim/users/bb927/share
+lrwxrwxrwx   1 bb927 bb927    39 Sep 29 12:44 .singularity -&gt; /cluster/qtim/users/bb927/singularity
+
+...
+</code></pre>
+
+<p>I do have some and I will delete them to demonstrate the full workflow:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ cd /cluster/qtim/users/bb927
+(base) carlsbad[0]:bb927$ ls
+(base) carlsbad[0]:bb927$ mkdir share singularity
+(base) carlsbad[0]:bb927$ ls
+share  singularity
+(base) carlsbad[0]:bb927$ ln -s /cluster/qtim/users/bb927/share ~/.share
+(base) carlsbad[0]:bb927$ ln -s /cluster/qtim/users/bb927/singularity ~/.singularity
+
+(base) carlsbad[0]:bb927$ mkdir ~/.singularity/tmp
+(base) carlsbad[0]:bb927$ export SINGULARITY_TMPDIR=~/.singularity/tmp
+(base) carlsbad[0]:bb927$ mkdir ~/.singularity/cache
+(base) carlsbad[0]:bb927$ export SINGULARITY_CACHEDIR=~/.singularity/cache
+</code></pre>
+
+<h2 id="singularity">Singularity</h2>
+<h3 id="must-know">Must know</h3>
+<p>[1] Images are read-only by default...more on that later.</p>
+<p>[2] You are not rot inside your image, but rather your username on linux (Ex: <code>bb927</code>).</p>
+<p>[3] Remember Singularity wants to auto <code>--bind</code> mount these 3 directories in the background whether you say to or not:</p>
+<ul>
+<li>/home/$USER  </li>
+<li>/tmp  </li>
+<li>$PWD </li>
+</ul>
+<p>[4] The concept of differentiating between image and container is no more. They are one in the same...more on that later.</p>
+<p>[5] For editable images (sandboxes) you must create your mount points ahead of time in the sandbox.</p>
+<h3 id="build-from-recipe">Build from Recipe</h3>
+<p><strong>Do you need administrator privileges to use Singularity?</strong></p>
+<p>You generally do not need admin/sudo to <em>use</em> Singularity containers but you do however need admin/root access to <em>install</em> Singularity and for some container <em>build</em> functions (for example, building from a recipe, or a writable image).</p>
+<h3 id="the-recipe-file">The Recipe File</h3>
+<p>Bootstrap let's us know that we are using a container from dockerhub to build off of. This should be similar to the Dockerfile from docker. Most of this should be self explainatory.</p>
+<pre><code class="bash">Bootstrap: docker
+From: ubuntu:18.04
+
+%help
+    This is where you can add some useful info.
+
+%labels
+    Creator Ben
+
+%environment
+    export MY_VAR='~~~~~some environment variable~~~~~'
+
+%files
+    test.py   /
+
+%post
+    apt-get -qq -y update
+    apt-get -qq -y install python &gt; /dev/null
+
+%runscript
+    python /test.py
+
+
+</code></pre>
+
+<p>test.py:</p>
+<pre><code class="python">import os
+
+if __name__ == '__main__':
+    print('import os module and clearly python is installed!')
+    print(os.environ['MY_VAR'])
+
+</code></pre>
+
+<p>Sections in recipe file:</p>
+<ul>
+<li>help: Give some help   </li>
+<li>labels: Impart meta-data into container  </li>
+<li>environment: Environment variables  </li>
+<li>files: Copy files into container   </li>
+<li>post: Run commands once container is created  </li>
+<li>runscript: A command to run by default   </li>
+</ul>
+<p><strong>Build Images from Scratch</strong></p>
+<p>Use this command to build the recipe file into a <code>*.simg</code></p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity build ubuntu.simg Singularity.recipe
+FATAL:   You must be the root user, however you can use --remote or --fakeroot to build from a Singularity recipe file
+</code></pre>
+
+<p>...as I said we don't have permissions. I will need this demo for later so I will show how to get it running in the long run.</p>
+<blockquote>
+<p>Hint you can always build somewhere else first...</p>
+</blockquote>
+<h3 id="build-from-docker">Build from Docker</h3>
+<p>Let's say I start with ubuntu from docker (btw you can grab images from shub:// as well):</p>
+<pre><code class="bash">singularity build ubuntu.simg docker://ubuntu:latest
+</code></pre>
+
+<p>Now let's see our image (unlike docker we won't use <code>docker ps</code> or <code>docker images</code>, rather all containers\images live where you execute commands):</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ ls
+share  singularity  ubuntu.simg
+</code></pre>
+
+<p>Now this is read only and can just be run or you can shell into it:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell ubuntu.simg 
+Singularity&gt; ls
+share  singularity  ubuntu.simg
+</code></pre>
+
+<blockquote>
+<p>Notice that since the user's $PWD directory is automatically mounted it shows the *.simg with <code>ls</code>, so don't be alarmed if your singularity directory looks just like your current directory! However we know we are <em>in the singularity ;)</em> (couldn't resist) because <code>/</code> is not the same outside the container.</p>
+</blockquote>
+<pre><code class="bash">Singularity&gt; ls /
+autofs  boot     dev          etc   homes  lib32  libx32  mnt  proc  run   singularity  sys  usr
+bin cluster  environment  home  lib    lib64  media   opt  root  sbin  srv      tmp  var
+Singularity&gt; exit
+exit
+
+(base) carlsbad[0]:bb927$ ls /
+autofs  boot     cmas  dev   etc   homes  lib64        lost+found  misc  nas  opt    proc  run   scratch  srv  tmp  var
+bin     cluster  data  eris  home  lib    local_mount  media       mnt   net  panfs  root  sbin  space    sys  usr  vast
+</code></pre>
+
+<h3 id="types-of-containers">Types of Containers</h3>
+<h4 id="default">Default</h4>
+<p>You may be wondering while shelling into the container, was that the image or did we shell into an instance container?!? Neither. Singularity has one <em>thing</em> and is always an image, but may have writable copies created for development work. You could think of these writable versions as containers if you'd like, but that is the main paradigm shift when using this techinology.</p>
+<p>Let's learn more with examples:</p>
+<pre><code class="bash">Singularity&gt; ls
+share  singularity  ubuntu.simg
+Singularity&gt; touch test_file.txt
+Singularity&gt; touch /test_file.txt
+touch: cannot touch '/test_file.txt': Read-only file system
+</code></pre>
+
+<p>Notice here that you can add files to the mount point <code>$PWD</code>, but not <code>/</code>. These images are read-only by default with the exception of mount points. So how do we make editable images?</p>
+<h4 id="sandbox-sandbox">Sandbox <code>--sandbox</code></h4>
+<p>So we can't edit <code>ubuntu.simg</code> by default, but we can build an editable version with <code>singularity build --sandbox</code>:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity build --sandbox s_ubuntu ubuntu.simg
+WARNING: 'nodev' mount option set on /autofs/cluster/qtim, it could be a source of failure during build process
+INFO:    Starting build...
+INFO:    Creating sandbox directory...
+INFO:    Build complete: s_ubuntu
+
+(base) carlsbad[0]:bb927$ ls
+share  singularity  s_ubuntu  test_file.txt  ubuntu.simg
+</code></pre>
+
+<p>Notice how we build it out of the original *.simg container we had. You can base a sandbox on shub or dockerhub images as well.</p>
+<p>so let's see what is inside:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ ls s_ubuntu/
+bin   dev          etc   lib    lib64   media  opt   root  sbin         srv  tmp  var
+boot  environment  home  lib32  libx32  mnt    proc  run   singularity  sys  usr
+</code></pre>
+
+<p>An entire ubuntu os! Cool so now let's change stuff in it:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell s_ubuntu
+Singularity&gt; touch /mnt/anything.txt
+touch: cannot touch '/mnt/anything.txt': Read-only file system
+</code></pre>
+
+<p>So even though we made a sandbox which is desinged to be interactive, we still need the <code>--writable</code> flag or it will be a read only image. What is going on behind the scenes is really just the <code>*.simg</code> format being converted to a directory. This directory is still read only if shelled into. </p>
+<blockquote>
+<p>Note if you don't shell into the image, it is editable from outside! This will be necessary for some mounts later as we will see. </p>
+</blockquote>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell --writable s_ubuntu 
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+WARNING: By using --writable, Singularity can't create /homes destination automatically without overlay or underlay
+FATAL:   container creation failed: mount /var/singularity/mnt/session/homes-&gt;/homes error: while mounting /var/singularity/mnt/session/homes: destination /homes doesn't exist in container
+</code></pre>
+
+<p><strong>- !!!UGH!!! What?... -</strong></p>
+<p>So remember that singularity wants to auto mount your home directory <code>/home/$USER</code> but this is a symlink in and of itself! So we need a little secret sauce for this to work. Singularity has a <code>--no-home--</code> flag we can use to tell it not to mount the <code>/home/$USER</code> directory.</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell --writable --no-home s_ubuntu 
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+WARNING: Skipping mount /cluster/qtim/users/bb927 [cwd]: /autofs/cluster/qtim/users/bb927 doesn't exist in container
+Singularity&gt; touch /mnt/anything.txt
+Singularity&gt; exit
+exit
+
+(base) carlsbad[0]:bb927$ ls s_ubuntu/
+bin   dev          etc   lib    lib64   media  opt   root  sbin         srv  tmp  var
+boot  environment  home  lib32  libx32  mnt    proc  run   singularity  sys  usr
+(base) carlsbad[0]:bb927$ ls s_ubuntu/mnt
+anything.txt
+</code></pre>
+
+<p>Now how do we turn it into a new image when we make changes? Just as you can build from docker images and singularity images and even singularity files, you can also build from sandboxes.</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity build s_ubuntu_modified s_ubuntu
+WARNING: 'nodev' mount option set on /autofs/cluster/qtim, it could be a source of failure during build process
+INFO:    Starting build...
+INFO:    Creating SIF file...
+INFO:    Build complete: s_ubuntu_modified
+
+(base) carlsbad[0]:bb927$ ls
+share  singularity  s_ubuntu  s_ubuntu_modified  test_file.txt  ubuntu.simg
+</code></pre>
+
+<p>Now let's see if our change made it:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell s_ubuntu_modified 
+Singularity&gt; ls /mnt/        
+anything.txt
+</code></pre>
+
+<p>Boom! So to recap, you need to build a <code>--sandbox</code> image from just about any image source, be it a hub or recipe file. Then shell into that container directory with flag <code>--writable</code>. Don't forget the <code>--no-home</code> flag.</p>
+<p><strong>So we can just install software right?</strong></p>
+<p>well...yes, but...</p>
+<pre><code class="bash">Singularity&gt; apt update -y
+Hit:1 http://security.ubuntu.com/ubuntu focal-security InRelease
+...
+Singularity&gt; apt-get install vim -y;
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+...
+...
+dpkg: error: requested operation requires superuser privilege
+E: Sub-process /usr/bin/dpkg returned an error code (2)
+Singularity&gt; 
+</code></pre>
+
+<p>What now?</p>
+<p>So remeber that singulariy doesn't let you run as root but rather as your normal user? However you can't install (some) software without being root. So we need to be root without being root...</p>
+<p><img alt="Wait What?" src="../wait_what.jpg" /></p>
+<p>Last wonky flag I promise, but we need to be <code>--fake-root</code>. Install as this user.</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell --writable --no-home --fakeroot s_ubuntu
+WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+WARNING: Skipping mount /cluster/qtim/users/bb927 [cwd]: /autofs/cluster/qtim/users/bb927 doesn't exist in container
+Singularity&gt; apt update -y; apt-get install vim -y;
+Hit:1 http://security.ubuntu.com/ubuntu focal-security InRelease
+...
+W: chown to _apt:root of directory /var/cache/apt/archives/partial failed - SetupAPTPartialDirectory (1: Operation not permitted)
+W: chown to _apt:root of directory /var/lib/apt/lists/auxfiles failed - SetupAPTPartialDirectory (1: Operation not permitted)
+W: Download is performed unsandboxed as root as file '/var/cache/apt/archives/partial/libmagic-mgc_1%3a5.38-4_amd64.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
+W: chown to root:adm of file /var/log/apt/term.log failed - OpenLog (1: Operation not permitted)
+
+Singularity&gt; vim
+
+
+~                                                                                                                             
+~                                                                                                                             
+~                                                                                                                             
+~                                                                                                                             
+~                                                     VIM - Vi IMproved                                                       
+~                                                                                                                             
+~                                                      version 8.1.2269                                                       
+~                                                  by Bram Moolenaar et al.                                                   
+...
+</code></pre>
+
+<p>So it works despite some rather concerning messages. Starting from ubuntu installing python worked and so did pip3, but using pip3 to install pandas failed because of a missing certificate. </p>
+<blockquote>
+<p>I tried a python image and stil lcouldn't install pandas, though I didn'tspend much time on it. Flask did work...We might have to practice a bit with this or only use fully formed images on this system.</p>
+</blockquote>
+<h2 id="run">Run</h2>
+<p>Use <code>singularity run</code> like docker:</p>
+<blockquote>
+<p>This image is the demo from earlier using the <code>Singularity.recipe</code> recipe file and <code>test.py</code>.</p>
+</blockquote>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity run shub://bbearce/singularity:test
+INFO:    Downloading shub image
+ 58.24 MiB / 58.24 MiB [=========================================================================================] 100.00% 16.88 MiB/s 3s
+import os module and clearly python is installed!
+~~~~~some environment variable~~~~~
+</code></pre>
+
+<p>So it ran and printed some stuff. Cool, but we really care about interactive mode.</p>
+<blockquote>
+<p>At the end I will discuss uploading images to shub and bulding from github repos.</p>
+</blockquote>
+<h3 id="useful-flags">Useful flags</h3>
+<p>Here are some of the flags we will need routinely:</p>
+<h4 id="-b-or-bind"><code>-B</code> or <code>--bind</code></h4>
+<blockquote>
+<p>Note mounts can be specified as read only <code>ro</code> or read write <code>rw</code> (default).</p>
+</blockquote>
+<p>This is equivalent to dockers <code>-v</code> flag. Use this to mount directories:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ pwd
+/cluster/qtim/users/bb927
+(base) carlsbad[0]:bb927$ mkdir in
+(base) carlsbad[0]:bb927$ mkdir out
+(base) carlsbad[0]:bb927$ singularity shell -B ./in:/mnt/in -B ./out:/mnt/out s_ubuntu/
+Singularity&gt; ls /mnt/in
+Singularity&gt; ls /mnt/out
+Singularity&gt; touch /mnt/out/anything.txt
+Singularity&gt; exit
+exit
+(base) carlsbad[0]:bb927$ ls out
+anything.txt
+
+Singularity&gt; 
+</code></pre>
+
+<p>you can comma delimit multiple mounts:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell -B ./in:/mnt/in,./out:/mnt/out s_ubuntu/
+Singularity&gt; ls /mnt/out
+anything.txt
+Singularity&gt; 
+</code></pre>
+
+<p>If you do not specify where in the container you mount to, the local mount will be mounted to the same directory inside the container:</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell -B /opt s_ubuntu/
+Singularity&gt; ls /opt
+containerd  google  microsoft  rh
+Singularity&gt; exit
+exit
+(base) carlsbad[0]:bb927$ ls /opt
+containerd  google  microsoft  rh
+</code></pre>
+
+<blockquote>
+<p>This is the same as <code>-B /opt:/opt</code></p>
+</blockquote>
+<h4 id="-fakeroot"><code>--fakeroot</code></h4>
+<p>This is important for interactive development because since you are not "root" normally you can't install stuff with apt-get. With this you can.</p>
+<h4 id="-net"><code>--net</code></h4>
+<p>Gives you internet access.</p>
+<h4 id="-nv"><code>--nv</code></h4>
+<p>Give container access to GPUs</p>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell --nv pytorch.simg
+</code></pre>
+
+<h4 id="-no-home"><code>--no-home</code></h4>
+<p>When shelling into your container image, Singularity allows you to mount your current working directory (<code>CWD</code>) without mounting your host <code>$HOME</code> directory with the <code>--no-home</code> flag.</p>
+<h2 id="jupyter-example">Jupyter Example</h2>
+<blockquote>
+<p>Source <a href="https://ljvmiranda921.github.io/notebook/2018/01/31/running-a-jupyter-notebook/">ljvmiranda921</a></p>
+</blockquote>
+<p>Also a note from Help Desk:</p>
+<blockquote>
+<p>Note from Martinos help Desk:
+If you run jupyter, you will not be able to access the port it is on (<code>8888</code>)
+remotely (such as your local machine at home over VPN) due to firewall on
+dotter. But port range <code>5900-5999</code> are open for VNC so if you
+force jupyter to use port <code>5999</code> instead of its default you can use that.</p>
+</blockquote>
+<h3 id="1-forward-via-ssh-in-your-local-machine">[1] Forward via ssh in your local machine</h3>
+<pre><code class="bash">bbearce@pop-os:~$ ssh -N -f -L localhost:5999:localhost:5999 bb927@carlsbad.nmr.mgh.harvard.edu
+</code></pre>
+
+<h3 id="2-run-jupyter-notebook-from-remote-machine">[2] Run jupyter notebook from remote machine</h3>
+<pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell --nv datascience-notebook_latest.sif 
+Singularity&gt; jupyter notebook --no-browser --port=5999
+Fail to get yarn configuration. {&quot;type&quot;:&quot;warning&quot;,&quot;data&quot;:&quot;Skipping preferred cache folder \&quot;/home/jovyan/.cache/yarn\&quot; because it is not writable.&quot;}
+{&quot;type&quot;:&quot;warning&quot;,&quot;data&quot;:&quot;Skipping preferred cache folder \&quot;/home/scratch/.yarn-cache-4643095\&quot; because it is not writable.&quot;}
+{&quot;type&quot;:&quot;warning&quot;,&quot;data&quot;:&quot;Skipping preferred cache folder \&quot;/home/scratch/.yarn-cache\&quot; because it is not writable.&quot;}
+{&quot;type&quot;:&quot;error&quot;,&quot;data&quot;:&quot;Yarn hasn't been able to find a cache folder it can use. Please use the explicit --cache-folder option to tell it what location to use, or make one of the preferred locations writable.&quot;}
+{&quot;type&quot;:&quot;info&quot;,&quot;data&quot;:&quot;Visit https://yarnpkg.com/en/docs/cli/config for documentation about this command.&quot;}
+
+[I 13:48:17.304 NotebookApp] JupyterLab extension loaded from /opt/conda/lib/python3.8/site-packages/jupyterlab
+[I 13:48:17.304 NotebookApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
+[I 13:48:17.312 NotebookApp] Serving notebooks from local directory: /autofs/cluster/qtim/users/bb927
+[I 13:48:17.312 NotebookApp] Jupyter Notebook 6.1.4 is running at:
+[I 13:48:17.312 NotebookApp] http://carlsbad.nmr.mgh.harvard.edu:5999/?token=26d3e282bf9f134c9059eac068d10a76d624754182d36a55
+[I 13:48:17.312 NotebookApp]  or http://127.0.0.1:5999/?token=26d3e282bf9f134c9059eac068d10a76d624754182d36a55
+[I 13:48:17.312 NotebookApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
+[C 13:48:17.323 NotebookApp] 
+
+    To access the notebook, open this file in a browser:
+        file:///homes/3/bb927/.local/share/jupyter/runtime/nbserver-25344-open.html
+    Or copy and paste one of these URLs:
+        http://carlsbad.nmr.mgh.harvard.edu:5999/?token=26d3e282bf9f134c9059eac068d10a76d624754182d36a55
+     or http://127.0.0.1:5999/?token=26d3e282bf9f134c9059eac068d10a76d624754182d36a55
+
+
+</code></pre>
+
+<p>Go here: http://carlsbad.nmr.mgh.harvard.edu:5999/?token=26d3e282bf9f134c9059eac068d10a76d624754182d36a55 and you should see this:</p>
+<p><img alt="Jupyter" src="../jupyter.jpg" /></p>
+<h2 id="shub">shub</h2>
+<p>Link to shub is: <a href="https://singularity-hub.org/">https://singularity-hub.org/</a></p>
+<p>Recapping on our previous example, let's say you want to build from a recipe file:</p>
+<p>Singularity.test:</p>
+<pre><code class="bash">Bootstrap: docker
+From: ubuntu:18.04
+
+%help
+    This is where you can add some useful info.
+
+%labels
+    Creator Ben
+
+%environment
+    export MY_VAR='~~~~~some environment variable~~~~~'
+
+%files
+    test.py   /
+
+%post
+    apt-get -qq -y update
+    apt-get -qq -y install python &gt; /dev/null
+
+%runscript
+    python /test.py
+
+
+</code></pre>
+
+<p>test.py:</p>
+<pre><code class="python">import os
+
+if __name__ == '__main__':
+    print('import os module and clearly python is installed!')
+    print(os.environ['MY_VAR'])
+
+</code></pre>
+
+<p>Build:</p>
+<blockquote>
+<p>Had to do this on my local</p>
+</blockquote>
+<pre><code class="bash">bbearce@pop-os:~/Documents/singularity$ ls
+README.md  Singularity.test  test.py
+
+bbearce@pop-os:~/Documents/singularity$ sudo singularity build test.simg Singularity.test
+[sudo] password for bbearce: 
+INFO:    Starting build...
+Getting image source signatures
+Copying blob 171857c49d0f skipped: already exists  
+Copying blob 419640447d26 skipped: already exists  
+Copying blob 61e52f862619 [--------------------------------------] 0.0b / 0.0b
+Copying config 33a51d0908 done  
+Writing manifest to image destination
+Storing signatures
+2020/11/17 13:40:36  info unpack layer: sha256:171857c49d0f5e2ebf623e6cb36a8bcad585ed0c2aa99c87a055df034c1e5848
+2020/11/17 13:40:37  info unpack layer: sha256:419640447d267f068d2f84a093cb13a56ce77e130877f5b8bdb4294f4a90a84f
+2020/11/17 13:40:37  info unpack layer: sha256:61e52f862619ab016d3bcfbd78e5c7aaaa1989b4c295e6dbcacddd2d7b93e1f5
+INFO:    Copying test.py to /tmp/build-temp-907729936/rootfs/
+INFO:    Running post scriptlet
++ apt-get -qq -y update
++ apt-get -qq -y install python
+debconf: delaying package configuration, since apt-utils is not installed
+INFO:    Adding help info
+INFO:    Adding labels
+INFO:    Adding environment to container
+INFO:    Adding runscript
+INFO:    Creating SIF file...
+INFO:    Build complete: test.simg
+
+bbearce@pop-os:~/Documents/singularity$ ls
+README.md  Singularity.test  test.py  test.simg
+
+</code></pre>
+
+<p>then run:</p>
+<pre><code class="bash">bbearce@pop-os:~/Documents/singularity$ singularity run test.simg
+import os module and clearly python is installed!
+~~~~~some environment variable~~~~~
+</code></pre>
+
+<p>So shub allows you to link github repos and put code and recipe files there for auto build:</p>
+<p><img alt="github" src="../github.jpg" /></p>
+<p>which will become this on sub:</p>
+<p><img alt="shub" src="../shub.jpg" /></p>
+<h3 id="add-images-via-github">Add images via github:</h3>
+<p>[1]
+<img alt="shub_add_collection" src="../shub_add_collection.jpg" /></p>
+<p>[2]
+<img alt="shub_git_repos" src="../shub_git_repos.jpg" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../kubernetes/basics/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../kubernetes/basics/" class="btn btn-xs btn-link">
+        Cheat Sheet
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../use_with_docker/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../use_with_docker/" class="btn btn-xs btn-link">
+        Use With Docker
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
