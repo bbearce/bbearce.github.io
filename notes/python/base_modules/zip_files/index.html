@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Zip Files - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Working With Zip Files", url: "#_top", children: [
+              {title: "Text Streams", url: "#text-streams" },
+              {title: "Binary Streams", url: "#binary-streams" },
+              {title: "Understanding the Python zipfile API", url: "#understanding-the-python-zipfile-api" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../io/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../io/" class="btn btn-xs btn-link">
+        IO
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Zip/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Zip/" class="btn btn-xs btn-link">
+        zip()
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="working-with-zip-files">Working With Zip Files</h1>
+<blockquote>
+<p>Source: <a href="https://medium.com/dev-bits/ultimate-guide-for-working-with-i-o-streams-and-zip-archives-in-python-3-6f3cf96dca50">medium.com</a></p>
+</blockquote>
+<p>A file recognized by Python can store three types of data:</p>
+<ul>
+<li>Text (string)</li>
+<li>Binary (bytes)</li>
+<li>Raw data</li>
+</ul>
+<p>Python considers an object falling in the above three categories as a <em>“file-like object.”</em> They are also called streams from where data can be read from or written. The data stored in streams are called buffers of that stream. The first two, i.e. Text and Binary streams, are buffered I/O streams, and raw type is unbuffered. In this article, we are only interested in <em>buffered</em> streams.</p>
+<p>Python’s io package provides two classes:</p>
+<ol>
+<li>StringIO: for storing UTF-8 string buffers</li>
+<li>BytesIO: for storing binary buffers</li>
+</ol>
+<h2 id="text-streams">Text Streams</h2>
+<pre><code class="python">from io import StringIO
+
+text_stream = StringIO()
+text_stream.write(&quot;I am a text buffer&quot;) # prints 18
+print(text_stream.getvalue()) # Prints 'I am a text buffer' to console
+text_stream.close()
+</code></pre>
+
+<blockquote>
+<p>One should be aware that, in Python, a file-like object can be used in any I/O operation. The classic example is the <em>print</em> statement.</p>
+</blockquote>
+<p>Python’s print statement takes a keyword argument called file that decides which stream to write the given message/objects. Its value is a “file-like object.” See the definition of print,</p>
+<pre><code class="python">print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)
+</code></pre>
+
+<p>Let us modify our program to change the destination of print to our custom text stream.</p>
+<pre><code class="python">from io import StringIO
+
+text_stream = StringIO()
+text_stream.write(&quot;I am a text buffer&quot;)
+
+print(&quot; in python&quot;, file=text_stream) # Doesn't print to console, instead writes to stream
+print(text_stream.getvalue()) # Prints 'I am a text buffer in python' to console
+text_stream.close()
+</code></pre>
+
+<p>Text streams are only useful in operating on UTF-8 buffers(XML, JSON, CSV). There are many other cases where we have to represent binary buffers(ZIP, PDF, Custom Extensions) in program memory. Binary streams come to the rescue.</p>
+<h2 id="binary-streams">Binary Streams</h2>
+<p>A binary stream stores and operates on binary data(bytes). It has the same methods as StringIO like getvalue, read, write.</p>
+<pre><code class="python">from io import BytesIO, StringIO
+
+binary_stream =  BytesIO(b'I am a byte string \x01')
+
+print(binary_stream.getvalue()) # Prints b'I am a byte string \x01'
+
+try:
+  text_stream = StringIO(binary_stream.getvalue())
+except TypeError:
+  print('Sorry, text stream cannot store bytes') # Prints 'Sorry, text stream cannot store bytes'
+</code></pre>
+
+<p>One can store any binary data coming from a PDF or ZIP file into a custom binary stream like the preceding one.</p>
+<h2 id="understanding-the-python-zipfile-api">Understanding the Python <code>zipfile</code> API</h2>
+<p>A zip file is a binary file. Contents of a zip file are compressed using an algorithm and paths are preserved. All open-source zip tools do the same thing, understand the binary representation, process it. It is a no-brainer that one should use BytesIO while working with zip files. Python provides a package to work with zip archives called <code>zipfile</code>.</p>
+<p>The <code>zipfile</code> package has two main classes:</p>
+<ol>
+<li><code>ZipFile</code> : to represent a zip archive in memory.</li>
+<li><code>ZipInfo</code> : to represent a member of a zip file.</li>
+</ol>
+<p>A <code>ZipFile</code> is an exact representation of a zip archive. It means you can load a .zip file directly into that class object or dump a <code>ZipFile</code> object to a new archive. Every <code>ZipFile</code> has a list of members. Those members are ZipInfo objects.</p>
+<pre><code class="bash">mkdir -p config/app
+mkdir -p config/docker
+touch config/app/app-config.json
+touch config/docker/docker-compose.yaml
+touch config/root-config.json
+zip -r config.zip config
+</code></pre>
+
+<pre><code class="bash">(venv) bbearce@pop-os:~$ python3 -m zipfile -l config.zip
+File Name                                             Modified             Size
+config/                                        2020-12-11 15:32:24            0
+config/root-config.json                        2020-12-11 15:32:24            0
+config/docker/                                 2020-12-11 15:32:16            0
+config/docker/docker-compose.yaml              2020-12-11 15:32:16            0
+config/app/                                    2020-12-11 15:32:06            0
+config/app/app-config.json
+</code></pre>
+
+<p>using python interactively:</p>
+<pre><code class="python">from zipfile import ZipFile
+
+with ZipFile('config.zip') as zip_archive:
+    for item in zip_archive.filelist:
+        print(item)
+    print(f'\nThere are {len(zip_archive.filelist)} ZipInfo objects present in archive')
+</code></pre>
+
+<p>out:</p>
+<pre><code class="python">&lt;ZipInfo filename='config/' filemode='drwxrwxr-x' external_attr=0x10&gt;
+&lt;ZipInfo filename='config/root-config.json' filemode='-rw-rw-r--' file_size=0&gt;
+&lt;ZipInfo filename='config/docker/' filemode='drwxrwxr-x' external_attr=0x10&gt;
+&lt;ZipInfo filename='config/docker/docker-compose.yaml' filemode='-rw-rw-r--' file_size=0&gt;
+&lt;ZipInfo filename='config/app/' filemode='drwxrwxr-x' external_attr=0x10&gt;
+&lt;ZipInfo filename='config/app/app-config.json' filemode='-rw-rw-r--' file_size=0&gt;
+
+There are 6 ZipInfo objects present in archive
+</code></pre>
+
+<h3 id="use-case-1-create-zip-archive-with-files">Use case #1: Create zip archive with files</h3>
+<p>We can create a zip file with the given name by opening a new ZipFile object with write mode ‘w’ or exclusive create mode ‘x’.</p>
+<p>Next, we can add files/paths to the zip archive. There are two approaches to do that:</p>
+<h4 id="v1-add-a-file-as-a-file-like-object">v1: Add a file as a file-like object</h4>
+<pre><code class="python">from zipfile import ZipFile
+from io import BytesIO
+
+def create_zip_v1():
+    &quot;&quot;&quot;
+    returns: zip archive
+    &quot;&quot;&quot;
+    archive = BytesIO()
+    with ZipFile(archive, 'w') as zip_archive:
+        # Create three files on zip archive
+        with zip_archive.open('docker/docker-compose.yaml', 'w') as file1:
+            file1.write(b'compose-file-content...')
+        with zip_archive.open('app/app-config.json', 'w') as file2:
+            file2.write(b'app-config-content...')
+        with zip_archive.open('root-config.json', 'w') as file3:
+            file3.write(b'root-config-content...')
+    return archive
+
+archive = create_zip_v1()
+# Flush archive stream to a file on disk
+with open('config.zip', 'wb') as f:
+    f.write(archive.getbuffer())
+
+archive.close()
+</code></pre>
+
+<h4 id="v2-add-a-file-as-a-zipinfo-object">v2: Add a file as a ZipInfo object</h4>
+<p>This approach composes files as objects and gives more flexibility to add meta information on file.</p>
+<pre><code class="python">from zipfile import ZipFile, ZipInfo
+from io import BytesIO
+
+def create_zip_v2():
+    &quot;&quot;&quot;
+    returns: zip archive
+    &quot;&quot;&quot;
+    archive = BytesIO()
+    with ZipFile(archive, 'w') as zip_archive:
+        # Create three files on zip archive
+        file1 = ZipInfo('docker/docker-compose.yaml')
+        zip_archive.writestr(file1, b'compose-file-content...')
+        file2 = ZipInfo('app/app-config.json')
+        zip_archive.writestr(file2, b'app-config-content...')
+        file3 = ZipInfo('root-config.json')
+        zip_archive.writestr(file3, b'root-config-content...')
+    return archive
+
+archive = create_zip_v2()
+
+# Flush archive stream to a file on disk
+with open('config.zip', 'wb') as f:
+    f.write(archive.getbuffer())
+
+archive.close()
+</code></pre>
+
+<h3 id="use-case-2-read-a-file-from-zip-archive">Use case #2: Read a file from zip archive</h3>
+<pre><code class="python">from zipfile import ZipFile
+
+docker_compose_config = None
+
+with ZipFile('config.zip') as zip_archive:
+    docker_compose_config = zip_archive.read('docker/docker-compose.yaml')
+
+print(docker_compose_config)
+</code></pre>
+
+<h3 id="use-case-3-update-or-insert-a-file-in-zip-arch">Use case #3: Update or Insert a file in zip arch</h3>
+<p>This use case is the most tricky part of the zipping business in Python. On the first look, it might look simple. Let us try attempting a few solutions.</p>
+<h4 id="attempt-1-dont-use-as-it-erases-everything-but-update">Attempt #1: Don't use as it erases everything but update</h4>
+<pre><code class="python">from zipfile import ZipFile
+
+with ZipFile('config.zip', 'w') as zip_archive:
+    zip_archive.writestr(
+        'docker/docker-compose.yaml', # File to replace
+        b'docker-compose-file-content-new'   # Data
+    )
+</code></pre>
+
+<p>If we run the preceding script, it replaces the file in archive config.zip, but, as zipfile is opened in write mode ‘w,’ the other files/paths in archive can vanish.</p>
+<blockquote>
+<p>They do, I checked. Don’t use ‘w’ mode, when you update/replace a single file in a zip archive, or your data is gone for good.</p>
+</blockquote>
+<h4 id="attempt-2-doesnt-erase-old-data-upon-update-so-there-is-extra-data">Attempt #2: Doesn't erase old data upon update so there is extra data</h4>
+<pre><code class="python">from zipfile import ZipFile
+
+with ZipFile('config.zip', 'a') as zip_archive:
+    zip_archive.writestr(
+        'docker/docker-compose.yaml', # File to replace
+        b'docker-compose-file-content-new'   # Data
+    )
+</code></pre>
+
+<pre><code class="bash">$ python -m zipfile -l config.zip
+File Name                                             Modified             Size
+docker/docker-compose.yaml                     1980-01-01 00:00:00           23
+app/app-config.json                            1980-01-01 00:00:00           21
+root-config.json                               1980-01-01 00:00:00           22
+docker/docker-compose.yaml                     2020-12-11 16:41:14           31
+</code></pre>
+
+<p>So docker/docker-compose.yaml had appeared twice in the ZipInfo list but only once in extraction. For every update, the zip archive size grows and grows in the magnitude of the updated file size. If you ignore the Python warning, at some point the junk in the archive may occupy more space than actual files.</p>
+<p>The two attempts until now couldn’t achieve an acceptable solution. Now comes third, which is a clean and elegant way.</p>
+<h4 id="attempt-3-works">Attempt #3: Works!</h4>
+<p>You have to loop through all objects and edit the one you want and if it's not the file you are looking for then copy old contents. </p>
+<blockquote>
+<p>Old contents are not untouched and in fact are deleted if you edit any part of the zip!</p>
+</blockquote>
+<pre><code class="python">from zipfile import ZipFile, ZipInfo
+from io import BytesIO
+
+
+def update_or_insert(path, data):
+    &quot;&quot;&quot;
+    Param: path -&gt; file in archive
+    Param: data -&gt; data to be updated
+
+    Returns a new zip file with the updated content
+    for the given path
+    &quot;&quot;&quot;
+    new_zip = BytesIO()
+    print('here?')
+    with ZipFile('config.zip', 'r') as old_archive:
+        with ZipFile(new_zip, 'w') as new_archive:
+            for item in old_archive.filelist:
+                # If you spot an existing file, create a new object
+                if item.filename == path:
+                    zip_inf = ZipInfo(path)
+                    new_archive.writestr(zip_inf, data)
+                else:
+                    # Copy other contents as it is
+                    new_archive.writestr(item, old_archive.read(item.filename))
+    return new_zip
+
+new_zip = update_or_insert(
+    'docker/docker-compose.yaml',
+    b'docker-compose-file-content-new'
+)
+
+# Flush new zip to disk
+with open('config.zip', 'wb') as f:
+    f.write(new_zip.getbuffer())
+
+new_zip.close()
+</code></pre>
+
+<h4 id="use-case-4-remove-an-existing-file-from-zip-archive">Use case #4: Remove an existing file from zip archive</h4>
+<p>The cleanest way again is to copy contents from the old archive to the new archive and skip the <code>ZipInfo</code> objects that match the given path.</p>
+<pre><code class="python">from zipfile import ZipFile, ZipInfo
+from io import BytesIO
+
+
+def delete(path):
+    &quot;&quot;&quot;
+    Param: path -&gt; file in archive
+    Returns a new zip file after deleting path
+    &quot;&quot;&quot;
+    new_zip = BytesIO()
+    with ZipFile('config.zip', 'r') as old_archive:
+        with ZipFile(new_zip, 'w') as new_archive:
+            for item in old_archive.filelist:
+                if item.filename != path:
+                    # Copy everything other than path to be inserted
+                    new_archive.writestr(item, old_archive.read(item.filename))
+    return new_zip
+
+new_zip = delete('docker/docker-compose.yaml')
+
+# Flush new zip to disk
+with open('config.zip', 'wb') as f:
+    f.write(new_zip.getbuffer())
+
+new_zip.close()
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../io/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../io/" class="btn btn-xs btn-link">
+        IO
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Zip/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Zip/" class="btn btn-xs btn-link">
+        zip()
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
