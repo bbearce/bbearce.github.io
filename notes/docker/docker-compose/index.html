@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Docker Compose - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Docker Compose", url: "#_top", children: [
+              {title: "Useful Tid Bits", url: "#useful-tid-bits" },
+              {title: "Example docker-compose.yml", url: "#example-docker-composeyml" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../singularity/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../singularity/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../remote_registry/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="docker-compose">Docker Compose</h1>
+<p>This page is for using docker-compose which allows you to deploy multiple containers in a config file. </p>
+<p>The details of using the <code>docker-compose</code> command are below as well as a lengthy example using <a href="https://github.com/codalab/codalab-competitions/blob/develop/.env_sample">codalab's</a> .</p>
+<pre><code>Define and run multi-container applications with Docker.
+
+Usage:
+  docker-compose [-f &lt;arg&gt;...] [options] [COMMAND] [ARGS...]
+  docker-compose -h|--help
+
+Options:
+  -f, --file FILE             Specify an alternate compose file
+                              (default: docker-compose.yml)
+  -p, --project-name NAME     Specify an alternate project name
+                              (default: directory name)
+  --verbose                   Show more output
+  --log-level LEVEL           Set log level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  --no-ansi                   Do not print ANSI control characters
+  -v, --version               Print version and exit
+  -H, --host HOST             Daemon socket to connect to
+
+  --tls                       Use TLS; implied by --tlsverify
+  --tlscacert CA_PATH         Trust certs signed only by this CA
+  --tlscert CLIENT_CERT_PATH  Path to TLS certificate file
+  --tlskey TLS_KEY_PATH       Path to TLS key file
+  --tlsverify                 Use TLS and verify the remote
+  --skip-hostname-check       Don't check the daemon's hostname against the
+                              name specified in the client certificate
+  --project-directory PATH    Specify an alternate working directory
+                              (default: the path of the Compose file)
+  --compatibility             If set, Compose will attempt to convert keys
+                              in v3 files to their non-Swarm equivalent
+  --env-file PATH             Specify an alternate environment file
+
+Commands:
+  build              Build or rebuild services
+  config             Validate and view the Compose file
+  create             Create services
+  down               Stop and remove containers, networks, images, and volumes
+  events             Receive real time events from containers
+  exec               Execute a command in a running container
+  help               Get help on a command
+  images             List images
+  kill               Kill containers
+  logs               View output from containers
+  pause              Pause services
+  port               Print the public port for a port binding
+  ps                 List containers
+  pull               Pull service images
+  push               Push service images
+  restart            Restart services
+  rm                 Remove stopped containers
+  run                Run a one-off command
+  scale              Set number of containers for a service
+  start              Start services
+  stop               Stop services
+  top                Display the running processes
+  unpause            Unpause services
+  up                 Create and start containers
+  version            Show the Docker-Compose version information
+
+</code></pre>
+
+<h2 id="useful-tid-bits">Useful Tid Bits</h2>
+<h3 id="restartingrebuilding-one-container">Restarting\Rebuilding One Container</h3>
+<p>By default <code>docker-compose up</code> will build containers based upon the <code>*.yml</code> definition. Usually if you build a new version of an image you want to be one of the composed containers you'd have to run <code>docker-compose down</code>, which kills and deletes all containers defined in the <code>*.yml</code>. </p>
+<p>It can annoying and time consuming to do this for all containers when only one container needs updating. </p>
+<p>Use this code to refresh and rebuild only the container you need:</p>
+<pre><code class="bash">$ docker-compose up -d --no-deps --build &lt;service_name&gt;
+</code></pre>
+
+<blockquote>
+<p><code>--no-deps</code> - Don't start linked services.</p>
+<p><code>--build</code> - Build images before starting containers.</p>
+</blockquote>
+<h2 id="example-docker-composeyml">Example docker-compose.yml</h2>
+<p>Here is an example:</p>
+<pre><code class="bash">version: '2'
+services:
+  # --------------------------------------------------------------------------
+  # HTTP Server
+  # --------------------------------------------------------------------------
+  nginx:
+    image: nginx
+    ports:
+      - ${NGINX_PORT}:${NGINX_PORT}
+      - ${SSL_PORT}:${SSL_PORT}
+    command: bash -x /app/docker/run_nginx.sh
+    volumes:
+      - ./certs:/app/certs
+      - ./docker:/app/docker
+      - ./codalab:/app/codalab
+      - ${LOGGING_DIR}/nginx:/var/log/nginx/
+    env_file: .env
+    links:
+      - django:django
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    container_name: nginx
+
+
+  # --------------------------------------------------------------------------
+  # Database
+  # --------------------------------------------------------------------------
+  postgres:
+    image: postgres:9.6.3
+    environment:
+      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - ./docker:/app/docker
+      - ${LOGGING_DIR}/psql:/var/log/psql
+      - ${DB_DATA_PATH}:/var/lib/postgresql/data
+      - ./backups:/app/backups
+    env_file: .env
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    container_name: postgres
+
+
+  # --------------------------------------------------------------------------
+  # Message queue
+  # --------------------------------------------------------------------------
+  rabbit:
+    build:
+      # Custom Dockerfile for rabbit mostly to make building faster because
+      # of envsubst dependency
+      context: .
+      dockerfile: docker/rabbitmq/Dockerfile
+    hostname: rabbit
+    command: bash -x /app/docker/run_rabbitmq.sh
+    environment:
+      - RABBITMQ_LOGS=/var/log/rabbitmq/output.log
+      - RABBITMQ_SASL_LOGS=/var/log/rabbitmq/output_sasl.log
+    env_file: .env
+    volumes:
+      - ./docker:/app/docker
+      - ./certs:/app/certs
+      - ${LOGGING_DIR}/rabbitmq:/var/log/rabbitmq
+      - ./var/data/rabbitmq/:/var/lib/rabbitmq/mnesia
+    ports:
+      - ${RABBITMQ_PORT}:${RABBITMQ_PORT}
+      - ${RABBITMQ_MANAGEMENT_PORT}:${RABBITMQ_MANAGEMENT_PORT}
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    container_name: rabbit
+
+  flower:
+    build:
+      context: .
+      dockerfile: docker/flower/Dockerfile
+    hostname: flower
+    ports:
+      - ${FLOWER_PORT}:${FLOWER_PORT}
+    environment:
+      # These aren't set in .env
+      - AMQP_USERNAME=${RABBITMQ_DEFAULT_USER}
+      - AMQP_PASSWORD=${RABBITMQ_DEFAULT_PASS}
+      - AMQP_HOST=rabbit
+      - AMQP_PORT=${RABBITMQ_PORT}
+      - FLOWER_CERTFILE=${SSL_CERTIFICATE}
+      - FLOWER_KEYFILE=${SSL_CERTIFICATE_KEY}
+    volumes:
+      - ./certs:/app/certs
+    env_file: .env
+    links:
+      - rabbit
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    container_name: flower
+
+
+  # --------------------------------------------------------------------------
+  # Cache
+  # --------------------------------------------------------------------------
+  memcached:
+    image: memcached
+    hostname: memcached
+    command: &quot;/usr/local/bin/memcached -u memcache&quot;
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    container_name: memcached
+
+
+  # --------------------------------------------------------------------------
+  # Django
+  # --------------------------------------------------------------------------
+  django:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    hostname: django
+    ports:
+      - ${DJANGO_PORT}:${DJANGO_PORT}
+    command: bash /app/docker/run_django.sh
+    volumes:
+      - ./certs:/app/certs
+      - ./codalab:/app/codalab
+      - ./docker:/app/docker
+      - ${LOGGING_DIR}/django:/var/log/django/
+      - ./backups:/app/backups
+    env_file: .env
+    environment:
+      - CONFIG_SERVER_NAME=${CODALAB_SITE_DOMAIN}
+      - PYTHONUNBUFFERED=1
+    links:
+      - postgres
+      - rabbit
+      - memcached
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    container_name: django
+
+
+  # --------------------------------------------------------------------------
+  # Celery Workers
+  # --------------------------------------------------------------------------
+  worker_site:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sh /app/docker/run_site.sh
+    volumes:
+      - ./codalab:/app/codalab
+      - ./docker:/app/docker
+      - ${LOGGING_DIR}/worker_site:/var/log/
+    environment:
+      # Stop memory leaks
+      - DEBUG=False
+      - REQUESTS_CA_BUNDLE=/usr/local/lib/python2.7/site-packages/certifi/cacert.pem
+    env_file: .env
+    links:
+      - postgres
+      - rabbit
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    container_name: worker_site
+
+  worker_compute:
+    image: codalab/competitions-v1-compute-worker:1.1.7
+    privileged: true
+    volumes:
+      - ${LOGGING_DIR}/worker_compute:/var/log/
+      - ${SUBMISSION_TEMP_DIR}:${SUBMISSION_TEMP_DIR}
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file: .env
+    links:
+      - rabbit
+    logging:
+      options:
+        max-size: &quot;200k&quot;
+    mem_limit: 1g
+    memswap_limit: 1g
+    container_name: worker_compute
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../singularity/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../singularity/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../remote_registry/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../remote_registry/" class="btn btn-xs btn-link">
+        Remote Registry
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
