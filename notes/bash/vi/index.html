@@ -35,6 +35,7 @@
         var pageToc = [
           {title: "VI", url: "#_top", children: [
               {title: "Find and Replace", url: "#find-and-replace" },
+              {title: "Formal Notes:", url: "#formal-notes" },
           ]},
         ];
 
@@ -86,7 +87,21 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h2 id="find-and-replace">Find and Replace</h2>
 <blockquote>
 <p>Source <a href="http://www.linfo.org/vi/search.html">linfo</a></p>
+<p>TL;DR</p>
 </blockquote>
+<p>Single Line scope (single replacement):</p>
+<pre><code class="bash">:s/search_for_text/replace_text/
+</code></pre>
+
+<p>Single Line scope (global replacement):</p>
+<pre><code class="bash">:s/search_for_text/replace_text/g
+</code></pre>
+
+<p>Whole file scope:</p>
+<pre><code class="bash">:s%/search_for_text/replace_text/&lt;g or no g&gt;
+</code></pre>
+
+<h2 id="formal-notes">Formal Notes:</h2>
 <p>vi also has powerful search and replace capabilities. To search the text of an open file for a specific string (combination of characters or words), in the command mode type a colon (:), "s," forward slash (/) and the search string itself. What you type will appear on the bottom line of the display screen. Finally, press ENTER, and the matching area of the text will be highlighted, if it exists. If the matching string is on an area of text that is not currently displayed on the screen, the text will scroll to show that area.</p>
 <p>The formal syntax for searching is:</p>
 <pre><code class="bash">:s/string
