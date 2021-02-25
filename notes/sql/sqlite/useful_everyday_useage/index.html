@@ -39,6 +39,7 @@
               {title: "Ranks / Row_Number", url: "#ranks-row_number" },
               {title: "Add/Change Column Data Type", url: "#addchange-column-data-type" },
               {title: "Julian Day", url: "#julian-day" },
+              {title: "Many to Many Relationship", url: "#many-to-many-relationship" },
           ]},
         ];
 
@@ -317,6 +318,79 @@ from mrns_dates;
 </tr>
 </tbody>
 </table>
+<h2 id="many-to-many-relationship">Many to Many Relationship</h2>
+<p><img alt="many_to_many" src="../many_to_many.jpg" /></p>
+<pre><code class="sql">/*display formatting*/
+.mode column
+.headers on
+
+CREATE TABLE books (book_id int, title varchar, description varchar);
+CREATE TABLE bookAuthor (bookAuthor int, author_id, book_id);
+CREATE TABLE authors (author_id int, last_name varchar, first_name varchar);
+
+insert into books (book_id, title, description) values(1, 'book1', 'Ben''s book');
+insert into books (book_id, title, description) values(2, 'book2', 'Yuki''s book');
+insert into books (book_id, title, description) values(3, 'book3', 'Collaboration of Yuki and Ben');
+
+insert into bookAuthor (bookAuthor, author_id, book_id) values(1, 1, 1); /*Ben wrote this book*/
+insert into bookAuthor (bookAuthor, author_id, book_id) values(2, 2, 2); /*Yuki wrote this book*/
+insert into bookAuthor (bookAuthor, author_id, book_id) values(3, 1, 3); /*Ben wrote some of this book*/
+insert into bookAuthor (bookAuthor, author_id, book_id) values(4, 2, 3); /*Yuki wrote some of this book*/
+
+insert into authors (author_id, last_name, first_name) values(1, 'Bearce', 'Ben');
+insert into authors (author_id, last_name, first_name) values(2, 'Davidoff', 'Yuki');
+
+select * from books;
+select * from bookAuthor;
+select * from authors;
+
+</code></pre>
+
+<p>Which shows:</p>
+<pre><code class="sql">sqlite&gt; select * from books;
+book_id     title       description
+----------  ----------  -----------
+1           book1       Ben's book 
+2           book2       Yuki's book
+3           book3       Collaborati
+sqlite&gt; select * from bookAuthor;
+bookAuthor  author_id   book_id   
+----------  ----------  ----------
+1           1           1         
+2           2           2         
+3           1           3         
+4           2           3         
+sqlite&gt; select * from authors;
+author_id   last_name   first_name
+----------  ----------  ----------
+1           Bearce      Ben       
+2           Davidoff    Yuki      
+sqlite&gt; select * from books;
+book_id     title       description
+----------  ----------  -----------
+1           book1       Ben's book 
+2           book2       Yuki's book
+3           book3       Collaborati
+sqlite&gt; select * from books where title = 'book3';
+book_id     title       description                  
+----------  ----------  -----------------------------
+3           book3       Collaboration of Yuki and Ben
+</code></pre>
+
+<p>Now we can showcase the purpose of such a join:</p>
+<pre><code class="sql">select b.title, a.first_name, b.description from books as b
+inner join bookAuthor as ba on b.book_id = ba.book_id
+inner join authors as a on a.author_id = ba.author_id;
+</code></pre>
+
+<p>which gives:</p>
+<pre><code class="sql">title       first_name  description
+----------  ----------  -----------
+book1       Ben         Ben's book 
+book2       Yuki        Yuki's book
+book3       Ben         Collaborati
+book3       Yuki        Collaborati
+</code></pre>
 
   <br>
     
