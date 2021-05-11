@@ -350,7 +350,7 @@ Singularity&gt;
 <p>What now?</p>
 <p>So remeber that singulariy doesn't let you run as root but rather as your normal user? However you can't install (some) software without being root. So we need to be root without being root...</p>
 <p><img alt="Wait What?" src="../wait_what.jpg" /></p>
-<p>Last wonky flag I promise, but we need to be <code>--fake-root</code>. Install as this user.</p>
+<p>Last wonky flag I promise, but we need to be <code>--fakeroot</code>. Install as this user.</p>
 <pre><code class="bash">(base) carlsbad[0]:bb927$ singularity shell --writable --no-home --fakeroot s_ubuntu
 WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container

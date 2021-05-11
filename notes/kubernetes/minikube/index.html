@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Minikube - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Minikube", url: "#_top", children: [
+              {title: "Installation", url: "#installation" },
+              {title: "Start Your Cluster", url: "#start-your-cluster" },
+              {title: "Interact With Your Cluster", url: "#interact-with-your-cluster" },
+              {title: "Deploy Applications", url: "#deploy-applications" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="minikube">Minikube</h1>
+<h2 id="installation">Installation</h2>
+<pre><code class="bash">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+sudo install minikube-linux-amd64 /usr/local/bin/minikube
+</code></pre>
+
+<h2 id="start-your-cluster">Start Your Cluster</h2>
+<pre><code class="bash">minikube start
+</code></pre>
+
+<h2 id="interact-with-your-cluster">Interact With Your Cluster</h2>
+<pre><code class="bash">kubectl get po -A
+
+NAMESPACE     NAME                               READY   STATUS    RESTARTS   AGE
+kube-system   coredns-74ff55c5b-w8nkf            1/1     Running   0          57m
+kube-system   etcd-minikube                      1/1     Running   0          57m
+kube-system   kube-apiserver-minikube            1/1     Running   0          57m
+kube-system   kube-controller-manager-minikube   1/1     Running   0          57m
+kube-system   kube-proxy-tqb79                   1/1     Running   0          57m
+kube-system   kube-scheduler-minikube            1/1     Running   0          57m
+kube-system   storage-provisioner                1/1     Running   1          58m
+</code></pre>
+
+<h2 id="deploy-applications">Deploy Applications</h2>
+<pre><code class="bash">kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
+kubectl expose deployment hello-minikube --type=NodePort --port=8080
+</code></pre>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
