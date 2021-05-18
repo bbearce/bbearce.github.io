@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>MIG - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "A100 Multi-Instance GPU", url: "#_top", children: [
+              {title: "Intro", url: "#intro" },
+              {title: "Getting Started", url: "#getting-started" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../python/Installs/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../python/Installs/" class="btn btn-xs btn-link">
+        Installs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../.." class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="a100-multi-instance-gpu">A100 Multi-Instance GPU</h1>
+<p><a href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html">Source</a></p>
+<h2 id="intro">Intro</h2>
+<p>Terminology:</p>
+<ul>
+<li>SM: A streaming multiprocessor (SM) executes compute instructions on the GPU. There are 7.</li>
+<li>GPU Engine: A GPU engine is what executes work on the GPU. The most commonly used engine is the Compute/Graphics engine that executes the compute instructions.</li>
+<li>GPU Slice: A GPU slice is the smallest fraction of the GA100 GPU that combines a single GPU memory slice and a single GPU SM slice.</li>
+<li>GPU Instance (GI): A GPU Instance (GI) is a combination of GPU slices and GPU engines (DMAs, NVDECs, etc.).</li>
+<li>Compute Instance: A GPU instance can be subdivided into multiple compute instances. A Compute Instance (CI) contains a subset of the parent GPU instance’s SM slices and other GPU engines (DMAs, NVDECs, etc.). The CIs share memory and engines.</li>
+</ul>
+<p>Configurations available:
+<img alt="Table2" src="../table2.png" /></p>
+<p>All configuration combinations:
+<img alt="Figure 2" src="../figure2.png" /></p>
+<p>Example Configuration:
+<img alt="Figure 3" src="../figure3.png" /></p>
+<p>Things to consider:</p>
+<ul>
+<li>MIG functionality is provided as part of the NVIDIA GPU driver starting with the CUDA 11.0 / R450 release.</li>
+<li>No GPU to GPU P2P (either PCIe or NVLink) is supported</li>
+<li>CUDA applications treat a Compute Instance and its parent GPU Instance as a single CUDA device.</li>
+</ul>
+<p>Currently, the NVIDIA kernel driver exposes its interfaces through a few system-wide device nodes. Each physical GPU is represented by its own device node - e.g. nvidia0, nvidia1 etc. This is shown below for a 2-GPU system.</p>
+<pre><code>    /dev
+    ├── nvidiactl
+    ├── nvidia-modeset
+    ├── nvidia-uvm
+    ├── nvidia-uvm-tools
+    ├── nvidia-nvswitchctl
+    ├── nvidia0
+    └── nvidia1  
+</code></pre>
+
+<h2 id="getting-started">Getting Started</h2>
+<h3 id="turning-on-mig-and-inspecting-the-gpus">Turning on MIG and inspecting the GPUs</h3>
+<p>MIG can be managed programmatically using NVIDIA Management Library (NVML) APIs or its command-line-interface, nvidia-smi. Note that for brevity, some of the nvidia-smi output in the following examples may be cropped to showcase the relevant sections of interest.</p>
+<p>Summary for each GPU:</p>
+<blockquote>
+<p>By default, MIG mode is not enabled on the NVIDIA A100. For example, running nvidia-smi shows that MIG mode is disabled:</p>
+</blockquote>
+<p>GPU 1:</p>
+<pre><code>nvidia-smi -i 0
+</code></pre>
+
+<p>GPU 2:</p>
+<pre><code>nvidia-smi -i 1
+</code></pre>
+
+<p>MIG mode can be enabled on a per-GPU basis with the following command: nvidia-smi -i <GPU IDs> -mig 1</p>
+<blockquote>
+<p>Need <code>sudo</code>. MIG mode can be enabled on a per-GPU basis with the following command: nvidia-smi -i <GPU IDs> -mig 1. The GPUs can be selected using comma separated GPU indexes, PCI Bus Ids or UUIDs. If no GPU ID is specified, then MIG mode is applied to all the GPUs on the system. Note that MIG mode (Disabled or Enabled states) is persistent across system reboots.</p>
+</blockquote>
+<pre><code>nvidia-smi -i 0 -mig 1
+</code></pre>
+
+<p><img alt="MIG_enabled" src="../MIG_enabled.png" /></p>
+<h3 id="list-gpu-instancesprofiles">List GPU Instances\Profiles</h3>
+<pre><code>sudo nvidia-smi mig -lgip
+</code></pre>
+
+<p>Ex:</p>
+<pre><code>[bb927@glacier ~]$ sudo nvidia-smi mig -lgip
+Your password [ bb927 ] : 
++--------------------------------------------------------------------------+
+| GPU instance profiles:                                                   |
+| GPU   Name          ID    Instances   Memory     P2P    SM    DEC   ENC  |
+|                           Free/Total   GiB              CE    JPEG  OFA  |
+|==========================================================================|
+|   0  MIG 1g.5gb     19     7/7        4.75       No     14     0     0   |
+|                                                          1     0     0   |
++--------------------------------------------------------------------------+
+|   0  MIG 2g.10gb    14     3/3        9.75       No     28     1     0   |
+|                                                          2     0     0   |
++--------------------------------------------------------------------------+
+|   0  MIG 3g.20gb     9     2/2        19.62      No     42     2     0   |
+|                                                          3     0     0   |
++--------------------------------------------------------------------------+
+|   0  MIG 4g.20gb     5     1/1        19.62      No     56     2     0   |
+|                                                          4     0     0   |
++--------------------------------------------------------------------------+
+|   0  MIG 7g.40gb     0     1/1        39.50      No     98     5     0   |
+|                                                          7     1     1   |
++--------------------------------------------------------------------------+
+</code></pre>
+
+<p>List the possible placements available using the following command:</p>
+<pre><code>sudo nvidia-smi mig -lgipp
+</code></pre>
+
+<p>Ex:</p>
+<pre><code>[bb927@glacier ~]$ sudo nvidia-smi mig -lgipp
+GPU  0 Profile ID 19 Placements: {0,1,2,3,4,5,6}:1
+GPU  0 Profile ID 14 Placements: {0,2,4}:2
+GPU  0 Profile ID  9 Placements: {0,4}:4
+GPU  0 Profile ID  5 Placement : {0}:4
+GPU  0 Profile ID  0 Placement : {0}:8
+</code></pre>
+
+<blockquote>
+<p>The command shows that the user can create two instances of type 3g.20gb (profile ID 9) or seven instances of 1g.5gb (profile ID 19).</p>
+</blockquote>
+<h3 id="create-gpu-instances">Create GPU Instances</h3>
+<p>Before starting to use MIG, the user needs to create GPU instances using the <code>-cgi</code> option. One of three options can be used to specify the instance profiles to be created:</p>
+<ol>
+<li>Profile ID (e.g. 9, 14, 5)</li>
+<li>Short name of the profile (e.g. 3g.20gb</li>
+<li>Full profile name of the instance (e.g. MIG 3g.20gb)</li>
+</ol>
+<p>Once the GPU instances are created, one needs to create the corresponding Compute Instances (CI). By using the <code>-C</code> option, <code>nvidia-smi</code> creates these instances.</p>
+<blockquote>
+<p>When only a single CI is created (that consumes the entire compute capacity of the GI), then the CI sizing is implied in the device name. <code>-C</code> is the same as <code>--default-compute-instance</code> and does not require a value.</p>
+</blockquote>
+<p><img alt="table4" src="../table4.png" /></p>
+<blockquote>
+<p>Each GI can be further sub-divided into multiple CIs as required by users depending on their workloads. The table below highlights what the name of a MIG device would look like in this case. The example shown is for subdividing a 3g.20gb device into a set of sub-devices with different Compute Instance slice counts.</p>
+</blockquote>
+<p><img alt="table5" src="../table5.png" /></p>
+<blockquote>
+<p>Also note that, the created MIG devices are not persistent across system reboots. Thus, the user or system administrator needs to recreate the desired MIG configurations if the GPU or system is reset. </p>
+</blockquote>
+<p>Example:</p>
+<pre><code>sudo nvidia-smi mig -cgi 9,3g.20gb -C -i 0
+Successfully created GPU instance ID  2 on GPU  0 using profile MIG 3g.20gb (ID  9)
+Successfully created compute instance ID  0 on GPU  0 GPU instance ID  2 using profile MIG 3g.20gb (ID  2)
+Successfully created GPU instance ID  1 on GPU  0 using profile MIG 3g.20gb (ID  9)
+Successfully created compute instance ID  0 on GPU  0 GPU instance ID  1 using profile MIG 3g.20gb (ID  2)
+</code></pre>
+
+<p>List the GPU Instances:</p>
+<pre><code>sudo nvidia-smi mig -lgi
+</code></pre>
+
+<p>List the GPU Compute Instances:</p>
+<pre><code>sudo nvidia-smi mig -lci
+</code></pre>
+
+<h3 id="destroy-gpu-instances">Destroy GPU Instances</h3>
+<p>You can specify GPU instances to delete <code>-dci</code></p>
+<pre><code>sudo nvidia-smi mig -dgi -gi 1,2 -i 0
+Successfully destroyed GPU instance ID  1 from GPU  0
+Successfully destroyed GPU instance ID  2 from GPU  0
+</code></pre>
+
+<p>Or Compute Instances <code>-dgi</code></p>
+<pre><code>sudo nvidia-smi mig -dci -ci 0 -gi 1,2 -i 0
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../python/Installs/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../python/Installs/" class="btn btn-xs btn-link">
+        Installs
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../.." class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
