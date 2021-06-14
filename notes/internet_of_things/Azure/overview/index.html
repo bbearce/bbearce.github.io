@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Azure - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Azure Cloud Notes", url: "#_top", children: [
+              {title: "Azure Active Directory", url: "#azure-active-directory" },
+              {title: "Azure Tenant", url: "#azure-tenant" },
+              {title: "Azure Subscription", url: "#azure-subscription" },
+              {title: "Service Principal Object", url: "#service-principal-object" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../General%20Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../General%20Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../AWS/storage/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="azure-cloud-notes">Azure Cloud Notes</h1>
+<h2 id="azure-active-directory">Azure Active Directory</h2>
+<p>Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and access management service, which helps your employees sign in and access resources in:</p>
+<ul>
+<li>
+<p>External resources, such as Microsoft 365, the Azure portal, and thousands of other SaaS applications.</p>
+</li>
+<li>
+<p>Internal resources, such as apps on your corporate network and intranet, along with any cloud apps developed by your own organization. For more information about creating a tenant for your organization, see Quickstart: Create a new tenant in Azure Active Directory.</p>
+</li>
+</ul>
+<h2 id="azure-tenant">Azure Tenant</h2>
+<p>A dedicated and trusted instance of Azure AD that's automatically created when your organization signs up for a Microsoft cloud service subscription, such as Microsoft Azure, Microsoft Intune, or Microsoft 365. An Azure tenant represents a single organization.</p>
+<h2 id="azure-subscription">Azure Subscription</h2>
+<p>Used to pay for Azure cloud services. You can have many subscriptions and they're linked to a credit card.</p>
+<blockquote>
+<p>More terms here: https://docs.microsoft.com/en-us/azure/active-directory/fundamentals/active-directory-whatis#:~:text=Azure%20tenant,tenant%20represents%20a%20single%20organization.</p>
+</blockquote>
+<h2 id="service-principal-object">Service Principal Object</h2>
+<p>To access resources that are secured by an Azure AD tenant, the entity that requires access must be represented by a security principal. This requirement is true for both <strong>users</strong> (user principal) and <strong>applications</strong> (service principal). The security principal defines the access policy and permissions for the user/application in the Azure AD tenant. This enables core features such as authentication of the user/application during sign-in, and authorization during resource access.</p>
+<p>There are three types of service principal: <strong>application</strong>, <strong>managed identity</strong>, and <strong>legacy</strong>.</p>
+<ul>
+<li>
+<p>Application: The first type of service principal is the local representation, or application instance, of a global application object in a single tenant or directory. In this case, a service principal is a concrete instance created from the application object and inherits certain properties from that application object. A service principal is created in each tenant where the application is used and references the globally unique app object. The service principal object defines what the app can actually do in the specific tenant, who can access the app, and what resources the app can access. When an application is given permission to access resources in a tenant (upon registration or consent), a service principal object is created.</p>
+</li>
+<li>
+<p>Managed Identity: The second type of service principal is used to represent a managed identity. Managed identities eliminate the need for developers to manage credentials. Managed identities provide an identity for applications to use when connecting to resources that support Azure AD authentication. When a managed identity is enabled, a service principal representing that managed identity is created in your tenant. <strong>Service principals representing managed identities can be granted access and permissions, but cannot be updated or modified directly.</strong></p>
+</li>
+<li>
+<p>Legacy: The third type of service principal represents a legacy app (an app created before app registrations were introduced or created through legacy experiences). A legacy service principal can have credentials, service principal names, reply URLs, and other properties which are editable by an authorized user, but does not have an associated app registration. <strong>The service principal can only be used in the tenant where it was created.</strong></p>
+</li>
+</ul>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../General%20Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../General%20Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../AWS/storage/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../AWS/storage/" class="btn btn-xs btn-link">
+        AWS
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
