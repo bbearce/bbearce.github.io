@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Binary Search - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Binary Search", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../codalab/docker_submission/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../codalab/docker_submission/" class="btn btn-xs btn-link">
+        Docker Submission
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../quick_sort/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../quick_sort/" class="btn btn-xs btn-link">
+        Quick Sort
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="binary-search">Binary Search</h1>
+<p>See <a href="../quick_sort">quick sort</a> first as the array you are searching needs to be sorted.</p>
+<p><img alt="binary-search" src="../binary-search.png" /></p>
+<pre><code class="python">import os, pdb, math
+
+def b_s_iterative(arr, elem):
+    start = 0
+    end = len(arr) - 1
+    mid = math.floor((start + end)/2)
+    iter_count = 0
+    while (arr[mid] != elem and start &lt;= end):
+        iter_count += 1; print(iter_count)
+        print(&quot;{}-{}-{}&quot;.format(start, mid, end))
+        # pdb.set_trace()
+        if elem &lt; arr[mid]:
+            end = mid - 1
+        else:
+            start = mid + 1
+        mid = math.floor((start + end)/2)
+    return mid if arr[mid] == elem else -1, iter_count
+</code></pre>
+
+<p>Below is some practice evaluation code I was using. What I was doing was making <a href="https://en.wikipedia.org/wiki/Big_O_notation#:~:text=Big%20O%20notation%20is%20a,a%20particular%20value%20or%20infinity.&amp;text=Big%20O%20notation%20characterizes%20functions,using%20the%20same%20O%20notation.">Big O notation</a> sample data to test how many iterations it takes to search different size data. First I do orders of 10 and then orders of 2. Technically Big O notation uses log with base 2, so the second set of data is more useful for plotting; though they both work. We should see O(log(n)) on the y-axis and n on the x-axis showing that the time complexity is log(n) iterations to search an array given n elements. </p>
+<pre><code class="python">big_O = [] # 10s
+for i in [1,10,100,1000,10000,100000,1000000,10000000]:
+    # pdb.set_trace()
+    if i == 0:
+        big_O.append((0, 1))
+    else:
+        array = range(i)
+        index, count = b_s_iterative(array, 6)
+        # pdb.set_trace()
+        big_O.append((i, count))
+
+big_O = [] # 2s
+for i in [2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536,131072,262144,524288,1048576]:
+    # pdb.set_trace()
+    if i == 0:
+        big_O.append((0, 1))
+    else:
+        array = range(i)
+        index, count = b_s_iterative(array, 6)
+        # pdb.set_trace()
+        big_O.append((i, count))
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../codalab/docker_submission/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../codalab/docker_submission/" class="btn btn-xs btn-link">
+        Docker Submission
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../quick_sort/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../quick_sort/" class="btn btn-xs btn-link">
+        Quick Sort
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

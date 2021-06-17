@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Quick Sort - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Quick Sort", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../binary_search/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../binary_search/" class="btn btn-xs btn-link">
+        Binary Search
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../stairs/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../stairs/" class="btn btn-xs btn-link">
+        Stairs
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="quick-sort">Quick Sort</h1>
+<p>After sorting you can search the array with <a href="../binary_search">binary search</a>.</p>
+<p><img alt="quick-sort" src="../quick-sort.png" /></p>
+<p>Take last element as pivot and low and high are indexes of full array's start and end</p>
+<pre><code class="python">import pdb
+
+def partition(arr, low, high):
+    i = (low-1)           # index of smaller element
+    pivot = arr[high]     # pivot, takes right most element
+    # print(&quot;call to partition&quot;)
+    # pdb.set_trace()
+    for j in range(low, high):
+
+        # If current element is smaller than or
+        # equal to pivot
+        if arr[j] &lt;= pivot:
+            # increment index of smaller element
+            i = i+1
+            arr[i], arr[j] = arr[j], arr[i]
+        # print(arr)
+
+    arr[i+1], arr[high] = arr[high], arr[i+1]
+    # print(arr)
+    return (i+1)
+
+# low and high are indexes of full array's start and end
+def quickSort(arr, low, high):
+    if len(arr) == 1:
+        return arr
+    if low &lt; high:
+
+        # pi is partitioning index, arr[p] is now
+        # at right place
+        pi = partition(arr, low, high)
+        # pdb.set_trace()
+        # Separately sort elements before
+        # partition and after partition
+        quickSort(arr, low, pi-1)
+        quickSort(arr, pi+1, high)
+
+
+# Driver code to test above
+arr = [2, 7, 8, 9, 1, 5]
+n = len(arr)
+quickSort(arr, 0, n-1)
+print(&quot;Sorted array is:&quot;,arr)
+# for i in range(n):
+#     print(&quot;%d&quot; % arr[i]),
+</code></pre>
+
+<blockquote>
+<p>Big O notation for this algorithm is O(log(n)). However according to <a href="https://medium.com/cesars-tech-insights/quicksort-17c5d24e7e5f#:~:text=Quicksort%20is%20a%20logarithmic%2Dtime,Merge%20Sort%20or%20Heap%20Sort.&amp;text=Quicksort%20uses%20recursion%2C%20divide%2Dand,%2Dconquer%20and%20comparison%2Dsort.">medium.com</a>, O(log (n)) speed is a best-case/average time, in worst case scenarios it can be O(n2) depending on the implementation.</p>
+</blockquote>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../binary_search/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../binary_search/" class="btn btn-xs btn-link">
+        Binary Search
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../stairs/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../stairs/" class="btn btn-xs btn-link">
+        Stairs
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
