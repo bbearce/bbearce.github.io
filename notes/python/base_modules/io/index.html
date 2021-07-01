@@ -37,6 +37,7 @@
               {title: "Reading \\ Writing", url: "#reading-writing" },
               {title: "Create folder", url: "#create-folder" },
               {title: "Move File", url: "#move-file" },
+              {title: "Copy File", url: "#copy-file" },
               {title: "Delete A File", url: "#delete-a-file" },
               {title: "Delete A Folder", url: "#delete-a-folder" },
           ]},
@@ -134,6 +135,14 @@ with open('from_here.txt', &quot;w&quot;) as file:
 src=&quot;./from_here.txt&quot;
 dest=&quot;./to_here/&quot;
 shutil.move(src, dest)
+</code></pre>
+
+<h2 id="copy-file">Copy File</h2>
+<pre><code class="python">import shutil
+
+src=&quot;from_here.txt&quot;
+dest=&quot;./to_here/&quot;
+shutil.copyfile(src, os.path.join(dest,src))
 </code></pre>
 
 <h2 id="delete-a-file">Delete A File</h2>
