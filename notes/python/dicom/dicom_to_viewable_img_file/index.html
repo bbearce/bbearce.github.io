@@ -82,7 +82,40 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="dicom-conversion-to-viewable-image">DICOM Conversion to Viewable Image</h1>
+<blockquote>
+<p>Much simpler than previous example and rescales appropriately.</p>
+</blockquote>
+<pre><code class="python"># Code to save 2D grayscale image as bmp
+import os
+import numpy as np
+import torch
+import pydicom
+from PIL import Image
+import pdb
+#...
+path_to_dicoms = './kmotion_data/0343922_E18868209/dicom_sorted/Series1'
+path_to_pngs = './JPG_test/0343922_E18868209/dicom_sorted/Series1'
+dir_list = os.listdir(path_to_dicoms)
+
+def saveimage():
+    for n, image_file_dicom in enumerate(dir_list):
+        # pdb.set_trace()
+        image = os.path.join(path_to_dicoms,image_file_dicom)
+        ds = pydicom.dcmread(image)
+        visual = ds.pixel_array
+        visual = (visual - visual.min()) / (visual.max() - visual.min())
+        filename_new = image[image.find(&quot;MR&quot;):image.find(&quot;.dcm&quot;)] + &quot;.png&quot; 
+        im = Image.fromarray((visual * 255).astype(np.uint8))
+        im.save(os.path.join(path_to_pngs, filename_new))
+#...
+
+saveimage()
+</code></pre>
+
 <p>Source: <a href="https://medium.com/@vivek8981/dicom-to-jpg-and-extract-all-patients-information-using-python-5e6dd1f1a07d">medium</a></p>
+<blockquote>
+<p>This example doesn't scale the DICOM pixel array between values of 0-255 and therefore clips all data between 255 and whatever max value the pixel array has. Likewise for negative numbers, which are clipped by 0.</p>
+</blockquote>
 <pre><code class="python">import os
 import pydicom
 import cv2
