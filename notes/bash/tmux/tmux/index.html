@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>TMUX - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "TMUX", url: "#_top", children: [
+              {title: "Cheat Sheets and Config", url: "#cheat-sheets-and-config" },
+              {title: "Concepts", url: "#concepts" },
+              {title: "Dual Interface", url: "#dual-interface" },
+              {title: "Tmux Console", url: "#tmux-console" },
+              {title: "Create Sessions", url: "#create-sessions" },
+              {title: "Detach Sessions", url: "#detach-sessions" },
+              {title: "Create Sessions With Names", url: "#create-sessions-with-names" },
+              {title: "View Sessions", url: "#view-sessions" },
+              {title: "Rename Sessions", url: "#rename-sessions" },
+              {title: "Kill Sessions", url: "#kill-sessions" },
+              {title: "Attach Sessions", url: "#attach-sessions" },
+              {title: "Create/Close Windows", url: "#createclose-windows" },
+              {title: "Select Windows", url: "#select-windows" },
+              {title: "Create/Close Panes", url: "#createclose-panes" },
+              {title: "Use Mouse", url: "#use-mouse" },
+              {title: "Copy and Paste", url: "#copy-and-paste" },
+              {title: "Tmux Resurrect Usages", url: "#tmux-resurrect-usages" },
+              {title: "Save and Restore Tmux Environment", url: "#save-and-restore-tmux-environment" },
+              {title: "Last Tricks", url: "#last-tricks" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../ssh/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../ssh/" class="btn btn-xs btn-link">
+        SSH
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../screen/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../screen/" class="btn btn-xs btn-link">
+        Screen
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="tmux">TMUX</h1>
+<p>Source <a href="https://leimao.github.io/blog/Tmux-Tutorial/">leimao.github.io</a></p>
+<h2 id="cheat-sheets-and-config">Cheat Sheets and Config</h2>
+<p><a href="https://tmuxcheatsheet.com/">Tmux Cheat Sheet</a>
+<a href="https://www.hamvocke.com/blog/a-guide-to-customizing-your-tmux-conf/">Customize Config</a></p>
+<h2 id="concepts">Concepts</h2>
+<p>Tmux has sessions, windows, and panes. The hierarchy is that Tmux could have multiple sessions, a session could have multiple windows, a window could have multiple panes. On the server, users could follow certain conventions or rules to manage Tmux. For example, we could create a session for a specific project. In the project session, we could create multiple windows, and each window would be used for each specific task for the project. In the window, in order to finish the task more efficiently, we create multiple panes for purposes such as process monitoring and file management.</p>
+<h2 id="dual-interface">Dual Interface</h2>
+<p>Similar to Docker, Tmux has two layers of the interface, the local terminal outside Tmux, and the terminal inside Tmux. We could manage Tmux in both layers. While typing bash commands are equivalent in both interface, to manage the Tmux related stuff inside Tmux, we would need to use hotkeys so Tmux knows when to manage the Tmux related stuff. All the hotkeys are prefixed by <code>Ctrl + b</code>.</p>
+<h2 id="tmux-console">Tmux Console</h2>
+<p>In the Tmux terminal, we could call out Tmux console by <code>Ctrl + b + :</code> and run all the Tmux commands available for the local terminal without tmux prefix. For example, if there is a Tmux command for the local terminal like this.</p>
+<pre><code class="bash">$ tmux xxxxx
+</code></pre>
+
+<p>In the Tmux console in the Tmux terminal, we could do the equivalent thing by running the following command.</p>
+<pre><code>:xxxxx
+</code></pre>
+
+<blockquote>
+<p>Note that <code>:</code> is the prefix of the Tmux console which we don’t type. : could be thought as $ tmux in the local terminal.</p>
+</blockquote>
+<h2 id="create-sessions">Create Sessions</h2>
+<p>In the local terminal, we create Tmux sessions by simply running one of the following three equivalent commands.</p>
+<pre><code class="bash">$ tmux
+$ tmux new
+$ tmux new-session
+</code></pre>
+
+<p><img alt="tmux_session" src="../tmux_session.jpg" /></p>
+<p>This will create a new session to the existing Tmux. If there is no previous Tmux session running, this will create the first Tmux session. If there are already Tmux sessions running, this will create an additional one.</p>
+<blockquote>
+<p>This has auto named the session and will not have a custom name but rather "session 1"..."session n".</p>
+</blockquote>
+<p><img alt="tmux_session_new" src="../tmux_session_new.jpg" /></p>
+<p>Tmux requires at least one session to run. If the last session was closed, Tmux server will automatically close.</p>
+<h2 id="detach-sessions">Detach Sessions</h2>
+<p>To return to the local terminal from Tmux sessions, we usually do detach by hitting Ctrl + b + d. Everything would be still running in the backend.</p>
+<p><img alt="tmux_session_detach" src="../tmux_session_detach.jpg" /></p>
+<p>In some scenarios, we could return to the local terminal by running the following command in the Tmux terminal.</p>
+<pre><code class="bash">$ exit
+</code></pre>
+
+<blockquote>
+<p>However, bear in mind that using this method the current session will exit and all the information in the current session will be lost.</p>
+</blockquote>
+<h2 id="create-sessions-with-names">Create Sessions With Names</h2>
+<p>Tmux, by default, uses natural integers as the name for sessions. This is sometimes inconvenient for project management. We could create sessions with names using the following commands in the local terminal.</p>
+<pre><code class="bash">$ tmux new -s [session-name]
+</code></pre>
+
+<p><img alt="tmux_name_session" src="../tmux_name_session.jpg" /></p>
+<h2 id="view-sessions">View Sessions</h2>
+<p>To view Tmux sessions from the local terminal, run one of the following commands.</p>
+<pre><code class="bash">$ tmux ls
+$ tmux list-sessions
+</code></pre>
+
+<p><img alt="tmux_ls" src="../tmux_ls.jpg" /></p>
+<p>In Tmux terminal, we check Tmux sessions by hitting Ctrl + b + s. The following information will show up.</p>
+<p><img alt="tmux_ls_in_tmux" src="../tmux_ls_in_tmux.jpg" /></p>
+<p>Hit <code>Esc</code> or <code>q</code> to exit the information.</p>
+<h2 id="rename-sessions">Rename Sessions</h2>
+<p>To rename sessions, from the local terminal, we run the following command.</p>
+<p>$ tmux rename-session [-t session-name] [new-session-name]</p>
+<blockquote>
+<p>If <code>[-t session-name]</code>is not provided, the last session used will be renamed.</p>
+</blockquote>
+<p>Ex:
+<img alt="tmux_rename_from_terminal" src="../tmux_rename_from_terminal.jpg" /></p>
+<p>Alternatively, we may also hit <code>Ctrl + b + $</code> to rename the current session in the Tmux terminal.</p>
+<p><img alt="tmux_rename_from_tmux" src="../tmux_rename_from_tmux.jpg" /></p>
+<pre><code class="bash">bb927@bryce:~$ tmux ls
+0-newer: 1 windows (created Wed Sep 22 09:38:41 2021) [105x14] (attached)
+1: 1 windows (created Wed Sep 22 09:42:48 2021) [56x13]
+session_bb: 1 windows (created Wed Sep 22 09:48:34 2021) [105x14]
+</code></pre>
+
+<h2 id="kill-sessions">Kill Sessions</h2>
+<p>To kill all sessions, from the local terminal, we run the following command.</p>
+<pre><code class="bash">$ tmux kill-server
+</code></pre>
+
+<p>Ex:</p>
+<pre><code class="bash">bb927@bryce:~$ tmux kill-server
+bb927@bryce:~$ tmux ls
+no server running on /tmp/tmux-4643095/default
+</code></pre>
+
+<p>To kill specific sessions, from the local terminal, we run the following command.</p>
+<pre><code class="bash">$ tmux kill-session -t [session-name]
+</code></pre>
+
+<h2 id="attach-sessions">Attach Sessions</h2>
+<p>To attach to specific sessions, from the local terminal, we run the following command.</p>
+<p>$ tmux attach -t [session-name]</p>
+<h2 id="createclose-windows">Create/Close Windows</h2>
+<p>In Tmux session, we could have multiple windows. To create a window, in the Tmux terminal, we hit <code>Ctrl + b + c</code>. To kill the current window, in the Tmux terminal, we hit <code>Ctrl + b + &amp;</code> (<code>&amp;</code> is <code>Shift + 7</code>).</p>
+<p>The windows in the sessions could have names. We rename the current window by hitting <code>Ctrl + b + ,</code>.</p>
+<h2 id="select-windows">Select Windows</h2>
+<p>Each window in the session, regardless of whether it has a name or not (actually its default name is always bash), would have a window id of natural integer 0, 1, etc. We select specific window by hitting <code>Ctrl + b + window id</code>.</p>
+<p>Sometimes it is also convenient to use <code>Ctrl + b + n</code> to move to the next window, or <code>Ctrl + b + p</code> to move to the previous window.</p>
+<h2 id="createclose-panes">Create/Close Panes</h2>
+<p>Each window in the session could have multiple panes, just like Gnome Terminator. To split the pane vertically, we hit <code>Ctrl + b + %</code>. To split the pane horizontally, we hit <code>Ctrl + b + "</code>. To close the current pane, we we hit <code>Ctrl + b + x</code>.</p>
+<p>To toggle between panes in the window, we simply hit <code>Ctrl + b + ↑/↓/←/→</code>.</p>
+<h2 id="use-mouse">Use Mouse</h2>
+<p>To scroll using mouse, we have to enable mouse mode in Tmux.<br />
+<code>:set -g mouse on</code></p>
+<p>To disable mouse mode in Tmux<br />
+<code>:set -g mouse off</code></p>
+<h2 id="copy-and-paste">Copy and Paste</h2>
+<p>To do copy and paste in Tmux or between Tmux and host, holding Shift while left clicking and selecting text followed by pressing Ctrl-Shift-C will copy to the X clipboard. Ctrl-Shift-V will paste from the X clipboard as well.</p>
+<p>Alternatively, holding Shift while left clicking and selecting text followed by right clicking. To paste, holding Shift while clicking the middle button of the mouse.</p>
+<h2 id="tmux-resurrect-usages">Tmux Resurrect Usages</h2>
+<h3 id="installation">Installation</h3>
+<p>To install Tmux Resurrect, it is recommended to install Tmux Plugin Manager first. Please check the GitHub repo for installation instructions.</p>
+<p>Then we add new plugin Tmux Resurrect to Tmux by adding set -g @plugin 'tmux-plugins/tmux-resurrect' to ~/.tmux.conf. An example of the ~/.tmux.conf would be</p>
+<pre><code class="bash">$ cat ~/.tmux.conf 
+# List of plugins
+set -g @plugin 'tmux-plugins/tpm'
+set -g @plugin 'tmux-plugins/tmux-sensible'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+
+# Other examples:
+# set -g @plugin 'github_username/plugin_name'
+# set -g @plugin 'git@github.com/user/plugin'
+# set -g @plugin 'git@bitbucket.com/user/plugin'
+
+# Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
+run -b '~/.tmux/plugins/tpm/tpm'
+</code></pre>
+
+<p>Finally, we install the plugin by hitting Ctrl + b + I in the Tmux terminal. We would see the following information if the installation was successful.</p>
+<pre><code>                                                                         [0/0]
+TMUX environment reloaded.
+Done, press ESCAPE to continue.
+</code></pre>
+
+<h2 id="save-and-restore-tmux-environment">Save and Restore Tmux Environment</h2>
+<p>To save the Tmux environment, we hit <code>Ctrl + b + Ctrl + s</code> in the Tmux Terminal. If the save was successful, a message of Tmux environment saved! would pop up.</p>
+<p>To restore the Tmux environment, we hit Ctrl + b + Ctrl + r in the Tmux Terminal. If the restore was successful, a message of Tmux restore complete! would pop up.</p>
+<p>All the sessions, windows, and panels would be saved and restored with Tmux Resurrect. Some of the running commands, such as htop, would be restored as well.</p>
+<h2 id="last-tricks">Last Tricks</h2>
+<p>Prefix Key Binding
+Sometimes hitting the hotkey prefix <code>Ctrl + b</code> could be tedious. We could set a single button hit for <code>Ctrl + b</code>. The right <code>⊞ Win</code> key on my keyboard seems to be useless in Ubuntu, and we could bind the right <code>⊞ Win</code> key to <code>Ctrl + b</code>.</p>
+<p>Acknowledgement
+Thank my friend Dong Meng for recommending Tmux Resurrect to me.</p>
+<p>Final Remarks
+We would see concept similarities between Tmux, Docker, and Vim. More comprehensive Tmux commands could be found on <a href="https://tmuxcheatsheet.com/">Tmux Cheat Sheet</a>.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../ssh/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../ssh/" class="btn btn-xs btn-link">
+        SSH
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../screen/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../screen/" class="btn btn-xs btn-link">
+        Screen
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
