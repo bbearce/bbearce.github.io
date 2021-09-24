@@ -90,14 +90,18 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><a href="https://www.nmr.mgh.harvard.edu/">Official Website</a></p>
 <p><img alt="martinos_homepage" src="../martinos_homepage.jpg" /></p>
 <p>Locate the <a href="https://www.nmr.mgh.harvard.edu/intranet">Intranet</a> in the top right on the homepage. This hosts all things Martinos related and should be your first stop for information.</p>
-<p>Other userful links within the intranet:
-* <a href="https://www.nmr.mgh.harvard.edu/intranet/computer">Compute Resources</a><br />
-* <a href="https://www.nmr.mgh.harvard.edu/faq">Frequently Asked Questions</a>
-* <a href="https://www.nmr.mgh.harvard.edu/martinos/userInfo/computer/index.php">Martinos User Information (sometimes more granular about technical things)</a></p>
-<p>Pre-requisites:<br />
-* Partners ID
-* <a href="https://www.nmr.mgh.harvard.edu/intranet/computer/request-account">Martinos Account</a>
-* MLSC Access</p>
+<p>Other userful links within the intranet:  </p>
+<ul>
+<li><a href="https://www.nmr.mgh.harvard.edu/intranet/computer">Compute Resources</a>  </li>
+<li><a href="https://www.nmr.mgh.harvard.edu/faq">Frequently Asked Questions</a>  </li>
+<li><a href="https://www.nmr.mgh.harvard.edu/martinos/userInfo/computer/index.php">Martinos User Information (sometimes more granular about technical things)</a>  </li>
+</ul>
+<p>Pre-requisites:   </p>
+<ul>
+<li>Partners ID  </li>
+<li><a href="https://www.nmr.mgh.harvard.edu/intranet/computer/request-account">Martinos Account</a>  </li>
+<li>MLSC Access  </li>
+</ul>
 <h2 id="loggin-in">Loggin in</h2>
 <p>Test access by sshing into <code>mlsc.nmr.mgh.harvard.edu</code> while on the Partners <a href="https://rc.partners.org/it-services/remote-access">VPN (scroll down a little)</a>.</p>
 <blockquote>
@@ -192,7 +196,7 @@ drwxr-sr-x. 35 bb927    qtim 43 Sep 10  2019 yifen
 <p>This location is available you from any Martinos machine. It is 20TB large but we have a tendancy to fill up data fast. I'm in the process of clearing some out so don't worry, but there is enough room for this demo.</p>
 <h2 id="anaconda">Anaconda</h2>
 <p>We will need a python source for part of this demo. The Martinos center has setup an Anaconda distribution we can use thathas scientific modules as part of it. </p>
-<p><a href="https://freesurfer.net/fswiki/DevelopersGuide/NMRCenterPython/UsersGuide">Instructions for Setup</a></p>
+<p><a href="https://freesurfer.net/fswiki/DevelopersGuide/NMRCenterPython/UsersGuide">Instructions for setup</a></p>
 <p>For now run this:</p>
 <pre><code class="bash">export PATH=/usr/pubsw/packages/python/anaconda3.7/bin:${PATH}
 </code></pre>
@@ -226,13 +230,58 @@ alabaster                 0.7.12                   py37_0
 <h2 id="submitting-jobs">Submitting Jobs</h2>
 <p>The Martinos Center Help Desk has created official instructions for the Cluster's use located at <a href="https://it.martinos.org/mlsc-cluster/">https://it.martinos.org/mlsc-cluster/</a>.</p>
 <p>It uses <a href="https://slurm.schedmd.com/documentation.html">SLURM</a> to manage work loads.</p>
-<p>The Martinos cluster docs above give the details but the most important piece is the resources available:
-| Description         | #Nodes | #Cores | RAM   | #GPU               | Partition | Scratch |
-|---------------------|--------|--------|-------|--------------------|-----------|---------|
-| Dell R440 Server    |     30 |     24 | 384GB | none               | basic     |   1.5TB |
-| RTX 6000 GPU Server |      2 |     32 | 1.5TB | 8                  | rtx6000   |   7.0TB |
-| RTX 8000 GPU Server |      5 |     32 | 1.5TB | 4 have 10, 1 has 4 | rtx8000   |   7.0TB |
-| NVIDIA DGX A100     |      4 |     64 | 1.0TB | 8                  | dgx-a100  |    14TB |</p>
+<p>The Martinos cluster docs above give the details but the most important piece is the resources available:</p>
+<table>
+<thead>
+<tr>
+<th>Description</th>
+<th>#Nodes</th>
+<th>#Cores</th>
+<th>RAM</th>
+<th>#GPU</th>
+<th>Partition</th>
+<th>Scratch</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dell R440 Server</td>
+<td>30</td>
+<td>24</td>
+<td>384GB</td>
+<td>none</td>
+<td>basic</td>
+<td>1.5TB</td>
+</tr>
+<tr>
+<td>RTX 6000 GPU Server</td>
+<td>2</td>
+<td>32</td>
+<td>1.5TB</td>
+<td>8</td>
+<td>rtx6000</td>
+<td>7.0TB</td>
+</tr>
+<tr>
+<td>RTX 8000 GPU Server</td>
+<td>5</td>
+<td>32</td>
+<td>1.5TB</td>
+<td>4 have 10, 1 has 4</td>
+<td>rtx8000</td>
+<td>7.0TB</td>
+</tr>
+<tr>
+<td>NVIDIA DGX A100</td>
+<td>4</td>
+<td>64</td>
+<td>1.0TB</td>
+<td>8</td>
+<td>dgx-a100</td>
+<td>14TB</td>
+</tr>
+</tbody>
+</table>
 <ul>
 <li>R440 Server - CPU compute cluster</li>
 <li>RTX6000 - 24GB GPU RAM</li>
