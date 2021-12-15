@@ -84,7 +84,9 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="pil-image-mmanipulation">PIL (Image mManipulation)</h1>
 <h2 id="resize-image">Resize Image</h2>
-<pre><code class="python">from PIL import Image
+<pre><code class="python">import os
+from PIL import Image
+from math import floor
 
 input_path = &quot;.&quot;
 dest_path = &quot;.&quot;
