@@ -98,7 +98,7 @@ def resize(path):
     i = i.resize(new_size, Image.ANTIALIAS)
     return i
 
-new_image = resize(os.path.join(dest_path, image_name))
+new_image = resize(os.path.join(input_path, image_name))
 new_image.save(os.path.join(dest_path, new_image_name), optimize=True, quality=50)
 </code></pre>
 
