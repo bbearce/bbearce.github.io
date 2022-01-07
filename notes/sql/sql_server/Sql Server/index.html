@@ -34,6 +34,7 @@
         
         var pageToc = [
           {title: "SQL Server", url: "#_top", children: [
+              {title: "Drivers", url: "#drivers" },
           ]},
         ];
 
@@ -82,11 +83,82 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="sql-server">SQL Server</h1>
-<p>Testing the addition of a new language</p>
-<pre><code class="sql">SELECT TOP 10000 sum(colC) FROM DB_Server.dbo.DB_Table
-WHERE colA = 'some value'
-GROUP BY colB 
+<pre><code class="sql">SELECT &quot;serve dat sql...chyeah!&quot;
+</code></pre>
 
+<p>Microsoft SQL Server can be hard to connect to. Here I'm compiling some notes that help me connect in various situations.</p>
+<h2 id="drivers">Drivers</h2>
+<h3 id="odbc-pyodbc">ODBC - pyodbc</h3>
+<p>This is the standard way and it works pretty well. It's pretty simple to use. </p>
+<p><a href="https://pypi.org/project/pyodbc/">pyodbc</a></p>
+<p>Much easier than JTDS below...</p>
+<h3 id="jtds-java-tabular-data-stream">JTDS - Java Tabular Data Stream</h3>
+<h4 id="datagrip">DataGrip</h4>
+<p>I was finally able to connect with the <a href="http://jtds.sourceforge.net/">jtds</a>:</p>
+<p>jTDS is an open source 100% pure Java (type 4) JDBC 3.0 driver for Microsoft SQL Server (6.5, 7, 2000, 2005, 2008 and 2012) and Sybase Adaptive Server Enterprise (10, 11, 12 and 15). jTDS is based on FreeTDS and is currently the fastest production-ready JDBC driver for SQL Server and Sybase ASE. jTDS is 100% JDBC 3.0 compatible, supporting forward-only and scrollable/updateable ResultSets, concurrent (completely independent) Statements and implementing all the DatabaseMetaData and ResultSetMetaData methods. Check out the feature matrix for more details.</p>
+<p>In DataGrip they have a connection for this driver and it looks like this when setup correctly:</p>
+<p><img alt="datagrip_config_jdts.jpg" src="../datagrip_config_jdts.jpg" /></p>
+<h4 id="python">python</h4>
+<p>To use the jtds driver in python you need these things:
+* install <a href="">jaydebeapi</a>
+* Follow this stackoverflow article: <a href="https://stackoverflow.com/questions/55376100/create-a-jtds-connection-string-in-python">https://stackoverflow.com/questions/55376100/create-a-jtds-connection-string-in-python</a>
+  * under jar_path = <code>"&lt;path_to&gt;\\jtds-1.3.1.jar"</code> we need goto <a href="http://jtds.sourceforge.net/">http://jtds.sourceforge.net/</a> and click on the Download navbar link and download and extract the <em>jtds-1.3.1-dist.zip</em> and then inside the extracted folder the jar is at: <em>jtds-1.3.1-dist/jtds-1.3.1.jar</em>.
+* In that article you will find a script. Below is an example</p>
+<pre><code class="python">import sys
+import jaydebeapi
+
+SQL_Server=&quot;emitsql07&quot;
+Database=&quot;MLInferenceDeploy&quot;
+View=&quot;ViewInferencePXS&quot;
+USER=&quot;bb927&quot;
+PASS=&quot;&quot; # I shouldn't tell you this ;)
+
+def main():
+    try:
+        # jTDS Driver.
+        driver_name = &quot;net.sourceforge.jtds.jdbc.Driver&quot;
+        #driver_name = &quot;org.hsqldb.jdbcDriver&quot; # not sure when to use this
+
+        # jTDS Connection string.
+        connection_url = f&quot;jdbc:jtds:sqlserver://{SQL_Server}/{Database};instance={SQL_Server};domain=PARTNERS&quot;
+
+        # jTDS Connection properties.
+        # Some additional connection properties you may want to use
+        # &quot;domain&quot;: &quot;&lt;domain&gt;&quot;
+        # &quot;ssl&quot;: &quot;require&quot;
+        # &quot;useNTLMv2&quot;: &quot;true&quot;
+        # See the FAQ for details http://jtds.sourceforge.net/faq.html
+        connection_properties = {
+            &quot;user&quot;:USER,
+            &quot;password&quot;: PASS,
+        }
+
+        # Path to jTDS Jar
+
+        # BB- !!! IMPORTANT !!! -BB
+        jar_path = &quot;/home/bbearce/Downloads/jtds-1.3.1-dist/jtds-1.3.1.jar&quot;
+        # BB- !!! IMPORTANT !!! -BB
+
+        # Establish connection.
+        connection = jaydebeapi.connect(driver_name, connection_url, connection_properties, jar_path)
+        cursor = connection.cursor()
+
+        # Execute test query.
+        cursor.execute(&quot;select 1 as test_connection&quot;)
+
+        # Execute a real query
+        # cursor.execute(f&quot;select top 1 * from {View};&quot;)
+
+        res = cursor.fetchall()
+        if res:
+            print(str(res))  # Should print [(1,)] for test query or have results from a real one
+
+    except Exception as err:
+        print(str(err))
+
+
+if __name__ == &quot;__main__&quot;:
+    sys.exit(main())
 </code></pre>
 
   <br>
