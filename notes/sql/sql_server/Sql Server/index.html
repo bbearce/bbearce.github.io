@@ -91,6 +91,31 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h3 id="odbc-pyodbc">ODBC - pyodbc</h3>
 <p>This is the standard way and it works pretty well. It's pretty simple to use. </p>
 <p><a href="https://pypi.org/project/pyodbc/">pyodbc</a></p>
+<pre><code class="python">import pyodbc
+
+SQL_Server=&quot;&quot;
+Database=&quot;&quot;
+View=&quot;&quot;
+USER=&quot;&quot;
+PASS=&quot;&quot;
+
+import pyodbc
+server = f'{SQL_Server}'
+database = f'{Database}'
+username = f'{USER}'
+password = f'{PASS}'   
+driver= '{ODBC Driver 17 for SQL Server}'
+
+with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE='+database+';UID='+username+';PWD='+ password) as conn:
+    with conn.cursor() as cursor:
+#        cursor.execute(&quot;SELECT TOP 3 name, collation_name FROM sys.databases&quot;)
+        cursor.execute(&quot;select top 10 * from viewInferencePXS&quot;)
+        row = cursor.fetchone()
+        while row:
+            print (str(row[0]) + &quot; &quot; + str(row[1]))
+            row = cursor.fetchone()
+</code></pre>
+
 <p>Much easier than JTDS below...</p>
 <h3 id="jtds-java-tabular-data-stream">JTDS - Java Tabular Data Stream</h3>
 <h4 id="datagrip">DataGrip</h4>
