@@ -145,7 +145,7 @@ def main():
         #driver_name = &quot;org.hsqldb.jdbcDriver&quot; # not sure when to use this
 
         # jTDS Connection string.
-        connection_url = f&quot;jdbc:jtds:sqlserver://{SQL_Server}/{Database};instance={SQL_Server};domain=PARTNERS&quot;
+        connection_url = f&quot;jdbc:jtds:sqlserver://{SQL_Server}/{Database};useLOBs=false;instance={SQL_Server};domain=PARTNERS&quot;
 
         # jTDS Connection properties.
         # Some additional connection properties you may want to use
