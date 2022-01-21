@@ -35,6 +35,7 @@
         var pageToc = [
           {title: "sed", url: "#_top", children: [
               {title: "Find and Replate", url: "#find-and-replate" },
+              {title: "Find Line", url: "#find-line" },
           ]},
         ];
 
@@ -112,6 +113,21 @@ XYZ
 XYZ
 
 XYZ
+</code></pre>
+
+<h2 id="find-line">Find Line</h2>
+<blockquote>
+<p><a href="https://www.baeldung.com/linux/read-specific-line-from-file">Source</a></p>
+</blockquote>
+<pre><code class="bash">$ sed -n '5{p;q}' input.txt
+</code></pre>
+
+<pre><code class="bash">* -n, --quiet, --silent
+              suppress automatic printing of pattern space
+
+* “-n ‘5p’” means print only the fifth line
+
+* The sed has provided a ‘q‘ command that allows to “quit” further processing. We can put the ‘q‘ command in the two one-liners
 </code></pre>
 
   <br>
