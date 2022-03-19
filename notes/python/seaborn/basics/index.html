@@ -88,31 +88,26 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Source <a href=""></a></p>
 </blockquote>
-<pre><code class="python">import seaborn as sns
+<pre><code class="language-python">import seaborn as sns
 </code></pre>
-
 <h2 id="bar-plot">Bar Plot</h2>
 <blockquote>
 <p>Source <a href="https://seaborn.pydata.org/generated/seaborn.barplot.html">seaborn</a></p>
 </blockquote>
-<pre><code class="python">sns.set(style=&quot;whitegrid&quot;)
+<pre><code class="language-python">sns.set(style=&quot;whitegrid&quot;)
 tips = sns.load_dataset(&quot;tips&quot;)
 ax = sns.barplot(x=&quot;day&quot;, y=&quot;total_bill&quot;, data=tips)
 </code></pre>
-
 <p><img alt="seaborn-barplot-1" src="../seaborn-barplot-1.png" /></p>
-<pre><code class="python">ax = sns.barplot(x=&quot;day&quot;, y=&quot;total_bill&quot;, hue=&quot;sex&quot;, data=tips)
+<pre><code class="language-python">ax = sns.barplot(x=&quot;day&quot;, y=&quot;total_bill&quot;, hue=&quot;sex&quot;, data=tips)
 </code></pre>
-
 <p><img alt="seaborn-barplot-2" src="../seaborn-barplot-2.png" /></p>
-<pre><code class="python">ax = sns.barplot(x=&quot;day&quot;, y=&quot;tip&quot;, data=tips, capsize=.2)
+<pre><code class="language-python">ax = sns.barplot(x=&quot;day&quot;, y=&quot;tip&quot;, data=tips, capsize=.2)
 </code></pre>
-
 <p><img alt="seaborn-barplot-8" src="../seaborn-barplot-8.png" /></p>
-<pre><code class="python">ax = sns.barplot(&quot;size&quot;, y=&quot;total_bill&quot;, data=tips,
+<pre><code class="language-python">ax = sns.barplot(&quot;size&quot;, y=&quot;total_bill&quot;, data=tips,
                  palette=&quot;Blues_d&quot;)
 </code></pre>
-
 <p><img alt="seaborn-barplot-9" src="../seaborn-barplot-9.png" /></p>
 <h2 id="heatmap">Heatmap</h2>
 <p>ax = sns.heatmap(A_V_A)</p>
@@ -121,12 +116,11 @@ ax = sns.barplot(x=&quot;day&quot;, y=&quot;total_bill&quot;, data=tips)
 <p>Source <a href="https://www.drawingfromdata.com/setting-figure-size-using-seaborn-and-matplotlib">drawingfromdata</a></p>
 </blockquote>
 <h3 id="rotate-axes">Rotate Axes</h3>
-<pre><code class="python">import seaborn as sns
+<pre><code class="language-python">import seaborn as sns
 planets = sns.load_dataset(&quot;planets&quot;)
 g = sns.factorplot(&quot;year&quot;, data=planets, aspect=1.5, kind=&quot;count&quot;, color=&quot;b&quot;)
 g.set_xticklabels(rotation=30)
 </code></pre>
-
 <p><img alt="rotated_axes" src="../rotated_axes.png" /></p>
 
   <br>

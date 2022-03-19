@@ -85,22 +85,19 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="sed">sed</h1>
 <h2 id="find-and-replate">Find and Replate</h2>
-<pre><code class="bash">$ sed -i -e &quot;&quot; file.txt
+<pre><code class="language-bash">$ sed -i -e &quot;&quot; file.txt
 </code></pre>
-
 <p>Flags:</p>
-<pre><code class="bash">-i[SUFFIX], --in-place[=SUFFIX]
+<pre><code class="language-bash">-i[SUFFIX], --in-place[=SUFFIX]
 
               edit files in place (makes backup if SUFFIX supplied)
 </code></pre>
-
-<pre><code class="bash">-e script, --expression=script
+<pre><code class="language-bash">-e script, --expression=script
 
               add the script to the commands to be executed
 </code></pre>
-
 <p>Ex:</p>
-<pre><code class="bash">bbearce@pop-os:~$ cat deleteme.txt 
+<pre><code class="language-bash">bbearce@pop-os:~$ cat deleteme.txt 
 abc
 
 abc
@@ -114,15 +111,13 @@ XYZ
 
 XYZ
 </code></pre>
-
 <h2 id="find-line">Find Line</h2>
 <blockquote>
 <p><a href="https://www.baeldung.com/linux/read-specific-line-from-file">Source</a></p>
 </blockquote>
-<pre><code class="bash">$ sed -n '5{p;q}' input.txt
+<pre><code class="language-bash">$ sed -n '5{p;q}' input.txt
 </code></pre>
-
-<pre><code class="bash">* -n, --quiet, --silent
+<pre><code class="language-bash">* -n, --quiet, --silent
               suppress automatic printing of pattern space
 
 * “-n ‘5p’” means print only the fifth line

@@ -94,9 +94,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Before you can deploy a registry, you need to install Docker on the host. A registry is an instance of the <code>registry</code> image, and runs within Docker.</p>
 <h2 id="run-a-local-registry">Run a local registry</h2>
 <p>Use a command like the following to start the registry container:</p>
-<pre><code class="bash">$ docker run -d -p 5000:5000 --restart=always --name registry registry:2
+<pre><code class="language-bash">$ docker run -d -p 5000:5000 --restart=always --name registry registry:2
 </code></pre>
-
 <p>The registry is now ready to use.</p>
 <blockquote>
 <p>Warning: These first few examples show registry configurations that are only appropriate for testing. A production-ready registry must be protected by TLS and should ideally use an access-control mechanism. Keep reading and then continue to the configuration guide to deploy a production-ready registry.</p>
@@ -106,43 +105,36 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <ol>
 <li>Pull the ubuntu:16.04 image from Docker Hub.</li>
 </ol>
-<pre><code class="bash">$ docker pull ubuntu:16.04
+<pre><code class="language-bash">$ docker pull ubuntu:16.04
 </code></pre>
-
 <ol>
 <li>Tag the image as localhost:5000/my-ubuntu. This creates an additional tag for the existing image. When the first part of the tag is a hostname and port, Docker interprets this as the location of a registry, when pushing.</li>
 </ol>
-<pre><code class="bash">$ docker tag ubuntu:16.04 localhost:5000/my-ubuntu
+<pre><code class="language-bash">$ docker tag ubuntu:16.04 localhost:5000/my-ubuntu
 </code></pre>
-
 <ol>
 <li>Push the image to the local registry running at localhost:5000:</li>
 </ol>
-<pre><code class="bash">$ docker push localhost:5000/my-ubuntu
+<pre><code class="language-bash">$ docker push localhost:5000/my-ubuntu
 </code></pre>
-
 <ol>
 <li>Remove the locally-cached ubuntu:16.04 and localhost:5000/my-ubuntu images, so that you can test pulling the image from your registry. This does not remove the localhost:5000/my-ubuntu image from your registry.</li>
 </ol>
-<pre><code class="bash">$ docker image remove ubuntu:16.04
+<pre><code class="language-bash">$ docker image remove ubuntu:16.04
 $ docker image remove localhost:5000/my-ubuntu
 </code></pre>
-
 <ol>
 <li>Pull the localhost:5000/my-ubuntu image from your local registry.</li>
 </ol>
-<pre><code class="bash">$ docker pull localhost:5000/my-ubuntu
+<pre><code class="language-bash">$ docker pull localhost:5000/my-ubuntu
 </code></pre>
-
 <h2 id="stop-a-local-registry">Stop a local registry</h2>
 <p>To stop the registry, use the same docker container stop command as with any other container.</p>
-<pre><code class="bash">$ docker container stop registry
+<pre><code class="language-bash">$ docker container stop registry
 </code></pre>
-
 <p>To remove the container, use docker container rm.</p>
-<pre><code class="bash">$ docker container stop registry &amp;&amp; docker container rm -v registry
+<pre><code class="language-bash">$ docker container stop registry &amp;&amp; docker container rm -v registry
 </code></pre>
-
 <h2 id="ssl-and-https">SSL and HTTPS</h2>
 
   <br>

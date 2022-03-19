@@ -92,7 +92,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Intro:<br />
  - Class: Blueprint<br />
  - Object - Instance  </p>
-<pre><code class="python">class Shark:
+<pre><code class="language-python">class Shark:
     # Basic Method definition
     def swim(self):
         print(&quot;The shark is swimming.&quot;)
@@ -100,16 +100,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     def be_awesome(self):
         print(&quot;The shark is being awesome.&quot;)
 </code></pre>
-
 <p>Notice the use of self to reference an instance specifically...the one calling the method.</p>
 <p>Implementing</p>
-<pre><code class="python">sammy = Shark()
+<pre><code class="language-python">sammy = Shark()
 sammy.swim() # &gt;&gt;&gt; The shark is swimming.
 sammy.be_awesome() # &gt;&gt;&gt; The shark is being awesome.
 </code></pre>
-
 <p>Now let's dicuss <strong>init</strong>.</p>
-<pre><code class="python">class Shark:
+<pre><code class="language-python">class Shark:
     def __init__(self):
         print(&quot;This is the constructor method.&quot;)
 
@@ -118,9 +116,8 @@ sammy.be_awesome() # &gt;&gt;&gt; The shark is being awesome.
 This is the constructor method.
 &lt;__main__.Shark object at 0x10348d470&gt;
 </code></pre>
-
 <p>Finally, we can set the name of the Shark object sammy as equal to "Sammy" by passing it as a parameter of the Shark class:</p>
-<pre><code class="python">class Shark:
+<pre><code class="language-python">class Shark:
     def __init__(self, name):
         self.name = name
 
@@ -140,13 +137,11 @@ def main():
 if __name__ == &quot;__main__&quot;:
     main()
 </code></pre>
-
 <p>run...</p>
-<pre><code class="python">$ python shark.py
+<pre><code class="language-python">$ python shark.py
 Sammy is swimming.
 Sammy is being awesome.
 </code></pre>
-
 <h1 id="inheritance">Inheritance</h1>
 <p><strong>super() and inheritance.</strong></p>
 <p>In this tutorial, you’ll learn about the following:</p>
@@ -158,7 +153,7 @@ Sammy is being awesome.
 <li>How the super() function in multiple inheritance works  </li>
 </ul>
 <p>Let's start with a simple example:</p>
-<pre><code class="python">class Rectangle:
+<pre><code class="language-python">class Rectangle:
     def __init__(self, length, width):
         self.length = length
         self.width = width
@@ -186,12 +181,11 @@ class Square:
 &gt;&gt;&gt; rectangle.area()
 8
 </code></pre>
-
 <p>Here no references to inheritance are being made.</p>
 <p><strong>super() in Single Inheritance</strong></p>
 <p>super() gives you access to methods in a superclass from the subclass that inherits from it. super() alone returns a temporary object of the superclass that then allows you to call that superclass’s methods.</p>
 <p>By using inheritance, you can reduce the amount of code you write while simultaneously reflecting the real-world relationship between rectangles and squares:</p>
-<pre><code class="python">class Rectangle:
+<pre><code class="language-python">class Rectangle:
     def __init__(self, length, width):
         self.length = length
         self.width = width
@@ -211,11 +205,10 @@ class Square(Rectangle):
 &gt;&gt;&gt; square.area()
 16
 </code></pre>
-
 <p>What Can super() Do for You?
 Like in other object-oriented languages, it allows you to call methods of the superclass in your subclass. The primary use case of this is to extend the functionality of the inherited method.</p>
 <p>In the example below, you will create a class Cube that inherits from Square and extends the functionality of .area() (inherited from the Rectangle class through Square) to calculate the surface area and volume of a Cube instance:</p>
-<pre><code class="python">class Square(Rectangle):
+<pre><code class="language-python">class Square(Rectangle):
     def __init__(self, length):
         super().__init__(length, length)
 
@@ -234,13 +227,12 @@ class Cube(Square):
 &gt;&gt;&gt; cube.volume()
 27
 </code></pre>
-
 <p>Here you have implemented two methods for the Cube class: .surface_area() and .volume(). Both of these calculations rely on calculating the area of a single face, so rather than reimplementing the area calculation, you use super() to extend the area calculation.</p>
 <p>Also notice that the Cube class definition does not have an .<strong>init</strong>(). Because Cube inherits from Square and .<strong>init</strong>() doesn’t really do anything differently for Cube than it already does for Square, you can skip defining it, and the .<strong>init</strong>() of the superclass (Square) will be called automatically.</p>
 <p><strong>A super() Deep Dive</strong></p>
 <p>While the examples above (and below) call super() without any parameters, super() can also take two parameters: the first is the subclass, and the second parameter is an object that is an instance of that subclass.</p>
 <p>First, let’s see two examples showing what manipulating the first variable can do, using the classes already shown:</p>
-<pre><code class="python">class Rectangle:
+<pre><code class="language-python">class Rectangle:
     def __init__(self, length, width):
         self.length = length
         self.width = width
@@ -255,9 +247,8 @@ class Square(Rectangle):
     def __init__(self, length):
         super(Square, self).__init__(length, length)
 </code></pre>
-
 <p>In Python 3, the super(Square, self) call is equivalent to the parameterless super() call. The first parameter refers to the subclass Square, while the second parameter refers to a Square object which, in this case, is self. You can call super() with other classes as well:</p>
-<pre><code class="python">class Cube(Square):
+<pre><code class="language-python">class Cube(Square):
     def surface_area(self):
         face_area = super(Square, self).area()
         return face_area * 6
@@ -266,7 +257,6 @@ class Square(Rectangle):
         face_area = super(Square, self).area()
         return face_area * self.length
 </code></pre>
-
 <p>In this example, you are setting Square as the subclass argument to super(), instead of Cube. This causes super() to start searching for a matching method (in this case, .area()) at one level above Square in the instance hierarchy, in this case Rectangle.</p>
 <p>In this specific example, the behavior doesn’t change. But imagine that Square also implemented an .area() function that you wanted to make sure Cube did not use. Calling super() in this way allows you to do that.</p>
 <p><strong>What about the second parameter?</strong></p>
@@ -278,7 +268,7 @@ class Square(Rectangle):
 <p>Now that you’ve worked through an overview and some examples of super() and single inheritance, you will be introduced to an overview and some examples that will demonstrate how multiple inheritance works and how <code>super()</code> enables that functionality.</p>
 <p><strong>Multiple Inheritance Overview</strong></p>
 <p>There is another use case in which <code>super()</code> really shines, and this one isn’t as common as the single inheritance scenario. In addition to single inheritance, Python supports multiple inheritance, in which a subclass can inherit from multiple superclasses that don’t necessarily inherit from each other (also known as sibling classes).</p>
-<pre><code class="bash">Superclass 1              Superclass 2
+<pre><code class="language-bash">Superclass 1              Superclass 2
      |                         |
      |                         |
      |                         |
@@ -286,9 +276,8 @@ class Square(Rectangle):
      |                         |
      ------&gt;  Subclass &lt;-------
 </code></pre>
-
 <p>Let's get reacquainted with our base code:</p>
-<pre><code class="python">class Rectangle:
+<pre><code class="language-python">class Rectangle:
     def __init__(self, length, width):
         self.length = length
         self.width = width
@@ -303,10 +292,9 @@ class Square(Rectangle):
     def __init__(self, length):
         super(Square, self).__init__(length, length)
 </code></pre>
-
 <p>Now let's proceed...</p>
 <p>To better illustrate multiple inheritance in action, here is some code for you to try out, showing how you can build a right pyramid (a pyramid with a square base) out of a Triangle and a Square:</p>
-<pre><code class="python">class Triangle:
+<pre><code class="language-python">class Triangle:
     def __init__(self, base, height):
         self.base = base
         self.height = height
@@ -324,10 +312,9 @@ class RightPyramid(Triangle, Square):
         perimeter = super().perimeter()
         return 0.5 * perimeter * self.slant_height + base_area
 </code></pre>
-
 <p>This example declares a Triangle class and a RightPyramid class that inherits from both Square and Triangle. You’ll see another .area() method that uses super() just like in single inheritance, with the aim of it reaching the .perimeter() and .area() methods defined all the way up in the Rectangle class.</p>
 <p>The problem, though, is that both superclasses (Triangle and Square) define a .area(). Take a second and think about what might happen when you call .area() on RightPyramid, and then try calling it like below:</p>
-<pre><code class="python">&gt;&gt; pyramid = RightPyramid(2, 4)
+<pre><code class="language-python">&gt;&gt; pyramid = RightPyramid(2, 4)
 &gt;&gt; pyramid.area()
 Traceback (most recent call last):
   File &quot;shapes.py&quot;, line 63, in 
@@ -338,22 +325,20 @@ Traceback (most recent call last):
     return 0.5 * self.base * self.height
 AttributeError: 'RightPyramid' object has no attribute 'height'
 </code></pre>
-
 <p>Did you guess that Python will try to call Triangle.area()? This is because of something called the method resolution order.</p>
 <p><strong>Method Resolution Order</strong></p>
 <p>The method resolution order (or MRO) tells Python how to search for inherited methods. This comes in handy when you’re using super() because the MRO tells you exactly where Python will look for a method you’re calling with super() and in what order.</p>
 <p>Every class has an .<strong>mro</strong> attribute that allows us to inspect the order, so let’s do that:</p>
-<pre><code class="python">&gt;&gt;&gt; RightPyramid.__mro__
+<pre><code class="language-python">&gt;&gt;&gt; RightPyramid.__mro__
 (&lt;class '__main__.RightPyramid'&gt;, &lt;class '__main__.Triangle'&gt;, 
  &lt;class '__main__.Square'&gt;, &lt;class '__main__.Rectangle'&gt;, 
  &lt;class 'object'&gt;)
 </code></pre>
-
 <p>This tells us that methods will be searched first in Rightpyramid, then in Triangle, then in Square, then Rectangle, and then, if nothing is found, in object, from which all classes originate.</p>
 <p>The problem here is that the interpreter is searching for .area() in Triangle before Square and Rectangle, and upon finding .area() in Triangle, Python calls it instead of the one you want. Because Triangle.area() expects there to be a .height and a .base attribute, Python throws an AttributeError.</p>
 <p>The problem here is that the interpreter is searching for .area() in Triangle before Square and Rectangle, and upon finding .area() in Triangle, Python calls it instead of the one you want. Because Triangle.area() expects there to be a .height and a .base attribute, Python throws an AttributeError.</p>
 <p>Luckily, you have some control over how the MRO is constructed. Just by changing the signature of the RightPyramid class, you can search in the order you want, and the methods will resolve correctly:</p>
-<pre><code class="python">class RightPyramid(Square, Triangle):
+<pre><code class="language-python">class RightPyramid(Square, Triangle):
     def __init__(self, base, slant_height):
         self.base = base
         self.slant_height = slant_height
@@ -364,10 +349,9 @@ AttributeError: 'RightPyramid' object has no attribute 'height'
         perimeter = super().perimeter()
         return 0.5 * perimeter * self.slant_height + base_area
 </code></pre>
-
 <p>Notice that RightPyramid initializes partially with the .<strong>init</strong>() from the Square class. This allows .area() to use the .length on the object, as is designed.</p>
 <p>Now, you can build a pyramid, inspect the MRO, and calculate the surface area:</p>
-<pre><code class="python">&gt;&gt;&gt; pyramid = RightPyramid(2, 4)
+<pre><code class="language-python">&gt;&gt;&gt; pyramid = RightPyramid(2, 4)
 &gt;&gt;&gt; RightPyramid.__mro__
 (&lt;class '__main__.RightPyramid'&gt;, &lt;class '__main__.Square'&gt;, 
 &lt;class '__main__.Rectangle'&gt;, &lt;class '__main__.Triangle'&gt;, 
@@ -375,13 +359,12 @@ AttributeError: 'RightPyramid' object has no attribute 'height'
 &gt;&gt;&gt; pyramid.area()
 20.0
 </code></pre>
-
 <p>You see that the MRO is now what you’d expect, and you can inspect the area of the pyramid as well, thanks to .area() and .perimeter().</p>
 <p>There’s still a problem here, though. For the sake of simplicity, I did a few things wrong in this example: the first, and arguably most importantly, was that I had two separate classes with the same method name and signature.</p>
 <p>This causes issues with method resolution, because the first instance of .area() that is encountered in the MRO list will be called.</p>
 <p>When you’re using super() with multiple inheritance, it’s imperative to design your classes to cooperate. Part of this is ensuring that your methods are unique so that they get resolved in the MRO, by making sure method signatures are unique—whether by using method names or method parameters.</p>
 <p>In this case, to avoid a complete overhaul of your code, you can rename the Triangle class’s .area() method to .tri_area(). This way, the area methods can continue using class properties rather than taking external parameters:</p>
-<pre><code class="python">class Triangle:
+<pre><code class="language-python">class Triangle:
     def __init__(self, base, height):
         self.base = base
         self.height = height
@@ -390,9 +373,8 @@ AttributeError: 'RightPyramid' object has no attribute 'height'
     def tri_area(self):
         return 0.5 * self.base * self.height
 </code></pre>
-
 <p>Let’s also go ahead and use this in the RightPyramid class:</p>
-<pre><code class="python">class RightPyramid(Square, Triangle):
+<pre><code class="language-python">class RightPyramid(Square, Triangle):
     def __init__(self, base, slant_height):
         self.base = base
         self.slant_height = slant_height
@@ -408,7 +390,6 @@ AttributeError: 'RightPyramid' object has no attribute 'height'
         triangle_area = super().tri_area()
         return triangle_area * 4 + base_area
 </code></pre>
-
 <p>The next issue here is that the code doesn’t have a delegated Triangle object like it does for a Square object, so calling .area_2() will give us an AttributeError since .base and .height don’t have any values.</p>
 <p>You need to do two things to fix this:</p>
 <ol>
@@ -419,7 +400,7 @@ AttributeError: 'RightPyramid' object has no attribute 'height'
 <p>Redesign all the .<strong>init</strong>() calls to take a keyword dictionary. See the complete code below.  </p>
 </li>
 </ol>
-<pre><code class="python">class Rectangle:
+<pre><code class="language-python">class Rectangle:
     def __init__(self, length, width, **kwargs):
         self.length = length
         self.width = width
@@ -473,7 +454,6 @@ class RightPyramid(Square, Triangle):
         triangle_area = super().tri_area()
         return triangle_area * 4 + base_area
 </code></pre>
-
 <p>There are a number of important differences in this code:</p>
 <ul>
 <li>
@@ -484,13 +464,12 @@ class RightPyramid(Square, Triangle):
 </li>
 </ul>
 <p>Now, when you use these updated classes, you have this:</p>
-<pre><code class="python">&gt;&gt;&gt; pyramid = RightPyramid(base=2, slant_height=4)
+<pre><code class="language-python">&gt;&gt;&gt; pyramid = RightPyramid(base=2, slant_height=4)
 &gt;&gt;&gt; pyramid.area()
 20.0
 &gt;&gt;&gt; pyramid.area_2()
 20.0
 </code></pre>
-
 <p>It works! You’ve used super() to successfully navigate a complicated class hierarchy while using both inheritance and composition to create new classes with minimal reimplementation.</p>
 <p>Quiz!!! When Rectangle calls super() what are the values of kwargs and what class gets it's <strong>init</strong> method called</p>
 <p>Answer:</p>
@@ -503,20 +482,18 @@ class RightPyramid(Square, Triangle):
 </li>
 </ul>
 <p>Remember the MRO? Let's look at RightPyramid's MRO</p>
-<pre><code class="python">&gt;&gt;&gt; RightPyramid.__mro__
+<pre><code class="language-python">&gt;&gt;&gt; RightPyramid.__mro__
 (&lt;class '__main__.RightPyramid'&gt;, &lt;class '__main__.Square'&gt;, &lt;class '__main__.Rectangle'&gt;, &lt;class '__main__.Triangle'&gt;, &lt;class 'object'&gt;)
 </code></pre>
-
 <p>Even though Rectangle doesn't inherit from Triangle, Triangle is next in the list of classes to search for an <strong>init</strong> method. You'll notice object is at the end of the list.</p>
-<pre><code class="python">super().__init__(**kwargs)
+<pre><code class="language-python">super().__init__(**kwargs)
 </code></pre>
-
 <p>Multiple Inheritance Alternatives
 As you can see, multiple inheritance can be useful but also lead to very complicated situations and code that is hard to read. It’s also rare to have objects that neatly inherit everything from more than multiple other objects.</p>
 <p>If you see yourself beginning to use multiple inheritance and a complicated class hierarchy, it’s worth asking yourself if you can achieve code that is cleaner and easier to understand by using composition instead of inheritance.</p>
 <p>With composition, you can add very specific functionality to your classes from a specialized, simple class called a mixin.</p>
 <p>Since this article is focused on inheritance, I won’t go into too much detail on composition and how to wield it in Python, but here’s a short example using VolumeMixin to give specific functionality to our 3D objects—in this case, a volume calculation:</p>
-<pre><code class="python">class Rectangle:
+<pre><code class="language-python">class Rectangle:
     def __init__(self, length, width):
         self.length = length
         self.width = width
@@ -543,15 +520,13 @@ class Cube(VolumeMixin, Square):
     def surface_area(self):
         return super().area() * 6
 </code></pre>
-
 <p>In this example, the code was reworked to include a mixin called VolumeMixin. The mixin is then used by Cube and gives Cube the ability to calculate its volume, which is shown below:</p>
-<pre><code class="python">&gt;&gt;&gt; cube = Cube(2)
+<pre><code class="language-python">&gt;&gt;&gt; cube = Cube(2)
 &gt;&gt;&gt; cube.surface_area()
 24
 &gt;&gt;&gt; cube.volume()
 8
 </code></pre>
-
 <p><strong>A super() Recap</strong></p>
 <p>In this tutorial, you learned how to supercharge your classes with super(). Your journey started with a review of single inheritance and then showed how to call superclass methods easily with super().</p>
 <p>You then learned how multiple inheritance works in Python, and techniques to combine super() with multiple inheritance. You also learned about how Python resolves method calls using the method resolution order (MRO), as well as how to inspect and modify the MRO to ensure appropriate methods are called at appropriate times.</p>

@@ -89,14 +89,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="useful-everyday-code">Useful Everyday Code</h1>
 <h2 id="drop-if-exists">Drop If Exists</h2>
-<pre><code class="sql">DROP TABLE [IF EXISTS] [schema_name.]table_name;
+<pre><code class="language-sql">DROP TABLE [IF EXISTS] [schema_name.]table_name;
 </code></pre>
-
 <h2 id="select-into">Select Into</h2>
 <p><em>source <a href="https://stackoverflow.com/questions/2361921/select-into-statement-in-sqlite">stackoverflow</a></em></p>
-<pre><code class="sql">CREATE TABLE equipments_backup AS SELECT * FROM equipments
+<pre><code class="language-sql">CREATE TABLE equipments_backup AS SELECT * FROM equipments
 </code></pre>
-
 <h2 id="ranks-row_number">Ranks / Row_Number</h2>
 <blockquote>
 <p>Courtest of <a href="https://www.sqlitetutorial.net/sqlite-window-functions/sqlite-rank/">sqlitetutorial</a></p>
@@ -104,12 +102,11 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><em>Window function support was first added to SQLite with release version 3.25.0 (2018-09-15). The SQLite developers used the PostgreSQL window function documentation as their primary reference for how window functions ought to behave.</em></p>
 <p>The <code>RANK()</code> function is a window function that assigns a rank to each row in a query’s result set. The rank of a row is calculated by one plus the number of ranks that comes before it.</p>
 <p>The following shows the syntax of the <code>RANK()</code> function:</p>
-<pre><code class="sql">RANK() OVER (
+<pre><code class="language-sql">RANK() OVER (
     PARTITION BY &lt;expression1&gt;[{,&lt;expression2&gt;...}]
     ORDER BY &lt;expression1&gt; [ASC|DESC], [{,&lt;expression1&gt;...}]
 )
 </code></pre>
-
 <blockquote>
 <p>Courtesty of <a href="https://www.sqlite.org/windowfunctions.html">sqlite</a></p>
 </blockquote>
@@ -146,15 +143,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </blockquote>
 <h3 id="add-column">Add Column</h3>
 <p>The syntax to ADD A COLUMN in a table in SQLite (using the ALTER TABLE statement) is:</p>
-<pre><code class="sql">ALTER TABLE table_name
+<pre><code class="language-sql">ALTER TABLE table_name
   ADD new_column_name column_definition;
 </code></pre>
-
 <h3 id="change-column">Change Column</h3>
 <p>You can not use the ALTER TABLE statement to modify a column in SQLite. Instead you will need to rename the table, create a new table, and copy the data into the new table.</p>
 <p>Syntax
 The syntax to MODIFY A COLUMN in a table in SQLite is:</p>
-<pre><code class="sql">PRAGMA foreign_keys=off;
+<pre><code class="language-sql">PRAGMA foreign_keys=off;
 
 BEGIN TRANSACTION;
 
@@ -174,13 +170,12 @@ COMMIT;
 
 PRAGMA foreign_keys=on;
 </code></pre>
-
 <h3 id="pivot-table">Pivot Table</h3>
 <blockquote>
 <p>Courtesty of <a href="https://modern-sql.com/use-case/pivot">modern-sql</a></p>
 </blockquote>
 <p>Essentially what you need to do is a subquery in which the inner query has the data you want to source and pivot. The outer query will group by a <em>key</em> and <strong>explicitly</strong> define the columns that should be created from values in a particular row. Use <em>FILTER</em> to filter for the rows that will belong to each column. <em>Note:</em> This should be replaced by <em>CASE</em> statements in the future. </p>
-<pre><code class="sql">SELECT year
+<pre><code class="language-sql">SELECT year
      , SUM(revenue) FILTER (WHERE month =  1) jan_revenue
      , SUM(revenue) FILTER (WHERE month =  2) feb_revenue
      ...
@@ -192,24 +187,21 @@ PRAGMA foreign_keys=on;
        ) invoices
  GROUP BY year
 </code></pre>
-
 <h2 id="julian-day">Julian Day</h2>
 <blockquote>
 <p>Source <a href="https://www.techonthenet.com/sqlite/functions/julianday.php">techonthenet</a></p>
 </blockquote>
 <p>Syntax:</p>
 <p>The syntax for the julianday function in SQLite is:</p>
-<pre><code class="sql">julianday(timestring [, modifier1, modifier2, ... modifier_n ] )
+<pre><code class="language-sql">julianday(timestring [, modifier1, modifier2, ... modifier_n ] )
 </code></pre>
-
 <p>More concrete example:</p>
-<pre><code class="sql">select
+<pre><code class="language-sql">select
 mrn,
 date,
 julianday(date) as j_day
 from mrns_dates;
 </code></pre>
-
 <p>output:</p>
 <table>
 <thead>
@@ -320,7 +312,7 @@ from mrns_dates;
 </table>
 <h2 id="many-to-many-relationship">Many to Many Relationship</h2>
 <p><img alt="many_to_many" src="../many_to_many.jpg" /></p>
-<pre><code class="sql">/*display formatting*/
+<pre><code class="language-sql">/*display formatting*/
 .mode column
 .headers on
 
@@ -345,9 +337,8 @@ select * from bookAuthor;
 select * from authors;
 
 </code></pre>
-
 <p>Which shows:</p>
-<pre><code class="sql">sqlite&gt; select * from books;
+<pre><code class="language-sql">sqlite&gt; select * from books;
 book_id     title       description
 ----------  ----------  -----------
 1           book1       Ben's book 
@@ -376,15 +367,13 @@ book_id     title       description
 ----------  ----------  -----------------------------
 3           book3       Collaboration of Yuki and Ben
 </code></pre>
-
 <p>Now we can showcase the purpose of such a join:</p>
-<pre><code class="sql">select b.title, a.first_name, b.description from books as b
+<pre><code class="language-sql">select b.title, a.first_name, b.description from books as b
 inner join bookAuthor as ba on b.book_id = ba.book_id
 inner join authors as a on a.author_id = ba.author_id;
 </code></pre>
-
 <p>which gives:</p>
-<pre><code class="sql">title       first_name  description
+<pre><code class="language-sql">title       first_name  description
 ----------  ----------  -----------
 book1       Ben         Ben's book 
 book2       Yuki        Yuki's book

@@ -88,7 +88,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>First, connect to your MySQL database using your MySQL client from your operating system command line:</p>
 <p><code>$ mysql -u root -p</code></p>
 <p>Next, after you're logged into your MySQL database, tell MySQL which database you want to use:</p>
-<pre><code class="sql">mysql&gt; show databases;
+<pre><code class="language-sql">mysql&gt; show databases;
 +--------------------+
 | Database           |
 +--------------------+
@@ -140,52 +140,43 @@ mysql&gt; show tables;
 28 rows in set (0.00 sec)
 
 </code></pre>
-
 <h3 id="create-database">Create Database</h3>
 <p>You can now work with the database. For example, the following commands demonstrate how to create a basic table named <code>example</code>, and how to insert some data into it:</p>
-<pre><code class="sql">CREATE TABLE example ( id smallint unsigned not null auto_increment, name varchar(20) not null, constraint pk_example primary key (id) );
+<pre><code class="language-sql">CREATE TABLE example ( id smallint unsigned not null auto_increment, name varchar(20) not null, constraint pk_example primary key (id) );
 INSERT INTO example ( id, name ) VALUES ( null, 'Sample data' );
 </code></pre>
-
 <h3 id="drop-databasetable">Drop Database\Table</h3>
-<pre><code class="sql">DROP DATABASE dbname;
+<pre><code class="language-sql">DROP DATABASE dbname;
 DROP TABLE tablename;
 </code></pre>
-
 <p>Type <code>\q</code> to exit the mysql program.</p>
 <h3 id="new-user">New User</h3>
 <blockquote>
 <p>Courtesty of <a href="https://www.a2hosting.com/kb/developer-corner/mysql/managing-mysql-databases-and-users-from-the-command-line">a2hosting.com</a></p>
 </blockquote>
 <p>To create a database user, type the following command. Replace <code>username</code> with the user you want to create, and replace <code>password</code> with the user's password:</p>
-<pre><code class="sql">GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost' IDENTIFIED BY 'password';
+<pre><code class="language-sql">GRANT ALL PRIVILEGES ON *.* TO 'username'@'localhost' IDENTIFIED BY 'password';
 </code></pre>
-
 <p>This command grants the user all permissions. However, you can grant specific permissions to maintain precise control over database access. For example, to explicitly grant the <code>SELECT</code> permission, you would use the following command:</p>
-<pre><code class="sql">GRANT SELECT ON *.* TO 'username'@'localhost'
+<pre><code class="language-sql">GRANT SELECT ON *.* TO 'username'@'localhost'
 </code></pre>
-
 <p>To log in to MySQL as the user you just created, type the following command. Replace <code>username</code> with the name of the user you created in step 3:</p>
-<pre><code class="sql">mysql -u username -p
+<pre><code class="language-sql">mysql -u username -p
 </code></pre>
-
 <h3 id="delete-user">Delete User</h3>
 <p>To view a list of all users, type the following command from the mysql&gt; prompt:</p>
-<pre><code class="sql">SELECT user FROM mysql.user GROUP BY user;
+<pre><code class="language-sql">SELECT user FROM mysql.user GROUP BY user;
 </code></pre>
-
 <p>To delete a specific user, type the following command from the mysql&gt; prompt. Replace username with the name of the user that you want to delete:</p>
-<pre><code class="sql">DELETE FROM mysql.user WHERE user = 'username';
+<pre><code class="language-sql">DELETE FROM mysql.user WHERE user = 'username';
 </code></pre>
-
 <h3 id="using-sql-script-files">Using SQL script files</h3>
 <p>Create a file named <strong>example.sql</strong> and open it in your preferred text edtior. Copy and paste the following text into the file:</p>
-<pre><code class="sql">CREATE DATABASE dbname;
+<pre><code class="language-sql">CREATE DATABASE dbname;
 USE dbname;
 CREATE TABLE tablename ( id smallint unsigned not null auto_increment, name varchar(20) not null, constraint pk_example primary key (id) );
 INSERT INTO tablename ( id, name ) VALUES ( null, 'Sample data' );
 </code></pre>
-
 <p>To process the SQL script, type the following command. Replace username with the name of the user you just created:</p>
 <p><code>mysql -u username -p &lt; example.sql</code></p>
 <h2 id="mysql-root-password-guide">MySQL Root Password Guide</h2>
@@ -211,10 +202,9 @@ INSERT INTO tablename ( id, name ) VALUES ( null, 'Sample data' );
 <p>At the <code>mysql&gt;</code> prompt, reset the password. To do this, type the following command, replacing <code>NEW-PASSWORD</code> with the new root password:</p>
 <p><code>UPDATE mysql.user SET Password=PASSWORD('NEW-PASSWORD') WHERE User='root';</code></p>
 <p>At the mysql&gt; prompt, type the following commands:</p>
-<pre><code class="sql">FLUSH PRIVILEGES;
+<pre><code class="language-sql">FLUSH PRIVILEGES;
 exit;
 </code></pre>
-
 <p>Stop the MySQL server using the following command. You will be prompted to enter the new MySQL root password before the MySQL server shuts down:</p>
 <p><code>mysqladmin -u root -p shutdown</code></p>
 <p>Start the MySQL server normally. To do this, type the appropriate command for your Linux distribution:</p>

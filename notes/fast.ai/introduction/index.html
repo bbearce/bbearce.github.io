@@ -95,20 +95,18 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Deep Learning really only cares about the number of Floating Point Operations (FLOPs) per second. GPUs are highly optimized for that.</p>
 <p>Try running this inside a Jupyter Notebook:</p>
 <p>Cell [1]:</p>
-<pre><code class="python">import torch
+<pre><code class="language-python">import torch
 t_cpu = torch.rand(500,500,500)
 %timeit t_cpu @ t_cpu
 
 1 loop, best of 3: 1.78 s per loop
 </code></pre>
-
 <p>Cell [2]:</p>
-<pre><code class="python">t_gpu = torch.rand(500,500,500).cuda()
+<pre><code class="language-python">t_gpu = torch.rand(500,500,500).cuda()
 %timeit t_gpu @ t_gpu
 
 1000 loops, best of 3: 15.4 ms per loop
 </code></pre>
-
 <p>If you would like to train anything meaningful in deep learning, a GPU is what you need - specifically an NVIDIA GPU.</p>
 <p>Why NVIDIA?
 We recommend you to use an NVIDIA GPU since they are currently the best out there for a few reasons:</p>

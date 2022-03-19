@@ -88,7 +88,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h2 id="padding-center-rjust-ljust">Padding: center(), rjust(), ljust()</h2>
 <p>The center() method returns a string which is padded with the specified character.</p>
 <p>The rjust()\ljust() methods return a string which is padded on either side.</p>
-<pre><code class="python">&gt;&gt;&gt; 'A'.center(1, '*')
+<pre><code class="language-python">&gt;&gt;&gt; 'A'.center(1, '*')
 'A'
 &gt;&gt;&gt; 'A'.center(2, '*')
 'A*'
@@ -107,36 +107,31 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 &gt;&gt;&gt; 'A'.ljust(3, '*')
 'A**'
 </code></pre>
-
 <h2 id="strformat">str.format()</h2>
 <p><strong>Different common uses of the str.format() function</strong></p>
 <p><em>format(value[, format_spec])</em></p>
 <p>First example:</p>
-<pre><code class="python">&gt;&gt;&gt; &quot;{}&quot;.format('value')
+<pre><code class="language-python">&gt;&gt;&gt; &quot;{}&quot;.format('value')
 'value'
 </code></pre>
-
 <p>Multiple values:</p>
-<pre><code class="python">&gt;&gt;&gt; &quot;{} {}&quot;.format('value1','value2')
+<pre><code class="language-python">&gt;&gt;&gt; &quot;{} {}&quot;.format('value1','value2')
 'value1 value2'
 </code></pre>
-
 <p>Reverse order:</p>
-<pre><code class="python">&gt;&gt;&gt; &quot;{1} {0}&quot;.format('value1','value2')
+<pre><code class="language-python">&gt;&gt;&gt; &quot;{1} {0}&quot;.format('value1','value2')
 'value2 value1'
 </code></pre>
-
 <p>Key Word Arguments</p>
-<pre><code class="python">&gt;&gt;&gt; print(&quot;{kwarg} is {0} used for {1}&quot;
+<pre><code class="language-python">&gt;&gt;&gt; print(&quot;{kwarg} is {0} used for {1}&quot;
 .format(&quot;being&quot;, &quot;string formatting&quot;, kwarg =&quot;Some Key Word Argument&quot;))
 
 ... Some Key Word Argument is being used for string formatting
 </code></pre>
-
 <p>We can also use types to further format values:</p>
 <p><strong>Syntax:</strong> {field_name:conversion}.format(value) </p>
 <p><em>Note: field_name can be the index (0) or name of key word argument</em></p>
-<pre><code class="python">conversion values:
+<pre><code class="language-python">conversion values:
 s – strings
 d – decimal integers (base-10)
 f – floating point display
@@ -147,20 +142,18 @@ x – hexadecimal with lowercase letters after 9
 X – hexadecimal with uppercase letters after 9
 e – exponent notation
 </code></pre>
-
 <p>Use like this:</p>
 <p><strong>s - string</strong></p>
-<pre><code class="python">&gt;&gt;&gt; '{kwarg:s}'.format(kwarg='5')
+<pre><code class="language-python">&gt;&gt;&gt; '{kwarg:s}'.format(kwarg='5')
 '5'
 &gt;&gt;&gt; '{kwarg:s}'.format(kwarg=5)
 Traceback (most recent call last):
   File &quot;&quot;, line 1, in 
 ValueError: Unknown format code 's' for object of type 'int'
 </code></pre>
-
 <p>Notice how we got an error for trying to convert an int to a string</p>
 <p><strong>d - decimal integers</strong></p>
-<pre><code class="python">&gt;&gt;&gt; # This works 
+<pre><code class="language-python">&gt;&gt;&gt; # This works 
 print(&quot;Convert {0} to decimal integer: {0:d}.&quot;.format(100))
 # Notice the Error
 print(&quot;Convert {0} to decimal integer: {0:d}.&quot;.format(100.0))
@@ -170,9 +163,8 @@ print(&quot;Convert {0} to decimal integer: {0:d}.&quot;.format(100.0))
   File &quot;&quot;, line 2, in 
 ValueError: Unknown format code 'd' for object of type 'float'
 </code></pre>
-
 <p><strong>f - floats</strong></p>
-<pre><code class="python">&gt;&gt;&gt; # Default decimal precision to 0.000001
+<pre><code class="language-python">&gt;&gt;&gt; # Default decimal precision to 0.000001
 print(&quot;Convert {0} to float: {0:f}.&quot;.format(100.123456789))
 ... Convert 100.123456789 to float: 100.123457.
 &gt;&gt;&gt; # Change decimal precision to 0.01
@@ -185,7 +177,6 @@ print(&quot;Convert {0} to float: {0:.1f}.&quot;.format(100.123456789))
 print(&quot;Convert {0} to float: {0:.9f}.&quot;.format(100.123456789))
 ... Convert 100.123456789 to float: 100.123456789.
 </code></pre>
-
 <p><strong>c - single character</strong> <em>(accepts integer or single character string). <a href="https://unicode-table.com/en/">Use this link for a unicode character lookup table</a></em></p>
 <p>Brief sample...</p>
 <table>
@@ -321,7 +312,7 @@ print(&quot;Convert {0} to float: {0:.9f}.&quot;.format(100.123456789))
 </tbody>
 </table>
 <p>...</p>
-<pre><code class="python">#000
+<pre><code class="language-python">#000
 &gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(16)])
 '\x00 \x01 \x02 \x03 \x04 \x05 \x06 \x07 \x08 \t \n \x0b \x0c \r \x0e \x0f'
 #001
@@ -340,9 +331,8 @@ print(&quot;Convert {0} to float: {0:.9f}.&quot;.format(100.123456789))
 &gt;&gt;&gt; ' '.join(['{0:c}'.format(_) for _ in range(80,96)])
 'P Q R S T U V W X Y Z [ \\ ] ^ _'
 </code></pre>
-
 <p><strong>b - binary</strong></p>
-<pre><code class="python">&gt;&gt;&gt; print(&quot;{0:b}&quot;.format(0))
+<pre><code class="language-python">&gt;&gt;&gt; print(&quot;{0:b}&quot;.format(0))
 0
 &gt;&gt;&gt; print(&quot;{0:b}&quot;.format(1))
 1
@@ -353,9 +343,8 @@ print(&quot;Convert {0} to float: {0:.9f}.&quot;.format(100.123456789))
 &gt;&gt;&gt; print(&quot;{0:b}&quot;.format(100))
 1100100
 </code></pre>
-
 <p><strong>o - octal</strong></p>
-<pre><code class="python">&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(0))
+<pre><code class="language-python">&gt;&gt;&gt; print(&quot;{0:o}&quot;.format(0))
 0
 &gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8))
 10
@@ -372,9 +361,8 @@ print(&quot;Convert {0} to float: {0:.9f}.&quot;.format(100.123456789))
 &gt;&gt;&gt; print(&quot;{0:o}&quot;.format(8 ** 3))
 1000
 </code></pre>
-
 <p><strong>x\H - hex\HEX</strong></p>
-<pre><code class="python">print(&quot;{0:x}&quot;.format(0*16)) # 0
+<pre><code class="language-python">print(&quot;{0:x}&quot;.format(0*16)) # 0
 print(&quot;{0:x}&quot;.format(1*16)) # 10
 print(&quot;{0:x}&quot;.format(2*16)) # 20
 print(&quot;{0:x}&quot;.format(16 ** 1)) # 10
@@ -385,17 +373,15 @@ print(&quot;{0:X}&quot;.format(10)) # A
 print(&quot;{0:x}&quot;.format(15)) # f
 print(&quot;{0:X}&quot;.format(15)) # F
 </code></pre>
-
 <p><strong>e - exponent</strong></p>
-<pre><code class="python">print(&quot;{0:e}&quot;.format(10))   # 1.000000e+01 
+<pre><code class="language-python">print(&quot;{0:e}&quot;.format(10))   # 1.000000e+01 
 print(&quot;{0:e}&quot;.format(100))  # 1.000000e+02
 print(&quot;{0:e}&quot;.format(1000)) # 1.000000e+03 
 </code></pre>
-
 <h2 id="strfind">str.find()</h2>
 <p><strong>Use a substring and start-end range to identify where a substring resides in a larger string</strong></p>
 <p><em>str.find(sub[, start[, end]])</em></p>
-<pre><code class="python">s = 'ABCBCBCBCBC'
+<pre><code class="language-python">s = 'ABCBCBCBCBC'
 
 # str.find() will return the index found or -1.
 

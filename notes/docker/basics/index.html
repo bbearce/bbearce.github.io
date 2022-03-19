@@ -93,41 +93,34 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <pre><code>docker 
 docker container --help 
 </code></pre>
-
 <p><strong>Display Docker version and info</strong></p>
 <pre><code>docker --version 
 docker version 
 docker info 
 </code></pre>
-
 <p><strong>Execute Docker image</strong></p>
 <pre><code>docker run hello-world 
 </code></pre>
-
 <p><strong>List Docker images</strong> </p>
 <pre><code>docker image ls 
 docker image ls --all 
 docker image ls -aq 
 </code></pre>
-
 <p><strong>List Docker containers (running, all, all in quiet mode)</strong></p>
 <pre><code>docker container ls 
 docker container ls --all 
 docker container ls –aq 
 </code></pre>
-
 <p><strong>Location of Docker logs</strong></p>
 <blockquote>
 <p>Source: <a href="https://stackoverflow.com/questions/41144589/how-to-redirect-docker-container-logs-to-a-single-file">stackoverflow</a></p>
 </blockquote>
 <p>Use this command to locate the logs:</p>
-<pre><code class="bash">docker inspect --format='{{.LogPath}}' containername
+<pre><code class="language-bash">docker inspect --format='{{.LogPath}}' containername
 </code></pre>
-
 <p>and this to view live:</p>
-<pre><code class="bash">tail -f `docker inspect --format='{{.LogPath}}' containername`
+<pre><code class="language-bash">tail -f `docker inspect --format='{{.LogPath}}' containername`
 </code></pre>
-
 <blockquote>
 <p>PS: Don't know why but <code>docker logs containername &gt; docker.log</code> just creates a blank file.</p>
 </blockquote>
@@ -135,17 +128,14 @@ docker container ls –aq
 <pre><code>docker service ls 
 docker stack services getstartedlab 
 </code></pre>
-
 <p><strong>Tasks</strong> <em>Note the addition of '_web' to the service name</em></p>
 <pre><code>docker service ps getstartedlab_web 
 </code></pre>
-
 <blockquote>
 <p>Note: container ls will show you the tasks running as well </p>
 </blockquote>
 <pre><code>docker container ls 
 </code></pre>
-
 <h2 id="run-without-sudo">Run without sudo</h2>
 <p>To create the docker group and add your user:</p>
 <ol>
@@ -198,7 +188,6 @@ On Linux, you can also run the following command to activate the changes to grou
 .
 .there is a lot more.
 </code></pre>
-
 <h2 id="useful-flags">Useful Flags</h2>
 <p><em>-v|--volume[=[[HOST-DIR:]CONTAINER-DIR[:OPTIONS]]]</em></p>
 <pre><code>          Create a bind mount. If you specify, -v /HOST-DIR:/CONTAINER-DIR, Docker 
@@ -212,19 +201,15 @@ On Linux, you can also run the following command to activate the changes to grou
               · [delegated|cached|consistent] 
               · [nocopy] 
 </code></pre>
-
 <p><em>-d, --detach=true|false</em></p>
 <pre><code>          Detached mode: run the container in the background and print the new container ID. The default is false. 
 </code></pre>
-
 <p><em>-i, --interactive=true|false</em></p>
 <pre><code>          Keep STDIN open even if not attached. The default is false. When set to true, keep stdin open even if not attached. 
 </code></pre>
-
 <p><em>-t, --tty=true|false</em></p>
 <pre><code>          Allocate a pseudo-TTY. The default is false. When set to true Docker can allocate a pseudo-tty and attach to the standard input of any container. This can be used, for example, to run a throwaway interactive shell. The default is false. The -t option is incompatible with a redirection of the docker client standard input. 
 </code></pre>
-
 <p><em>--name=" "</em></p>
 <pre><code>          Assign a name to the container 
 
@@ -235,7 +220,6 @@ On Linux, you can also run the following command to activate the changes to grou
        │UUID short identifier │ &quot;f78375b1c487&quot;│ 
        │Name                  │ &quot;evil_ptolemy&quot;|   
 </code></pre>
-
 <p><em>--restart=" "</em>
 To configure the restart policy for a container, use the <code>--restart</code> flag when using the docker run command. The value of the <code>--restart</code> flag can be any of the following:</p>
 <table>
@@ -267,7 +251,7 @@ To configure the restart policy for a container, use the <code>--restart</code> 
 <h2 id="managing-and-removing">Managing and Removing</h2>
 <p>Good <a href="https://linuxize.com/post/how-to-remove-docker-images-containers-volumes-and-networks/">discussion</a></p>
 <p><strong>Summary</strong></p>
-<pre><code class="bash">docker build -t friendlyhello .  # Create image using this directory's Dockerfile  
+<pre><code class="language-bash">docker build -t friendlyhello .  # Create image using this directory's Dockerfile  
 docker run -d -p 4000:80 friendlyhello         # Same thing, but in detached mode  
 docker container ls                                # List all running containers  
 docker container ls -a             # List all containers, even those not running  
@@ -283,7 +267,6 @@ docker tag &lt;image&gt; username/repository:tag  # Tag &lt;image&gt; for upload
 docker push username/repository:tag            # Upload tagged image to registry  
 docker run username/repository:tag                   # Run image from a registry  
 </code></pre>
-
 <h2 id="investigating-and-playing-around">Investigating and playing around</h2>
 <p><strong>DockerHub:</strong></p>
 <p>Image specifications: </p>
@@ -303,11 +286,9 @@ docker run username/repository:tag                   # Run image from a registry
 <p>If you want to run an instance of an image issue this command(this will download it if you don't have the image): </p>
 <pre><code>docker run -it -d ashok/pyashokproj bin/bash 
 </code></pre>
-
 <p>Keep in mind this is different than getting inside a running container. For this to work the container needs to be already running: </p>
 <pre><code>docker exec -it &lt;container-name/ID&gt; bash 
 </code></pre>
-
 <p>Some dockers can be started and stopped indefinitely either because they are a web server or an OS image(Ubuntu). Others based on things like pythonX.X can't be started up once stopped. A lot of customization and investigation can only really be done inside the running docker. So in order to get in we need to one of two things depending on the docker: </p>
 <p><em>OS or web server type docker:</em></p>
 <p>Use <code>docker container –ls a</code> to find the stopped container id. Next use <code>docker start &lt;container id&gt;</code>  to start the container again. Now use <code>docker ps</code> to see that it is running </p>
@@ -330,11 +311,10 @@ docker run username/repository:tag                   # Run image from a registry
 <p><code>root@f907b9e5d9a6:/# pip install seaborn</code><br />
 ...python is importing stuff... </p>
 <p><code>root@f907b9e5d9a6:/# python</code></p>
-<pre><code class="python">&gt;&gt;&gt; import seaborn 
+<pre><code class="language-python">&gt;&gt;&gt; import seaborn 
 &gt;&gt;&gt; 
 
 </code></pre>
-
 <p>You can see we installed seaborn. Now exit the docker <code>root@f907b9e5d9a6:/# exit</code>. We need to build it to an image: </p>
 <p><code>docker commit d7ef724c4309 bbearce/codalab:legacy</code></p>
 <p>We just made an image and tagged it with this identifier <code>bbearce/codalab:legacy</code> and we can see it if we execute: </p>
@@ -343,7 +323,6 @@ REPOSITORY               TAG                 IMAGE ID            CREATED        
 bbearce/codalab          legacy              c2d04ddb825a        3 seconds ago       2.65GB 
 codalab/codalab-legacy   latest              432ce2829707        20 months ago       2.64GB 
 </code></pre>
-
 <p>Now let's push it online (Docker Hub) as an optional last step: </p>
 <p><code>docker login</code></p>
 <p><code>docker push bbearce/codalab:legacy</code></p>

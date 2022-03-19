@@ -89,14 +89,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="io">IO</h1>
 <h2 id="reading-writing">Reading \ Writing</h2>
-<pre><code class="python">with open('test.txt', &quot;w&quot;) as file:
+<pre><code class="language-python">with open('test.txt', &quot;w&quot;) as file:
     file.write(&quot;Bam&quot;)
 </code></pre>
-
 <blockquote>
 <p>Source: <a href="https://www.w3schools.com/python/python_file_write.asp">w3schools</a></p>
 </blockquote>
-<pre><code class="python">f = open(&quot;demofile2.txt&quot;, &quot;a&quot;)
+<pre><code class="language-python">f = open(&quot;demofile2.txt&quot;, &quot;a&quot;)
 f.write(&quot;Now the file has more content!&quot;)
 f.close()
 
@@ -104,8 +103,7 @@ f.close()
 f = open(&quot;demofile2.txt&quot;, &quot;r&quot;)
 print(f.read())
 </code></pre>
-
-<pre><code class="python">f = open(&quot;demofile3.txt&quot;, &quot;w&quot;)
+<pre><code class="language-python">f = open(&quot;demofile3.txt&quot;, &quot;w&quot;)
 f.write(&quot;Woops! I have deleted the content!&quot;)
 f.close()
 
@@ -113,21 +111,19 @@ f.close()
 f = open(&quot;demofile3.txt&quot;, &quot;r&quot;)
 print(f.read())
 </code></pre>
-
 <blockquote>
 <p>Source: <a href="https://www.geeksforgeeks.org/python-os-mkdir-method/">geeksforgeeks</a></p>
 </blockquote>
 <h2 id="create-folder">Create folder</h2>
-<pre><code class="python">import os 
+<pre><code class="language-python">import os 
 os.mkdir(&quot;./to_here&quot;)
 </code></pre>
-
 <h2 id="move-file">Move File</h2>
 <blockquote>
 <p>Source: <a href="https://www.w3schools.com/python/python_file_write.asp">w3schools</a>
 </p>
 </blockquote>
-<pre><code class="python">import shutil
+<pre><code class="language-python">import shutil
 
 with open('from_here.txt', &quot;w&quot;) as file:
     file.write(&quot;from here&quot;)
@@ -136,22 +132,19 @@ src=&quot;./from_here.txt&quot;
 dest=&quot;./to_here/&quot;
 shutil.move(src, dest)
 </code></pre>
-
 <h2 id="copy-file">Copy File</h2>
-<pre><code class="python">import shutil
+<pre><code class="language-python">import shutil
 
 src=&quot;from_here.txt&quot;
 dest=&quot;./to_here/&quot;
 shutil.copyfile(src, os.path.join(dest,src))
 </code></pre>
-
 <h2 id="delete-a-file">Delete A File</h2>
-<pre><code class="python">import os
+<pre><code class="language-python">import os
 os.remove(&quot;test.txt&quot;)
 </code></pre>
-
 <h2 id="delete-a-folder">Delete A Folder</h2>
-<pre><code class="python">import shutil, os
+<pre><code class="language-python">import shutil, os
 
 #if empty
 os.rmdir(&quot;from_here&quot;)

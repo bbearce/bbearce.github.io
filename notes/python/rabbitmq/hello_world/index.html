@@ -87,12 +87,11 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </blockquote>
 <p><strong>RabbitMQ libraries</strong></p>
 <p>RabbitMQ speaks multiple protocols. This tutorial uses AMQP 0-9-1, which is an open, general-purpose protocol for messaging. There are a number of clients for RabbitMQ in many different languages. In this tutorial series we're going to use Pika 1.0.0, which is the Python client recommended by the RabbitMQ team. To install it you can use the pip package management tool:</p>
-<pre><code class="bash">python -m pip install pika --upgrade
+<pre><code class="language-bash">python -m pip install pika --upgrade
 </code></pre>
-
 <p>Our first program <em>send.py</em> will send a single message to the queue. The first thing we need to do is to establish a connection with RabbitMQ server.</p>
 <p>send.py:</p>
-<pre><code class="bash">#!/usr/bin/env python
+<pre><code class="language-bash">#!/usr/bin/env python
 import pika
 
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
@@ -113,9 +112,8 @@ print(&quot; [x] Sent 'Hello World!'&quot;)
 # We can do it by gently closing the connection.
 connection.close()
 </code></pre>
-
 <p>receive.py:</p>
-<pre><code class="bash">#!/usr/bin/env python
+<pre><code class="language-bash">#!/usr/bin/env python
 import pika
 
 connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))

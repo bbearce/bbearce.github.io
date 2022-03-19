@@ -84,20 +84,18 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     <h1 id="breadth-first-search">Breadth First Search</h1>
 <p>Solve a maze!</p>
 <p>In the breadth first search we start by imagining a grid.</p>
-<pre><code class="python">grid = [&quot;..........&quot;,
+<pre><code class="language-python">grid = [&quot;..........&quot;,
         &quot;...#...##.&quot;,
         &quot;..##...#..&quot;,
         &quot;.....###..&quot;,
         &quot;......*...&quot;]
 </code></pre>
-
 <p>Also define a key.</p>
-<pre><code class="python">wall, clear, goal = &quot;#&quot;, &quot;.&quot;, &quot;*&quot;
+<pre><code class="language-python">wall, clear, goal = &quot;#&quot;, &quot;.&quot;, &quot;*&quot;
 </code></pre>
-
 <p>The constraints are that you need to provide a function that takes a grid and a starting point and finds the shortest path to the goal. Provide the starting point as a tuple <code>(0,0)</code>.</p>
 <p>Here is a basic example:</p>
-<pre><code class="python">import collections, pdb
+<pre><code class="language-python">import collections, pdb
 
 
 def bfs(grid, start):
@@ -116,9 +114,8 @@ def bfs(grid, start):
         # pdb.set_trace(); # For when you get stuck
 
 </code></pre>
-
 <p>I have another version without the collections package to see a base python implementation.</p>
-<pre><code class="python">lot = [[1,1,1,1,1,1,1],
+<pre><code class="language-python">lot = [[1,1,1,1,1,1,1],
        [1,1,0,1,1,1,1],
        [0,1,1,0,0,0,1],
        [0,0,1,1,1,1,9],]
@@ -148,14 +145,12 @@ def bfs(grid, start):
 shortest_path = bfs(lot, (0,0))
 print(shortest_path)
 </code></pre>
-
 <p>This prints out the following:</p>
 <pre><code>([(0, 0), (1, 0), (2, 0), (3, 0), (4, 0), (5, 0), (6, 0), (6, 1), (6, 2), (6, 3)], 10)
 </code></pre>
-
 <p>A list that contains the path traversed and the the number of points in the traversed path.</p>
 <p>Finally there is a graph based approach:</p>
-<pre><code class="python"># Python3 Program to print BFS traversal 
+<pre><code class="language-python"># Python3 Program to print BFS traversal 
 # from a given source vertex. BFS(int s) 
 # traverses vertices reachable from s. 
 from collections import defaultdict 

@@ -85,7 +85,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>After sorting you can search the array with <a href="../binary_search">binary search</a>.</p>
 <p><img alt="quick-sort" src="../quick-sort.png" /></p>
 <p>Take last element as pivot and low and high are indexes of full array's start and end</p>
-<pre><code class="python">import pdb
+<pre><code class="language-python">import pdb
 
 def partition(arr, low, high):
     i = (low-1)           # index of smaller element
@@ -130,7 +130,6 @@ print(&quot;Sorted array is:&quot;,arr)
 # for i in range(n):
 #     print(&quot;%d&quot; % arr[i]),
 </code></pre>
-
 <blockquote>
 <p>Big O notation for this algorithm is O(log(n)). However according to <a href="https://medium.com/cesars-tech-insights/quicksort-17c5d24e7e5f#:~:text=Quicksort%20is%20a%20logarithmic%2Dtime,Merge%20Sort%20or%20Heap%20Sort.&amp;text=Quicksort%20uses%20recursion%2C%20divide%2Dand,%2Dconquer%20and%20comparison%2Dsort.">medium.com</a>, O(log (n)) speed is a best-case/average time, in worst case scenarios it can be O(n2) depending on the implementation.</p>
 </blockquote>

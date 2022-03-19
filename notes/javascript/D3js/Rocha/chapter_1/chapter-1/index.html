@@ -115,37 +115,31 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Use <a href="https://d3js.org/">https://d3js.org/</a> and click on any of the hexagon example to be taken to a tutorial. Two other platforms are <a href="https://www.bl.ocks.org">https://www.bl.ocks.org</a> and <a href="https://www.observablehq.com">https://www.observablehq.com</a> which contain interactive tutorials.</p>
 <h2 id="environment-setup">Environment Setup</h2>
 <h3 id="npm">npm</h3>
-<pre><code class="bash">$ npm install d3
+<pre><code class="language-bash">$ npm install d3
 </code></pre>
-
 <p>From there in my home directory is:</p>
-<pre><code class="bash">$ ls node_modules/d3/dist/
+<pre><code class="language-bash">$ ls node_modules/d3/dist/
 d3.js  d3.min.js  d3.node.js  package.js
 </code></pre>
-
 <p>Just source the <em>min</em> after copying it to your development directory as follows:</p>
-<pre><code class="html">&lt;script src=&quot;js/d3/d3.v5.min.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script src=&quot;js/d3/d3.v5.min.js&quot;&gt;&lt;/script&gt;
 </code></pre>
-
 <h3 id="cdn-link">CDN link</h3>
 <p>You can also just source it from the internet if you always have internet:</p>
-<pre><code class="html">&lt;script src=&quot;https://d3js.org/d3.v5.min.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script src=&quot;https://d3js.org/d3.v5.min.js&quot;&gt;&lt;/script&gt;
 </code></pre>
-
 <h3 id="simple-web-server-with-node">Simple Web Server with node</h3>
 <p>For simple examples using the file system to open the file is enough, but for larger ones that load external files, it is better to use a web server.</p>
-<pre><code class="bash">$ npm install http-server -g
+<pre><code class="language-bash">$ npm install http-server -g
 </code></pre>
-
 <p>Once installed move to the working directory and execute:</p>
-<pre><code class="bash">$ http-server
+<pre><code class="language-bash">$ http-server
 </code></pre>
-
 <blockquote>
 <p>I had an issue running <code>http-server</code> out of the box and this <a href="https://github.com/nodejs/node-v0.x-archive/issues/3911">thread</a> fixed it.</p>
 </blockquote>
 <p>Ex: Create a sim link called <em>node</em> that points to <em>nodejs</em></p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop/D3_tutorials$ sudo ln -s /usr/bin/nodejs /usr/bin/node
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~/Desktop/D3_tutorials$ sudo ln -s /usr/bin/nodejs /usr/bin/node
 bbearce@bbearce-XPS-15-9560:~/Desktop/D3_tutorials$ http-server
 Starting up http-server, serving ./
 Available on:
@@ -153,25 +147,22 @@ Available on:
   http://192.168.0.46:8080
 Hit CTRL-C to stop the server
 </code></pre>
-
 <p>Notice:</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop/D3_tutorials$ ls -la /usr/bin/node
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~/Desktop/D3_tutorials$ ls -la /usr/bin/node
 lrwxrwxrwx 1 root root 15 Feb 27 22:53 /usr/bin/node -&gt; /usr/bin/nodejs
 bbearce@bbearce-XPS-15-9560:~/Desktop/D3_tutorials$ ls -la /usr/bin/nodejs
 -rwxr-xr-x 1 root root 11187096 Aug  9  2018 /usr/bin/nodejs
 </code></pre>
-
 <blockquote>
 <p>Don't forget about codepen and jsfiddle as possible development environments</p>
 </blockquote>
 <h2 id="hello-world">Hello World</h2>
 <p>Put this is the body tag and then the js in a separate doc and source or put it in a script tag.
 HTML</p>
-<pre><code class="html">&lt;svg id=&quot;chart&quot; width=&quot;600&quot; height=&quot;200&quot;&gt;&lt;/svg&gt;
+<pre><code class="language-html">&lt;svg id=&quot;chart&quot; width=&quot;600&quot; height=&quot;200&quot;&gt;&lt;/svg&gt;
 </code></pre>
-
 <h3 id="constant">Constant</h3>
-<pre><code class="js">const array = [100, 200, 300, 350, 375, 400, 500];
+<pre><code class="language-js">const array = [100, 200, 300, 350, 375, 400, 500];
 
 d3.select(&quot;#chart&quot;)  // select #chart
 .selectAll(&quot;circle&quot;) // declares the elements we would like to create; Really this selects all circle elements in the &lt;svg&gt; tag but there are none so the selection is empty
@@ -182,12 +173,11 @@ d3.select(&quot;#chart&quot;)  // select #chart
 .attr(&quot;cy&quot;, 100)     // sets &quot;cy&quot; attribute
 .attr(&quot;cx&quot;, d =&gt; d)  // sets &quot;cx&quot; attribute (same as function(d){ return d }); This is being set by the data;
 </code></pre>
-
 <h3 id="binding">Binding</h3>
 <blockquote>
 <p>(we changed [100] in .data() to array)</p>
 </blockquote>
-<pre><code class="js">const array = [100, 200, 300, 350, 375, 400, 500];
+<pre><code class="language-js">const array = [100, 200, 300, 350, 375, 400, 500];
 
 d3.select(&quot;#chart&quot;)
         .selectAll(&quot;circle&quot;)
@@ -198,10 +188,9 @@ d3.select(&quot;#chart&quot;)
         .attr(&quot;cy&quot;, 100)
         .attr(&quot;cx&quot;, d =&gt; d)
 </code></pre>
-
 <h3 id="update">Update</h3>
 <p>Now skip a line and add this code after the selection. After 2 seconds there is a 1/4 second transition.</p>
-<pre><code class="js">setTimeout(function() {
+<pre><code class="language-js">setTimeout(function() {
     d3.select(&quot;#chart&quot;).selectAll(&quot;circle&quot;)
       .data([50, 75, 125, 225, 325, 425, 450])
         .attr(&quot;r&quot;, 5)
@@ -209,9 +198,8 @@ d3.select(&quot;#chart&quot;)
         .style(&quot;fill&quot;, &quot;red&quot;)
 }, 2000)
 </code></pre>
-
 <p>One very nice feature of D3 is how simple it is to animate transitions. You just need to chain a <code>transition()</code> command before the attributes and styles that changed. The default transition takes a quarter of a second.</p>
-<pre><code class="js">setTimeout(function() {
+<pre><code class="language-js">setTimeout(function() {
         d3.select(&quot;#chart&quot;).selectAll(&quot;circle&quot;)
                 .data([50, 75, 125, 225, 325, 425, 450])
                 .transition().duration(1000)
@@ -220,18 +208,15 @@ d3.select(&quot;#chart&quot;)
                 .style(&quot;fill&quot;, &quot;red&quot;)
         }, 2000)
 </code></pre>
-
 <p>You'll notice the transition is much smoother now, taking time to switch to red dots.</p>
 <h3 id="modules-microlibraries">Modules (microlibraries)</h3>
 <p>You can load select libraries like so:</p>
-<pre><code class="html">&lt;script src=&quot;https://d3js.org/d3-selection.v1.min.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script src=&quot;https://d3js.org/d3-selection.v1.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;https://d3js.org/d3-transition.v1.min.js&quot;&gt;&lt;/script&gt;
 </code></pre>
-
 <p>But if you need axes, maps, and other features, you will require more modules and dependencies. In this case, either use the default bundle, or set up a development environment where you can install each module using npm, since it automatically includes any dependencies.</p>
-<pre><code class="js">npm install module-name
+<pre><code class="language-js">npm install module-name
 </code></pre>
-
 <p><img alt="modules" src="../modules.png" /></p>
 <h3 id="data-manipulation">Data Manipulation</h3>
 <p>The following modules listed are used to generate, manipulate, transform, parse, and format data, in the form of numbers, text, arrays, objects, and files. They are all included in the default d3.js bundle:</p>

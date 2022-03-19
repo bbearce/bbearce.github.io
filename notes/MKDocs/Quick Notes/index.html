@@ -87,34 +87,29 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     <h1 id="quick-notes">Quick Notes</h1>
 <h2 id="deploy-the-serversite">Deploy the server\site</h2>
 <p>Be sure you are in ./code-journal/ or ./&lt;project root&gt;</p>
-<pre><code class="bash">code-journal  
+<pre><code class="language-bash">code-journal  
   |-docs  
   |-site  
   |-mkdocs.yml  
 </code></pre>
-
-<pre><code class="bash">Benjamins-MBP-2:code-journal bbearce$ pwd
+<pre><code class="language-bash">Benjamins-MBP-2:code-journal bbearce$ pwd
 /Users/bbearce/Documents/Code/code-journal
 </code></pre>
-
 <p>Use this code to serve the developer site</p>
-<pre><code class="bash">$ mkdocs serve
+<pre><code class="language-bash">$ mkdocs serve
 </code></pre>
-
 <p>Use this code to build the site</p>
-<pre><code class="bash">$ mkdocs build
+<pre><code class="language-bash">$ mkdocs build
 </code></pre>
-
 <p>To push to github do this:</p>
-<pre><code class="bash">cd ../bbearce.github.io/
+<pre><code class="language-bash">cd ../bbearce.github.io/
 mkdocs gh-deploy --config-file ../code-journal/mkdocs.yml --remote-branch master
 </code></pre>
-
 <h2 id="detailed-github-notes">Detailed Github Notes</h2>
 <p><a href="https://www.mkdocs.org/user-guide/deploying-your-docs/#readthedocs">github deploy</a></p>
 <h2 id="note-for-the-venv">Note for the venv</h2>
 <p><code>pip freeze</code> lists these packages:</p>
-<pre><code class="bash">Click==7.0
+<pre><code class="language-bash">Click==7.0
 Jinja2==2.10.1
 livereload==2.6.1
 Markdown==3.1.1
@@ -126,7 +121,6 @@ PyYAML==5.1.2
 six==1.12.0
 tornado==6.0.3
 </code></pre>
-
 <p>I am pretty sure I only installed <code>mkdocs</code> and <code>mkdocs-windmill-dark</code></p>
 
   <br>

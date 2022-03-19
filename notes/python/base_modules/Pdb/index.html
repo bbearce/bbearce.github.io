@@ -86,18 +86,16 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     <h1 id="pdb">Pdb</h1>
 <h2 id="useage-docs">Useage - <a href="https://docs.python.org/3/library/pdb.html">Docs</a></h2>
 <p>You can use </p>
-<pre><code class="python">import pdb
+<pre><code class="language-python">import pdb
 pdb.set_trace()
 </code></pre>
-
 <p>or <em>New: as of 3.7</em> <a href="https://docs.python.org/3/library/functions.html#breakpoint">breakpoint()</a></p>
-<pre><code class="python">breakpoint()
+<pre><code class="language-python">breakpoint()
 </code></pre>
-
 <p>to enter debug mode.</p>
 <h2 id="hidden-gems">Hidden gems</h2>
 <p>Use <code>!</code> to escape default pdb commands like <code>n(ext), c(ont(inue)) and h(elp)</code></p>
-<pre><code class="python">&gt;&gt;&gt; c = 1
+<pre><code class="language-python">&gt;&gt;&gt; c = 1
 &gt;&gt;&gt; breakpoint()
 --Return--
 &gt; &lt;stdin&gt;(1)&lt;module&gt;()-&gt;None

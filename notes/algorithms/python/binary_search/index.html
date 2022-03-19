@@ -84,7 +84,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     <h1 id="binary-search">Binary Search</h1>
 <p>See <a href="../quick_sort">quick sort</a> first as the array you are searching needs to be sorted.</p>
 <p><img alt="binary-search" src="../binary-search.png" /></p>
-<pre><code class="python">import os, pdb, math
+<pre><code class="language-python">import os, pdb, math
 
 def b_s_iterative(arr, elem):
     start = 0
@@ -102,9 +102,8 @@ def b_s_iterative(arr, elem):
         mid = math.floor((start + end)/2)
     return mid if arr[mid] == elem else -1, iter_count
 </code></pre>
-
 <p>Below is some practice evaluation code I was using. What I was doing was making <a href="https://en.wikipedia.org/wiki/Big_O_notation#:~:text=Big%20O%20notation%20is%20a,a%20particular%20value%20or%20infinity.&amp;text=Big%20O%20notation%20characterizes%20functions,using%20the%20same%20O%20notation.">Big O notation</a> sample data to test how many iterations it takes to search different size data. First I do orders of 10 and then orders of 2. Technically Big O notation uses log with base 2, so the second set of data is more useful for plotting; though they both work. We should see O(log(n)) on the y-axis and n on the x-axis showing that the time complexity is log(n) iterations to search an array given n elements. </p>
-<pre><code class="python">big_O = [] # 10s
+<pre><code class="language-python">big_O = [] # 10s
 for i in [1,10,100,1000,10000,100000,1000000,10000000]:
     # pdb.set_trace()
     if i == 0:

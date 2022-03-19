@@ -108,7 +108,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>You should be able to do this in the CMD in Windows or your terminal in MacOS\Linux.</p>
 </blockquote>
 <p>Ex:</p>
-<pre><code class="bash">bbearce@pop-os:~$ ssh bb927@mlsc.nmr.mgh.harvard.edu
+<pre><code class="language-bash">bbearce@pop-os:~$ ssh bb927@mlsc.nmr.mgh.harvard.edu
 
  /$$      /$$ /$$        /$$$$$$   /$$$$$$
 | $$$    /$$$| $$       /$$__  $$ /$$__  $$
@@ -128,7 +128,6 @@ on this cluster.
 Last login: Wed Sep 22 16:06:16 2021 from 10.251.11.74
 mlsc-login[0]:~$
 </code></pre>
-
 <h2 id="home-directories-and-data">Home Directories and Data</h2>
 <h3 id="home-directories">Home Directories</h3>
 <p>We have user accounts that are synced between all martinos machines and they all live on a drive managed by help desk. In order to keep space concerns down with 100s of users, they limit our space allowance to the point where it is unusable for more than configuratoin or tiny tests.</p>
@@ -138,10 +137,9 @@ mlsc-login[0]:~$
 <p>Notice how <code>pwd</code> prints something like <strong>/homes/#/\&lt;username></strong> rather than <strong>/home/\&lt;username></strong>. This is because we all live in <strong>/homes</strong> which is special directory (drive) managed by <a href="help@nmr.mgh.harvard.edu">Help Desk</a>.</p>
 </blockquote>
 <p>Ex:</p>
-<pre><code class="bash">mlsc-login[0]:~$ pwd
+<pre><code class="language-bash">mlsc-login[0]:~$ pwd
 /homes/3/bb927
 </code></pre>
-
 <h3 id="drives-and-network-storage">Drives and Network Storage</h3>
 <p><a href="https://www.nmr.mgh.harvard.edu/martinos/userInfo/computer/diskSpace.php">Martinos Official Notes</a></p>
 <ul>
@@ -155,7 +153,7 @@ mlsc-login[0]:~$
 </blockquote>
 <h4 id="network-storage">Network Storage</h4>
 <p>As the name implies /cluster/qtim is our lab's (QTIM) storage for use with the cluster. Everyone has a user folder as demonstrated here:</p>
-<pre><code class="bash">mlsc-login[0]:~$ ls /cluster/qtim
+<pre><code class="language-bash">mlsc-login[0]:~$ ls /cluster/qtim
 ID-qtim  machine_backups  users
 
 mlsc-login[0]:~$ ls -la /cluster/qtim/users
@@ -181,7 +179,6 @@ drwxrwsr-x.  2 bb927    qtim  4 Sep 21 17:31 slurm_jobs
 drwxrwsr-x. 27 va914    qtim 35 Aug  2 13:12 va914
 drwxr-sr-x. 35 bb927    qtim 43 Sep 10  2019 yifen
 </code></pre>
-
 <p>Go ahead and make yourself a directory here.</p>
 <blockquote>
 <p>Note we do not have <strong>sudo</strong> on these machines and everyone owns their own <strong>folder</strong> and are in the <strong>qtim</strong> group. These are denoted in columns <strong>3</strong> and <strong>4</strong>. We can technically add data to each others folders in their default state so becareful.</p>
@@ -189,7 +186,6 @@ drwxr-sr-x. 35 bb927    qtim 43 Sep 10  2019 yifen
 <p>Ex:</p>
 <pre><code>&lt;permissions&gt;. &lt;hard-links&gt; &lt;user&gt;    &lt;group&gt; &lt;size&gt; &lt;Month  Day Time&gt; &lt;item&gt;
 </code></pre>
-
 <blockquote>
 <p>This is the official place to do work, store data and code. </p>
 </blockquote>
@@ -198,19 +194,17 @@ drwxr-sr-x. 35 bb927    qtim 43 Sep 10  2019 yifen
 <p>We will need a python source for part of this demo. The Martinos center has setup an Anaconda distribution we can use thathas scientific modules as part of it. </p>
 <p><a href="https://freesurfer.net/fswiki/DevelopersGuide/NMRCenterPython/UsersGuide">Instructions for setup</a></p>
 <p>For now run this:</p>
-<pre><code class="bash">export PATH=/usr/pubsw/packages/python/anaconda3.7/bin:${PATH}
+<pre><code class="language-bash">export PATH=/usr/pubsw/packages/python/anaconda3.7/bin:${PATH}
 </code></pre>
-
 <p>Now you can use python:</p>
-<pre><code class="bash">mlsc-login[0]:bb927$ python
+<pre><code class="language-bash">mlsc-login[0]:bb927$ python
 Python 3.7.3 (default, Mar 27 2019, 22:11:17) 
 [GCC 7.3.0] :: Anaconda, Inc. on linux
 Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
 &gt;&gt;&gt; 
 </code></pre>
-
 <p>and list conda packages available:</p>
-<pre><code class="bash">mlsc-login[0]:bb927$ conda list
+<pre><code class="language-bash">mlsc-login[0]:bb927$ conda list
 # packages in environment at /usr/pubsw/packages/python/anaconda3-2019.03:
 #
 # Name                    Version                   Build  Channel
@@ -223,7 +217,6 @@ alabaster                 0.7.12                   py37_0
 ...
 ...
 </code></pre>
-
 <blockquote>
 <p>Additional instructions show you how to set your system path and properly install new packages.</p>
 </blockquote>
@@ -293,23 +286,19 @@ alabaster                 0.7.12                   py37_0
 </blockquote>
 <p>You should already be signed in. Change directory to the qtim cluster network storage now (be sure to have made your own directory with <code>mkdir &lt;username&gt;</code> where \&lt;username> is your Partners ID and it should be located at /cluster/qtim/users/. Also this directory is one level higher than your user directory):</p>
 <p>Ex:</p>
-<pre><code class="bash">mlsc-login[0]:~$ cd /cluster/qtim/users
+<pre><code class="language-bash">mlsc-login[0]:~$ cd /cluster/qtim/users
 </code></pre>
-
 <p>Notice a non-user directory called <strong>slurm_jobs</strong></p>
-<pre><code class="bash">mlsc-login[0]:users$ ls slurm_jobs
+<pre><code class="language-bash">mlsc-login[0]:users$ ls slurm_jobs
 README.md  sample_job.py
 </code></pre>
-
 <p>Here you will find a README.md file for using the cluster. It follows from the notes in the link above, but I find it handy. In it you will find two main ways to use the job scheduler SLURM.</p>
 <p>They are:</p>
-<pre><code class="bash">$ jobsubmit -p rtx6000 -A qtim -m 128G -t 0-00:5:00 -c 3 -G 1 -M ALL --mail-user bbearce@mgh.harvard.edu python sample_job.py
+<pre><code class="language-bash">$ jobsubmit -p rtx6000 -A qtim -m 128G -t 0-00:5:00 -c 3 -G 1 -M ALL --mail-user bbearce@mgh.harvard.edu python sample_job.py
 </code></pre>
-
 <p>and </p>
-<pre><code class="bash">srun -p rtx6000 -A qtim --mem 4G -t 0-00:1:00 -c 3 -G 1 --mail-user bbearce@mgh.harvard.edu --pty /bin/bash
+<pre><code class="language-bash">srun -p rtx6000 -A qtim --mem 4G -t 0-00:1:00 -c 3 -G 1 --mail-user bbearce@mgh.harvard.edu --pty /bin/bash
 </code></pre>
-
 <p>Let's break the flags down:</p>
 <pre><code>Required argument flags:
   -A &lt;account&gt;     Fairshare/billing account to use (qtim)
@@ -317,7 +306,6 @@ README.md  sample_job.py
   -p &lt;partition&gt;   Partition to submit the job to (machine type)
   -t &lt;timelimit&gt;   Max real time job will use before killed (DD-HH:MM:SS)
 </code></pre>
-
 <p>Other optional flags:</p>
 <pre><code>  -c &lt;numcores&gt;       Number of cores per node required (default 1)
   -G &lt;numgpus&gt;        Number of GPUS required (default 0)
@@ -328,9 +316,8 @@ README.md  sample_job.py
   --mail-user &lt;user&gt;  Send mail to &lt;user&gt; (default is current user)
 
 </code></pre>
-
 <p>The more readable versions are:</p>
-<pre><code class="bash">$ jobsubmit -p rtx6000 \
+<pre><code class="language-bash">$ jobsubmit -p rtx6000 \
             -A qtim \
             -m 128G \
             -t 0-00:5:00 \
@@ -340,8 +327,7 @@ README.md  sample_job.py
             --mail-user bbearce@mgh.harvard.edu \
             python sample_job.py
 </code></pre>
-
-<pre><code class="bash">$ srun -p rtx6000 \
+<pre><code class="language-bash">$ srun -p rtx6000 \
        -A qtim \
        --mem 128G \
        -t 0-00:5:00 \
@@ -350,56 +336,48 @@ README.md  sample_job.py
        --mail-user bbearce@mgh.harvard.edu \
        --pty /bin/bash
 </code></pre>
-
 <p><code>jobsubmit</code> allows for running of a script file while <code>srun</code> allows interactice mode.</p>
 <h3 id="script-execution">Script Execution</h3>
 <p>Let's try to submit a script (sample_job.py), but first let's open it:</p>
 <p>/cluster/qtim/users/slurm_jobs/sample_job.py</p>
-<pre><code class="python">import torch
+<pre><code class="language-python">import torch
 
 if __name__ == &quot;__main__&quot;:
     gpu_status = torch.cuda.is_available()
     with open(&quot;/cluster/qtim/users/bb927/slurm_jobs/output.txt&quot;, &quot;w&quot;) as f:
         f.write(&quot;Did this work? GPUs available: {}&quot;.format(gpu_status));
 </code></pre>
-
 <p>This when run, will put a file called <strong>output.txt</strong> in <strong>/cluster/qtim/users/bb927/slurm_jobs</strong>. However you might not have made <strong>slurm_jobs</strong> in your user directory yet so go ahead and create it and also copy <strong>sample_job.py</strong> to your <strong>slurm_jobs</strong> directory.
 Ex:</p>
-<pre><code class="bash">mlsc-login[0]:bb927$ mkdir /cluster/qtim/users/bb927/slurm_jobs
+<pre><code class="language-bash">mlsc-login[0]:bb927$ mkdir /cluster/qtim/users/bb927/slurm_jobs
 
 mlsc-login[0]:bb927$ cp ../slurm_jobs/sample_job.py ./slurm_jobs/
 </code></pre>
-
 <p>Next change your copy of <strong>sample_job.py</strong> to edit the user folder to your own:<br />
 from:</p>
-<pre><code class="python">with open(&quot;/cluster/qtim/users/bb927/slurm_jobs/output.txt&quot;, &quot;w&quot;) as f:
+<pre><code class="language-python">with open(&quot;/cluster/qtim/users/bb927/slurm_jobs/output.txt&quot;, &quot;w&quot;) as f:
 </code></pre>
-
 <p>to:</p>
-<pre><code class="python">with open(&quot;/cluster/qtim/users/&lt;user directory you already made made&gt;/slurm_jobs/output.txt&quot;, &quot;w&quot;) as f:
+<pre><code class="language-python">with open(&quot;/cluster/qtim/users/&lt;user directory you already made made&gt;/slurm_jobs/output.txt&quot;, &quot;w&quot;) as f:
 </code></pre>
-
 <p>Now we should be able to execute this. Change directories into your personal <strong>slurm_jobs</strong> folder and run this command substituting your <strong>--mail-user</strong> (email address):</p>
-<pre><code class="bash">jobsubmit -p rtx6000 -A qtim -m 128G -t 0-00:5:00 -c 3 -G 1 -M ALL --mail-user bbearce@mgh.harvard.edu python sample_job.py
+<pre><code class="language-bash">jobsubmit -p rtx6000 -A qtim -m 128G -t 0-00:5:00 -c 3 -G 1 -M ALL --mail-user bbearce@mgh.harvard.edu python sample_job.py
 </code></pre>
-
 <p>You will get an email and eventually <strong>output.txt</strong> will be in your <strong>slurm_jobs</strong> directory:</p>
-<pre><code class="bash">mlsc-login[0]:slurm_jobs$ ls
+<pre><code class="language-bash">mlsc-login[0]:slurm_jobs$ ls
 README.md  sample_job.py
 
 mlsc-login[0]:slurm_jobs$ ls
 output.txt  README.md  sample_job.py
 </code></pre>
-
 <p>Look inside <strong>output.txt</strong>:</p>
-<pre><code class="bash">mlsc-login[0]:slurm_jobs$ cat output.txt 
+<pre><code class="language-bash">mlsc-login[0]:slurm_jobs$ cat output.txt 
 Did this work? GPUs available: True
 </code></pre>
-
 <p>That is how you submit a script.</p>
 <h3 id="interactive-mode">Interactive Mode</h3>
 <p>Maybe you haven't written a script yet or any pipeline. You can reserve access with <code>srun</code> and <code>--pty /bin/bash</code>.</p>
-<pre><code class="bash">srun -p rtx6000 \
+<pre><code class="language-bash">srun -p rtx6000 \
        -A qtim \
        --mem 4G \
        -t 0-00:1:00 \
@@ -410,22 +388,19 @@ Did this work? GPUs available: True
 
 [bb927@rtx-01 slurm_jobs]$
 </code></pre>
-
 <p>Notice how your terminal changes to indicate that you are connected to another server:</p>
-<pre><code class="bash">[bb927@rtx-01 slurm_jobs]$ hostname
+<pre><code class="language-bash">[bb927@rtx-01 slurm_jobs]$ hostname
 rtx-01.nmr.mgh.harvard.edu
 </code></pre>
-
 <p>This is the normal hostname:</p>
-<pre><code class="bash">mlsc-login[0]:slurm_jobs$ hostname
+<pre><code class="language-bash">mlsc-login[0]:slurm_jobs$ hostname
 mlsc-login.nmr.mgh.harvard.edu
 </code></pre>
-
 <blockquote>
 <p>If you can't get a job it's because the "fair share" system implemented to make sure everyone has fair access is not letting you as all those resources are spoken for. Usually the smaller resources are more in demand so for demo purposes we can choose large compute and little time to ensure we get something.</p>
 </blockquote>
 <p>Ex:</p>
-<pre><code class="bash">rtx-01[0]:slurm_jobs$ srun -p rtx6000 \
+<pre><code class="language-bash">rtx-01[0]:slurm_jobs$ srun -p rtx6000 \
 &gt;        -A qtim \
 &gt;        --mem 4G \
 &gt;        -t 0-00:1:00 \
@@ -435,9 +410,8 @@ mlsc-login.nmr.mgh.harvard.edu
 &gt;        --pty /bin/bash
 srun: Job 565212 step creation temporarily disabled, retrying (Requested nodes are busy)
 </code></pre>
-
 <p>Try an RTX 8000 then:</p>
-<pre><code class="bash">srun -p rtx8000 \
+<pre><code class="language-bash">srun -p rtx8000 \
        -A qtim \
        --mem 4G \
        -t 0-00:1:00 \
@@ -447,9 +421,8 @@ srun: Job 565212 step creation temporarily disabled, retrying (Requested nodes a
        --pty /bin/bash
 rtx-06[0]:slurm_jobs$
 </code></pre>
-
 <p>And if all else fails, try an A100 then:</p>
-<pre><code class="bash">srun -p dgx-a100 \
+<pre><code class="language-bash">srun -p dgx-a100 \
        -A qtim \
        --mem 4G \
        -t 0-00:1:00 \
@@ -459,20 +432,17 @@ rtx-06[0]:slurm_jobs$
        --pty /bin/bash
 A100-04[0]:slurm_jobs$
 </code></pre>
-
 <p>Once in a machine you can look around but know it's a different server. Also notice how <strong>/cluster/qtim</strong> is still available. This is key as our network storage is always available on every node (server) in the cluster. </p>
-<pre><code class="bash"> rtx-01[0]:slurm_jobs$ ls /cluster/qtim
+<pre><code class="language-bash"> rtx-01[0]:slurm_jobs$ ls /cluster/qtim
 ID-qtim  machine_backups  users
 </code></pre>
-
 <p>I'm also in the starting directory I ran the script from and I can also run the previous script from here too:</p>
-<pre><code class="bash">rtx-01[0]:slurm_jobs$ pwd
+<pre><code class="language-bash">rtx-01[0]:slurm_jobs$ pwd
 /cluster/qtim/users/bb927/slurm_jobs
 rtx-01[0]:slurm_jobs$ python sample_job.py 
 rtx-01[0]:slurm_jobs$ ls
 output.txt  sample_job.py
 </code></pre>
-
 <h2 id="singularity">Singularity</h2>
 <p><a href="https://www.nmr.mgh.harvard.edu/martinos/userInfo/computer/docker.php">Martinos Singularity Instructions</a></p>
 <p>In a nut shell this is what needs to be executed:</p>
@@ -480,31 +450,28 @@ output.txt  sample_job.py
 <blockquote>
 <p>(make sure ~/.singularity does not already exist first)</p>
 </blockquote>
-<pre><code class="bash">mlsc-login[0]:~$ cd /cluster/qtim/users/bb927
+<pre><code class="language-bash">mlsc-login[0]:~$ cd /cluster/qtim/users/bb927
 mlsc-login[0]:~$ mkdir singularity
 mlsc-login[0]:~$ ln -s /cluster/qtim/users/bb927/singularity ~/.singularity
 </code></pre>
-
 <p>You can now put things in either ~/.singularity or /cluster/qtim/users/bb927/singularity and they will be in /cluster/qtim/users/bb927/singularity.</p>
 <h3 id="set-some-environment-variables">Set some environment variables</h3>
-<pre><code class="bash">mkdir ~/.singularity/tmp
+<pre><code class="language-bash">mkdir ~/.singularity/tmp
 export SINGULARITY_TMPDIR=~/.singularity/tmp
 mkdir ~/.singularity/cache
 export SINGULARITY_CACHEDIR=~/.singularity/cache
 </code></pre>
-
 <blockquote>
 <p>(do this or singularity will fill up workstation OS disk at /tmp)
    (in fact put this setting in your .bashrc or .cshrc)</p>
 </blockquote>
 <p>Test by listing home directory:</p>
 <p>Ex.</p>
-<pre><code class="bash">mlsc-login[0]:bb927$ ls -la ~
+<pre><code class="language-bash">mlsc-login[0]:bb927$ ls -la ~
 ...
 lrwxrwxrwx.   1 bb927 bb927     37 Sep 24 01:38 .singularity -&gt; /cluster/qtim/users/bb927/singularity
 ...
 </code></pre>
-
 <h3 id="using-premade-containers">Using Premade Containers</h3>
 <blockquote>
 <p>You might need an account on <a href="https://hub.docker.com/">DockerHUB</a></p>
@@ -517,18 +484,15 @@ WARNING: 'nodev' mount option set on /autofs/cluster/qtim, it could be a source 
 INFO:    Starting build...
 ...
 </code></pre>
-
 <p>When done view it:</p>
-<pre><code class="bash">mlsc-login[0]:bb927$ ls
+<pre><code class="language-bash">mlsc-login[0]:bb927$ ls
 ubuntu.simg
 </code></pre>
-
 <h4 id="shell-into-container">Shell Into Container</h4>
 <p>Shell into it with <code>singularity shell</code>:</p>
-<pre><code class="bash">mlsc-login[0]:test$ singularity shell ubuntu.simg 
+<pre><code class="language-bash">mlsc-login[0]:test$ singularity shell ubuntu.simg 
 Singularity&gt; 
 </code></pre>
-
 <p>You can execute code and look around.</p>
 <blockquote>
 <p>Must know:</p>
@@ -541,42 +505,37 @@ Singularity&gt;
 * $PWD</p>
 <p>[4] For editable images (sandboxes) you must create your mount points ahead of time in the sandbox. (More shortly)</p>
 <p>Let's talk about [3] real quick. If you do an <code>ls</code> it looks like we are in our home directory. Inside this container Singularity is making <strong>/homes/3/bb927</strong> point to <strong>/homes/3/bb927</strong> on the mlsc. This means anything you write here will be available if you exit the container.</p>
-<pre><code class="bash">Singularity&gt; ls
+<pre><code class="language-bash">Singularity&gt; ls
 Desktop    Downloads  Pictures  Templates   Untitled1.ipynb  jupyter  matlab_crash_dump.224407-1  untitled.ipynb
 Documents  Music      Public    Untitled.ipynb  Videos       matlab   test.txt
 Singularity&gt; pwd
 /homes/3/bb927
 </code></pre>
-
 <h4 id="editable-containers">Editable Containers</h4>
 <p>By default these are read only, which means you can't install software in them and besides mounts, you can't write to them. So you will need to make an editable version.</p>
-<pre><code class="bash">mlsc-login[0]:test$ singularity build --sandbox s_ubuntu ubuntu.simg
+<pre><code class="language-bash">mlsc-login[0]:test$ singularity build --sandbox s_ubuntu ubuntu.simg
 WARNING: 'nodev' mount option set on /autofs/cluster/qtim, it could be a source of failure during build process
 INFO:    Starting build...
 </code></pre>
-
 <p>View it:</p>
-<pre><code class="bash">mlsc-login[0]:test$ ls
+<pre><code class="language-bash">mlsc-login[0]:test$ ls
 s_ubuntu  ubuntu.simg
 </code></pre>
-
 <blockquote>
 <p>Notice how we build it out of the original *.simg container we had. You can base a sandbox on shub (SingularityHUB - A docker like repository of container sources) or dockerhub images as well.</p>
 </blockquote>
 <p>Sandboxes are just directories so you can see inside with <code>ls</code>:</p>
-<pre><code class="bash">mlsc-login[0]:test$ ls s_ubuntu/
+<pre><code class="language-bash">mlsc-login[0]:test$ ls s_ubuntu/
 bin   dev          etc   lib    lib64   media  opt   root  sbin         srv  tmp  var
 boot  environment  home  lib32  libx32  mnt    proc  run   singularity  sys  usr
 </code></pre>
-
 <p>To shell into sandboxs and make changes we need to add the <code>--writable</code>, <code>--fakeroot</code> and <code>--no-home</code> flag.</p>
-<pre><code class="bash">mlsc-login[0]:test$ singularity shell --writable --no-home s_ubuntu/
+<pre><code class="language-bash">mlsc-login[0]:test$ singularity shell --writable --no-home s_ubuntu/
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
 Singularity&gt; 
 </code></pre>
-
 <p>Let's make a change:</p>
-<pre><code class="bash">Singularity&gt; cd /
+<pre><code class="language-bash">Singularity&gt; cd /
 
 Singularity&gt; ls /
 bin   dev      etc   lib    lib64   media  opt   root  sbin     srv  tmp  var
@@ -591,25 +550,21 @@ Singularity&gt; ls /
 bin   deleteme.txt  environment...
 ...
 </code></pre>
-
 <p>Now let's build this back into a real container (type <code>exit</code> and hit Enter to leave continer shell):</p>
 <pre><code>mlsc-login[0]:test$ singularity build s_ubuntu_modified.simg s_ubuntu
 WARNING: 'nodev' mount option set on /autofs/cluster/qtim, it could be a source of failure during build process
 INFO:    Starting build...
 </code></pre>
-
 <p><code>ls</code>:</p>
-<pre><code class="bash">mlsc-login[0]:test$ ls
+<pre><code class="language-bash">mlsc-login[0]:test$ ls
 s_ubuntu  s_ubuntu_modified.simg  ubuntu.simg
 </code></pre>
-
 <p>Shell into new Singularity Image:</p>
-<pre><code class="bash">mlsc-login[0]:test$ singularity shell s_ubuntu_modified.simg 
+<pre><code class="language-bash">mlsc-login[0]:test$ singularity shell s_ubuntu_modified.simg 
 Singularity&gt; ls /
 bin   deleteme.txt  environment ...
 ...
 </code></pre>
-
 <p><strong>deleteme.txt</strong> is in the new image.</p>
 <p>This exercise is to show you how to make new Singularity images after you make edits to them like installing new python packages, installing other software and adding files.</p>
 <h4 id="other-useful-flags">Other Useful Flags</h4>
@@ -622,15 +577,13 @@ bin   deleteme.txt  environment ...
 <p>Locate file <strong>/cluster/qtim/users/slurm_jobs/datascience-notebook_latest.sif</strong>. I recommend changing directory to /cluster/qtim/users/slurm_jobs/.</p>
 <p>While in /cluster/qtim/users/slurm_jobs/:<br />
 [1] Start job:</p>
-<pre><code class="bash">srun -p rtx6000 -A qtim --mem 4G -t 0-00:1:00 -c 3 -G 1 --mail-user bbearce@mgh.harvard.edu --pty /bin/bash 
+<pre><code class="language-bash">srun -p rtx6000 -A qtim --mem 4G -t 0-00:1:00 -c 3 -G 1 --mail-user bbearce@mgh.harvard.edu --pty /bin/bash 
 </code></pre>
-
 <p>[2] Forward via ssh in your local machine:</p>
-<pre><code class="bash">bbearce@pop-os:~$ ssh -N -f -L localhost:5999:localhost:5999 bb927@rtx-01.nmr.mgh.harvard.edu
+<pre><code class="language-bash">bbearce@pop-os:~$ ssh -N -f -L localhost:5999:localhost:5999 bb927@rtx-01.nmr.mgh.harvard.edu
 </code></pre>
-
 <p>[3] Shell into Singularity Image <strong>datascience-notebook_latest.sif</strong> and start jupyter notebook server:</p>
-<pre><code class="bash">rtx-01[0]:slurm_jobs$ pwd
+<pre><code class="language-bash">rtx-01[0]:slurm_jobs$ pwd
 /cluster/qtim/users/slurm_jobs
 
 rtx-01[0]:slurm_jobs$ singularity shell --nv -B /cluster/qtim/users/slurm_jobs:/new_dir datascience-notebook_latest.sif
@@ -662,7 +615,6 @@ Singularity&gt; jupyter notebook --no-browser --port=5999
      or http://127.0.0.1:5999/?token=86c02c9b7be4ddcb5aa1540698f28d58308562223de4c7a4
 
 </code></pre>
-
 <p><img alt="singularity_jupyter_mlsc" src="../singularity_jupyter_mlsc.jpg" /></p>
 <blockquote>
 <p>Now because of the ssh tunnel we setup in step [2] we can reach this with "localhost" or "127.0.0.1" as hostnames. Note we can also use the machine name "rtx-01.nmr.mgh.harvard.edu"</p>
@@ -674,10 +626,9 @@ Singularity&gt; jupyter notebook --no-browser --port=5999
 <blockquote>
 <p>Find host name with <code>hostname</code> once your job gives you a resource:</p>
 </blockquote>
-<pre><code class="bash">rtx-01[0]:slurm_jobs$ hostname
+<pre><code class="language-bash">rtx-01[0]:slurm_jobs$ hostname
 rtx-01.nmr.mgh.harvard.edu
 </code></pre>
-
 <h3 id="building-your-own-sinularity-images">Building Your Own Sinularity Images</h3>
 <p><a href="https://bbearce.github.io/#notes/singularity/demo_for_qtim/">Original Demo</a></p>
 <p>We can't build on the /cluster/qtim network storage so if we want to use recipe files, we need to build images on hard drives and for that we need QTIM servers. We can touch on this another time.</p>

@@ -89,9 +89,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><img alt="Folder Structure" src="../folder_structure.png" /></p>
 <p><em>flask_cors_and_redesign.py</em>
 Here all we need to do is import the app</p>
-<pre><code class="python">from app import app
+<pre><code class="language-python">from app import app
 </code></pre>
-
 <p><em>app/__init__.py</em></p>
 <pre><code>from flask import Flask
 from flask_cors import CORS
@@ -102,9 +101,8 @@ CORS(app)
 from app import routes
 
 </code></pre>
-
 <p><em>app/routes.py</em></p>
-<pre><code class="python">from app import app
+<pre><code class="language-python">from app import app
 from flask import render_template, jsonify
 
 import math
@@ -150,15 +148,12 @@ def get_latlngs():
     return jsonify(post_latlngs)
 
 </code></pre>
-
 <p><em>app/models.py</em></p>
-<pre><code class="python"># Not shown, but this layout is for directory structure mainly.
+<pre><code class="language-python"># Not shown, but this layout is for directory structure mainly.
 </code></pre>
-
 <p>Before running it, though, Flask needs to be told how to import it, by setting the <code>FLASK_APP</code> environment variable:</p>
-<pre><code class="bash">(venv) $ export FLASK_APP=microblog.py
+<pre><code class="language-bash">(venv) $ export FLASK_APP=microblog.py
 </code></pre>
-
 <p>If you are using Microsoft Windows, use <code>set</code> instead of <code>export</code> in the command above.</p>
 <p>Are you ready to be blown away? You can run your first web application, with the following command:</p>
 <p><code>bash

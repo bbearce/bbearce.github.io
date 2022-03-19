@@ -144,22 +144,20 @@ Commands:
   version            Show the Docker-Compose version information
 
 </code></pre>
-
 <h2 id="useful-tid-bits">Useful Tid Bits</h2>
 <h3 id="restartingrebuilding-one-container">Restarting\Rebuilding One Container</h3>
 <p>By default <code>docker-compose up</code> will build containers based upon the <code>*.yml</code> definition. Usually if you build a new version of an image you want to be one of the composed containers you'd have to run <code>docker-compose down</code>, which kills and deletes all containers defined in the <code>*.yml</code>. </p>
 <p>It can annoying and time consuming to do this for all containers when only one container needs updating. </p>
 <p>Use this code to refresh and rebuild only the container you need:</p>
-<pre><code class="bash">$ docker-compose up -d --no-deps --build &lt;service_name&gt;
+<pre><code class="language-bash">$ docker-compose up -d --no-deps --build &lt;service_name&gt;
 </code></pre>
-
 <blockquote>
 <p><code>--no-deps</code> - Don't start linked services.</p>
 <p><code>--build</code> - Build images before starting containers.</p>
 </blockquote>
 <h2 id="example-docker-composeyml">Example docker-compose.yml</h2>
 <p>Here is an example:</p>
-<pre><code class="bash">version: '2'
+<pre><code class="language-bash">version: '2'
 services:
   # --------------------------------------------------------------------------
   # HTTP Server

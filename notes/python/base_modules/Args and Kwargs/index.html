@@ -86,7 +86,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><code>*args</code> - any number of inputs of any data type. They will be referenced in order with indicies being of the form args[0]...etc.</p>
 <p><code>**kwargs</code> - The same as above but with key work arguments, so you would be able to access elements by key name. kwargs</p>
 <p>The * is important as it signifies if args or kwargs are being used. Otherwise this happens:</p>
-<pre><code class="python">&gt;&gt;&gt; def prac(*args):
+<pre><code class="language-python">&gt;&gt;&gt; def prac(*args):
 ...     for i in args:
 ...         print(&quot;This arg is :{}&quot;.format(i))
 ... 
@@ -108,9 +108,8 @@ This arg is :5
 1
 2
 </code></pre>
-
 <p>Also note iterables are acceptible inputs:</p>
-<pre><code class="python">&gt;&gt;&gt; prac(*[1,2,3,4,5])
+<pre><code class="language-python">&gt;&gt;&gt; prac(*[1,2,3,4,5])
 This arg is :1
 This arg is :2
 This arg is :3

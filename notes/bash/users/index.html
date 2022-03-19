@@ -98,7 +98,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 4. Enter password and other needed info to create a user account on Ubuntu server<br />
 5. New username would be added to /etc/passwd file, and encrypted password stored in the /etc/shadow file  </p>
 <h3 id="example">Example</h3>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ sudo adduser vivek
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ sudo adduser vivek
 [sudo] password for bbearce: 
 Adding user `vivek' ...
 Adding new group `vivek' (1001) ...
@@ -118,31 +118,26 @@ Enter the new value, or press ENTER for the default
 Is the information correct? [Y/n] y
 
 </code></pre>
-
 <h3 id="verification">Verification</h3>
 <p>Use the grep command or cat command as follows:</p>
-<pre><code class="bash">$ cat /etc/passwd
+<pre><code class="language-bash">$ cat /etc/passwd
 .
 .
 .
 vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 </code></pre>
-
 <p>or</p>
-<pre><code class="bash">$ grep '^vivek' /etc/passwd
+<pre><code class="language-bash">$ grep '^vivek' /etc/passwd
 vivek:x:1001:1001:,,,:/home/vivek:/bin/bash
 </code></pre>
-
 <h3 id="check-group-groupid-and-userid-of-user">Check group, groupid and userid of user:</h3>
 <p>Use <code>id</code>:</p>
-<pre><code class="bash">$ id &lt;user&gt;
+<pre><code class="language-bash">$ id &lt;user&gt;
 </code></pre>
-
 <p>Ex:</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ id bbearce
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ id bbearce
 uid=1000(bbearce) gid=1000(bbearce) groups=1000(bbearce),4(adm),24(cdrom),27(sudo),30(dip),46(plugdev),113(lpadmin),128(sambashare),130(docker),999(microk8s)
 </code></pre>
-
 <h2 id="delete-user">Delete User</h2>
 <h3 id="remove-the-user">Remove the user</h3>
 <ol>
@@ -164,18 +159,17 @@ uid=1000(bbearce) gid=1000(bbearce) groups=1000(bbearce),4(adm),24(cdrom),27(sud
 <p>Type following passwd command to change your own password:
 <code>$ passwd</code></p>
 <p>Sample Outputs:</p>
-<pre><code class="bash">Changing password for vivek
+<pre><code class="language-bash">Changing password for vivek
 (current) UNIX password:
 Enter new UNIX password:
 Retype new UNIX password:
 passwd: password updated successfully
 </code></pre>
-
 <h2 id="add-user-to-sudo">Add User to Sudo</h2>
 <blockquote>
 <p>Source <a href="https://phoenixnap.com/kb/how-to-create-sudo-user-on-ubuntu">phoenixnap</a></p>
 </blockquote>
-<pre><code class="bash">usermod –aG sudo newuser
+<pre><code class="language-bash">usermod –aG sudo newuser
 </code></pre>
 
   <br>

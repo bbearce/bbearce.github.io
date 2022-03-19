@@ -96,65 +96,56 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <li>How to connect to SFTP server via command line</li>
 </ul>
 <p>SFTP requires SSH, so if SSH server is not already installed on your system, install it with the following command:</p>
-<pre><code class="bash">$ sudo apt install ssh
+<pre><code class="language-bash">$ sudo apt install ssh
 </code></pre>
-
 <p>Once SSH is installed, we need to make some changes to the SSHD configuration file. Use nano or your favorite text editor to open it:</p>
-<pre><code class="bash">$ sudo vi /etc/ssh/sshd_config
+<pre><code class="language-bash">$ sudo vi /etc/ssh/sshd_config
 </code></pre>
-
 <p>Scroll to the bottom of the file and add the following 5 lines at the very end:</p>
-<pre><code class="bash">Match group sftp
+<pre><code class="language-bash">Match group sftp
 ChrootDirectory /home
 X11Forwarding no
 AllowTcpForwarding no
 ForceCommand internal-sftp
 </code></pre>
-
 <p>Restart the SSH service for these new changes to take effect:</p>
-<pre><code class="bash">$ sudo systemctl restart ssh
+<pre><code class="language-bash">$ sudo systemctl restart ssh
 </code></pre>
-
 <p>Create a new user group called sftp. All of our SFTP users will need to belong to this group.</p>
-<pre><code class="bash">$ sudo addgroup sftp
+<pre><code class="language-bash">$ sudo addgroup sftp
 Adding group `sftp' (GID 1002) ...
 Done.
 </code></pre>
-
 <h2 id="login">Login</h2>
-<pre><code class="bash">bbearce@terry:~$ sftp challenge-organizer@&lt;server ip address&gt;
+<pre><code class="language-bash">bbearce@terry:~$ sftp challenge-organizer@&lt;server ip address&gt;
 challenge-organizer@&lt;server ip address&gt;'s password: 
 Connected to &lt;server ip address&gt;.
 sftp&gt; ls
 azureuser                 challenge-organizer       
 sftp&gt;
 </code></pre>
-
 <h2 id="use-filezilla">Use FileZilla</h2>
 <p>Real Example:</p>
-<pre><code class="bash">azureuser@codalab-vm:~$ ls -la /home
+<pre><code class="language-bash">azureuser@codalab-vm:~$ ls -la /home
 total 16
 drwxr-xr-x  4 root                root      4096 Feb  5 16:13 .
 drwxr-xr-x 23 root                root      4096 Jan 21 06:22 ..
 drwxr-x--- 13 azureuser           azureuser 4096 Feb  7 03:13 azureuser
 drwx------  6 challenge-organizer sftp      4096 Feb  7 02:43 challenge-organizer
 </code></pre>
-
-<pre><code class="bash">$ sudo vi /etc/ssh/sshd_config
+<pre><code class="language-bash">$ sudo vi /etc/ssh/sshd_config
 </code></pre>
-
 <p>sshd_config:</p>
 <blockquote>
 <p>Note: ChrootDirectories have to be owned by root.</p>
 </blockquote>
-<pre><code class="bash">Match group sftp
+<pre><code class="language-bash">Match group sftp
 #Match user challenge-organizer # other option
 ChrootDirectory /home
     X11Forwarding no
     AllowTcpForwarding no
     ForceCommand internal-sftp
 </code></pre>
-
 <p><img alt="FileZilla_Sites" src="../FileZilla_Sites.jpg" /></p>
 <blockquote>
 <p>Notice how to the sftp user they are at <code>/</code> but for them that is <code>/home</code>. You don't want to give them access to the real <code>/</code>.

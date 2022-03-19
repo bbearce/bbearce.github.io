@@ -89,7 +89,6 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
    |_
      |...
 </code></pre>
-
 <p>how many ways can you traverse n stairs if you can
 only take 1 or 2 steps.</p>
 <p>Example: n = 1
@@ -174,7 +173,7 @@ answer = 8</p>
 For the first two values n can have (1,2) we will setup base cases to kill 
 the recursive stack.</p>
 <p>Here is the answer:</p>
-<pre><code class="python">def stairs_combo(n=0):
+<pre><code class="language-python">def stairs_combo(n=0):
     if n == 0:
         return 0
     elif n == 1:
@@ -191,7 +190,6 @@ print(stairs_combo(3)) # 3
 print(stairs_combo(4)) # 5
 print(stairs_combo(5)) # 8
 </code></pre>
-
 <p>The other solution is to figure out the combinations for real! ;)</p>
 
   <br>

@@ -102,36 +102,30 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </blockquote>
 <h2 id="create-a-repo">Create a Repo</h2>
 <p>Create a new repo with <code>git init</code>:</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Desktop/git_practice$ git init
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~/Desktop/git_practice$ git init
 Initialized empty Git repository in /home/bbearce/Desktop/git_practice/.git/
 
 </code></pre>
-
 <h2 id="checkout-a-repo">Checkout a Repo</h2>
 <p>Checkout a repo with <code>git clone</code>:</p>
-<pre><code class="bash">$ git clone /path/to/repository
+<pre><code class="language-bash">$ git clone /path/to/repository
 </code></pre>
-
 <p>When using a remote server, your command will be:</p>
-<pre><code class="bash">git clone username@host:/path/to/repository
+<pre><code class="language-bash">git clone username@host:/path/to/repository
 </code></pre>
-
 <h2 id="workflow">Workflow</h2>
 <p>Your local repository consists of three "trees" maintained by git. the first one is your <code>Working Directory</code> which holds the actual files. The second one is the <code>Index</code> which acts as a staging area and finally the <code>HEAD</code> which points to the last commit you've made.</p>
 <p><img alt="Basic Git Workflow" src="/notes/git/git_trees.png" /></p>
 <h2 id="add-and-commit">Add and Commit</h2>
 <p>You can propose changes (add it to the Index) using:</p>
-<pre><code class="bash">git add &lt;filename&gt;
+<pre><code class="language-bash">git add &lt;filename&gt;
 </code></pre>
-
 <p>or</p>
 <pre><code>git add *
 </code></pre>
-
 <p>This is the first step in the basic git workflow. To actually commit these changes use:</p>
-<pre><code class="bash">git commit -m &quot;Commit message&quot;
+<pre><code class="language-bash">git commit -m &quot;Commit message&quot;
 </code></pre>
-
 <p>Now the file is committed to the <code>HEAD</code>, but not in your remote repository yet.</p>
 <blockquote>
 <p><code>git remote -v</code> will tell you which remote you are connected to.</p>
@@ -145,7 +139,6 @@ OPTIONS
        -v, --verbose
            Be a little more verbose and show remote url after name. NOTE: This must be placed between remote and subcommand.
 </code></pre>
-
 <h2 id="adding-a-new-remote">Adding a New Remote</h2>
 <blockquote>
 <p>Courtesy of <a href="https://articles.assembla.com/en/articles/1136998-how-to-add-a-new-remote-to-your-git-repo#targetText=To%20add%20a%20new%20remote%2C%20use%20the%20git%20remote%20add,tab%20of%20your%20Git%20repo">articles.assembla.com</a></p>
@@ -156,7 +149,7 @@ OPTIONS
 <li>A remote name, for example, “origin”  </li>
 <li>A remote URL, which you can find on the Source sub-tab of your Git repo  </li>
 </ul>
-<pre><code class="bash">#set a new remote
+<pre><code class="language-bash">#set a new remote
 git remote add origin git@git.assembla.com:portfolio/space.space_name.git
 
 #Verify new remote
@@ -165,17 +158,14 @@ git remote -v
 origin  git@git.assembla.com:portfolio/space.space_name.git (fetch)
 origin  git@git.assembla.com:portfolio/space.space_name.git (push)
 </code></pre>
-
 <h2 id="pushing-changes">Pushing Changes</h2>
 <p>Your changes are now in the <code>HEAD</code> of your local working copy. To send those changes to your remote repository, execute:</p>
-<pre><code class="bash">git push origin master
+<pre><code class="language-bash">git push origin master
 </code></pre>
-
 <p>Change master to whatever branch you want to push your changes to.</p>
 <p>If you have not cloned an existing repository and want to connect your repository to a remote server, you need to add it with:</p>
-<pre><code class="bash">git remote add origin &lt;server&gt;
+<pre><code class="language-bash">git remote add origin &lt;server&gt;
 </code></pre>
-
 <p>Now you are able to push your changes to the selected remote server.</p>
 <h2 id="push-without-userpass">Push Without User:Pass</h2>
 <blockquote>
@@ -186,9 +176,8 @@ origin  git@git.assembla.com:portfolio/space.space_name.git (push)
 <p>https url: <code>https://github.com/&lt;Username&gt;/&lt;Project&gt;.git</code><br />
 ssh url: <code>git@github.com:&lt;Username&gt;/&lt;Project&gt;.git</code>  </p>
 <p>You can do:</p>
-<pre><code class="bash">git remote set-url origin git@github.com:&lt;Username&gt;/&lt;Project&gt;.git
+<pre><code class="language-bash">git remote set-url origin git@github.com:&lt;Username&gt;/&lt;Project&gt;.git
 </code></pre>
-
 <p>to change the url.</p>
 <blockquote>
 <p>You need to have an ssh key pair generated and added to github</p>
@@ -197,44 +186,38 @@ ssh url: <code>git@github.com:&lt;Username&gt;/&lt;Project&gt;.git</code>  </p>
 <p>[1]. <a href="https://help.github.com/en/github/authenticating-to-github/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent#generating-a-new-ssh-key">Generate Key Pair</a>  </p>
 <p>Open Terminal.</p>
 <p>Paste the text below, substituting in your GitHub email address.</p>
-<pre><code class="bash">$ ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
+<pre><code class="language-bash">$ ssh-keygen -t rsa -b 4096 -C &quot;your_email@example.com&quot;
 
 Generating public/private rsa key pair.
 </code></pre>
-
 <p>This creates a new ssh key, using the provided email as a label. When you're prompted to "Enter a file in which to save the key," press Enter. This accepts the default file location.</p>
-<pre><code class="bash">Enter a file in which to save the key (/home/you/.ssh/id_rsa): [Press enter]
+<pre><code class="language-bash">Enter a file in which to save the key (/home/you/.ssh/id_rsa): [Press enter]
 </code></pre>
-
 <p>At the prompt, type a secure passphrase. For more information, see <a href="https://help.github.com/en/articles/working-with-ssh-key-passphrases">Working with SSH key passphrases</a>.</p>
-<pre><code class="bash">Enter passphrase (empty for no passphrase): [Type a passphrase]&gt; Enter same passphrase again: [Type passphrase again]
+<pre><code class="language-bash">Enter passphrase (empty for no passphrase): [Type a passphrase]&gt; Enter same passphrase again: [Type passphrase again]
 </code></pre>
-
 <p>[2]. <a href="https://help.github.com/en/enterprise/2.14/user/articles/adding-a-new-ssh-key-to-your-github-account">Add public key to git account</a> or <a href="https://developer.github.com/v3/guides/managing-deploy-keys/#deploy-keys">Add public key to git repo</a> </p>
 <h3 id="possible-issues">Possible Issues:</h3>
 <p>If you get this error:</p>
-<pre><code class="bash">ERROR: Permission to bbearce/code-journal.git denied to deploy key
+<pre><code class="language-bash">ERROR: Permission to bbearce/code-journal.git denied to deploy key
 fatal: Could not read from remote repository.
 
 Please make sure you have the correct access rights
 and the repository exists.
 </code></pre>
-
 <p>You need to add your ssh key to the ssh-agent. Before adding a new SSH key to the ssh-agent to manage your keys, you should have <a href="https://help.github.com/en/articles/checking-for-existing-ssh-keys">checked for existing SSH keys and generated a new SSH key</a>.</p>
 <p>If you have checked for existing SSH keys and find one you want to use, follow the below instructions.</p>
 <ol>
 <li>Start the ssh-agent in the background.</li>
 </ol>
-<pre><code class="bash">$ eval &quot;$(ssh-agent -s)&quot;
+<pre><code class="language-bash">$ eval &quot;$(ssh-agent -s)&quot;
 &gt; Agent pid 59566
 </code></pre>
-
 <ol>
 <li>Add your SSH private key to the ssh-agent. If you created your key with a different name, or if you are adding an existing key that has a different name, replace id_rsa in the command with the name of your private key file.</li>
 </ol>
-<pre><code class="bash">$ ssh-add ~/.ssh/&lt;your_ssh_key&gt;
+<pre><code class="language-bash">$ ssh-add ~/.ssh/&lt;your_ssh_key&gt;
 </code></pre>
-
 <blockquote>
 <p>not the <your_ssh_key>.pub file but the <your_ssh_key> file with no extension.</p>
 </blockquote>
@@ -286,10 +269,9 @@ and the repository exists.
 <p><code>git checkout -- &lt;filename&gt;</code></p>
 <p>This replaces the changes in your working tree with the last content in <code>HEAD</code>. Changes already added to the index, as well as new files, will be kept.</p>
 <p>If you instead want to drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this:</p>
-<pre><code class="bash">git fetch origin
+<pre><code class="language-bash">git fetch origin
 git reset --hard origin/master
 </code></pre>
-
 <h2 id="useful-hints">Useful Hints</h2>
 <p>If you want a built-in git GUI, use:</p>
 <p><code>gitk</code></p>
@@ -303,7 +285,7 @@ git reset --hard origin/master
 <blockquote>
 <p>Courtesy of <a href="https://stackoverflow.com/questions/4811434/clone-only-one-branch/14930421#14930421">stackoverflow</a></p>
 </blockquote>
-<pre><code class="bash">git clone -b &lt;mybranch&gt; --single-branch &lt;git-url&gt;
+<pre><code class="language-bash">git clone -b &lt;mybranch&gt; --single-branch &lt;git-url&gt;
 </code></pre>
 
   <br>

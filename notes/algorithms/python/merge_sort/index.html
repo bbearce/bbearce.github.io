@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Merge Sort - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Merge Sort", url: "#_top", children: [
+              {title: "Difference Between Quicksort and Merge Sort", url: "#difference-between-quicksort-and-merge-sort" },
+              {title: "Functionality", url: "#functionality" },
+              {title: "Application", url: "#application" },
+              {title: "Speed", url: "#speed" },
+              {title: "Space Requirement", url: "#space-requirement" },
+              {title: "Efficiency", url: "#efficiency" },
+              {title: "Conclusion", url: "#conclusion" },
+              {title: "Recursive Merge Sort:", url: "#recursive-merge-sort" },
+              {title: "Iterative Merge Sort:", url: "#iterative-merge-sort" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="merge-sort">Merge Sort</h1>
+<blockquote>
+<p>Source: <a href="https://www.geeksforgeeks.org/iterative-merge-sort/">geeksforgeeks</a></p>
+<p>Related algorithm <a href="../quick_sort/">Quick Sort</a></p>
+</blockquote>
+<h3 id="difference-between-quicksort-and-merge-sort">Difference Between Quicksort and Merge Sort</h3>
+<h4 id="definition">Definition</h4>
+<p>Quicksort is an efficient sorting algorithm, serving as a systematic method for placing the elements of an array in order. In contrast, merge sort is an efficient, general purpose, comparison-based sorting algorithms. Thus, this is the fundamental difference between quicksort and merge sort.</p>
+<h3 id="functionality">Functionality</h3>
+<p>Aboveall, the functionality is the main difference between quicksort and merge sort. Quicksort sorts the elements by comparing each element with the pivot while merge sort divides the array into two subarrays (n/2) again and again until one element is left.</p>
+<h3 id="application">Application</h3>
+<p>Also, while quicksort is suitable for small arrays, merge sort works for any type of array.</p>
+<h3 id="speed">Speed</h3>
+<p>Another difference between quicksort and merge sort is that the quicksort works faster for small data sets while merge sort works in consistent speed for all datasets.</p>
+<h3 id="space-requirement">Space Requirement</h3>
+<p>Moreover, the space requirement is also an important difference between quicksort and merge sort. Quicksort requires minimum space compared to merge sort.  </p>
+<h3 id="efficiency">Efficiency</h3>
+<p>Furthermore, quicksort is not efficient for large arrays, but merge sort is more efficient than quicksort. Hence, this is another difference between quicksort and merge sort.</p>
+<h3 id="conclusion">Conclusion</h3>
+<p>In summary, the main difference between quicksort and merge sort is that the quicksort sorts the elements by comparing each element with an element called a pivot while the merge sort divides the array into two subarrays again and again until one element is left.</p>
+<p><img alt="merge_sort.jpg" src="../merge_sort.jpg" /></p>
+<h2 id="recursive-merge-sort">Recursive Merge Sort:</h2>
+<pre><code class="language-python">def merge(left, right):
+    print(f&quot;left: {left}; right: {right}&quot;)
+    if not len(left) or not len(right):
+        return left or right
+    pdb.set_trace()
+    result = []
+    i, j = 0, 0
+    while (len(result) &lt; len(left) + len(right)):
+        if left[i] &lt; right[j]:
+            result.append(left[i])
+            print(f&quot;result l &lt; r: {result}&quot;)
+            i+= 1
+        else:
+            result.append(right[j])
+            print(f&quot;result r &gt; l: {result}&quot;)
+            j+= 1
+        if i == len(left) or j == len(right):
+            result.extend(left[i:] or right[j:])
+            break
+    print(f&quot;result: {result}&quot;)
+    return result
+
+def mergesort(list):
+    if len(list) &lt; 2:
+        print(f&quot;returning list: {list}&quot;)
+        return list
+
+    middle = int(len(list)/2)
+    pdb.set_trace()
+    print(f&quot;middle: {int(len(list)/2)}&quot;) 
+    print(f&quot;left: {list[:middle]}&quot;) 
+    print(f&quot;right: {list[middle:]}&quot;) 
+    left = mergesort(list[:middle])
+    right = mergesort(list[middle:])
+    return merge(left, right)
+
+seq = [12, 11, 13, 5, 6, 7]
+print(&quot;Given array is&quot;)
+print(seq);
+print(&quot;\n&quot;)
+print(&quot;Sorted array is&quot;)
+print(mergesort(seq))
+
+# Code Contributed by Mohit Gupta_OMG
+</code></pre>
+<h2 id="iterative-merge-sort">Iterative Merge Sort:</h2>
+<pre><code class="language-python"># Iterative Merge sort (Bottom Up)
+
+# Iterative mergesort function to
+# sort arr[0...n-1]
+
+# perform bottom up merge
+def mergeSort(a):
+    # start with least partition size of 2^0 = 1
+    width = 1
+    n = len(a)                                      
+    # subarray size grows by powers of 2
+    # since growth of loop condition is exponential,
+    # time consumed is logarithmic (log2n)
+    while (width &lt; n):
+        # always start from leftmost
+        l=0;
+        while (l &lt; n):
+            r = min(l+(width*2-1), n-1)     
+            m = min(l+width-1,n-1)
+            # final merge should consider
+            # unmerged sublist if input arr
+            # size is not power of 2            
+            merge(a, l, m, r)
+            l += width*2
+        # Increasing sub array size by powers of 2
+        width *= 2
+    return a
+
+# Merge Function
+def merge(a, l, m, r):
+    n1 = m - l + 1
+    n2 = r - m
+    L = [0] * n1
+    R = [0] * n2
+    for i in range(0, n1):
+        L[i] = a[l + i]
+    for i in range(0, n2):
+        R[i] = a[m + i + 1]
+
+    i, j, k = 0, 0, l
+    while i &lt; n1 and j &lt; n2:
+        if L[i] &lt;= R[j]:
+            a[k] = L[i]
+            i += 1
+        else:
+            a[k] = R[j]
+            j += 1
+        k += 1
+
+    while i &lt; n1:
+        a[k] = L[i]
+        i += 1
+        k += 1
+
+    while j &lt; n2:
+        a[k] = R[j]
+        j += 1
+        k += 1
+
+
+# Driver code
+a = [-74,48,-20,2,10,-84,-5,-9,11,-24,-91,2,-71,64,63,80,28,-30,-58,-11,-44,-87,-22,54,-74,-10,-55,-28,-46,29,10,50,-72,34,26,25,8,51,13,30,35,-8,50,65,-6,16,-2,21,-78,35,-13,14,23,-3,26,-90,86,25,-56,91,-13,92,-25,37,57,-20,-69,98,95,45,47,29,86,-28,73,-44,-46,65,-84,-96,-24,-12,72,-68,93,57,92,52,-45,-2,85,-63,56,55,12,-85,77,-39]
+print(&quot;Given array is &quot;)
+print(a)
+mergeSort(a)
+
+print(&quot;Sorted array is &quot;)
+print(a)
+
+# Contributed by Madhur Chhangani [RCOEM]
+# corrected and improved by @mahee96
+
+</code></pre>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

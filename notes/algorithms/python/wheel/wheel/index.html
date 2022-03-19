@@ -86,13 +86,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Import what you need</p>
 </blockquote>
-<pre><code class="python">import os
+<pre><code class="language-python">import os
 import sys
 import time
 import math
 </code></pre>
-
-<pre><code class="python">state_1 = &quot;&quot;&quot;
+<pre><code class="language-python">state_1 = &quot;&quot;&quot;
                     -|-
                      |
       /              |              \\
@@ -112,8 +111,7 @@ import math
                     -|-
 &quot;&quot;&quot;
 </code></pre>
-
-<pre><code class="python">state_2 = &quot;&quot;&quot;
+<pre><code class="language-python">state_2 = &quot;&quot;&quot;
 
                            /
                           /
@@ -132,8 +130,7 @@ import math
 
 &quot;&quot;&quot; 
 </code></pre>
-
-<pre><code class="python">state_3 = &quot;&quot;&quot;
+<pre><code class="language-python">state_3 = &quot;&quot;&quot;
 
 
 
@@ -152,8 +149,7 @@ import math
 
 &quot;&quot;&quot;
 </code></pre>
-
-<pre><code class="python">state_4 = &quot;&quot;&quot;
+<pre><code class="language-python">state_4 = &quot;&quot;&quot;
                     -
 
 
@@ -175,8 +171,7 @@ import math
                      -
 &quot;&quot;&quot;
 </code></pre>
-
-<pre><code class="python">state_5 = &quot;&quot;&quot;
+<pre><code class="language-python">state_5 = &quot;&quot;&quot;
 
 
 
@@ -195,8 +190,7 @@ import math
 
 &quot;&quot;&quot;
 </code></pre>
-
-<pre><code class="python">state_6 = &quot;&quot;&quot;
+<pre><code class="language-python">state_6 = &quot;&quot;&quot;
 
              \\
               \\
@@ -215,31 +209,27 @@ import math
 
 &quot;&quot;&quot; 
 </code></pre>
-
 <p>Now define a generator to access the wheel states infintely:</p>
-<pre><code class="python">def spinning_cursor():
+<pre><code class="language-python">def spinning_cursor():
     while True:
         for cursor in [state_1,state_2,state_3,state_4,state_5,state_6]:
             yield cursor
 
 </code></pre>
-
 <p>Next wheel size and set placeholders to keep track of the <em>elapsed time</em> and <em>velocity</em>:</p>
-<pre><code class="python">radius = 1 # ft
+<pre><code class="language-python">radius = 1 # ft
 
 spinner = spinning_cursor()
 elapsed_time = 0
 velocity = 0
 </code></pre>
-
 <p>Choose the speed in terms of rotations per second:</p>
-<pre><code class="python">rotations_per_second = 3
+<pre><code class="language-python">rotations_per_second = 3
 rotations_desired = 2
 </code></pre>
-
 <p>"DJ spin that shit!"
 - KS -</p>
-<pre><code class="python">for _ in range(6*rotations_desired): 
+<pre><code class="language-python">for _ in range(6*rotations_desired): 
     # there are 6 states and we need all of them per rotation
     state = next(spinner) # call the next state
     if state == state_1 and elapsed_time != 0:
@@ -267,7 +257,6 @@ print(&quot;velocity: {} in miles/hour&quot;.format(velocity/5280*60*60))
 # 60 min in an hour
 
 </code></pre>
-
 <video width="400" controls>
   <source src="/notes/algorithms/python/wheel/wheel.mp4" type="video/mp4">
   Your browser does not support HTML5 video.

@@ -86,7 +86,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     <h1 id="decorators">Decorators</h1>
 <p><strong>@Add_This_Functionality_To_Any_Function!</strong></p>
 <h2 id="simple-example">Simple Example:</h2>
-<pre><code class="python">def my_decorator(original_function):
+<pre><code class="language-python">def my_decorator(original_function):
     def new_function(*args,**kwargs):
         print(&quot;you did it!&quot;)
         of = original_function(*args,**kwargs)
@@ -108,33 +108,29 @@ def my_func3(stuff):
 
 my_func1(1);my_func2(1);my_func3(1);
 </code></pre>
-
 <h2 id="tutorial">Tutorial:</h2>
 <p>We need to discuss global variables and function closure</p>
 <h3 id="1-functions">[1] functions:</h3>
-<pre><code class="python">def foo():
+<pre><code class="language-python">def foo():
     return 1;
 </code></pre>
-
 <h3 id="2-scope">[2] scope</h3>
-<pre><code class="python">a_string = 'this is a string'
+<pre><code class="language-python">a_string = 'this is a string'
 def foo():
     print(locals())
 foo() # {}
 print(globals()) # {..., 'a_string': 'this is a string'}
 </code></pre>
-
 <h3 id="3-varible-resolution-rules">[3] varible resolution rules</h3>
 <p>Local variables with the same name as global ones don't modify the global one.</p>
 <h3 id="4-variable-lifetime">[4] variable lifetime</h3>
-<pre><code class="python">def foo():
+<pre><code class="language-python">def foo():
     x = 1;
 
 foo() # NameError: name 'x' is not defined
 </code></pre>
-
 <h3 id="5-function-arguments-and-parameters">[5] function arguments and parameters</h3>
-<pre><code class="python">def foo(x):
+<pre><code class="language-python">def foo(x):
     print(locals())
 foo(1) # {'x': 1}
 
@@ -145,18 +141,16 @@ foo()
 #   File &quot;&quot;, line 1, in 
 # TypeError: foo() missing 1 required positional argument: 'x'
 </code></pre>
-
 <h3 id="6-nested-functions">[6] Nested Functions</h3>
-<pre><code class="python">def outer():
+<pre><code class="language-python">def outer():
     x = 1
     def inner():
         print(x)
     inner()
 outer() # 1
 </code></pre>
-
 <h3 id="7-functions-are-first-class-objectsin-python">[7] Functions are first class objectsin python</h3>
-<pre><code class="python"># all objects in Python inherit from a common baseclass
+<pre><code class="language-python"># all objects in Python inherit from a common baseclass
 issubclass(int, object) # True
 
 def foo():
@@ -187,9 +181,8 @@ foo = outer()
 foo # .inner at 0x10be011e0&gt;
 foo() # 'this is inner'
 </code></pre>
-
 <h3 id="8-closures">[8] Closures</h3>
-<pre><code class="python">def outer():
+<pre><code class="language-python">def outer():
     x = 1
     def inner():
         print(x)
@@ -214,9 +207,8 @@ print2 = outer(2)
 print1() # 1
 print2() # 2
 </code></pre>
-
 <h3 id="9-decorators">[9] Decorators</h3>
-<pre><code class="python">def outer(some_func):
+<pre><code class="language-python">def outer(some_func):
     def inner():
         print('before some_func')
         ret = some_func() # 1
@@ -273,9 +265,8 @@ sub = wrapper(sub)
 sub(one, two)
 add(one, three)
 </code></pre>
-
 <h3 id="10-the-symbol">[10] the @ symbol</h3>
-<pre><code class="python"># so instead of wrapper(add)\wrapper(sub), use @wrapper
+<pre><code class="language-python"># so instead of wrapper(add)\wrapper(sub), use @wrapper
 @wrapper
 def add(a, b):
     return Coordinate(a.x + b.x, a.y + b.y)
@@ -284,9 +275,8 @@ def add(a, b):
 def sub(a, b):
     return Coordinate(a.x - b.x, a.y - b.y)
 </code></pre>
-
 <h3 id="11-args-and-kwargs">[11] *args and **kwargs</h3>
-<pre><code class="python">def one(*args):
+<pre><code class="language-python">def one(*args):
     print(args)
 
 one() # ()
@@ -309,9 +299,8 @@ foo()
 foo(x=1, y=2)
 
 </code></pre>
-
 <h3 id="12-more-generic-decorators">[12] More generic decorators</h3>
-<pre><code class="python">def logger(func):
+<pre><code class="language-python">def logger(func):
     def inner(*args, **kwargs):
         print('Arguments were: {}, {}'.format(args,kwargs))
         return func(*args, **kwargs)

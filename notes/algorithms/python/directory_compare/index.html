@@ -81,7 +81,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Source <a href="https://stackoverflow.com/questions/19251993/comparing-two-directories-with-subdirectories-to-find-any-changes">stackoverflow</a></p>
 </blockquote>
 <h3 id="list-out-files-appended-to-their-paths">List out files appended to their paths:</h3>
-<pre><code class="python">import os
+<pre><code class="language-python">import os
 
 def listfiles(path):
     files = []
@@ -94,13 +94,11 @@ def listfiles(path):
 x = listfiles('D:\\xfiles')
 y = listfiles('D:\\yfiles')
 </code></pre>
-
 <h3 id="you-can-use-list-comprehensions-to-compare-but-its-slow-compared-to-sets">You can use list comprehensions to compare, but it's slow compared to <em>sets</em>:</h3>
-<pre><code class="python">q = [filename for filename in x if filename not in y]
+<pre><code class="language-python">q = [filename for filename in x if filename not in y]
 </code></pre>
-
 <h3 id="use-sets-in-python-to-make-compares">Use <em>sets</em> in python to make compares:</h3>
-<pre><code class="python">files_only_in_x = set(x) - set(y) 
+<pre><code class="language-python">files_only_in_x = set(x) - set(y) 
 files_only_in_y = set(y) - set(x)
 files_only_in_either = set(x) ^ set(y)
 files_in_both = set(x) &amp; set(y)

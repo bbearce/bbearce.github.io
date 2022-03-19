@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>input() - Ben's Code Journal</title>
+    <title>Insertion Sort - Ben's Code Journal</title>
     <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,7 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "Input", url: "#_top", children: [
+          {title: "Insertion Sort", url: "#_top", children: [
           ]},
         ];
 
@@ -53,74 +53,52 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     
-    
-      
-    
 
-  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
-    
-    <div class="wm-article-nav pull-right">
-      <a href="../Sets/" class="btn btn-xs btn-default pull-right">
-        Next
-        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-      </a>
-      <a href="../Sets/" class="btn btn-xs btn-link">
-        Sets
-      </a>
-    </div>
-    
-    <div class="wm-article-nav">
-      <a href="../Map/" class="btn btn-xs btn-default pull-left">
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../Map/" class="btn btn-xs btn-link">
-        map()
-      </a>
-    </div>
-    
-  </div>
+    <h1 id="insertion-sort">Insertion Sort</h1>
+<blockquote>
+<p>Source: <a href="https://www.geeksforgeeks.org/insertion-sort/">geeksforgeeks</a></p>
+</blockquote>
+<p>Insertion sort is a simple sorting algorithm that works similar to the way you sort playing cards in your hands. The array is virtually split into a sorted and an unsorted part. Values from the unsorted part are picked and placed at the correct position in the sorted part.
+Algorithm 
+To sort an array of size n in ascending order: </p>
+<p>1: Iterate from arr[1] to arr[n] over the array.<br />
+2: Compare the current element (key) to its predecessor.<br />
+3: If the key element is smaller than its predecessor, compare it to the elements before. Move the greater elements one position up to make space for the swapped element.  </p>
+<p><img alt="insertionsort" src="../insertionsort.png" /></p>
+<pre><code class="language-python">
+# Python program for implementation of Insertion Sort
 
-    
+# Function to do insertion sort
+def insertionSort(arr):
 
-    <h1 id="input">Input</h1>
-<p>Here we show how to accept user input</p>
-<pre><code class="language-python">print('Enter your name:')
-x = input()
-print('Hello, ' + x)
+    # Traverse through 1 to len(arr)
+    for i in range(1, len(arr)):
+        # pdb.set_trace()
+        key = arr[i]
 
-&gt;&gt;&gt; Enter your name:
-Ben
-Hello, Ben
+        # Move elements of arr[0..i-1], that are
+        # greater than key, to one position ahead
+        # of their current position
+        j = i-1
+        while j &gt;= 0 and key &lt; arr[j]:
+                arr[j + 1] = arr[j]
+                j -= 1
+        arr[j + 1] = key
+        print(arr)
+
+
+# Driver code to test above
+arr = [12, 11, 13, 5, 6]
+insertionSort(arr)
+for i in range(len(arr)):
+    print (&quot;% d&quot; % arr[i])
+
+
+# This code is contributed by Mohit Kumra
 </code></pre>
 
   <br>
     
-
-    
-    
-      
-    
-
-  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
-    
-    <div class="wm-article-nav pull-right">
-      <a href="../Sets/" class="btn btn-xs btn-default pull-right">
-        Next
-        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-      </a>
-      <a href="../Sets/" class="btn btn-xs btn-link">
-        Sets
-      </a>
-    </div>
-    
-    <div class="wm-article-nav">
-      <a href="../Map/" class="btn btn-xs btn-default pull-left">
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../Map/" class="btn btn-xs btn-link">
-        map()
-      </a>
-    </div>
-    
-  </div>
 
     <br>
 </div>

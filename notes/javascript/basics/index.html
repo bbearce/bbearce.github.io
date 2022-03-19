@@ -97,42 +97,36 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <li>Iterable collections, such as maps and sets</li>
 </ul>
 <h2 id="arrays">Arrays</h2>
-<pre><code class="js">const colors = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;];
+<pre><code class="language-js">const colors = [&quot;red&quot;, &quot;blue&quot;, &quot;green&quot;];
 const geocoords = [27.2345, 34.9937]; 
 const numbers = [1,2,3,4,5,6]; 
 const empty = [];
 </code></pre>
-
 <p>Each array has a <code>length</code> property that returns the number of elements. It's very useful to iterate using the array index:</p>
-<pre><code class="js">for(let i = 0; i &lt; colors.length; i++) {
+<pre><code class="language-js">for(let i = 0; i &lt; colors.length; i++) {
     console.log(colors[i]); 
 }
 </code></pre>
-
 <p>You can also loop over the elements of an array using the of operator (introduced in ES2015), when you don't need the index:</p>
-<pre><code class="js">for(let color of colors) {
+<pre><code class="language-js">for(let color of colors) {
     console.log(color); 
 }
 </code></pre>
-
 <p>And you can use the <code>forEach()</code> method, which runs a function for each element and also allows access to the <strong>index</strong>, <strong>item</strong> and <strong>array</strong> inside the function:</p>
-<pre><code class="js">colors.forEach(function(i, color, colors) {
+<pre><code class="language-js">colors.forEach(function(i, color, colors) {
     console.log((i+1) + &quot;: &quot; + color);
 })
 </code></pre>
-
 <blockquote>
 <p>You need to pass something into the funtion and most by default use index, item, array, but as you can see other more descriptive placeholders can be used.</p>
 </blockquote>
 <p>Multi-dimensional arrays are created in JavaScript as arrays of arrays:</p>
-<pre><code class="js">const points = [[200,300], [150,100], [100,300]];
+<pre><code class="language-js">const points = [[200,300], [150,100], [100,300]];
 </code></pre>
-
 <p>You can retrieve individual items like this:</p>
-<pre><code class="js">const firstPoint = points[0];
+<pre><code class="language-js">const firstPoint = points[0];
 const middleX = points[1][0];
 </code></pre>
-
 <p>JavaScript provides many ways to extract and insert data into an array. It's usually recommended to use methods whenever possible. The following table lists useful methods you can use on arrays. Some modify the array; others return new arrays and other types. The examples provided use the <code>colors</code> and <code>numbers</code> arrays as declared above. Try them out using your browser's JavaScript console:</p>
 <table>
 <thead>
@@ -238,19 +232,16 @@ const middleX = points[1][0];
 <h2 id="strings">Strings</h2>
 <p>Strings are primitive types in JavaScript that can be created with single quotes or double quotes. There is no difference. It's only a matter of style. ES2015 introduced two new string features: <strong>template literals</strong> and <strong>multiline strings</strong>.</p>
 <p>Multiline strings can be created adding a backslash at the end of each line:</p>
-<pre><code class="js">const line = &quot;Multiline strings can be \
+<pre><code class="language-js">const line = &quot;Multiline strings can be \
 reated adding a backslash \
 at the end of each line&quot;;
 </code></pre>
-
 <p>Template literals are strings created with <strong>backticks</strong>. They allow the inclusion of JavaScript expressions inside <code>${}</code> placeholders. The result is concatenated as a single string.</p>
-<pre><code class="js">const template = `The square root of 2 is ${Math.sqrt(2)}`;
+<pre><code class="language-js">const template = `The square root of 2 is ${Math.sqrt(2)}`;
 </code></pre>
-
 <p>If you need to use a special character in a string, such as a double quote in a double quoted string, or a backslash, you need to precede it with a backslash:</p>
-<pre><code class="js">const s = &quot;This is a backslash \\ and this is a double quote \&quot;&quot;;
+<pre><code class="language-js">const s = &quot;This is a backslash \\ and this is a double quote \&quot;&quot;;
 </code></pre>
-
 <p>There are several methods for string manipulation. They all return new strings or other types. No methods modify the original strings.</p>
 <table>
 <thead>
@@ -315,7 +306,7 @@ at the end of each line&quot;;
 </table>
 <h2 id="functions">Functions</h2>
 <p>Functions are typically created in JavaScript using the <code>function</code> keyword, using one of the forms below:</p>
-<pre><code class="js">function f() {
+<pre><code class="language-js">function f() {
      console.log('function1', this);
  }
 const g = function(name) {
@@ -324,34 +315,30 @@ const g = function(name) {
 f(); // calls f
 g('test'); // calls g() with a parameter
 </code></pre>
-
 <blockquote>
 <p>The <code>this</code> keyword refers to the object that owns the function. If this code runs in a browser, and this is a top-level function created in the <code>&lt;script&gt;</code> block, the owner is the global <code>window</code> object. Any properties accessed via this refer to that object.</p>
 </blockquote>
-<pre><code class="js">const obj = {a: 5, b: 6}
+<pre><code class="language-js">const obj = {a: 5, b: 6}
  obj.method = function() {
      console.log('method', this)
  }
 obj.method()
 </code></pre>
-
 <p>output:
 <code>method {a: 5, b: 6, method: ƒ}</code></p>
 <p>Arrow functions were introduced in ES2015. They are much more compact and can lead to cleaner code, but the scope of <code>this</code> is no longer retained by the object. In the code below, it refers to the global <code>window</code> object. Code that uses <code>this.a</code> and <code>this.b</code> will not find any data in the object and will return <strong>undefined</strong>.</p>
-<pre><code class="js">obj.arrow = () =&gt; console.log('arrow', this)
+<pre><code class="language-js">obj.arrow = () =&gt; console.log('arrow', this)
 obj.arrow()
 </code></pre>
-
 <p>output:
 <code>arrow Window {parent: Window, opener: null, top: Window, length: 0, frames: Window, …}</code></p>
 <h2 id="objects">Objects</h2>
 <p>An object is an unordered collection of data. Values in an object are stored as key-value pairs. You can create an object by declaring a comma-separated list of <code>key:value</code> pairs within curly braces, or simply a pair of opening-closing curly braces if you want to start with an empty object:</p>
-<pre><code class="js">const color = {name: &quot;red&quot;, code: &quot;ff0000&quot;};
+<pre><code class="language-js">const color = {name: &quot;red&quot;, code: &quot;ff0000&quot;};
 const empty = {};
 </code></pre>
-
 <p>Objects can contain other objects and arrays, which can also contain objects. They can also contain functions (which have access to local properties and behave as methods):</p>
-<pre><code class="js">const city = {name: &quot;Sao Paulo&quot;, 
+<pre><code class="language-js">const city = {name: &quot;Sao Paulo&quot;, 
               location: {latitude: 23.555, longitude: 46.63},
               airports: [&quot;SAO&quot;,&quot;CGH&quot;,&quot;GRU&quot;,&quot;VCP&quot;]};
 const circle = {
@@ -363,9 +350,8 @@ const circle = {
     }
 }
 </code></pre>
-
 <p>A typical dataset used by a simple chart usually consists of an array of objects.</p>
-<pre><code class="js">var array2 = [
+<pre><code class="language-js">var array2 = [
     {continent: &quot;Asia&quot;, areakm2: 43820000}, 
     {continent: &quot;Europe&quot;, areakm2: 10180000},
     {continent: &quot;Africa&quot;, areakm2: 30370000},
@@ -374,23 +360,20 @@ const circle = {
     {continent: &quot;North America&quot;, areakm2:24490000}
 ];
 </code></pre>
-
 <p>You can access the properties of an object using the dot operator or brackets containing the key as a string. You can run its methods using the dot operator:</p>
-<pre><code class="js">const latitude = city.location.latitude; 
+<pre><code class="language-js">const latitude = city.location.latitude; 
 const oceania = array2[4].continent;
 const code = color[&quot;code&quot;];
 circle.r = 100; 
 const area = circle.area();
 </code></pre>
-
 <p>You can also loop over the properties of an object:</p>
-<pre><code class="js">for(let key in color) {
+<pre><code class="language-js">for(let key in color) {
     console.log(key + &quot;: &quot; + color[key]); 
 }
 </code></pre>
-
 <p>Properties and functions can be added to objects. It's common to write code that declares an empty object in a global context so that operations in other contexts add data to it:</p>
-<pre><code class="js">coords = {lat:34.342352435, lng: 108.98375984}
+<pre><code class="language-js">coords = {lat:34.342352435, lng: 108.98375984}
 
 const map = {};
 function getCoords(coords) {
@@ -400,66 +383,54 @@ function getCoords(coords) {
 
 console.log(map)
 </code></pre>
-
 <p>output:</p>
-<pre><code class="js">{lat:34.342352435, lng: 108.98375984}
+<pre><code class="language-js">{lat:34.342352435, lng: 108.98375984}
 </code></pre>
-
 <p>Objects can also be created with a constructor. You can create an object that contains the current date/time using:</p>
-<pre><code class="js">const now = new Date();
+<pre><code class="language-js">const now = new Date();
 </code></pre>
-
 <p>JSON is a data format based on JavaScript objects. It has the same structure as JavaScript object but the property keys have to be placed within double quotes:</p>
-<pre><code class="html">{&quot;name&quot;: &quot;Sao Paulo&quot;, 
+<pre><code class="language-html">{&quot;name&quot;: &quot;Sao Paulo&quot;, 
               &quot;location&quot;: {&quot;latitude&quot;: 23.555, &quot;longitude&quot;: 46.63},
               &quot;airports&quot;: [&quot;SAO&quot;,&quot;CGH&quot;,&quot;GRU&quot;,&quot;VCP&quot;]};
 </code></pre>
-
 <p>To use a JSON string in JavaScript you have to parse it.</p>
 <h2 id="maps-and-sets">Maps and Sets</h2>
 <p>Besides arrays, ES2015 also introduced two new data structures: <code>Map</code>, an associative array with key-value pairs easier to use than simple objects, and <code>Set</code>, which doesn't allow repeated values. Both can be transformed to and from arrays.</p>
 <p>You can create a new <code>Set</code> object using:</p>
-<pre><code class="js">const set = new Set();
+<pre><code class="language-js">const set = new Set();
 </code></pre>
-
 <p>And add elements to it using:</p>
-<pre><code class="js">set.add(5);
+<pre><code class="language-js">set.add(5);
 set.add(7);
 </code></pre>
-
 <p>If you try to add elements that already exist, they won't be included in the set:</p>
-<pre><code class="js">set.add(1);
+<pre><code class="language-js">set.add(1);
 set.add(5);   // not added
 set.add(7);   // not added
 console.log(set.size); // prints 3
 </code></pre>
-
 <p>You can check if a Set contains an element:</p>
-<pre><code class="js">console.log(set.has(3)); // false
+<pre><code class="language-js">console.log(set.has(3)); // false
 </code></pre>
-
 <p>And convert a Set object into an array:</p>
-<pre><code class="js">const array1 = [... set]; // spread operator
+<pre><code class="language-js">const array1 = [... set]; // spread operator
 </code></pre>
-
 <p>A Map can be more efficient than using an object to store key-value pairs in an associative array:</p>
-<pre><code class="js">const map = new Map();
+<pre><code class="language-js">const map = new Map();
 map.set(&quot;a&quot;, 123)
 map.set(&quot;b&quot;, 456);
 
 console.log(map)
 </code></pre>
-
 <p>output:</p>
-<pre><code class="js">Map(2) {&quot;a&quot; =&gt; 123, &quot;b&quot; =&gt; 456}
+<pre><code class="language-js">Map(2) {&quot;a&quot; =&gt; 123, &quot;b&quot; =&gt; 456}
 </code></pre>
-
 <p>You can then retrieve the value for each key using get(key):</p>
-<pre><code class="js">console.log(map.get(&quot;b&quot;))
+<pre><code class="language-js">console.log(map.get(&quot;b&quot;))
 </code></pre>
-
 <p>Or using iterative operations and the keys(), values() and entries() methods:</p>
-<pre><code class="js">for (let key of map.keys()) {
+<pre><code class="language-js">for (let key of map.keys()) {
     console.log(key, map.get(key))
 }
 
@@ -469,18 +440,16 @@ for (let [key, value] of map.entries()) {
 
 map.forEach ((k, v) =&gt; console.log(k, v))
 </code></pre>
-
 <p>Maps can be converted into arrays with the spread operator or Arrays.from():</p>
-<pre><code class="js">const array2 = [... map.values()];  // an array of values
+<pre><code class="language-js">const array2 = [... map.values()];  // an array of values
 const array3 = Array.from(map.values()); // an array of keys  
 </code></pre>
-
 <h2 id="promises">Promises</h2>
 <blockquote>
 <p>Source <a href="https://www.youtube.com/watch?v=DHvZLI7Db8E">Web Dev Simplified</a></p>
 </blockquote>
 <p>Define a promise. <code>1+1</code> is what we want the promise to do. The object itself accepts a function that has inputs <em>resolve</em> and <em>reject</em>.</p>
-<pre><code class="js">let p = new Promise((resolve, reject) =&gt; {
+<pre><code class="language-js">let p = new Promise((resolve, reject) =&gt; {
     let a = 1 + 1 // if you change of one these to 2 to make it fail you have to have the p.then().catch() code implemented of you will get a &quot;Uncaught (in promise) Failed&quot; message
     if (a == 2) {
         resolve('Success')
@@ -489,9 +458,8 @@ const array3 = Array.from(map.values()); // an array of keys
     }
 })
 </code></pre>
-
 <p>Interact with promises. the <code>.then</code> method runs if the promise <em>resolves</em>. If the promise rejects it runs the <em>.catch</em> method. </p>
-<pre><code class="js">p.then((message) =&gt; {
+<pre><code class="language-js">p.then((message) =&gt; {
     console.log('This is in the then ' + message)
 }).catch ((message) =&gt; {
     console.log('This is in the catch '+ message)

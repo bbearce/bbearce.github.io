@@ -90,9 +90,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     choices = {1:'404',2:'pass',3:'401'}
     return choices[choice]
 </code></pre>
-
 <p>Now we need try_again(). I have to give credit to <a href="https://zagaran.com/">Zagaran</a> which you can find a link to on the Sources tab for this algorithm. During an interview I attempted a recursive solution, but they said a for loop would of done. So for extra practice I implemented both.</p>
-<pre><code class="python">def try_again_recursive(response, try_count=1):
+<pre><code class="language-python">def try_again_recursive(response, try_count=1):
     &quot;&quot;&quot;
     This function will take a response object
     and do the following:
@@ -129,9 +128,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     return response
 </code></pre>
-
 <p>Check out the output below</p>
-<pre><code class="python"># Tests
+<pre><code class="language-python"># Tests
 # &gt;&gt;&gt;try_again_recursive(get_response())
 # for n = 1, waiting 1 seconds.
 # for n = 2, waiting 4 seconds.
@@ -141,9 +139,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 # client could not be authenticated.
 # '401'
 </code></pre>
-
 <p>One thing to note, I cheated a little. For the sake of practicing the multiple calls, I made sure the get_response() function always returned a '401'. We will address this a little later. For now let's implement the for loop version.</p>
-<pre><code class="python"># For Loop Solution:
+<pre><code class="language-python"># For Loop Solution:
 def try_again_for_loop(response):
     &quot;&quot;&quot;
     This function will take a response object
@@ -183,9 +180,8 @@ def try_again_for_loop(response):
 
     return response
 </code></pre>
-
 <p>Output:</p>
-<pre><code class="python"># &gt;&gt;&gt; try_again_for_loop(get_response())
+<pre><code class="language-python"># &gt;&gt;&gt; try_again_for_loop(get_response())
 # for n = 1, waiting 1 seconds.
 # for n = 2, waiting 4 seconds.
 # for n = 3, waiting 9 seconds.
@@ -194,11 +190,10 @@ def try_again_for_loop(response):
 # client could not be authenticated.
 # '401'
 </code></pre>
-
 <p>Now we need to simulate reality a little better to give the other logic a chance to be executed. Let's make it so get_response() could return any of the other values ('pass','404').</p>
 <p>Go into the recursive version of <code>try_again()</code> and find this line <code>try_again_recursive(get_response(), try_count=try_count+1)</code>, and change it to <code>try_again_recursive(get_response(random.randint(1,3)), try_count=try_count+1)</code>. You will need to <code>import random</code> at the top of your script. Then also add to your call of <code>try_again_recursive()</code></p>
 <p>Results:</p>
-<pre><code class="python"># Simulation
+<pre><code class="language-python"># Simulation
 # &gt;&gt;&gt; try_again_recursive(get_response(random.randint(1,3)))
 # for n = 1, waiting 1 seconds.
 # '401'
@@ -221,9 +216,8 @@ def try_again_for_loop(response):
 # client could not be authenticated.
 # '401'
 </code></pre>
-
 <p>Again, the for loop version changes the same thing, ie. <code>response = get_response(</code> to this <code>response = get_response(random.rendint(1,3))</code>.</p>
-<pre><code class="python"># &gt;&gt;&gt; try_again_for_loop(get_response(random.randint(1,3)))
+<pre><code class="language-python"># &gt;&gt;&gt; try_again_for_loop(get_response(random.randint(1,3)))
 # for n = 1, waiting 1 seconds.
 # for n = 2, waiting 4 seconds.
 # '404 Not Found Error'

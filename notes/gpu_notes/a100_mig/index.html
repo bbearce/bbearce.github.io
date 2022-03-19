@@ -116,7 +116,6 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     ├── nvidia0
     └── nvidia1  
 </code></pre>
-
 <h2 id="getting-started">Getting Started</h2>
 <h3 id="turning-on-mig-and-inspecting-the-gpus">Turning on MIG and inspecting the GPUs</h3>
 <p>MIG can be managed programmatically using NVIDIA Management Library (NVML) APIs or its command-line-interface, nvidia-smi. Note that for brevity, some of the nvidia-smi output in the following examples may be cropped to showcase the relevant sections of interest.</p>
@@ -127,23 +126,19 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>GPU 1:</p>
 <pre><code>nvidia-smi -i 0
 </code></pre>
-
 <p>GPU 2:</p>
 <pre><code>nvidia-smi -i 1
 </code></pre>
-
 <p>MIG mode can be enabled on a per-GPU basis with the following command: nvidia-smi -i <GPU IDs> -mig 1</p>
 <blockquote>
 <p>Need <code>sudo</code>. MIG mode can be enabled on a per-GPU basis with the following command: nvidia-smi -i <GPU IDs> -mig 1. The GPUs can be selected using comma separated GPU indexes, PCI Bus Ids or UUIDs. If no GPU ID is specified, then MIG mode is applied to all the GPUs on the system. Note that MIG mode (Disabled or Enabled states) is persistent across system reboots.</p>
 </blockquote>
 <pre><code>nvidia-smi -i 0 -mig 1
 </code></pre>
-
 <p><img alt="MIG_enabled" src="../MIG_enabled.png" /></p>
 <h3 id="list-gpu-instancesprofiles">List GPU Instances\Profiles</h3>
 <pre><code>sudo nvidia-smi mig -lgip
 </code></pre>
-
 <p>Ex:</p>
 <pre><code>[bb927@glacier ~]$ sudo nvidia-smi mig -lgip
 Your password [ bb927 ] : 
@@ -168,11 +163,9 @@ Your password [ bb927 ] :
 |                                                          7     1     1   |
 +--------------------------------------------------------------------------+
 </code></pre>
-
 <p>List the possible placements available using the following command:</p>
 <pre><code>sudo nvidia-smi mig -lgipp
 </code></pre>
-
 <p>Ex:</p>
 <pre><code>[bb927@glacier ~]$ sudo nvidia-smi mig -lgipp
 GPU  0 Profile ID 19 Placements: {0,1,2,3,4,5,6}:1
@@ -181,7 +174,6 @@ GPU  0 Profile ID  9 Placements: {0,4}:4
 GPU  0 Profile ID  5 Placement : {0}:4
 GPU  0 Profile ID  0 Placement : {0}:8
 </code></pre>
-
 <blockquote>
 <p>The command shows that the user can create two instances of type 3g.20gb (profile ID 9) or seven instances of 1g.5gb (profile ID 19).</p>
 </blockquote>
@@ -211,22 +203,18 @@ Successfully created compute instance ID  0 on GPU  0 GPU instance ID  2 using p
 Successfully created GPU instance ID  1 on GPU  0 using profile MIG 3g.20gb (ID  9)
 Successfully created compute instance ID  0 on GPU  0 GPU instance ID  1 using profile MIG 3g.20gb (ID  2)
 </code></pre>
-
 <p>List the GPU Instances:</p>
 <pre><code>sudo nvidia-smi mig -lgi
 </code></pre>
-
 <p>List the GPU Compute Instances:</p>
 <pre><code>sudo nvidia-smi mig -lci
 </code></pre>
-
 <h3 id="destroy-gpu-instances">Destroy GPU Instances</h3>
 <p>You can specify GPU instances to delete <code>-dci</code></p>
 <pre><code>sudo nvidia-smi mig -dgi -gi 1,2 -i 0
 Successfully destroyed GPU instance ID  1 from GPU  0
 Successfully destroyed GPU instance ID  2 from GPU  0
 </code></pre>
-
 <p>Or Compute Instances <code>-dgi</code></p>
 <pre><code>sudo nvidia-smi mig -dci -ci 0 -gi 1,2 -i 0
 </code></pre>

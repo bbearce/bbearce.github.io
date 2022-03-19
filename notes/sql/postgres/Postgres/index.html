@@ -104,15 +104,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Connect to the default database with user <code>postgres</code>: </p>
 <p><code>sudo -u postgres psql template1</code></p>
 <p>Set the password for user <code>postgres</code>, then exit psql (Ctrl-D) : </p>
-<pre><code class="sql">postgres=# ALTER USER postgres with encrypted password 'xxxxxxx';
+<pre><code class="language-sql">postgres=# ALTER USER postgres with encrypted password 'xxxxxxx';
 </code></pre>
-
 <p>Edit the <em>pg_hba.conf</em> file: </p>
 <p><code>sudo vim /etc/postgresql/9.1/main/pg_hba.conf</code></p>
 <p>And change <code>peer</code> to <code>md5</code> on the line concerning postgres : </p>
 <pre><code>local      all     postgres     peer md5 
 </code></pre>
-
 <blockquote>
 <p>Note: you need sudo or the file will appear blank </p>
 </blockquote>
@@ -120,26 +118,23 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><code>postgres=# sudo /etc/init.d/postgresql restart\</code> </p>
 <p>(Here you can check it worked with <code>psql -U postgres</code>.) </p>
 <p>Create a user having the same name as you (to find it, you can type <code>whoami</code>) : </p>
-<pre><code class="sql">postgres=# createuser -U postgres -d -e -E -l -P -r -s &lt;my_name&gt; 
+<pre><code class="language-sql">postgres=# createuser -U postgres -d -e -E -l -P -r -s &lt;my_name&gt; 
 </code></pre>
-
 <p>The options tell postgresql to create a user that can login, create databases, create new roles, is a superuser, and will have an encrypted password. The really important ones are <code>-P</code> <code>-E</code>, so that you're asked to type the password that will be encrypted, and <code>-d</code> so that you can do a <code>createdb</code>. </p>
 <p>Beware of passwords : it will first ask you twice the new password (for the new user), repeated, and then once the postgres password (the one specified on step 2). </p>
 <p>Again, edit the <em>pg_hba.conf </em>file (see step 3 above), and change <code>peer</code> to <code>md5</code> on the line concerning "all" other users : </p>
 <pre><code>local      all     all     peer md5 
 </code></pre>
-
 <p>Restart (like in step 4), and check that you can login without <code>-U postgres</code>: </p>
 <pre><code>psql template1 
 </code></pre>
-
 <blockquote>
 <p>Note that if you do a mere psql, it will fail since it will try to connect you to a default database having the same name as you (ie. <code>whoami</code>). <code>template1</code> is the admin database that is here from the start. </p>
 </blockquote>
 <p>Now <code>createdb &lt;dbname&gt;</code> should work. </p>
 <h2 id="display-all-dbs">Display all DBs:</h2>
 <p>Use <code>\list</code> or <code>\l</code> to display databases.</p>
-<pre><code class="sql">postgres=# \list
+<pre><code class="language-sql">postgres=# \list
                                     List of databases
       Name       |  Owner   | Encoding |  Collate   |   Ctype    |   Access privileges   
 -----------------+----------+----------+------------+------------+-----------------------
@@ -152,10 +147,9 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 (4 rows)
 
 </code></pre>
-
 <h2 id="display-tables">Display Tables</h2>
 <p>Use <code>\dt</code> to list all public tables, and <code>\dt *</code> for all tables in the current DB you are connected to.  </p>
-<pre><code class="sql">postgres=# \dt
+<pre><code class="language-sql">postgres=# \dt
 
                       List of relations
  Schema |                Name                 | Type  | Owner 
@@ -192,84 +186,69 @@ codalab_website=# \dt *
  pg_catalog | pg_class                            | table | postgres
 ...
 </code></pre>
-
 <h2 id="display-schema">Display Schema</h2>
 <blockquote>
 <p>Source <a href="https://kb.objectrocket.com/postgresql/connect-to-postgresql-and-show-the-table-schema-967">objectrocket</a></p>
 </blockquote>
-<pre><code class="sql">SELECT column_name FROM information_schema.columns WHERE TABLE_NAME = 'some_table';
+<pre><code class="language-sql">SELECT column_name FROM information_schema.columns WHERE TABLE_NAME = 'some_table';
 </code></pre>
-
 <h2 id="display-connection-information">Display Connection Information</h2>
-<pre><code class="sql">codalab_website-# \conninfo
+<pre><code class="language-sql">codalab_website-# \conninfo
 You are connected to database &quot;codalab_website&quot; as user &quot;root&quot; via socket in &quot;/var/run/postgresql&quot; at port &quot;5432&quot;.
 
 </code></pre>
-
 <blockquote>
 <p>You will never see tables in other databases, these tables aren't visible. You have to connect to the correct database to see its tables (and other objects). </p>
 </blockquote>
 <h2 id="switch-dbs">Switch DBs:</h2>
 <p>To switch databases: </p>
-<pre><code class="sql">postgres=# \connect database_name 
+<pre><code class="language-sql">postgres=# \connect database_name 
 </code></pre>
-
 <p>Selects all non-template DBs: </p>
-<pre><code class="sql">postgres=# SELECT datname FROM pg_database 
+<pre><code class="language-sql">postgres=# SELECT datname FROM pg_database 
 WHERE datistemplate = false; 
 </code></pre>
-
 <p>Select all tables in current DB connection </p>
-<pre><code class="sql">postgres=# SELECT table_schema,table_name 
+<pre><code class="language-sql">postgres=# SELECT table_schema,table_name 
 FROM information_schema.tables 
 ORDER BY table_schema,table_name; 
 </code></pre>
-
 <h2 id="delete-database">Delete Database:</h2>
-<pre><code class="sql">postgres=# DROP DATABASE [ IF EXISTS ] name 
+<pre><code class="language-sql">postgres=# DROP DATABASE [ IF EXISTS ] name 
 </code></pre>
-
 <h2 id="create-database">Create Database:</h2>
-<pre><code class="sql">postgres=# CREATE DATABASE testdb; 
+<pre><code class="language-sql">postgres=# CREATE DATABASE testdb; 
 </code></pre>
-
 <h2 id="create-user">Create User:</h2>
 <h3 id="see-all-current-users">See all current users:</h3>
-<pre><code class="sql">postgres=# SELECT usename FROM pg_user; 
+<pre><code class="language-sql">postgres=# SELECT usename FROM pg_user; 
 </code></pre>
-
 <h3 id="create-new-user">Create New User:</h3>
 <p>Bash:</p>
-<pre><code class="bash">$ createuser name  
+<pre><code class="language-bash">$ createuser name  
 </code></pre>
-
 <p>or<br />
 Postgres:</p>
-<pre><code class="sql">postgres=# CREATE USER testuser; 
+<pre><code class="language-sql">postgres=# CREATE USER testuser; 
 </code></pre>
-
 <h3 id="drop-user">Drop User:</h3>
 <p>Bash:</p>
-<pre><code class="bash">$ dropuser name 
+<pre><code class="language-bash">$ dropuser name 
 </code></pre>
-
 <p>or<br />
 Postgres:</p>
-<pre><code class="sql">postgres=# DROP USER testuser; 
+<pre><code class="language-sql">postgres=# DROP USER testuser; 
 </code></pre>
-
 <h2 id="bulk-insert">Bulk Insert:</h2>
 <blockquote>
 <p>https://stackoverflow.com/questions/12856377/the-correct-copy-command-to-load-postgresql-data-from-csv-file-that-has-single-q</p>
 </blockquote>
 <p>Double single quotes (if standard_conforming_strings is on, see the docs)</p>
-<pre><code class="sql">COPY my_table FROM 'c:\downloads\file.csv' DELIMITERS ',' CSV QUOTE '''';
+<pre><code class="language-sql">COPY my_table FROM 'c:\downloads\file.csv' DELIMITERS ',' CSV QUOTE '''';
 </code></pre>
-
 <p>or use the non-standard PostgreSQL-specific escape string:</p>
-<pre><code class="sql">COPY my_table FROM 'c:\downloads\file.csv' DELIMITERS ',' CSV QUOTE E'\'';
+<pre><code class="language-sql">COPY my_table FROM 'c:\downloads\file.csv' DELIMITERS ',' CSV QUOTE E'\'';
 </code></pre>
-
 <p>If you have a header:
 COPY my_table FROM 'c:\downloads\file.csv' WITH DELIMITER ',' CSV HEADER;</p>
 <blockquote>

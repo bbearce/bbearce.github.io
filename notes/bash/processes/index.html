@@ -96,13 +96,11 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Source <a href="https://mr-khan.gitlab.io/linux/2018/05/02/kill-specific-port-on-linux.html">mr-khan.gitlab.io</a></p>
 </blockquote>
 <p>Sometimes I fed up with searching my program PID. As you know the port number so you can easily find the port PID and kill it. If you want to kill a process running on port number 8000 then first you need to find the PID and then kill it. Run the following command to find port number PID:</p>
-<pre><code class="bash">sudo lsof -t -i:8000
+<pre><code class="language-bash">sudo lsof -t -i:8000
 </code></pre>
-
 <p>then kill:</p>
-<pre><code class="bash">sudo kill $(sudo lsof -t -i:8000)
+<pre><code class="language-bash">sudo kill $(sudo lsof -t -i:8000)
 </code></pre>
-
 <blockquote>
 <p>Courtesy of <a href="booleanworld.com/kill-process-linux/#targetText=It%20is%20very%20easy%20to,that%20you%20want%20to%20kill.">booleanworld.com</a></p>
 </blockquote>
@@ -149,7 +147,6 @@ KiB Swap:        0 total,        0 used,        0 free.   336792 cached Mem
     ...
     ...
 </code></pre>
-
 <p>The other option is <code>$ ps aux</code>. This will give the command used to run the process (this can sometimes be more helpful).</p>
 <pre><code>azureuser@miccai:~$ ps aux
 USER        PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
@@ -170,18 +167,15 @@ root         14  0.0  0.0      0     0 ?        S    18:46   0:00 [migration/1]
 ...
 ...
 </code></pre>
-
 <p>The advantage of using ps is that you can easily filter this list with the grep command. For example, to find a process associated with the term "SCREEN", you can use:</p>
 <pre><code>azureuser@miccai:~$ ps aux | grep -i SCREEN
 azureus+   1813  0.0  0.0  26104  2756 ?        Ss   19:02   0:00 SCREEN -S mysql
 azureus+   2058  0.0  0.0   8212  2148 pts/0    S+   19:17   0:00 grep --color=auto -i SCREEN
 </code></pre>
-
 <p>Thus, even when there are no “vnstat” related processes running, we would get one entry showing the grep process:</p>
 <pre><code>azureuser@miccai:~$ ps aux | grep -i &quot;vnstat&quot;
 azureus+   2070  0.0  0.0   8212  2212 pts/0    S+   19:18   0:00 grep --color=auto -i vnstat
 </code></pre>
-
 <p>Killing a process:</p>
 <p>There are various commands you can use to kill a process — <code>kill</code>, <code>killall</code>, <code>pkill</code> and <code>top</code>. We will begin from the simplest one: the <code>killall</code> command.</p>
 <h2 id="killall">killall</h2>
@@ -210,7 +204,6 @@ M   months
 y   years
 
 </code></pre>
-
 <h2 id="pkill">pkill</h2>
 <p>Killing processes with the <code>pkill</code> command
 Sometimes, you only know part of a program’s name. Just like <code>pgrep</code>, <code>pkill</code> allows you to kill processes based on partial matches. For example, if you want to kill all processes containing the name apache in the name, run:</p>

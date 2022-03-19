@@ -104,11 +104,10 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </blockquote>
 <h4 id="train-it">Train it</h4>
 <p>After they setup the resnet model we atually kick offf the learn step:</p>
-<pre><code class="python">learn = cnn_learner(data, models.resnet34, metrics=error_rate)
+<pre><code class="language-python">learn = cnn_learner(data, models.resnet34, metrics=error_rate)
 learn.model # prints the architecture
 learn.fit_one_cycle(4)
 </code></pre>
-
 <p>When looking at the cycles 4 is a good start. Cycles and Epochs are the same thing. They are passes throught the data. Each pass the model gets more and more accurate. Here is an example:</p>
 <table>
 <thead>
@@ -153,9 +152,8 @@ learn.fit_one_cycle(4)
 </table>
 <h4 id="save-it">Save it</h4>
 <p>Now we want to save the model, and this means save the weights or in a classical sense, the coefficients.</p>
-<pre><code class="python">learn.save('stage-1')
+<pre><code class="language-python">learn.save('stage-1')
 </code></pre>
-
 <h4 id="interpret-it">Interpret it</h4>
 <p>We need to look at the loss functions, which tell you how well did you predict what you tried to. Incorrect predictions have high losses and good predictions have low losses</p>
 

@@ -85,14 +85,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="azure-ingresscert-for-static-ip">Azure Ingress\Cert for Static IP</h1>
 <h2 id="create-an-ingress-controller">Create an ingress controller</h2>
-<pre><code class="bash">myResourceGroup=&quot;flask_demo&quot;
+<pre><code class="language-bash">myResourceGroup=&quot;flask_demo&quot;
 myAKSCluster=&quot;flaskAKSCluster&quot;
 az aks show --resource-group $myResourceGroup --name $myAKSCluster --query nodeResourceGroup -o tsv
 </code></pre>
-
 <p>Node Resource Group: <em>MC_flask_demo_flaskAKSCluster_eastus</em></p>
 <p>Next, create a public IP address with the static allocation method using the <a href="https://docs.microsoft.com/en-us/cli/azure/network/public-ip?view=azure-cli-latest#az_network_public_ip_create">az network public-ip create command</a>.</p>
-<pre><code class="bash">az network public-ip create --name
+<pre><code class="language-bash">az network public-ip create --name
                             --resource-group
                             [--allocation-method {Dynamic, Static}]
                             [--dns-name]
@@ -107,11 +106,9 @@ az aks show --resource-group $myResourceGroup --name $myAKSCluster --query nodeR
                             [--version {IPv4, IPv6}]
                             [--zone {1, 2, 3}]
 </code></pre>
-
 <p>The following example creates a public IP address named myAKSPublicIP in the AKS cluster resource group obtained in the previous step:</p>
-<pre><code class="bash">az network public-ip create --resource-group MC_flask_demo_flaskAKSCluster_eastus --name myAKSPublicIP --sku Standard --allocation-method static --query publicIp.ipAddress -o tsv
+<pre><code class="language-bash">az network public-ip create --resource-group MC_flask_demo_flaskAKSCluster_eastus --name myAKSPublicIP --sku Standard --allocation-method static --query publicIp.ipAddress -o tsv
 </code></pre>
-
 <p>Public IP: <em>20.62.186.98</em></p>
 <blockquote>
 <p>The above commands create an IP address that will be deleted if you delete your AKS cluster.</p>
@@ -129,7 +126,7 @@ az aks show --resource-group $myResourceGroup --name $myAKSCluster --query nodeR
 <blockquote>
 <p>Tip: The following example creates a Kubernetes namespace for the ingress resources named <code>ingress-basic</code>. Specify a namespace for your own environment as needed. If your AKS cluster is not RBAC enabled, add <code>--set rbac.create=false</code> to the Helm commands.</p>
 </blockquote>
-<pre><code class="bash"># Create a namespace for your ingress resources
+<pre><code class="language-bash"># Create a namespace for your ingress resources
 kubectl create namespace ingress-basic
 
 # Add the ingress-nginx repository
@@ -146,14 +143,12 @@ helm install nginx-ingress ingress-nginx/ingress-nginx \
     --set rbac.create=false \
     --set controller.service.annotations.&quot;service\.beta\.kubernetes\.io/azure-dns-label-name&quot;=&quot;anything-will-do&quot;
 </code></pre>
-
 <p>No ingress rules have been created yet, so the NGINX ingress controller's default 404 page is displayed if you browse to the public IP address. Ingress rules are configured in the following steps.</p>
-<pre><code class="bash">az network public-ip list --resource-group mc_flask_demo_flaskakscluster_eastus --query &quot;[?name=='myAKSPublicIP'].[dnsSettings.fqdn]&quot; -o tsv
+<pre><code class="language-bash">az network public-ip list --resource-group mc_flask_demo_flaskakscluster_eastus --query &quot;[?name=='myAKSPublicIP'].[dnsSettings.fqdn]&quot; -o tsv
 </code></pre>
-
 <p><em>anything-will-do.eastus.cloudapp.azure.com</em></p>
 <h2 id="install-cert-manager">Install cert-manager</h2>
-<pre><code class="bash"># Label the cert-manager namespace to disable resource validation
+<pre><code class="language-bash"># Label the cert-manager namespace to disable resource validation
 kubectl label namespace ingress-basic cert-manager.io/disable-validation=true
 
 # Add the Jetstack Helm repository

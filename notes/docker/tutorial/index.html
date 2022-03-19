@@ -103,7 +103,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <iframe width="560" height="315" src="https://www.youtube.com/embed/Yy549qywTQQ" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 <h2 id="we-will-go-over-these-fundamental-commands">We will go over these fundamental commands:</h2>
-<pre><code class="bash">
+<pre><code class="language-bash">
 docker build -t friendlyhello .  # Create image using this directory's Dockerfile  
 docker run -d -p 4000:80 friendlyhello         # Same thing, but in detached mode  
 docker container ls                                # List all running containers  
@@ -120,83 +120,65 @@ docker tag &lt;image&gt; username/repository:tag  # Tag &lt;image&gt; for upload
 docker push username/repository:tag            # Upload tagged image to registry  
 docker run username/repository:tag                   # Run image from a registry  
 </code></pre>
-
 <h2 id="lists-images-on-machine">Lists images on machine</h2>
-<pre><code class="bash">docker images
+<pre><code class="language-bash">docker images
 </code></pre>
-
 <h2 id="lists-running-containers">Lists running containers</h2>
-<pre><code class="bash">docker ps
+<pre><code class="language-bash">docker ps
 </code></pre>
-
 <h2 id="lists-all-containers-stopped-or-otherwise">Lists all containers stopped or otherwise</h2>
-<pre><code class="bash">docker ps -a
+<pre><code class="language-bash">docker ps -a
 </code></pre>
-
 <h2 id="start-a-docker">Start a docker</h2>
-<pre><code class="bash">docker run bbearce/docker_demo:from_docker_file
+<pre><code class="language-bash">docker run bbearce/docker_demo:from_docker_file
 </code></pre>
-
 <h2 id="delete-a-container">Delete a container</h2>
-<pre><code class="bash">docker container rm 3e64bfa61b7e
+<pre><code class="language-bash">docker container rm 3e64bfa61b7e
 </code></pre>
-
 <h2 id="removes-an-image">Removes an image</h2>
-<pre><code class="bash">docker image rm 7a59e09539e4
+<pre><code class="language-bash">docker image rm 7a59e09539e4
 </code></pre>
-
 <h2 id="run-an-interactive-session">Run an interactive session</h2>
-<pre><code class="bash">docker run -it bbearce/docker_demo:from_docker_file bash
+<pre><code class="language-bash">docker run -it bbearce/docker_demo:from_docker_file bash
 </code></pre>
-
 <ul>
 <li><code>-i</code> - interactive sessoin</li>
 <li><code>-t</code> - join docker terminal to yours</li>
 <li><code>bash</code> - run <em>bash</em> inside the session instead of default program(s)</li>
 </ul>
 <h2 id="detach-from-container-and-leave-running">Detach from container and leave running</h2>
-<pre><code class="html">&lt;cntrl p+q&gt;
+<pre><code class="language-html">&lt;cntrl p+q&gt;
 </code></pre>
-
 <h2 id="to-attach-back-to-a-docker-container">To attach back to a docker container</h2>
-<pre><code class="bash">docker attach silly_wright
+<pre><code class="language-bash">docker attach silly_wright
 </code></pre>
-
 <p>or</p>
-<pre><code class="bash">docker attach &lt;container_id&gt;
+<pre><code class="language-bash">docker attach &lt;container_id&gt;
 </code></pre>
-
 <h2 id="stop-a-running-docker-like-this-youll-need-to-to-delete-it">Stop a running docker like this (you'll need to to delete it)</h2>
-<pre><code class="bash">docker stop &lt;container_id or name&gt;
+<pre><code class="language-bash">docker stop &lt;container_id or name&gt;
 </code></pre>
-
 <h2 id="to-name-a-container">To name a container</h2>
 <p><code>--name=&lt;name&gt;</code></p>
-<pre><code class="bash">docker run -it --name=auto_remove bbearce/docker_demo:from_docker_file bash
+<pre><code class="language-bash">docker run -it --name=auto_remove bbearce/docker_demo:from_docker_file bash
 </code></pre>
-
 <h2 id="tag-existing-image-as-a-different-name-repoimagetag">Tag existing image as a different name (repo/image:tag)</h2>
-<pre><code class="bash">docker tag bbearce/docker_demo:from_docker_file bbearce/docker_demo:delete_me
+<pre><code class="language-bash">docker tag bbearce/docker_demo:from_docker_file bbearce/docker_demo:delete_me
 </code></pre>
-
 <h2 id="login-to-your-dockerhub-account">Login to your dockerhub account</h2>
-<pre><code class="bash">docker login --username=bbearce
+<pre><code class="language-bash">docker login --username=bbearce
 </code></pre>
-
 <h2 id="to-push-image-online">To push image online</h2>
-<pre><code class="bash">docker push bbearce/docker_demo:from_docker_file
+<pre><code class="language-bash">docker push bbearce/docker_demo:from_docker_file
 </code></pre>
-
 <h2 id="to-automatically-remove-container-when-exited">To automatically remove container when exited</h2>
-<pre><code class="bash">docker run -it --rm --name=auto_remove bbearce/docker_demo:from_docker_file bash
+<pre><code class="language-bash">docker run -it --rm --name=auto_remove bbearce/docker_demo:from_docker_file bash
 </code></pre>
-
 <h2 id="use-bash-flag-v-to-mount-the-host-folder-inside-the-docker">Use bash flag <em>-v <host_machine_dir>:<docker_dir></em> to mount the host folder inside the docker.</h2>
-<pre><code class="bash">docker run -it --rm --name=auto_remove -v /home/bbearce/Desktop/Docker_Demo/mount:/app bbearce/docker_demo:from_docker_file bash
+<pre><code class="language-bash">docker run -it --rm --name=auto_remove -v /home/bbearce/Desktop/Docker_Demo/mount:/app bbearce/docker_demo:from_docker_file bash
 </code></pre>
-
 <h2 id="from-a-dockerfile">from a Dockerfile</h2>
-<pre><code class="bash">docker build -t bbearce/docker_demo:from_docker_file .
+<pre><code class="language-bash">docker build -t bbearce/docker_demo:from_docker_file .
 </code></pre>
 
   <br>

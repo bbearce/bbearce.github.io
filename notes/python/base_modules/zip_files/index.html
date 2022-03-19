@@ -101,23 +101,21 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <li>BytesIO: for storing binary buffers</li>
 </ol>
 <h2 id="text-streams">Text Streams</h2>
-<pre><code class="python">from io import StringIO
+<pre><code class="language-python">from io import StringIO
 
 text_stream = StringIO()
 text_stream.write(&quot;I am a text buffer&quot;) # prints 18
 print(text_stream.getvalue()) # Prints 'I am a text buffer' to console
 text_stream.close()
 </code></pre>
-
 <blockquote>
 <p>One should be aware that, in Python, a file-like object can be used in any I/O operation. The classic example is the <em>print</em> statement.</p>
 </blockquote>
 <p>Python’s print statement takes a keyword argument called file that decides which stream to write the given message/objects. Its value is a “file-like object.” See the definition of print,</p>
-<pre><code class="python">print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)
+<pre><code class="language-python">print(*objects, sep=' ', end='\n', file=sys.stdout, flush=False)
 </code></pre>
-
 <p>Let us modify our program to change the destination of print to our custom text stream.</p>
-<pre><code class="python">from io import StringIO
+<pre><code class="language-python">from io import StringIO
 
 text_stream = StringIO()
 text_stream.write(&quot;I am a text buffer&quot;)
@@ -126,11 +124,10 @@ print(&quot; in python&quot;, file=text_stream) # Doesn't print to console, inst
 print(text_stream.getvalue()) # Prints 'I am a text buffer in python' to console
 text_stream.close()
 </code></pre>
-
 <p>Text streams are only useful in operating on UTF-8 buffers(XML, JSON, CSV). There are many other cases where we have to represent binary buffers(ZIP, PDF, Custom Extensions) in program memory. Binary streams come to the rescue.</p>
 <h2 id="binary-streams">Binary Streams</h2>
 <p>A binary stream stores and operates on binary data(bytes). It has the same methods as StringIO like getvalue, read, write.</p>
-<pre><code class="python">from io import BytesIO, StringIO
+<pre><code class="language-python">from io import BytesIO, StringIO
 
 binary_stream =  BytesIO(b'I am a byte string \x01')
 
@@ -141,7 +138,6 @@ try:
 except TypeError:
   print('Sorry, text stream cannot store bytes') # Prints 'Sorry, text stream cannot store bytes'
 </code></pre>
-
 <p>One can store any binary data coming from a PDF or ZIP file into a custom binary stream like the preceding one.</p>
 <h2 id="understanding-the-python-zipfile-api">Understanding the Python <code>zipfile</code> API</h2>
 <p>A zip file is a binary file. Contents of a zip file are compressed using an algorithm and paths are preserved. All open-source zip tools do the same thing, understand the binary representation, process it. It is a no-brainer that one should use BytesIO while working with zip files. Python provides a package to work with zip archives called <code>zipfile</code>.</p>
@@ -151,15 +147,14 @@ except TypeError:
 <li><code>ZipInfo</code> : to represent a member of a zip file.</li>
 </ol>
 <p>A <code>ZipFile</code> is an exact representation of a zip archive. It means you can load a .zip file directly into that class object or dump a <code>ZipFile</code> object to a new archive. Every <code>ZipFile</code> has a list of members. Those members are ZipInfo objects.</p>
-<pre><code class="bash">mkdir -p config/app
+<pre><code class="language-bash">mkdir -p config/app
 mkdir -p config/docker
 touch config/app/app-config.json
 touch config/docker/docker-compose.yaml
 touch config/root-config.json
 zip -r config.zip config
 </code></pre>
-
-<pre><code class="bash">(venv) bbearce@pop-os:~$ python3 -m zipfile -l config.zip
+<pre><code class="language-bash">(venv) bbearce@pop-os:~$ python3 -m zipfile -l config.zip
 File Name                                             Modified             Size
 config/                                        2020-12-11 15:32:24            0
 config/root-config.json                        2020-12-11 15:32:24            0
@@ -168,18 +163,16 @@ config/docker/docker-compose.yaml              2020-12-11 15:32:16            0
 config/app/                                    2020-12-11 15:32:06            0
 config/app/app-config.json
 </code></pre>
-
 <p>using python interactively:</p>
-<pre><code class="python">from zipfile import ZipFile
+<pre><code class="language-python">from zipfile import ZipFile
 
 with ZipFile('config.zip') as zip_archive:
     for item in zip_archive.filelist:
         print(item)
     print(f'\nThere are {len(zip_archive.filelist)} ZipInfo objects present in archive')
 </code></pre>
-
 <p>out:</p>
-<pre><code class="python">&lt;ZipInfo filename='config/' filemode='drwxrwxr-x' external_attr=0x10&gt;
+<pre><code class="language-python">&lt;ZipInfo filename='config/' filemode='drwxrwxr-x' external_attr=0x10&gt;
 &lt;ZipInfo filename='config/root-config.json' filemode='-rw-rw-r--' file_size=0&gt;
 &lt;ZipInfo filename='config/docker/' filemode='drwxrwxr-x' external_attr=0x10&gt;
 &lt;ZipInfo filename='config/docker/docker-compose.yaml' filemode='-rw-rw-r--' file_size=0&gt;
@@ -188,12 +181,11 @@ with ZipFile('config.zip') as zip_archive:
 
 There are 6 ZipInfo objects present in archive
 </code></pre>
-
 <h3 id="use-case-1-create-zip-archive-with-files">Use case #1: Create zip archive with files</h3>
 <p>We can create a zip file with the given name by opening a new ZipFile object with write mode ‘w’ or exclusive create mode ‘x’.</p>
 <p>Next, we can add files/paths to the zip archive. There are two approaches to do that:</p>
 <h4 id="v1-add-a-file-as-a-file-like-object">v1: Add a file as a file-like object</h4>
-<pre><code class="python">from zipfile import ZipFile
+<pre><code class="language-python">from zipfile import ZipFile
 from io import BytesIO
 
 def create_zip_v1():
@@ -218,10 +210,9 @@ with open('config.zip', 'wb') as f:
 
 archive.close()
 </code></pre>
-
 <h4 id="v2-add-a-file-as-a-zipinfo-object">v2: Add a file as a ZipInfo object</h4>
 <p>This approach composes files as objects and gives more flexibility to add meta information on file.</p>
-<pre><code class="python">from zipfile import ZipFile, ZipInfo
+<pre><code class="language-python">from zipfile import ZipFile, ZipInfo
 from io import BytesIO
 
 def create_zip_v2():
@@ -247,9 +238,8 @@ with open('config.zip', 'wb') as f:
 
 archive.close()
 </code></pre>
-
 <h3 id="use-case-2-read-a-file-from-zip-archive">Use case #2: Read a file from zip archive</h3>
-<pre><code class="python">from zipfile import ZipFile
+<pre><code class="language-python">from zipfile import ZipFile
 
 docker_compose_config = None
 
@@ -258,11 +248,10 @@ with ZipFile('config.zip') as zip_archive:
 
 print(docker_compose_config)
 </code></pre>
-
 <h3 id="use-case-3-update-or-insert-a-file-in-zip-arch">Use case #3: Update or Insert a file in zip arch</h3>
 <p>This use case is the most tricky part of the zipping business in Python. On the first look, it might look simple. Let us try attempting a few solutions.</p>
 <h4 id="attempt-1-dont-use-as-it-erases-everything-but-update">Attempt #1: Don't use as it erases everything but update</h4>
-<pre><code class="python">from zipfile import ZipFile
+<pre><code class="language-python">from zipfile import ZipFile
 
 with ZipFile('config.zip', 'w') as zip_archive:
     zip_archive.writestr(
@@ -270,13 +259,12 @@ with ZipFile('config.zip', 'w') as zip_archive:
         b'docker-compose-file-content-new'   # Data
     )
 </code></pre>
-
 <p>If we run the preceding script, it replaces the file in archive config.zip, but, as zipfile is opened in write mode ‘w,’ the other files/paths in archive can vanish.</p>
 <blockquote>
 <p>They do, I checked. Don’t use ‘w’ mode, when you update/replace a single file in a zip archive, or your data is gone for good.</p>
 </blockquote>
 <h4 id="attempt-2-doesnt-erase-old-data-upon-update-so-there-is-extra-data">Attempt #2: Doesn't erase old data upon update so there is extra data</h4>
-<pre><code class="python">from zipfile import ZipFile
+<pre><code class="language-python">from zipfile import ZipFile
 
 with ZipFile('config.zip', 'a') as zip_archive:
     zip_archive.writestr(
@@ -284,15 +272,13 @@ with ZipFile('config.zip', 'a') as zip_archive:
         b'docker-compose-file-content-new'   # Data
     )
 </code></pre>
-
-<pre><code class="bash">$ python -m zipfile -l config.zip
+<pre><code class="language-bash">$ python -m zipfile -l config.zip
 File Name                                             Modified             Size
 docker/docker-compose.yaml                     1980-01-01 00:00:00           23
 app/app-config.json                            1980-01-01 00:00:00           21
 root-config.json                               1980-01-01 00:00:00           22
 docker/docker-compose.yaml                     2020-12-11 16:41:14           31
 </code></pre>
-
 <p>So docker/docker-compose.yaml had appeared twice in the ZipInfo list but only once in extraction. For every update, the zip archive size grows and grows in the magnitude of the updated file size. If you ignore the Python warning, at some point the junk in the archive may occupy more space than actual files.</p>
 <p>The two attempts until now couldn’t achieve an acceptable solution. Now comes third, which is a clean and elegant way.</p>
 <h4 id="attempt-3-works">Attempt #3: Works!</h4>
@@ -300,7 +286,7 @@ docker/docker-compose.yaml                     2020-12-11 16:41:14           31
 <blockquote>
 <p>Old contents are not untouched and in fact are deleted if you edit any part of the zip!</p>
 </blockquote>
-<pre><code class="python">from zipfile import ZipFile, ZipInfo
+<pre><code class="language-python">from zipfile import ZipFile, ZipInfo
 from io import BytesIO
 
 
@@ -337,10 +323,9 @@ with open('config.zip', 'wb') as f:
 
 new_zip.close()
 </code></pre>
-
 <h4 id="use-case-4-remove-an-existing-file-from-zip-archive">Use case #4: Remove an existing file from zip archive</h4>
 <p>The cleanest way again is to copy contents from the old archive to the new archive and skip the <code>ZipInfo</code> objects that match the given path.</p>
-<pre><code class="python">from zipfile import ZipFile, ZipInfo
+<pre><code class="language-python">from zipfile import ZipFile, ZipInfo
 from io import BytesIO
 
 

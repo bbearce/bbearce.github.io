@@ -85,16 +85,15 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="csv-loader">CSV Loader</h1>
 <p>Packages needed:</p>
-<pre><code class="python">os
+<pre><code class="language-python">os
 pandas
 sqlite3
 numpy
 </code></pre>
-
 <p>This sets of scripts works as 2 independent situations:</p>
 <h2 id="1-bulk-folder-load">[1] Bulk folder load</h2>
 <p>The function in this script looks inside a folder and using all *.csv begins a process of concatenating all csvs together and removing duplpicates on each merge. </p>
-<pre><code class="python">import pandas as pd, os, pdb, sqlite3, numpy as np
+<pre><code class="language-python">import pandas as pd, os, pdb, sqlite3, numpy as np
 
 pd.set_option('display.min_rows', 25) # How many to show
 pd.set_option('display.max_rows', 25) # How many to show
@@ -173,10 +172,9 @@ create_table_from_folder_csvs(covid_test_results_folder)
 create_table_from_folder_csvs(chest_imaging_reports_folder)
 
 </code></pre>
-
 <h2 id="2-load-a-new-csv">[2] Load a new csv</h2>
 <p>This script could load every csv but it much much slower. Use this once a bulk database is made andd you want to add a new csv.</p>
-<pre><code class="python">import pandas as pd, os, pdb, sqlite3, numpy as np
+<pre><code class="language-python">import pandas as pd, os, pdb, sqlite3, numpy as np
 
 pd.set_option('display.min_rows', 25) # How many to show
 pd.set_option('display.max_rows', 25) # How many to show

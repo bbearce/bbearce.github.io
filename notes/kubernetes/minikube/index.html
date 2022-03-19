@@ -60,16 +60,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="minikube">Minikube</h1>
 <h2 id="installation">Installation</h2>
-<pre><code class="bash">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+<pre><code class="language-bash">curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 </code></pre>
-
 <h2 id="start-your-cluster">Start Your Cluster</h2>
-<pre><code class="bash">minikube start
+<pre><code class="language-bash">minikube start
 </code></pre>
-
 <h2 id="interact-with-your-cluster">Interact With Your Cluster</h2>
-<pre><code class="bash">kubectl get po -A
+<pre><code class="language-bash">kubectl get po -A
 
 NAMESPACE     NAME                               READY   STATUS    RESTARTS   AGE
 kube-system   coredns-74ff55c5b-w8nkf            1/1     Running   0          57m
@@ -80,9 +78,8 @@ kube-system   kube-proxy-tqb79                   1/1     Running   0          57
 kube-system   kube-scheduler-minikube            1/1     Running   0          57m
 kube-system   storage-provisioner                1/1     Running   1          58m
 </code></pre>
-
 <h2 id="deploy-applications">Deploy Applications</h2>
-<pre><code class="bash">kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
+<pre><code class="language-bash">kubectl create deployment hello-minikube --image=k8s.gcr.io/echoserver:1.4
 kubectl expose deployment hello-minikube --type=NodePort --port=8080
 </code></pre>
 

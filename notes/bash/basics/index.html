@@ -94,23 +94,21 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     <h1 id="basic-bash-commands">Basic bash commands</h1>
 <h2 id="help-from-the-man">Help from the <code>man</code> ;)</h2>
 <p>This small section is to show you that help is on the way with <code>man</code>. Type this prefacing any other command in bash and you can get help on it:</p>
-<pre><code class="bash">$ man ls
+<pre><code class="language-bash">$ man ls
 NAME
        ls - list directory contents
 .
 .
 .
 </code></pre>
-
 <h2 id="where-are-you">Where are you?</h2>
 <p>Find your location with <code>pwd</code>:</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ pwd
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ pwd
 /home/bbearce
 
 </code></pre>
-
 <p>Look around with <code>ls</code>:</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ ls
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ ls
 check-config.sh                gems          Slicer-4.10.2-linux-amd64
 Desktop                        Music         snap
 docker_practice                pgAdmin4      src
@@ -121,10 +119,9 @@ examples.desktop               seaborn-data
 
 
 </code></pre>
-
 <h3 id="-l">-l</h3>
 <p>With <code>-l</code> you can see things listed out vertically</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ ls -l
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ ls -l
 total 2268
 -rw-rw-r--  1 bbearce bbearce   10314 May 20 09:40 check-config.sh
 drwxr-xr-x  2 bbearce bbearce    4096 Sep 18 11:15 Desktop
@@ -148,7 +145,6 @@ drwxr-xr-x  2 bbearce bbearce    4096 Aug 30 13:55 Videos
 -rw-rw-r--  1 bbearce bbearce 2220414 Aug 16 17:05 wget-log
 
 </code></pre>
-
 <p>The columns are <em>using ls -lai</em>:</p>
 <pre><code>+--------------+------------------+-----------------+-------+-------+------+-------+-----+-------+-----------+
 | index number | file permissions | number of links | owner | group | size | month | day | time  | filename  |
@@ -156,13 +152,12 @@ drwxr-xr-x  2 bbearce bbearce    4096 Aug 30 13:55 Videos
 |       933442 | -rwxrw-r--       |              10 | root  | root  | 2048 | Jan   |  13 | 07:11 | afile.exe |
 +--------------+------------------+-----------------+-------+-------+------+-------+-----+-------+-----------+
 </code></pre>
-
 <h3 id="-a">-a</h3>
 <p>With <code>-a</code> you show hidden files:</p>
 <blockquote>
 <p>Hidden files are denoted with a <code>.&lt;file_name&gt;</code></p>
 </blockquote>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ ls -a
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ ls -a
 .                              gems                .pyenv
 ..                             .gitconfig          .pylint.d
 .azure                         .gksu.lock          .python_history
@@ -185,10 +180,9 @@ Downloads                      pgAdmin4            .wget-hsts
 .dropbox                       Pictures            wget-log
 
 </code></pre>
-
 <h3 id="-la">-la</h3>
 <p>Using both <code>-la</code>:</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ ls -la
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ ls -la
 total 2564
 drwxrwxrwx 50 bbearce bbearce    4096 Sep 19 22:01 .
 drwxr-xr-x  3 root    root       4096 May 29 15:05 ..
@@ -234,12 +228,11 @@ drwxrwxr-x  2 bbearce bbearce    4096 May 22 15:23 .nano
 -rw-rw-r--  1 bbearce bbearce      55 Aug  6 09:48 .node_repl_history
 
 </code></pre>
-
 <h3 id="-block_sizesize">--block_size=SIZE</h3>
 <blockquote>
 <p>SIZE units  are  K,M,G,T,P,E,Z,Y (powers of 1024) or KB,MB,... (powers of 1000).</p>
 </blockquote>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ ls -la --block-size=M
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ ls -la --block-size=M
 total 3M
 drwxrwxrwx 50 bbearce bbearce 1M Sep 20 09:32 .
 drwxr-xr-x  3 root    root    1M May 29 15:05 ..
@@ -249,29 +242,26 @@ drwxrwxr-x  3 bbearce bbearce 1M May 23 16:51 .azure-shell
 -rw-r--r--  1 bbearce bbearce 1M May 16 16:13 .bash_logout
 ...
 </code></pre>
-
 <h2 id="count-files">Count files</h2>
 <p>Use <code>wc</code> to count things and get their byte sizes. The <code>-l</code> flag stands for lines and can be used with <code>ls</code> and <code>|</code> to count files in a directory:</p>
 <p>Ex:</p>
-<pre><code class="bash">user@server:~/$ ls data/rsna | wc -l
+<pre><code class="language-bash">user@server:~/$ ls data/rsna | wc -l
 26684
 
 </code></pre>
-
 <h2 id="sudo-su">sudo, su</h2>
 <blockquote>
 <p>Notes courtesy of <a href="https://www.maketecheasier.com/differences-between-su-sudo-su-sudo-s-sudo-i/">maketecheasier.com</a></p>
 </blockquote>
 <p>Using <code>sudo</code> you can execute code as superuser. It stands for <em>super user do</em>.</p>
-<pre><code class="bash">$ man sudo
+<pre><code class="language-bash">$ man sudo
 NAME
      sudo, sudoedit — execute a command as another user
 .
 .
 .
 </code></pre>
-
-<pre><code class="bash">$ man su
+<pre><code class="language-bash">$ man su
 
 NAME
        su - change user ID or become superuser
@@ -280,7 +270,6 @@ NAME
 .
 
 </code></pre>
-
 <h3 id="su">$ su</h3>
 <p>The <code>su</code> command substitutes the current user in use by the system in the shell. This will tell the system to switch (and essentially log out of) the current user to the one specified.. <code>su</code> is best used when a user wants direct access to the root account on the system. It doesn’t go through sudo or anything like that. It is <a href="https://askubuntu.com/questions/446570/why-does-su-fail-with-authentication-error">disabled</a> by default on Ubuntu. It is recommended to use <code>sudo -i</code> in this case. As the note above mentions, this drops you at <code>/root</code>.</p>
 <h3 id="sudo-su_1">$ sudo su</h3>
@@ -293,7 +282,7 @@ NAME
 <p>The <code>-s</code> switch for “sudo” command reads the $SHELL variable of the current user executing commands. This command works as if the user is running <code>sudo /bin/bash</code>. <code>sudo -s</code> is a “non-login” style shell. This means that unlike a command like <code>sudo -i</code> or <code>sudo su</code>, the system will not read any environmental files. This means that when a user tells the shell to run <code>sudo -s</code>, it gains root but will not change the user or the user environment. Your home will not be the root home, etc.</p>
 <p>This command is best used when the user doesn’t want to touch root at all and just wants a root shell for easy command execution. Other commands talked about above gain root access, but touch root environmental files, and allow users more fuller access to root (which can be a security issue).</p>
 <h4 id="summary-and-demo-of-pwd-when-running-these-commands">Summary and demo of <code>pwd</code> when running these commands:</h4>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~$ sudo su
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~$ sudo su
 root@bbearce-XPS-15-9560:/home/bbearce# pwd
 /home/bbearce
 root@bbearce-XPS-15-9560:/home/bbearce# exit
@@ -312,7 +301,6 @@ root@bbearce-XPS-15-9560:~# exit
 exit
 
 </code></pre>
-
 <blockquote>
 <p>btw: <code>exit</code> is for leaving a current logged in session.</p>
 </blockquote>
@@ -344,40 +332,33 @@ Use the <code>cp</code> command to copy things.<br />
 Use the <code>rsync</code> command to move things. Use the <em>-a</em> flag to archive and retain permissions and time stamps.  </p>
 <h3 id="scp">scp</h3>
 <p>Local to local:</p>
-<pre><code class="bash">$ scp &lt;from&gt; &lt;to&gt; 
+<pre><code class="language-bash">$ scp &lt;from&gt; &lt;to&gt; 
 </code></pre>
-
 <p>Local to Remote:</p>
-<pre><code class="bash">$ scp [-i identity_file] &lt;from_local&gt; user@remote:&lt;to_remote&gt; 
+<pre><code class="language-bash">$ scp [-i identity_file] &lt;from_local&gt; user@remote:&lt;to_remote&gt; 
 </code></pre>
-
 <p>Remote to Local:</p>
-<pre><code class="bash">$ scp [-i identity_file] user@remote:&lt;from_remote&gt; &lt;to_local&gt; 
+<pre><code class="language-bash">$ scp [-i identity_file] user@remote:&lt;from_remote&gt; &lt;to_local&gt; 
 </code></pre>
-
 <h3 id="rsync">rsync</h3>
 <p>Local to local:</p>
-<pre><code class="bash">$ rsync &lt;from&gt; &lt;to&gt; 
+<pre><code class="language-bash">$ rsync &lt;from&gt; &lt;to&gt; 
 </code></pre>
-
 <p>Local to Remote:</p>
-<pre><code class="bash">$ rsync [-e &quot;ssh -i &lt;path to identity_file&gt;&quot;] &lt;from_local&gt; user@remote:&lt;to_remote&gt; 
+<pre><code class="language-bash">$ rsync [-e &quot;ssh -i &lt;path to identity_file&gt;&quot;] &lt;from_local&gt; user@remote:&lt;to_remote&gt; 
 </code></pre>
-
 <p>Remote to Local:</p>
-<pre><code class="bash">$ rsync [-e &quot;ssh -i &lt;path to identity_file&gt;&quot;] user@remote:&lt;from_remote&gt; &lt;to_local&gt; 
+<pre><code class="language-bash">$ rsync [-e &quot;ssh -i &lt;path to identity_file&gt;&quot;] user@remote:&lt;from_remote&gt; &lt;to_local&gt; 
 </code></pre>
-
 <p>Most important flags:
 <code>-a -v -z</code></p>
-<pre><code class="bash">rsync -avz foo:src/bar /data/tmp
+<pre><code class="language-bash">rsync -avz foo:src/bar /data/tmp
 
 This  would  recursively  transfer  all  files  from  the  directory src/bar on the machine foo into the
 /data/tmp/bar directory on the local machine. The files are transferred in &quot;archive&quot; mode, which ensures
 that  symbolic  links, devices, attributes, permissions, ownerships, etc. are preserved in the transfer.
 Additionally, compression will be used to reduce the size of data portions of the transfer.
 </code></pre>
-
 <p><em>-a</em>:
 <code>-a, --archive               archive mode; equals -rlptgoD (no -H,-A,-X)</code></p>
 <p><em>-v</em>:
@@ -385,14 +366,12 @@ Additionally, compression will be used to reduce the size of data portions of th
 <p><em>-z</em>:
 <code>-z, --compress</code></p>
 <p><em>--progress</em>:</p>
-<pre><code class="--progress">              This option tells rsync to print information showing the progress of the transfer. This  gives  a
+<pre><code class="language---progress">              This option tells rsync to print information showing the progress of the transfer. This  gives  a
               bored   user  something  to  watch.
 </code></pre>
-
 <h2 id="check-os-version">Check OS Version</h2>
 <pre><code>$ cat /etc/os-release
 </code></pre>
-
 <h2 id="make-files">make files</h2>
 <blockquote>
 <p>Courtesty of <a href="https://stackoverflow.com/questions/3915067/what-are-makefiles-make-install">stackoverflow</a></p>
@@ -415,35 +394,30 @@ Additionally, compression will be used to reduce the size of data portions of th
 <p>SSHFS is shipped by all major Linux distributions and has been in production use across a wide range of systems for many years. However, at present SSHFS does not have any active, regular contributors, and there are a number of known issues (see the bugtracker). The current maintainer continues to apply pull requests and makes regular releases, but unfortunately has no capacity to do any development beyond addressing high-impact issues. When reporting bugs, please understand that unless you are including a pull request or are reporting a critical issue, you will probably not get a response.</p>
 <h3 id="how-to-use">How to use</h3>
 <p>Once sshfs is installed (see next section) running it is very simple:</p>
-<pre><code class="bash">$ sshfs [user@]hostname:[directory] mountpoint
+<pre><code class="language-bash">$ sshfs [user@]hostname:[directory] mountpoint
 </code></pre>
-
 <p>It is recommended to run SSHFS as regular user (not as root). For this to work the mountpoint must be owned by the user. If username is omitted SSHFS will use the local username. If the directory is omitted, SSHFS will mount the (remote) home directory. If you need to enter a password sshfs will ask for it (actually it just runs ssh which ask for the password if needed).</p>
 <p>Also many ssh options can be specified (see the manual pages for sftp(1) and ssh_config(5)), including the remote port number (-oport=PORT)</p>
 <p>To unmount the filesystem:</p>
-<pre><code class="bash">fusermount -u mountpoint
+<pre><code class="language-bash">fusermount -u mountpoint
 </code></pre>
-
 <p>On BSD and macOS, to unmount the filesystem:</p>
-<pre><code class="bash">umount mountpoint
+<pre><code class="language-bash">umount mountpoint
 </code></pre>
-
 <p><em>If you get an error:</em></p>
-<pre><code class="bash">fuse: mountpoint is not empty
+<pre><code class="language-bash">fuse: mountpoint is not empty
 fuse: if you are sure this is safe, use the 'nonempty' mount option
 </code></pre>
-
 <p>You might need to kill all sshfs processes and restart:</p>
-<pre><code class="bash">~$ killall sshfs
+<pre><code class="language-bash">~$ killall sshfs
 </code></pre>
-
 <p><em>Then restart your sshfs mounting procedure</em></p>
 <h2 id="mouse-sensitivity">Mouse sensitivity</h2>
 <blockquote>
 <p>Source: <a href="https://askubuntu.com/questions/205676/how-to-change-mouse-speed-sensitivity/272534#272534?newreg=6f7d8e99ca264da893fdef1f5828746c">askubuntu</a></p>
 </blockquote>
 <p>Sometimes (happened to me) the mouse UI options in settings are not enough to control the mouse sensitivity. If that is the case then try this:</p>
-<pre><code class="bash">
+<pre><code class="language-bash">
 </code></pre>
 
   <br>

@@ -101,20 +101,18 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h2 id="step-2-add-database-option-for-docker-submission">Step 2: Add Database Option for Docker Submission</h2>
 <h3 id="add-new-column-in-competition-table">Add New Column in Competition Table</h3>
 <p>Find file <code>/codalab/apps/web/models.py</code>. Approximately on line 233 is the Competition model definition. It has definitions for the columns of this table. It looks like this:</p>
-<pre><code class="python">class Competition(ChaHubSaveMixin, models.Model):
+<pre><code class="language-python">class Competition(ChaHubSaveMixin, models.Model):
 ...
 </code></pre>
-
 <p>Add <code>enable_docker_submission</code> as a <code>BooleanField</code>:</p>
 <p><strong>Add this line:</strong></p>
-<pre><code class="python">enable_docker_submission = models.BooleanField(default=False, verbose_name=&quot;Allow participant docker submission&quot;)
+<pre><code class="language-python">enable_docker_submission = models.BooleanField(default=False, verbose_name=&quot;Allow participant docker submission&quot;)
 </code></pre>
-
 <p>It doesn't matter what order the columns are in, so if you are familiar with setting up models in Django or Flask projects, just add a column that we can reference later.</p>
 <h3 id="migrate-database-so-we-can-see-our-changes">Migrate Database So We Can See Our Changes</h3>
 <p>Codalab as of this writing (5/1/2020) is deployed with an orchestration of docker containers. One of these is the database (postgres). </p>
 <p>Using <code>docker ps</code> we can see our images:</p>
-<pre><code class="bash">bbearce@MedICI-CodaLab-Master:~/src$ docker ps
+<pre><code class="language-bash">bbearce@MedICI-CodaLab-Master:~/src$ docker ps
 CONTAINER ID        IMAGE                                          COMMAND                  CREATED             STATUS              PORTS                                                                                        NAMES
 b8196a2e9fc5        nginx                                          &quot;bash -x /app/docker…&quot;   4 months ago        Up 2 months         0.0.0.0:80-&gt;80/tcp, 0.0.0.0:443-&gt;443/tcp                                                     nginx
 528d2dc976a1        codalab-competitions_django                    &quot;bash /app/docker/ru…&quot;   4 months ago        Up 2 months         0.0.0.0:8000-&gt;8000/tcp                                                                       django
@@ -125,12 +123,11 @@ b93b3f7e0a3b        codalab-competitions_rabbit                    &quot;docker-
 5e3492959db1        postgres:9.6.3                                 &quot;docker-entrypoint.s…&quot;   4 months ago        Up 2 months         5432/tcp                                                                                     postgres
 
 </code></pre>
-
 <p>We need use manage.py from the django container to migrate the database. This will talk to the postgres container for us. Codalab has notes for how to do this so we will <a href="https://github.com/codalab/codalab-competitions/wiki/Dev_Database-Migrations">follow their lead</a>:</p>
 <blockquote>
 <p>Note, in the link from codalab they have a placeholder for <code>APPNAME</code>. Substitute <code>web</code> in for this.</p>
 </blockquote>
-<pre><code class="bash">root@django:/app/codalab# ./manage schemamigration web --auto
+<pre><code class="language-bash">root@django:/app/codalab# ./manage schemamigration web --auto
 ./manage: line 3: ./config/generated/startup_env.sh: No such file or directory
 ./manage: line 4: ../venv/bin/activate: No such file or directory
 /usr/local/lib/python2.7/site-packages/django_extensions/db/fields/__init__.py:425: DeprecationWarning: Django 1.8 features a native UUIDField, this UUIDField will be removed after Django 1.7 becomes unsupported.
@@ -140,13 +137,11 @@ b93b3f7e0a3b        codalab-competitions_rabbit                    &quot;docker-
 Created 0085_auto__add_field_competition_enable_docker_submission.py. You can now apply this migration with: ./manage.py migrate web
 
 </code></pre>
-
 <p>Once you have that migrate the database.</p>
-<pre><code class="bash">./manage migrate
+<pre><code class="language-bash">./manage migrate
 </code></pre>
-
 <p>This will apply the migration and look for all changes to all tables. Looking in the results we can see our migration in action:</p>
-<pre><code class="bash">~
+<pre><code class="language-bash">~
 ~
 Running migrations for web:
  - Migrating forwards to 0085_auto__add_field_competition_enable_docker_submission.
@@ -154,13 +149,11 @@ Running migrations for web:
 ~
 ~
 </code></pre>
-
 <p>Now let's verify our change. First create a database superuser:</p>
-<pre><code class="bash">docker exec -it django python manage.py createsuperuser
+<pre><code class="language-bash">docker exec -it django python manage.py createsuperuser
 </code></pre>
-
 <p>This will prompt you to create a superuser:</p>
-<pre><code class="bash">bbearce@miccai2019:~/src/codalab-competitions/codalab$ docker exec -it django python manage.py createsuperuser
+<pre><code class="language-bash">bbearce@miccai2019:~/src/codalab-competitions/codalab$ docker exec -it django python manage.py createsuperuser
 /usr/local/lib/python2.7/site-packages/django_extensions/db/fields/__init__.py:425: DeprecationWarning: Django 1.8 features a native UUIDField, this UUIDField will be removed after Django 1.7 becomes unsupported.
   warnings.warn(&quot;Django 1.8 features a native UUIDField, this UUIDField will be removed after Django 1.7 becomes unsupported.&quot;, DeprecationWarning)
 
@@ -171,14 +164,13 @@ Password (again):
 Superuser created successfully.
 
 </code></pre>
-
 <p>Now proceed to http://&lt;your domain>.com/admin and log in with the credentials you made. Find the "Web" app section and click "Competitions".</p>
 <p><img alt="django_admin_home" src="../django_admin_home.png" /></p>
 <p>Next scroll till you see "Allow participant docker submission" or whatever you put as your new column.</p>
 <p><img alt="django_admin_allow_docker_submission_checkbox" src="../django_admin_allow_docker_submission_checkbox.png" /></p>
 <h3 id="add-our-new-option-to-the-competitionform-class">Add Our new Option to the CompetitionForm Class</h3>
 <p>Django or CodaLab uses <code>apps.web.forms.CompetitionForm</code> to manage the edit competiton form. </p>
-<pre><code class="python">class CompetitionForm(forms.ModelForm):
+<pre><code class="language-python">class CompetitionForm(forms.ModelForm):
     class Meta:
         model = models.Competition
         fields = (
@@ -198,7 +190,6 @@ Superuser created successfully.
             'admins',
 ...
 </code></pre>
-
 <p>This will allow us to see this option in the edit competition view:</p>
 <p><img alt="codalab_edit_competition" src="../codalab_edit_competition.png" /></p>
 <p>This has the effect of allowing access to this option from multiple views so we can conditionally render a docker submission form or a regular result submission form.</p>
@@ -206,7 +197,7 @@ Superuser created successfully.
 <h3 id="add-ui-elements">Add UI Elements</h3>
 <p>Find template <code>apps/web/templates/web/competitions/_submit_results_page.html</code>. Roughly on line 70 there is a <code>{% if USE_AWS %}</code> block and in the <code>{% else %}</code> block we can add our code.</p>
 <p>Replace the inside of the else block with this code:</p>
-<pre><code class="html">{% if phase.competition.enable_docker_submission %}
+<pre><code class="language-html">{% if phase.competition.enable_docker_submission %}
 
 &lt;h1&gt;DOCKER SUBMISSION ENABLED &lt;/h1&gt;
 &lt;!-- Submit Docker Button --&gt;
@@ -229,7 +220,6 @@ Superuser created successfully.
 &lt;!-- original code from codalab --&gt;
 {% endif %}
 </code></pre>
-
 <blockquote>
 <p>Our If Else block has the original code in the else.</p>
 </blockquote>
@@ -239,7 +229,7 @@ Superuser created successfully.
 <p><img alt="codalab_docker_submit_docker_page" src="../codalab_docker_submit_docker_page.png" /></p>
 <p>Next we need the "Submit Docker" button to do something. Let's add a modal that get's triggered when you click the button.</p>
 <p>Add this code just before the line that has <code>{% include "web/common/_submission_details_template.html" %}</code> on line ~167:</p>
-<pre><code class="html">&lt;div class=&quot;modal fade&quot; id=&quot;submit-docker-dialog&quot;&gt;
+<pre><code class="language-html">&lt;div class=&quot;modal fade&quot; id=&quot;submit-docker-dialog&quot;&gt;
     &lt;div class=&quot;modal-dialog&quot;&gt;
 
         &lt;div class=&quot;modal-content&quot;&gt;
@@ -263,19 +253,17 @@ Superuser created successfully.
 &lt;/div&gt;
 
 </code></pre>
-
 <p>You should see this when you click the "Submit Docker" button:</p>
 <p><img alt="codalab_docker_submit_modal" src="../codalab_docker_submit_modal.png" /></p>
 <p>Now let's tie the "Send" button from the modal to some javascript so we can call the backend to process this for us. At the bottom of the same file we've been working in, add this code and create the file apps/web/static/js/submit_docker.js:</p>
-<pre><code class="html">&lt;!-- Docker Submission Front End --&gt;
+<pre><code class="language-html">&lt;!-- Docker Submission Front End --&gt;
 
 &lt;script type=&quot;text/javascript&quot; src=&quot;{{STATIC_URL}}js/submit_docker.js&quot;&gt;&lt;/script&gt;
 
 &lt;!-- Docker Submission Front End --&gt;
 </code></pre>
-
 <p>In submit_docker.js add this:</p>
-<pre><code class="js">$('#submit-docker').click(function(){
+<pre><code class="language-js">$('#submit-docker').click(function(){
 
   //copy from codalab/apps/web/static/js/Competition.js file
 
@@ -363,11 +351,10 @@ Superuser created successfully.
 });
 
 </code></pre>
-
 <p>From looking at the <code>ajax</code> call you can see we are hitting the route for an api that ultimately triggers a <code>POST</code> request in view "CompetitionSubmissionViewSet" under the api app. The part we need to edit is the <code>post_save()</code> method.</p>
 <h2 id="step-4-edit-site-worker-code">Step 4: Edit Site-Worker Code</h2>
 <p>Replace the <code>post_save()</code> with this:</p>
-<pre><code class="python">def post_save(self, obj, created):
+<pre><code class="language-python">def post_save(self, obj, created):
     # Original Code
     #if created:
     #    evaluate_submission.apply_async((obj.pk, obj.phase.is_scoring_only))
@@ -386,30 +373,24 @@ Superuser created successfully.
                                          submit_docker_command))
     ## - pass extra info to submission
 </code></pre>
-
 <p>At the bottom of <code>post_save()</code> is <code>evaluate_submission</code>. That is from apps/web/tasks.py. We are passing the <code>submit_docker_command</code> to <code>evaluate submission</code>. Change <code>evaluate_submission</code> to accept the <code>submit_docker_command</code>. Also edit it to pass the command to <code>task_func()</code></p>
 <p>Add <code>submit_docker_command</code> to these two sections:</p>
-<pre><code class="python">def evaluate_submission(submission_id, is_scoring_only, submit_docker_command):
+<pre><code class="language-python">def evaluate_submission(submission_id, is_scoring_only, submit_docker_command):
 </code></pre>
-
 <p>and:</p>
-<pre><code class="python">task_func(submission, job_id, submit_docker_command)
+<pre><code class="language-python">task_func(submission, job_id, submit_docker_command)
 </code></pre>
-
 <p><code>task_func</code> is actually a user defined variable for <code>score</code>, a function in the same file above <code>evaluate_submission</code>. Add <code>submit_docker_command</code> to the input of <code>score</code>.</p>
-<pre><code class="python">def score(submission, job_id, submit_docker_command):
+<pre><code class="language-python">def score(submission, job_id, submit_docker_command):
 </code></pre>
-
 <p>Towards the bottom of <code>score</code>, <code>_prepare_compute_worker_run</code> needs <code>submit_docker_command</code>. Pass it in, and subsequently add it to it's function definition at towards the top of the page:</p>
-<pre><code class="python">_prepare_compute_worker_run(job_id, submission, submit_docker_command, is_prediction=False)
+<pre><code class="language-python">_prepare_compute_worker_run(job_id, submission, submit_docker_command, is_prediction=False)
 </code></pre>
-
 <p>and</p>
-<pre><code class="python">def _prepare_compute_worker_run(job_id, submission, submit_docker_command, is_prediction):
+<pre><code class="language-python">def _prepare_compute_worker_run(job_id, submission, submit_docker_command, is_prediction):
 </code></pre>
-
 <p>Inside this function you will find a <code>data</code> variable we need to add the docker command to:</p>
-<pre><code class="python">    data = {
+<pre><code class="language-python">    data = {
         &quot;id&quot;: job_id,
         &quot;task_type&quot;: &quot;run&quot;,
         &quot;task_args&quot;: {
@@ -430,17 +411,15 @@ Superuser created successfully.
             'submit_docker_command':submit_docker_command, ## - Added submit_docker_command here
         }
 </code></pre>
-
 <p>At this point the code hands off the data to the Compute-Worker with <code>compute_worker_run(data, soft_time_limit=time_limit, priority=2)</code>.</p>
 <h2 id="step-5-the-compute-worker">Step 5: The Compute-Worker</h2>
 <p>We need to enter the <strong>compute-worker</strong> docker container and edit "worker.py". On the machine where the compute-worker is running execute:</p>
-<pre><code class="bash">$ docker exec -it codalab/competitions-v1-compute-worker:latest
+<pre><code class="language-bash">$ docker exec -it codalab/competitions-v1-compute-worker:latest
 </code></pre>
-
 <p>...or use the compute image that you need. </p>
 <p>Once inside you should be able to see "worker.py". Open it. Find function <code>run(task_id, task_args)</code>. This is where we will add our code on approx line 500. </p>
 <p>Add this:</p>
-<pre><code class="python">if task_args['submit_docker_command'] != 'this is not a docker submission':
+<pre><code class="language-python">if task_args['submit_docker_command'] != 'this is not a docker submission':
     print('@CUSTOM DOCKER START@')
     participant_docker_cmd = task_args['submit_docker_command'].format(input_dir+&quot;/res&quot;)
     logger.info(&quot;Invoking program %s&quot;, participant_docker_cmd)
@@ -449,15 +428,13 @@ Superuser created successfully.
     print('@CUSTOM DOCKER END@')
 
 </code></pre>
-
 <p>This is the important line:</p>
-<pre><code class="python">participant_docker_cmd = task_args['submit_docker_command'].format(input_dir+&quot;/res&quot;)
+<pre><code class="language-python">participant_docker_cmd = task_args['submit_docker_command'].format(input_dir+&quot;/res&quot;)
 </code></pre>
-
 <p>This line substitutes the results directory into a mount placeholder so that the container can put the results from the run into it. Then the compute-worker can consume the results.</p>
 <p>Update (7/17/2020):</p>
 <p>Docker Image Submission only and resulting handling:</p>
-<pre><code class="python">                participant_docker_submission_cmd = [
+<pre><code class="language-python">                participant_docker_submission_cmd = [
                     'docker',
                     'run',
                     # Ask all participants to add this user
@@ -499,18 +476,15 @@ Superuser created successfully.
                   print('@CUSTOM DOCKER END@')
 
 </code></pre>
-
 <p>Below I will discuss some of the important options...</p>
 <blockquote>
 <p>Note, we need to mount two folders (<em>datain:/mnt/in</em>, <em>dataout:/mnt/out</em>). We don't need to change anything about <em>datain</em> because we can use <code>:ro</code> to make it read-only inside the docker container like so <em>/mnt/in:ro</em>. This keeps users from tampering with input data. <em>dataout</em> needs to be owned by user "participant". We do this like so...</p>
 </blockquote>
-<pre><code class="bash">$ chown participant:participant &lt;path to&gt;/dataout
+<pre><code class="language-bash">$ chown participant:participant &lt;path to&gt;/dataout
 </code></pre>
-
 <p>and make it writable as well:</p>
-<pre><code class="bash">$ chmod 0777 &lt;path to&gt;/dataout
+<pre><code class="language-bash">$ chmod 0777 &lt;path to&gt;/dataout
 </code></pre>
-
 <p>If participant is the user that will be using these mounts then we need the container to run as <em>participant</em>. Notice we run the docker with <code>-u participant</code>, but how do we get that user in the docker ahead of time. </p>
 <p>In the Dockerfile for a submission add this to the top:</p>
 <pre><code>ARG USER=participant
@@ -523,23 +497,19 @@ RUN useradd -m ${USER} --uid=${UID} &amp;&amp; echo &quot;${USER}:${PW}&quot; | 
       chpasswd
 
 </code></pre>
-
 <p>This should add user <em>participant</em> with password <em>participant</em>.</p>
 <p>Finally we need to make sure the container has no internet. We add flag <code>--net none</code> to cut internet to the docker rendering it unable to transfer data.</p>
 <p>Lastly if this is an nvidia compute worker <code>codalab/competitions-v1-nvidia-worker:latest</code> then we have a few extra things ot take care of. On lines 274-275 there are two variables that don't exist being referenced. </p>
 <pre><code>    max_execution_time_limit = task_args['max_execution_time_limit']
     previous_execution_time = task_args['previous_execution_time']
 </code></pre>
-
 <p>to</p>
 <pre><code>    #max_execution_time_limit = task_args['max_execution_time_limit'] # -BB-
     #previous_execution_time = task_args['previous_execution_time'] # -BB- 
 </code></pre>
-
 <p>and at the bottom of the file (~ line 700):</p>
 <pre><code>signal.alarm(int(math.fabs(math.ceil(max_execution_time_limit - time_difference - previous_execution_time)))) # Total Execution
 </code></pre>
-
 <p>to</p>
 <pre><code>#signal.alarm(int(math.fabs(math.ceil(max_execution_time_limit - time_difference - previous_execution_time)))) # Total Execution -BB-
 </code></pre>

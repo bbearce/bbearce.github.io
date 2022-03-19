@@ -111,23 +111,20 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Similar to Docker, Tmux has two layers of the interface, the local terminal outside Tmux, and the terminal inside Tmux. We could manage Tmux in both layers. While typing bash commands are equivalent in both interface, to manage the Tmux related stuff inside Tmux, we would need to use hotkeys so Tmux knows when to manage the Tmux related stuff. All the hotkeys are prefixed by <code>Ctrl + b</code>.</p>
 <h2 id="tmux-console">Tmux Console</h2>
 <p>In the Tmux terminal, we could call out Tmux console by <code>Ctrl + b + :</code> and run all the Tmux commands available for the local terminal without tmux prefix. For example, if there is a Tmux command for the local terminal like this.</p>
-<pre><code class="bash">$ tmux xxxxx
+<pre><code class="language-bash">$ tmux xxxxx
 </code></pre>
-
 <p>In the Tmux console in the Tmux terminal, we could do the equivalent thing by running the following command.</p>
 <pre><code>:xxxxx
 </code></pre>
-
 <blockquote>
 <p>Note that <code>:</code> is the prefix of the Tmux console which we don’t type. : could be thought as $ tmux in the local terminal.</p>
 </blockquote>
 <h2 id="create-sessions">Create Sessions</h2>
 <p>In the local terminal, we create Tmux sessions by simply running one of the following three equivalent commands.</p>
-<pre><code class="bash">$ tmux
+<pre><code class="language-bash">$ tmux
 $ tmux new
 $ tmux new-session
 </code></pre>
-
 <p><img alt="tmux_session" src="../tmux_session.jpg" /></p>
 <p>This will create a new session to the existing Tmux. If there is no previous Tmux session running, this will create the first Tmux session. If there are already Tmux sessions running, this will create an additional one.</p>
 <blockquote>
@@ -139,24 +136,21 @@ $ tmux new-session
 <p>To return to the local terminal from Tmux sessions, we usually do detach by hitting Ctrl + b + d. Everything would be still running in the backend.</p>
 <p><img alt="tmux_session_detach" src="../tmux_session_detach.jpg" /></p>
 <p>In some scenarios, we could return to the local terminal by running the following command in the Tmux terminal.</p>
-<pre><code class="bash">$ exit
+<pre><code class="language-bash">$ exit
 </code></pre>
-
 <blockquote>
 <p>However, bear in mind that using this method the current session will exit and all the information in the current session will be lost.</p>
 </blockquote>
 <h2 id="create-sessions-with-names">Create Sessions With Names</h2>
 <p>Tmux, by default, uses natural integers as the name for sessions. This is sometimes inconvenient for project management. We could create sessions with names using the following commands in the local terminal.</p>
-<pre><code class="bash">$ tmux new -s [session-name]
+<pre><code class="language-bash">$ tmux new -s [session-name]
 </code></pre>
-
 <p><img alt="tmux_name_session" src="../tmux_name_session.jpg" /></p>
 <h2 id="view-sessions">View Sessions</h2>
 <p>To view Tmux sessions from the local terminal, run one of the following commands.</p>
-<pre><code class="bash">$ tmux ls
+<pre><code class="language-bash">$ tmux ls
 $ tmux list-sessions
 </code></pre>
-
 <p><img alt="tmux_ls" src="../tmux_ls.jpg" /></p>
 <p>In Tmux terminal, we check Tmux sessions by hitting Ctrl + b + s. The following information will show up.</p>
 <p><img alt="tmux_ls_in_tmux" src="../tmux_ls_in_tmux.jpg" /></p>
@@ -171,27 +165,23 @@ $ tmux list-sessions
 <img alt="tmux_rename_from_terminal" src="../tmux_rename_from_terminal.jpg" /></p>
 <p>Alternatively, we may also hit <code>Ctrl + b + $</code> to rename the current session in the Tmux terminal.</p>
 <p><img alt="tmux_rename_from_tmux" src="../tmux_rename_from_tmux.jpg" /></p>
-<pre><code class="bash">bb927@bryce:~$ tmux ls
+<pre><code class="language-bash">bb927@bryce:~$ tmux ls
 0-newer: 1 windows (created Wed Sep 22 09:38:41 2021) [105x14] (attached)
 1: 1 windows (created Wed Sep 22 09:42:48 2021) [56x13]
 session_bb: 1 windows (created Wed Sep 22 09:48:34 2021) [105x14]
 </code></pre>
-
 <h2 id="kill-sessions">Kill Sessions</h2>
 <p>To kill all sessions, from the local terminal, we run the following command.</p>
-<pre><code class="bash">$ tmux kill-server
+<pre><code class="language-bash">$ tmux kill-server
 </code></pre>
-
 <p>Ex:</p>
-<pre><code class="bash">bb927@bryce:~$ tmux kill-server
+<pre><code class="language-bash">bb927@bryce:~$ tmux kill-server
 bb927@bryce:~$ tmux ls
 no server running on /tmp/tmux-4643095/default
 </code></pre>
-
 <p>To kill specific sessions, from the local terminal, we run the following command.</p>
-<pre><code class="bash">$ tmux kill-session -t [session-name]
+<pre><code class="language-bash">$ tmux kill-session -t [session-name]
 </code></pre>
-
 <h2 id="attach-sessions">Attach Sessions</h2>
 <p>To attach to specific sessions, from the local terminal, we run the following command.</p>
 <p>$ tmux attach -t [session-name]</p>
@@ -216,7 +206,7 @@ no server running on /tmp/tmux-4643095/default
 <h3 id="installation">Installation</h3>
 <p>To install Tmux Resurrect, it is recommended to install Tmux Plugin Manager first. Please check the GitHub repo for installation instructions.</p>
 <p>Then we add new plugin Tmux Resurrect to Tmux by adding set -g @plugin 'tmux-plugins/tmux-resurrect' to ~/.tmux.conf. An example of the ~/.tmux.conf would be</p>
-<pre><code class="bash">$ cat ~/.tmux.conf 
+<pre><code class="language-bash">$ cat ~/.tmux.conf 
 # List of plugins
 set -g @plugin 'tmux-plugins/tpm'
 set -g @plugin 'tmux-plugins/tmux-sensible'
@@ -230,13 +220,11 @@ set -g @plugin 'tmux-plugins/tmux-resurrect'
 # Initialize TMUX plugin manager (keep this line at the very bottom of tmux.conf)
 run -b '~/.tmux/plugins/tpm/tpm'
 </code></pre>
-
 <p>Finally, we install the plugin by hitting Ctrl + b + I in the Tmux terminal. We would see the following information if the installation was successful.</p>
 <pre><code>                                                                         [0/0]
 TMUX environment reloaded.
 Done, press ESCAPE to continue.
 </code></pre>
-
 <h2 id="save-and-restore-tmux-environment">Save and Restore Tmux Environment</h2>
 <p>To save the Tmux environment, we hit <code>Ctrl + b + Ctrl + s</code> in the Tmux Terminal. If the save was successful, a message of Tmux environment saved! would pop up.</p>
 <p>To restore the Tmux environment, we hit Ctrl + b + Ctrl + r in the Tmux Terminal. If the restore was successful, a message of Tmux restore complete! would pop up.</p>

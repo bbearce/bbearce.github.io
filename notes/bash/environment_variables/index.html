@@ -90,15 +90,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Ubuntu Linux, as well as all other Linux distributions, uses the PATH variable to tell the operating system where to look for executable commands. Typically these commands are located in the /usr/sbin, usr/bin and /sbin, and /bin directories. Other command directories can be added to this list of directories by adding them to the PATH variable. You can choose to make a user-specified directory available for a single user or the entire system, depending on your company's requirements.</p>
 <h3 id="add-to-path">Add to Path</h3>
 <p>Add a path to the <code>PATH</code> variable:</p>
-<pre><code class="bash">export PATH=$PATH:/my/custom/path
+<pre><code class="language-bash">export PATH=$PATH:/my/custom/path
 </code></pre>
-
 <p>This appends your new path to the old path and overwrites PATH.</p>
 <h3 id="remove-from-path">Remove from Path</h3>
 <p>Execute <code>echo $PATH</code> to see full path variable and copy it to clipboard. Then remove a specific path between colons <code>...:&lt;some path&gt;:&lt;path to be removed&gt;:...</code> and paste that into this command:</p>
-<pre><code class="bash">export PATH=&lt;new full path minus the path you do not want&gt;
+<pre><code class="language-bash">export PATH=&lt;new full path minus the path you do not want&gt;
 </code></pre>
-
 <blockquote>
 <p>Note thatwe aren't appending to <code>$PATH</code> this time, but overwriting it.</p>
 </blockquote>

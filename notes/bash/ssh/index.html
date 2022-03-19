@@ -86,9 +86,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 
     <h1 id="ssh">SSH</h1>
 <h2 id="useage">Useage</h2>
-<pre><code class="bash">$ ssh &lt;username&gt;@&lt;host-ip&gt;
+<pre><code class="language-bash">$ ssh &lt;username&gt;@&lt;host-ip&gt;
 </code></pre>
-
 <h2 id="keys">Keys</h2>
 <blockquote>
 <p>Courtesty of <a href="https://unix.stackexchange.com/questions/337465/username-and-password-in-command-line-with-sshfs/381331">stackexchange</a></p>
@@ -97,66 +96,56 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <ul>
 <li>On Local server</li>
 </ul>
-<pre><code class="bash">ssh-keygen -t rsa
+<pre><code class="language-bash">ssh-keygen -t rsa
 </code></pre>
-
 <ul>
 <li>On remote Server</li>
 </ul>
-<pre><code class="bash">ssh root@remote_servers_ip &quot;mkdir -p .ssh&quot;
+<pre><code class="language-bash">ssh root@remote_servers_ip &quot;mkdir -p .ssh&quot;
 </code></pre>
-
 <ul>
 <li>Uploading Generated Public Keys to the Remote Server</li>
 </ul>
-<pre><code class="bash">cat ~/.ssh/id_rsa.pub | ssh root@remote_servers_ip &quot;cat &gt;&gt; ~/.ssh/authorized_keys&quot;
+<pre><code class="language-bash">cat ~/.ssh/id_rsa.pub | ssh root@remote_servers_ip &quot;cat &gt;&gt; ~/.ssh/authorized_keys&quot;
 </code></pre>
-
 <ul>
 <li>Set Permissions on Remote server</li>
 </ul>
-<pre><code class="bash">ssh root@remote_servers_ip &quot;chmod 700 ~/.ssh; chmod 640 ~/.ssh/authorized_keys&quot;
+<pre><code class="language-bash">ssh root@remote_servers_ip &quot;chmod 700 ~/.ssh; chmod 640 ~/.ssh/authorized_keys&quot;
 </code></pre>
-
 <ul>
 <li>Login</li>
 </ul>
-<pre><code class="bash">ssh root@remote_servers_ip
+<pre><code class="language-bash">ssh root@remote_servers_ip
 </code></pre>
-
 <ul>
 <li>Enabling SSH Protocol v2</li>
 </ul>
-<pre><code class="bash">uncomment &quot;Protocol 2&quot; in /etc/ssh/sshd_config
+<pre><code class="language-bash">uncomment &quot;Protocol 2&quot; in /etc/ssh/sshd_config
 </code></pre>
-
 <ul>
 <li>Enabling public key authorization in sshd</li>
 </ul>
-<pre><code class="bash">uncomment &quot;PubkeyAuthentication yes&quot; in /etc/ssh/sshd_config
+<pre><code class="language-bash">uncomment &quot;PubkeyAuthentication yes&quot; in /etc/ssh/sshd_config
 </code></pre>
-
 <ul>
 <li>If StrictModes is set to yes in /etc/ssh/sshd_config then</li>
 </ul>
-<pre><code class="bash">restorecon -Rv ~/.ssh
+<pre><code class="language-bash">restorecon -Rv ~/.ssh
 </code></pre>
-
 <blockquote>
 <p>If you get "The program 'restorecon' is currently not installed. You can install it by typing"</p>
 </blockquote>
-<pre><code class="bash">sudo apt install policycoreutils
+<pre><code class="language-bash">sudo apt install policycoreutils
 </code></pre>
-
 <p>...then run that</p>
 <h2 id="over-two-ssh-hops">Over Two ssh Hops</h2>
 <p><a href="https://www.larkinweb.co.uk/computing/mounting_file_systems_over_two_ssh_hops.html">larkinweb</a></p>
 <p>ssh from systemA trough systemB into systemC:</p>
-<pre><code class="bash">$ ssh -t user1@systemB &quot;ssh user2@systemC&quot;
+<pre><code class="language-bash">$ ssh -t user1@systemB &quot;ssh user2@systemC&quot;
 </code></pre>
-
 <p>Mount file system under similar circumstances:</p>
-<pre><code class="bash">
+<pre><code class="language-bash">
 </code></pre>
 
   <br>

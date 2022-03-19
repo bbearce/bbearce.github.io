@@ -96,7 +96,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><label>Container:</label>
 <input type="text" style="color:black;" id="container" value="my-container"></p>
 <h2 id="my-main-commands">My main commands:</h2>
-<p><pre><code class="bash hljs"><span class="hljs-comment"># List all pods in all namespaces</span>
+<pre><code class="bash hljs"><span class="hljs-comment"># List all pods in all namespaces</span>
 $ kubectl get pods -A
 $ kubectl get pods --all-namespaces
 <span class="hljs-comment"># Additional Info:</span>
@@ -104,13 +104,15 @@ $ kubectl get pods -A -o wide
 <span class="hljs-comment"># Get logs for a pod</span>
 $ kubectl logs <span class="pod">my-pod</span>
 $ kubectl logs <span class="pod">my-pod</span> -c <span class="pod-container">my-container</span>
-$ kubectl logs -f <span class="pod">my-pod</span> -c <span class="pod-container">my-container</span><br />
+$ kubectl logs -f <span class="pod">my-pod</span> -c <span class="pod-container">my-container</span>  
 <span class="hljs-comment"># Get interactive bash shell</span>
 $ kubectl exec -it <span class="pod">my-pod</span> -c <span class="pod-container">my-container</span> -- bash
-$ kubectl get ingress</p>
-<p><span class="hljs-comment"># Get nodes</span>
+$ kubectl get ingress
+
+<span class="hljs-comment"># Get nodes</span>
 $ kubectl get nodes
-</code></pre></p>
+</code></pre>
+
 <script>
     // get pods
     var pods = document.getElementsByClassName("pod")
@@ -153,7 +155,7 @@ $ kubectl get nodes
 </script>
 
 <h2 id="viewing-finding-resources">Viewing, finding resources</h2>
-<pre><code class="bash"># Get commands with basic output
+<pre><code class="language-bash"># Get commands with basic output
 kubectl get services                          # List all services in the namespace
 kubectl get pods --all-namespaces             # List all pods in all namespaces
 kubectl get pods -o wide                      # List all pods in the current namespace, with more details
@@ -224,18 +226,16 @@ kubectl get nodes -o json | jq -c 'path(..)|[.[]|tostring]|join(&quot;.&quot;)'
 # Produce a period-delimited tree of all keys returned for pods, etc
 kubectl get pods -o json | jq -c 'path(..)|[.[]|tostring]|join(&quot;.&quot;)'
 </code></pre>
-
 <h2 id="deleting-resources">Deleting resources</h2>
-<pre><code class="bash">kubectl delete -f ./pod.json                                              # Delete a pod using the type and name specified in pod.json
+<pre><code class="language-bash">kubectl delete -f ./pod.json                                              # Delete a pod using the type and name specified in pod.json
 kubectl delete pod,service baz foo                                        # Delete pods and services with same names &quot;baz&quot; and &quot;foo&quot;
 kubectl delete pods,services -l name=myLabel                              # Delete pods and services with label name=myLabel
 kubectl -n my-ns delete pod,svc --all                                      # Delete all pods and services in namespace my-ns,
 # Delete all pods matching the awk pattern1 or pattern2
 kubectl get pods  -n mynamespace --no-headers=true | awk '/pattern1|pattern2/{print $1}' | xargs  kubectl delete -n mynamespace pod
 </code></pre>
-
 <h2 id="interacting-with-running-pods">Interacting with running Pods</h2>
-<pre><code class="bash">kubectl logs my-pod                                 # dump pod logs (stdout)
+<pre><code class="language-bash">kubectl logs my-pod                                 # dump pod logs (stdout)
 kubectl logs -l name=myLabel                        # dump pod logs, with label name=myLabel (stdout)
 kubectl logs my-pod --previous                      # dump pod logs (stdout) for a previous instantiation of a container
 kubectl logs my-pod -c my-container                 # dump pod container logs (stdout, multi-container case)

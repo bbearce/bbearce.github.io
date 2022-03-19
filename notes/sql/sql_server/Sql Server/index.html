@@ -83,15 +83,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="sql-server">SQL Server</h1>
-<pre><code class="sql">SELECT &quot;serve dat sql...chyeah!&quot;
+<pre><code class="language-sql">SELECT &quot;serve dat sql...chyeah!&quot;
 </code></pre>
-
 <p>Microsoft SQL Server can be hard to connect to. Here I'm compiling some notes that help me connect in various situations.</p>
 <h2 id="drivers">Drivers</h2>
 <h3 id="odbc-pyodbc">ODBC - pyodbc</h3>
 <p>This is the standard way and it works pretty well. It's pretty simple to use. </p>
 <p><a href="https://pypi.org/project/pyodbc/">pyodbc</a></p>
-<pre><code class="python">import pyodbc
+<pre><code class="language-python">import pyodbc
 
 SQL_Server=&quot;&quot;
 Database=&quot;&quot;
@@ -115,7 +114,6 @@ with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
             print (str(row[0]) + &quot; &quot; + str(row[1]))
             row = cursor.fetchone()
 </code></pre>
-
 <p>Much easier than JTDS below...</p>
 <h3 id="jtds-java-tabular-data-stream">JTDS - Java Tabular Data Stream</h3>
 <h4 id="datagrip">DataGrip</h4>
@@ -129,7 +127,7 @@ with pyodbc.connect('DRIVER='+driver+';SERVER=tcp:'+server+';PORT=1433;DATABASE=
 * Follow this stackoverflow article: <a href="https://stackoverflow.com/questions/55376100/create-a-jtds-connection-string-in-python">https://stackoverflow.com/questions/55376100/create-a-jtds-connection-string-in-python</a>
   * under jar_path = <code>"&lt;path_to&gt;\\jtds-1.3.1.jar"</code> we need goto <a href="http://jtds.sourceforge.net/">http://jtds.sourceforge.net/</a> and click on the Download navbar link and download and extract the <em>jtds-1.3.1-dist.zip</em> and then inside the extracted folder the jar is at: <em>jtds-1.3.1-dist/jtds-1.3.1.jar</em>.
 * In that article you will find a script. Below is an example</p>
-<pre><code class="python">import sys
+<pre><code class="language-python">import sys
 import jaydebeapi
 
 SQL_Server=&quot;emitsql07&quot;

@@ -98,7 +98,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>You generally do not need admin/sudo to <em>use</em> Singularity containers but you do however need admin/root access to <em>install</em> Singularity and for some container <em>build</em> functions (for example, building from a recipe, or a writable image).</p>
 <h3 id="the-recipe-file">The Recipe File</h3>
 <p>Bootstrap let's us know that we are using a container from dockerhub to build off of. This should be similar to the Dockerfile from docker. Most of this should be self explainatory.</p>
-<pre><code class="bash">Bootstrap: docker
+<pre><code class="language-bash">Bootstrap: docker
 From: ubuntu:18.04
 
 %help
@@ -122,16 +122,14 @@ From: ubuntu:18.04
 
 
 </code></pre>
-
 <p>test.py:</p>
-<pre><code class="python">import os
+<pre><code class="language-python">import os
 
 if __name__ == '__main__':
     print('import os module and clearly python is installed!')
     print(os.environ['MY_VAR'])
 
 </code></pre>
-
 <p>Sections in recipe file:</p>
 <ul>
 <li>help: Give some help   </li>
@@ -143,9 +141,8 @@ if __name__ == '__main__':
 </ul>
 <h2 id="build-images-from-scratch">Build Images from Scratch</h2>
 <p>Use this command to build the recipe file into a <code>*.simg</code></p>
-<pre><code class="bash">sudo singularity build ubuntu.simg Singularity.recipe
+<pre><code class="language-bash">sudo singularity build ubuntu.simg Singularity.recipe
 </code></pre>
-
 <p>Here the "ubuntu.simg singularity.recipe" part of the command is "&lt;image-name&gt;.simg &lt;recipe-file-name&gt;.recipe"</p>
 <p>You can build from multiple sources and even create interactive containers that you can add to. We will cover these soon, but here is a picture illustrating the many sources for singularity containers:</p>
 <p><img alt="build_sources" src="../build_input_output.svg" /></p>
@@ -160,68 +157,59 @@ However, during testing and debugging you may want an image format that is writa
 the image and install software and dependencies until you are satisfied that your container will fulfill your needs. For
 these scenarios, Singularity also supports the sandbox format (which is really just a directory).</p>
 <p>Let's say I start with ubuntu:</p>
-<pre><code class="bash">singularity build ubuntu.simg docker://ubuntu:latest
+<pre><code class="language-bash">singularity build ubuntu.simg docker://ubuntu:latest
 </code></pre>
-
-<pre><code class="bash">bbearce@pop-os:~/$ ls
+<pre><code class="language-bash">bbearce@pop-os:~/$ ls
 ubuntu.simg
 
 </code></pre>
-
 <p>Now this is read only and can just be run or you can shell into it:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ singularity shell ubuntu.simg 
+<pre><code class="language-bash">bbearce@pop-os:~/$ singularity shell ubuntu.simg 
 Singularity&gt; ls
 ubuntu.simg
 </code></pre>
-
 <p>Notice that since the user's home directory is automatically mounted it shows the *.simg with <code>ls</code>.</p>
 <p>Watch as writing anything triggers an error:</p>
-<pre><code class="bash">Singularity&gt; touch anything.txt
+<pre><code class="language-bash">Singularity&gt; touch anything.txt
 Singularity&gt; ls
 anything.txt ubuntu.simg
 </code></pre>
-
 <p><strong>How come that worked?</strong> Well the mounted home directories are considered outside the container and you can read and write to those. Let's try again in <code>/mnt</code>:</p>
-<pre><code class="bash">Singularity&gt; touch /mnt/anything.txt
+<pre><code class="language-bash">Singularity&gt; touch /mnt/anything.txt
 touch: cannot touch '/mnt/anything.txt': Read-only file system
 
 </code></pre>
-
 <p>ahhh, there we go. So how do we write inside a singularity container?</p>
 <h3 id="enter-the-sandbox">Enter the --sandbox</h3>
 <p>First we have to create a sandbox out of the original container:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ singularity build --sandbox s_ubuntu ubuntu.simg
+<pre><code class="language-bash">bbearce@pop-os:~/$ singularity build --sandbox s_ubuntu ubuntu.simg
 INFO:    Starting build...
 INFO:    Creating sandbox directory...
 INFO:    Build complete: s_ubuntu
 
 </code></pre>
-
 <p>Notice how we build it out of the original *.simg container we had. You can base a sandbox on shub or dockerhub images as well.</p>
 <p>so let's see what is inside:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ ls s_ubuntu/
+<pre><code class="language-bash">bbearce@pop-os:~/$ ls s_ubuntu/
 bin          etc    lib64   opt   sbin         tmp
 boot         home   libx32  proc  singularity  usr
 dev          lib    media   root  srv          var
 environment  lib32  mnt     run   sys
 </code></pre>
-
 <p>An entire ubuntu os! Cool so now let's change stuff in it:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ singularity shell s_ubuntu 
+<pre><code class="language-bash">bbearce@pop-os:~/$ singularity shell s_ubuntu 
 Singularity&gt; touch /mnt/anything.txt
 touch: cannot touch '/mnt/anything.txt': Read-only file system
 </code></pre>
-
 <p>So even though we made a sandbox which is desinged to be interactive, we still need the <code>--writable</code> flag.</p>
-<pre><code class="bash">bbearce@pop-os:~/$ singularity shell --writable s_ubuntu 
+<pre><code class="language-bash">bbearce@pop-os:~/$ singularity shell --writable s_ubuntu 
 Singularity&gt; touch /mnt/anything.txt
 Singularity&gt; ls /mnt
 anything.txt
 
 </code></pre>
-
 <p>We did it! Ok now how do we make this change into a new container:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ singularity build s_ubuntu_modified s_ubuntu
+<pre><code class="language-bash">bbearce@pop-os:~/$ singularity build s_ubuntu_modified s_ubuntu
 INFO:    Starting build...
 INFO:    Creating SIF file...
 INFO:    Build complete: s_ubuntu_modified
@@ -230,53 +218,46 @@ s_ubuntu_modified  ubuntu.simg
 s_ubuntu
 
 </code></pre>
-
 <p>Now let's see if our change made it:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ singularity shell s_ubuntu_modified 
+<pre><code class="language-bash">bbearce@pop-os:~/$ singularity shell s_ubuntu_modified 
 Singularity&gt; ls /mnt
 anything.txt
 </code></pre>
-
 <p>Boom! So to recap, you need to build a <code>--sandbox</code> image from just about any image source, be it a hub or recipe file. Then shell into that container directory with flag <code>--writable</code>.</p>
 <h2 id="run">Run</h2>
 <blockquote>
 <p>Continue from the Build section above with files test.py and Singularity.recipe.</p>
 </blockquote>
 <p>Run the image with <code>run</code>:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ singularity run ubuntu.simg 
+<pre><code class="language-bash">bbearce@pop-os:~/$ singularity run ubuntu.simg 
 import os module and clearly python is installed!
 ~~~~~some environment variable~~~~~
 </code></pre>
-
 <p>or treat as an executable:</p>
-<pre><code class="bash">bbearce@pop-os:~/$ ./ubuntu.simg 
+<pre><code class="language-bash">bbearce@pop-os:~/$ ./ubuntu.simg 
 import os module and clearly python is installed!
 ~~~~~some environment variable~~~~~
 </code></pre>
-
 <p>run also works with shub:// and docker:// URIs. This creates an ephemeral container that runs and then disappears.</p>
-<pre><code class="bash">$ singularity run shub://GodloveD/lolcow
+<pre><code class="language-bash">$ singularity run shub://GodloveD/lolcow
 </code></pre>
-
 <p>Files on the host are reachable from within the container.</p>
-<pre><code class="bash">$ echo &quot;Hello World&quot; &gt; $HOME/hello-kitty.txt
+<pre><code class="language-bash">$ echo &quot;Hello World&quot; &gt; $HOME/hello-kitty.txt
 $ singularity exec vsoch-hello-world-master.simg cat $HOME/hello-kitty.txt
 Hello World
 </code></pre>
-
 <blockquote>
 <p>This example works because hello-kitty.txt exists in the user’s home directory. By default singularity bind mounts <code>/home/$USER</code>, <code>/tmp</code>, and <code>$PWD</code> into your container at runtime.</p>
 </blockquote>
 <h2 id="mounting">Mounting</h2>
 <p>You can specify additional directories to bind mount into your container with the --bind option. In this example, the <code>/data</code> directory on the host system is bind mounted to the <code>/mnt</code> directory inside the container.</p>
-<pre><code class="bash">$ echo &quot;I am your father&quot; &gt;/data/vader.sez
+<pre><code class="language-bash">$ echo &quot;I am your father&quot; &gt;/data/vader.sez
 $ ~/sing-dev/bin/singularity exec --bind /data:/mnt hello-world.simg cat /mnt/vader.sez
 I am your father
 </code></pre>
-
 <h2 id="inspect">Inspect</h2>
 <p>Look at meta-data with <code>inspect</code>. Notice the <code>%labels</code> sections details shows up under <code>"CREATOR": "Ben"</code></p>
-<pre><code class="bash">bbearce@bryce:~/singularity$ singularity inspect ubuntu.simg
+<pre><code class="language-bash">bbearce@bryce:~/singularity$ singularity inspect ubuntu.simg
 {
     &quot;org.label-schema.usage.singularity.deffile.bootstrap&quot;: &quot;docker&quot;,
     &quot;org.label-schema.usage.singularity.deffile&quot;: &quot;singularity.recipe&quot;,
@@ -290,7 +271,6 @@ I am your father
     &quot;org.label-schema.build-size&quot;: &quot;135MB&quot;
 }
 </code></pre>
-
 <h2 id="useful-flags">Useful flags</h2>
 <p>Here are some of the flags we will need routinely:</p>
 <h3 id="-b-or-bind"><code>-B</code> or <code>--bind</code></h3>
@@ -298,25 +278,23 @@ I am your father
 <p>Note mounts can be specified as read only <code>ro</code> or read write <code>rw</code> (default).</p>
 </blockquote>
 <p>This is equivalent to dockers <code>-v</code> flag. Use this to mount directories:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell -B ./in:/mnt/in -B ./out:/mnt/out s_ubuntu/
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell -B ./in:/mnt/in -B ./out:/mnt/out s_ubuntu/
 Singularity&gt; ls /mnt/in
 in.txt  new_file.txt  out.txt
 Singularity&gt; ls /mnt/out
 out.txt
 Singularity&gt; 
 </code></pre>
-
 <p>you can comma delimit multiple mounts:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell -B ./in:/mnt/in,./out:/mnt/out s_ubuntu/
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell -B ./in:/mnt/in,./out:/mnt/out s_ubuntu/
 Singularity&gt; ls /mnt/in
 in.txt  new_file.txt  out.txt
 Singularity&gt; ls /mnt/out
 out.txt
 Singularity&gt; 
 </code></pre>
-
 <p>If you do not specify where in the container you mount to, the local mount will be mounted to the same directory inside the container:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell -B /opt s_ubuntu/
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell -B /opt s_ubuntu/
 Singularity&gt; ls /opt
 containerd  google  microsoft  rh
 Singularity&gt; exit 
@@ -325,7 +303,6 @@ dotter[0]:bb927$ ls /opt
 containerd  google  microsoft  rh
 dotter[0]:bb927$ 
 </code></pre>
-
 <p>This is the same as <code>-B /opt:/opt</code></p>
 <h3 id="-fakeroot"><code>--fakeroot</code></h3>
 <p>This is important for interactive development because since you are not "root" normally you can't install stuff with apt-get. With this you can.</p>

@@ -93,17 +93,15 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><strong>SimpleHTTPServer: a quick way to serve a directory</strong></p>
 <h3 id="using-simplehttpserver">Using SimpleHTTPServer</h3>
 <p>SimpleHTTPServer is invoked like this (the parameter <port> is optional):</p>
-<pre><code class="bash">python -m SimpleHTTPServer &lt;port&gt;
+<pre><code class="language-bash">python -m SimpleHTTPServer &lt;port&gt;
 </code></pre>
-
 <p>(On OS X, Python is pre-installed and this command works out of the box.)</p>
 <p>Let’s look at an example of using SimpleHTTPServer: During the following Unix shell interaction, I first list the files in the current directory and then start SimpleHTTPServer to serve it.</p>
-<pre><code class="bash">$ ls .
+<pre><code class="language-bash">$ ls .
 foo.html
 $ python -m SimpleHTTPServer
 Serving HTTP on 0.0.0.0 port 8000 ...
 </code></pre>
-
 <p>Afterwards, I can access the following URLs:</p>
 <ul>
 <li>http://localhost:8000/ lists the files in the current directory (namely, just foo.html). If there were a file index.html, it would be displayed, instead.  </li>
@@ -111,7 +109,7 @@ Serving HTTP on 0.0.0.0 port 8000 ...
 </ul>
 <h3 id="customizing-simplehttpserver">Customizing SimpleHTTPServer</h3>
 <p>The following Unix shell script demonstrates how to customize SimpleHTTPServer so that it serves files that have a given file name extension with a given media type. One case where that matters is Firefox being picky about the media type of the webapp.manifest.</p>
-<pre><code class="python">#!/usr/bin/python
+<pre><code class="language-python">#!/usr/bin/python
 
 import SimpleHTTPServer
 import SocketServer
@@ -128,12 +126,10 @@ httpd = SocketServer.TCPServer((&quot;&quot;, PORT), Handler)
 print &quot;Serving at port&quot;, PORT
 httpd.serve_forever()
 </code></pre>
-
 <h2 id="python3">Python3</h2>
 <p>In python 3 you can run:</p>
-<pre><code class="python">python3 -m http.server 8080
+<pre><code class="language-python">python3 -m http.server 8080
 </code></pre>
-
 <p>to create a server that will serve to the folder you are currntly in.</p>
 
   <br>

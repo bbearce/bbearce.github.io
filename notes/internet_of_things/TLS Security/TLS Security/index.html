@@ -139,11 +139,10 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h3 id="generate-a-self-signed-certificate">Generate a Self-Signed Certificate</h3>
 <p>Use this method if you want to use HTTPS (HTTP over TLS) to secure your Apache HTTP or Nginx web server, and you do not require that your certificate is signed by a CA.</p>
 <p>This command creates a 2048-bit private key (<code>domain.key</code>) and a self-signed certificate (<code>domain.crt</code>) from scratch:</p>
-<pre><code class="bash">openssl req \
+<pre><code class="language-bash">openssl req \
        -newkey rsa:2048 -nodes -keyout domain.key \
        -x509 -days 365 -out domain.crt
 </code></pre>
-
 <p>The <code>-x509</code> option tells <code>req</code> to create a self-signed cerificate. The <code>-days 365</code> option specifies that the certificate will be valid for 365 days. A temporary CSR is generated to gather information to associate with the certificate.</p>
 <h3 id="talks-about-the-csr-and-getting-a-real-ca-verified-key-pair">Talks about the CSR and getting a real CA verified key pair.</h3>
 <blockquote>
@@ -157,27 +156,24 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>SSH into the server running your HTTP website as a user with sudo privileges.</p>
 <h4 id="add-certbot-ppa">Add Certbot PPA</h4>
 <p>You'll need to add the Certbot PPA to your list of repositories. To do so, run the following commands on the command line on the machine:</p>
-<pre><code class="bash">sudo apt-get update
+<pre><code class="language-bash">sudo apt-get update
 sudo apt-get install software-properties-common
 sudo add-apt-repository universe
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
 </code></pre>
-
 <h4 id="install-certbot">Install Certbot</h4>
 <p>Run this command on the command line on the machine to install Certbot.</p>
-<pre><code class="bash">sudo apt-get install certbot
+<pre><code class="language-bash">sudo apt-get install certbot
 </code></pre>
-
 <h4 id="choose-how-youd-like-to-run-certbot">Choose how you'd like to run Certbot</h4>
 <p>Are you ok with temporarily stopping your website?</p>
 <p>Yes, my web server is not currently running on this machine.
 Stop your webserver, then run this command to get a certificate. Certbot will temporarily spin up a webserver on your machine.</p>
-<pre><code class="bash">sudo certbot certonly --standalone
+<pre><code class="language-bash">sudo certbot certonly --standalone
 </code></pre>
-
 <p>This gives this output:</p>
-<pre><code class="bash">bbearce@miccai2019:~$ sudo certbot certonly --standalone
+<pre><code class="language-bash">bbearce@miccai2019:~$ sudo certbot certonly --standalone
 Saving debug log to /var/log/letsencrypt/letsencrypt.log
 Plugins selected: Authenticator standalone, Installer None
 Starting new HTTPS connection (1): acme-v02.api.letsencrypt.org
@@ -210,17 +206,14 @@ IMPORTANT NOTES:
    Donating to ISRG / Let's Encrypt:   https://letsencrypt.org/donate
    Donating to EFF:                    https://eff.org/donate-le
 </code></pre>
-
 <p>Notice where it put the cert:</p>
-<pre><code class="bash">/etc/letsencrypt/live/miccai2020.eastus.cloudapp.azure.com/
+<pre><code class="language-bash">/etc/letsencrypt/live/miccai2020.eastus.cloudapp.azure.com/
 </code></pre>
-
-<pre><code class="bash">bbearce@miccai2019:~$ sudo ls /etc/letsencrypt/live/miccai2020.eastus.cloudapp.azure.com/
+<pre><code class="language-bash">bbearce@miccai2019:~$ sudo ls /etc/letsencrypt/live/miccai2020.eastus.cloudapp.azure.com/
 cert.pem  chain.pem  fullchain.pem  privkey.pem  README
 </code></pre>
-
 <p>The README has this info:</p>
-<pre><code class="bash">bbearce@miccai2019:~$ sudo cat /etc/letsencrypt/live/miccai2020.eastus.cloudapp.azure.com/README
+<pre><code class="language-bash">bbearce@miccai2019:~$ sudo cat /etc/letsencrypt/live/miccai2020.eastus.cloudapp.azure.com/README
 This directory contains your keys and certificates.
 
 `privkey.pem`  : the private key for your certificate.
@@ -238,7 +231,6 @@ User Guide at https://certbot.eff.org/docs/using.html#where-are-my-certificates.
 
 
 </code></pre>
-
 <p>Let's look inside just to get a feel for what is going on:</p>
 <h4 id="fullchain">fullchain</h4>
 <p><img alt="fullchain.pem" src="../fullchain.png" /></p>
@@ -251,17 +243,15 @@ User Guide at https://certbot.eff.org/docs/using.html#where-are-my-certificates.
 <p><img alt="privkey.pem" src="../privkey.png" /></p>
 <p>If you need to keep my web server running.
 If you have a webserver that's already using port 80 and don't want to stop it while Certbot runs, run this command and follow the instructions in the terminal.</p>
-<pre><code class="bash">sudo certbot certonly --webroot
+<pre><code class="language-bash">sudo certbot certonly --webroot
 </code></pre>
-
 <h4 id="install-your-certificate">Install your certificate</h4>
 <p>You'll need to install your new certificate in the configuration file for your webserver.</p>
 <h2 id="renew">Renew</h2>
-<pre><code class="bash">$ sudo certbot renew
+<pre><code class="language-bash">$ sudo certbot renew
 </code></pre>
-
 <p>Ex:</p>
-<pre><code class="bash">azureuser@spie-aapm-nci-dair:~/src/MedICI/codalab$ sudo certbot renew
+<pre><code class="language-bash">azureuser@spie-aapm-nci-dair:~/src/MedICI/codalab$ sudo certbot renew
 Saving debug log to /var/log/letsencrypt/letsencrypt.log
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

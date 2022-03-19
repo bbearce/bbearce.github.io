@@ -85,23 +85,19 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Source <a href="https://hub.docker.com/_/couchdb?tab=description">docker</a></p>
 </blockquote>
-<pre><code class="bash">$ docker pull couchdb
+<pre><code class="language-bash">$ docker pull couchdb
 </code></pre>
-
 <p>This will get you latest. Then as per their instructoins run this command:</p>
-<pre><code class="bash">$ docker run -d --name my-couchdb couchdb:tag
+<pre><code class="language-bash">$ docker run -d --name my-couchdb couchdb:tag
 </code></pre>
-
 <p>If you want to expose the port to the outside world, run</p>
-<pre><code class="bash">$ docker run -p 5984:5984 -d couchdb
+<pre><code class="language-bash">$ docker run -p 5984:5984 -d couchdb
 </code></pre>
-
 <p>Start not in <em>Admin Party</em> mode:</p>
-<pre><code class="bash">$ docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -d couchdb
+<pre><code class="language-bash">$ docker run -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -d couchdb
 </code></pre>
-
 <p>Example I used for a simple project:</p>
-<pre><code class="bash">$ docker run -d --name ben-couchdb2 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -p 5985:5984 couchdb:latest
+<pre><code class="language-bash">$ docker run -d --name ben-couchdb2 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password -p 5985:5984 couchdb:latest
 </code></pre>
 
   <br>

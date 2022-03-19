@@ -93,7 +93,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Source <a href="https://www.nmr.mgh.harvard.edu/martinos/userInfo/computer/docker.php">Martinos Docs</a></p>
 </blockquote>
-<pre><code class="bash">ls -la ~
+<pre><code class="language-bash">ls -la ~
 ...
 
 lrwxrwxrwx   1 bb927 bb927    33 Sep 29 12:48 .share -&gt; /space/dotter/2/users/bb927/share
@@ -101,13 +101,12 @@ lrwxrwxrwx   1 bb927 bb927    39 Sep 29 12:44 .singularity -&gt; /space/dotter/2
 
 ...
 </code></pre>
-
 <p>Once you have this setup, you can proceed, otherwise you are in for a world of hurt if you accidentally fill up your real home dir.</p>
 <h3 id="martinos-gotchas">Martinos gotchas:</h3>
 <h4 id="dotter-for-example">Dotter for example:</h4>
 <h5 id="pure-singularity">Pure Singularity:</h5>
 <p>Your home directory and drive directories are actually simlinks and this will mess up singularity on dotter.</p>
-<pre><code class="bash">dotter[0]:bb927$ ls -la /homes/3
+<pre><code class="language-bash">dotter[0]:bb927$ ls -la /homes/3
 lrwxrwxrwx 1 root root 17 Sep 17  2016 /homes/3 -&gt; /autofs/homes/003
 dotter[0]:bb927$ ls -la /space/dotter
 total 32
@@ -121,7 +120,6 @@ lrwxrwxrwx   1 root root    24 Jul  9 12:00 5 -&gt; /autofs/space/dotter_005
 lrwxrwxrwx   1 root root    24 Jul  9 12:00 6 -&gt; /autofs/space/dotter_006
 
 </code></pre>
-
 <p>Remember Singularity wants to auto <code>--bind</code> mount these 3 directories:</p>
 <ul>
 <li>/home/$USER  </li>
@@ -133,14 +131,13 @@ lrwxrwxrwx   1 root root    24 Jul  9 12:00 6 -&gt; /autofs/space/dotter_006
 </blockquote>
 <p>I have a sanbox made from a regular ubuntu image (docker://ubuntu:latest) that was first pulled to <code>ubuntu.simg</code> and then the sandbox is called <code>s_ubuntu</code>. Let's try to shell into it.</p>
 <p>This is my current $PWD:</p>
-<pre><code class="bash">dotter[0]:bb927$ pwd
+<pre><code class="language-bash">dotter[0]:bb927$ pwd
 /space/dotter/2/users/bb927
 dotter[0]:bb927$ ls
 in  out  README.md  share  singularity  s_ubuntu  ubuntu.simg
 </code></pre>
-
 <p>After shelling in let's look at the mounts:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell s_ubuntu
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell s_ubuntu
 Singularity&gt; ls ~   
 Desktop    Downloads  Pictures  Templates  matlab
 
@@ -161,9 +158,8 @@ Singularity&gt; pwd
 Singularity&gt; exit
 exit
 </code></pre>
-
 <p>Now outside the container:</p>
-<pre><code class="bash">dotter[0]:bb927$ ls ~
+<pre><code class="language-bash">dotter[0]:bb927$ ls ~
 Desktop    Downloads  matlab_crash_dump.224407-1  Pictures  Templates
 Documents  matlab     Music                       Public    Videos
 dotter[0]:bb927$ ls /tmp
@@ -180,10 +176,9 @@ dotter[0]:bb927$ pwd
 /space/dotter/2/users/bb927
 dotter[0]:bb927$ 
 </code></pre>
-
 <p>We see those three locations mounted perfectly! :)</p>
 <p>Now let's shell in with <code>--writable</code></p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable s_ubuntu
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell --writable s_ubuntu
 WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
 WARNING: By using --writable, Singularity can't create /homes destination automatically without overlay or underlay
@@ -191,15 +186,13 @@ FATAL:   container creation failed: mount /var/singularity/mnt/session/homes-&gt
 dotter[0]:bb927$ 
 
 </code></pre>
-
 <p>Ugh, what happend? Well the WARNINGS were sort of ignored but the FATAL error is because /homes doesn't exist in the container. We can work around this by creating it before hand:</p>
 <blockquote>
 <p>Note, see these <a href="https://sylabs.io/guides/3.5/user-guide/bind_paths_and_mounts.html?highlight=home#a-note-on-using-bind-with-the-writable-flag">notes</a></p>
 </blockquote>
-<pre><code class="bash">dotter[0]:bb927$ mkdir s_ubuntu/homes
+<pre><code class="language-bash">dotter[0]:bb927$ mkdir s_ubuntu/homes
 </code></pre>
-
-<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable s_ubuntu
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell --writable s_ubuntu
 WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
 WARNING: Skipping mount /space/dotter/2/users/bb927 [cwd]: /autofs/space/dotter_002/users/bb927 doesn't exist in container
@@ -212,21 +205,19 @@ Desktop    Downloads  Pictures  Templates  matlab
 Documents  Music      Public    Videos     matlab_crash_dump.224407-1
 Singularity&gt; 
 </code></pre>
-
 <p>Now even though the warning says we might not be able to write to our home directory, you can. This is probably because dotter has an environment variable HOME=/homes/3/bb927 and that is also set inside the singularity container. Even though that is a simlink you can access it inside the container.</p>
 <p>But we know that Help Desk has asked us not to use our home directories because they have limited storage, so let's create the drive mount location and get rid of another warning:</p>
-<pre><code class="bash">dotter[0]:bb927$ mkdir -p s_ubuntu/autofs/space/dotter_002/users/bb927
+<pre><code class="language-bash">dotter[0]:bb927$ mkdir -p s_ubuntu/autofs/space/dotter_002/users/bb927
 dotter[0]:bb927$ singularity shell --writable s_ubuntu
 WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
 Singularity&gt; 
 
 </code></pre>
-
 <p>So we know we can ignore the first WARNING because there isn't much we can do, and as far as the second one is concerned, you have the tools to make it disappear if you need it to. </p>
 <p><strong>Mounting, does it work?!?!?</strong></p>
 <p>In my $PWD I have <code>in</code>  and <code>out</code> folders:</p>
-<pre><code class="bash">dotter[0]:bb927$ ls
+<pre><code class="language-bash">dotter[0]:bb927$ ls
 in  out  README.md  share  singularity  s_ubuntu  ubuntu.simg
 dotter[0]:bb927$ ls in
 in.txt
@@ -234,12 +225,11 @@ dotter[0]:bb927$ ls out
 out.txt
 
 </code></pre>
-
 <p>Let's see if we can read and write to them:</p>
 <blockquote>
 <p>Note: Just from playing around I've noticed in <code>--writable</code> mode you need to have created the mount points ahead of time. It seems that when running the container, you will not need to do this as the mounts will be made on the fly as shown below:</p>
 </blockquote>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu
 Singularity&gt; ls /mnt
 in  out
 Singularity&gt; ls /mnt/in
@@ -248,23 +238,20 @@ Singularity&gt; ls /mnt/out
 out.txt
 
 </code></pre>
-
 <p>watch in <code>--writable</code> mode:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu/
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell --writable --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu/
 WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
 WARNING: By using --writable, Singularity can't create /mnt/in destination automatically without overlay or underlay
 FATAL:   container creation failed: mount /autofs/space/dotter_002/users/bb927/in-&gt;/mnt/in error: while mounting /autofs/space/dotter_002/users/bb927/in: destination /mnt/in doesn't exist in container
 
 </code></pre>
-
 <p>So create them:</p>
-<pre><code class="bash">dotter[0]:bb927$ mkdir -p s_ubuntu/mnt/in
+<pre><code class="language-bash">dotter[0]:bb927$ mkdir -p s_ubuntu/mnt/in
 dotter[0]:bb927$ mkdir -p s_ubuntu/mnt/out
 </code></pre>
-
 <p>and try again:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell --writable --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu/
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell --writable --bind /autofs/space/dotter_002/users/bb927/in:/mnt/in --bind /autofs/space/dotter_002/users/bb927/out:/mnt/out s_ubuntu/
 WARNING: Your current working directory is a symlink and may not be available in container, you should use real path with --writable when possible
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
 Singularity&gt; ls /mnt
@@ -274,9 +261,8 @@ in.txt
 Singularity&gt; ls /mnt/out
 out.txt
 </code></pre>
-
 <p>Nice! Ok, now the 1st of two important questions; can we read/write?</p>
-<pre><code class="bash">Singularity&gt; cd /mnt/in
+<pre><code class="language-bash">Singularity&gt; cd /mnt/in
 Singularity&gt; touch new_file.txt
 Singularity&gt; ls
 in.txt  new_file.txt  out.txt
@@ -295,10 +281,9 @@ drwxrwsr-x 7 bb927 pimi 4096 Oct  3 19:55 ..
 -rw-rw-r-- 1 bb927 pimi   11 Oct  3 20:55 out.txt
 
 </code></pre>
-
 <p>Nice! Ok so now can we access GPUs?</p>
 <p>Let's pull pytorch:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity pull docker://pytorch/pytorch:latest
+<pre><code class="language-bash">dotter[0]:bb927$ singularity pull docker://pytorch/pytorch:latest
 INFO:    Converting OCI blobs to SIF format
 INFO:    Starting build...
 Getting image source signatures
@@ -324,9 +309,8 @@ INFO:    Build complete: pytorch_latest.sif
 dotter[0]:bb927$ 
 
 </code></pre>
-
 <p>Alright deep breath:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell pytorch_latest.sif 
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell pytorch_latest.sif 
 Singularity&gt; python
 Python 3.7.7 (default, May  7 2020, 21:25:33) 
 [GCC 7.3.0] :: Anaconda, Inc. on linux
@@ -336,9 +320,8 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 False
 &gt;&gt;&gt; 
 </code></pre>
-
 <p>NOOOOOooooooooooo...Ok there must be a flag:</p>
-<pre><code class="bash">dotter[0]:bb927$ singularity shell --nv pytorch_latest.sif 
+<pre><code class="language-bash">dotter[0]:bb927$ singularity shell --nv pytorch_latest.sif 
 Singularity&gt; python
 Python 3.7.7 (default, May  7 2020, 21:25:33) 
 [GCC 7.3.0] :: Anaconda, Inc. on linux
@@ -347,7 +330,6 @@ Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;licen
 &gt;&gt;&gt; torch.cuda.is_available()
 True
 </code></pre>
-
 <p><em>Swish</em></p>
 <h2 id="should-we-use-docker">Should we use Docker???</h2>
 <p>Actually I think this could be a problem. See as root inside docker if you write to mounts it shows up ownded by either root or 10000..:1000..., some weird user of numbers...Anyways you won't be able to manipulate that data once you log out of the container as you are not them! It seems singularity is the best way to go mainly because you are the same user inside and outside the singularity...</p>
@@ -355,14 +337,13 @@ True
 <p>Note I haven't seen this per se, but Kevin has and DeepNeuro made files with a cron job that had those user characteristics...</p>
 <p>Update: tried it and actually you can't write even though you are root:</p>
 </blockquote>
-<pre><code class="bash">dotter[0]:bb927$ docker run -it --rm -v /space/dotter/2/users/bb927/in:/mnt/in pytorch/pytorch:latest bash
+<pre><code class="language-bash">dotter[0]:bb927$ docker run -it --rm -v /space/dotter/2/users/bb927/in:/mnt/in pytorch/pytorch:latest bash
 root@7b3a11b77784:/workspace# ls /mnt/in
 in.txt  new_file.txt  out.txt
 root@7b3a11b77784:/workspace# touch /mnt/in/example_of_what_not_to_do.txt
 touch: cannot touch '/mnt/in/example_of_what_not_to_do.txt': Permission denied
 
 </code></pre>
-
 <p>So if you know how to add users in your Dockerfile, you could in theory make the user inside the image your Carlsbad or Dotter user, but that's a lot of work. I hope that using singularity just works smoothly...Stay tuned for how to use SHUB, Singularities Dockerhub...</p>
 
   <br>

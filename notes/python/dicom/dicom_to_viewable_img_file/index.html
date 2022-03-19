@@ -85,7 +85,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Much simpler than previous example and rescales appropriately.</p>
 </blockquote>
-<pre><code class="python"># Code to save 2D grayscale image as bmp
+<pre><code class="language-python"># Code to save 2D grayscale image as bmp
 import os
 import numpy as np
 import torch
@@ -125,12 +125,11 @@ def saveimage(adjust_for_contrast=False):
 
 saveimage(adjust_for_contrast=True)
 </code></pre>
-
 <p>Source: <a href="https://medium.com/@vivek8981/dicom-to-jpg-and-extract-all-patients-information-using-python-5e6dd1f1a07d">medium</a></p>
 <blockquote>
 <p>This example doesn't scale the DICOM pixel array between values of 0-255 and therefore clips all data between 255 and whatever max value the pixel array has. Likewise for negative numbers, which are clipped by 0.</p>
 </blockquote>
-<pre><code class="python">import os
+<pre><code class="language-python">import os
 import pydicom
 import cv2
 

@@ -99,27 +99,24 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h2 id="setting-up-the-empty-repository-for-a-subtree-merge">Setting up the empty repository for a subtree merge</h2>
 <p>Open Terminal.</p>
 <p>Create a new directory and navigate to it.</p>
-<pre><code class="bash">$ mkdir test
+<pre><code class="language-bash">$ mkdir test
 $ cd test
 </code></pre>
-
 <p>Initialize a new Git repository.</p>
-<pre><code class="bash">$ git init
+<pre><code class="language-bash">$ git init
 &gt; Initialized empty Git repository in /Users/octocat/tmp/test/.git/
 </code></pre>
-
 <p>Create and commit a new file.</p>
-<pre><code class="bash">$ touch .gitignore
+<pre><code class="language-bash">$ touch .gitignore
 $ git add .gitignore
 $ git commit -m &quot;initial commit&quot;
 &gt; [master (root-commit) 3146c2a] initial commit
 &gt;  0 files changed, 0 insertions(+), 0 deletions(-)
 &gt;  create mode 100644 .gitignore
 </code></pre>
-
 <h2 id="adding-a-new-repository-as-a-subtree">Adding a new repository as a subtree</h2>
 <p>Add a new remote URL pointing to the separate project that we're interested in.</p>
-<pre><code class="bash">$ git remote add -f spoon-knife git@github.com:octocat/Spoon-Knife.git
+<pre><code class="language-bash">$ git remote add -f spoon-knife git@github.com:octocat/Spoon-Knife.git
 &gt; Updating spoon-knife
 &gt; warning: no common commits
 &gt; remote: Counting objects: 1732, done.
@@ -130,38 +127,32 @@ $ git commit -m &quot;initial commit&quot;
 &gt; From git://github.com/octocat/Spoon-Knife
 &gt;  * [new branch]      master     -&gt; Spoon-Knife/master
 </code></pre>
-
 <p>Merge the <code>Spoon-Knife</code> project into the local Git project. This doesn't change any of your files locally, but it does prepare Git for the next step.</p>
 <p>If you're using Git 2.9 or above:</p>
-<pre><code class="bash">$ git merge -s ours --no-commit --allow-unrelated-histories spoon-knife/master
+<pre><code class="language-bash">$ git merge -s ours --no-commit --allow-unrelated-histories spoon-knife/master
 &gt; Automatic merge went well; stopped before committing as requested
 </code></pre>
-
 <p>If you're using Git 2.8 or below:</p>
-<pre><code class="bash">$ git merge -s ours --no-commit spoon-knife/master
+<pre><code class="language-bash">$ git merge -s ours --no-commit spoon-knife/master
 &gt; Automatic merge went well; stopped before committing as requested
 </code></pre>
-
 <p>Create a new directory called <strong>spoon-knife</strong>, and copy the Git history of the Spoon-Knife project into it.</p>
-<pre><code class="bash">$ git read-tree --prefix=spoon-knife/ -u spoon-knife/master
+<pre><code class="language-bash">$ git read-tree --prefix=spoon-knife/ -u spoon-knife/master
 </code></pre>
-
 <p>Commit the changes to keep them safe.</p>
-<pre><code class="bash">$ git commit -m &quot;Subtree merged in spoon-knife&quot;
+<pre><code class="language-bash">$ git commit -m &quot;Subtree merged in spoon-knife&quot;
 &gt; [master fe0ca25] Subtree merged in spoon-knife
 </code></pre>
-
 <p>Although we've only added one subproject, any number of subprojects can be incorporated into a Git repository.</p>
 <blockquote>
 <p>Tip: If you create a fresh clone of the repository in the future, the remotes you've added will not be created for you. You will have to add them again using the <code>git remote add</code> command.</p>
 </blockquote>
 <h2 id="synchronizing-with-updates-and-changes">Synchronizing with updates and changes</h2>
 <p>When a subproject is added, it is not automatically kept in sync with the upstream changes. You will need to update the subproject with the following command:</p>
-<pre><code class="bash">$ git pull -s subtree remotename branchname
+<pre><code class="language-bash">$ git pull -s subtree remotename branchname
 </code></pre>
-
 <p>For the example above, this would be:</p>
-<pre><code class="bash">$ git pull -s subtree spoon-knife master
+<pre><code class="language-bash">$ git pull -s subtree spoon-knife master
 </code></pre>
 
   <br>

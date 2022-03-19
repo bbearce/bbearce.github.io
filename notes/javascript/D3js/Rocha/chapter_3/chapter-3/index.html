@@ -106,16 +106,15 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h3 id="selecting-and-appending">Selecting and appending</h3>
 <p>The selection methods <code>select()</code> and <code>selectAll()</code> receive a CSS selector expression and return a D3 handle for a node or a set of nodes. You can convert the D3 handle into a DOM object calling <code>node()</code> or <code>nodes()</code>.</p>
 <p>Add the following HTML to the <code>&lt;body&gt;</code> of your HTML file (or use Selecting/1-select.html):</p>
-<pre><code class="html">&lt;p&gt;See results in console log.&lt;/p&gt;
+<pre><code class="language-html">&lt;p&gt;See results in console log.&lt;/p&gt;
 &lt;div id=&quot;section&quot;&gt;
     &lt;p class=first&gt;Paragraph 1&lt;/p&gt;
     &lt;p&gt;Paragraph 2&lt;/p&gt;
 &lt;/div&gt;
 &lt;p&gt;Paragraph 3&lt;/p&gt;
 </code></pre>
-
 <p>Now you can use the JavaScript console (or a <code>&lt;script&gt;</code> block in your page) to type in the following code, which shows how <code>select()</code> and <code>selectAll()</code> can be used:</p>
-<pre><code class="js">const div = d3.select(&quot;#section&quot;);       // selects element with the 
+<pre><code class="language-js">const div = d3.select(&quot;#section&quot;);       // selects element with the 
                                          // &quot;section&quot; ID
 const domDiv = div.node();               // converts the object into a 
                                          // DOM node
@@ -131,9 +130,8 @@ const sectionParagraphs =
                  .selectAll(&quot;p&quot;);       // selects the two &lt;p&gt; nodes 
                                         // inside &lt;div&gt;
 </code></pre>
-
 <p>A selection object serves as a handle to elements in your page. You can use it to change their styles, properties, attributes, classes, and contents, using methods that can receive static or dynamic values (using functions) as parameters. The following examples demonstrate some of these methods (see <code>Selecting/2-attributes-styles.html</code>):</p>
-<pre><code class="js">div.style('border', 'solid blue 2px'); // draws blue border around &lt;div&gt;
+<pre><code class="language-js">div.style('border', 'solid blue 2px'); // draws blue border around &lt;div&gt;
 firstP.classed('big', true);           // adds class ‘.big’ to 
                                          first paragraph 
 firstP.text('This is paragraph zero'); // replaces contents of 
@@ -148,9 +146,8 @@ d3.select('.first') // selects first element of class ‘.first’
         .style('font-variant', 'small-caps')       // applies a style
         .html('This is a &lt;b&gt;bold&lt;/b&gt; paragraph.'); // replaces contents with HTML
 </code></pre>
-
 <p>The <code>select()</code> method will always return only <strong>one</strong> object (if the selector matches more items, only the first will be returned). The <code>selectAll()</code> method returns a collection, which can be iterated with the <code>each()</code> method, which receives a callback function, which receives up to three parameters. Inside the function, <code>this</code> refers to the current DOM element, and <code>d3.select(this)</code> wraps it in a D3 selection object, which can be manipulated with selection methods, as follows:</p>
-<pre><code class="js">sectionParagraphs.each(function(d, i) {     // i is the index
+<pre><code class="language-js">sectionParagraphs.each(function(d, i) {     // i is the index
      d3.select(this).classed('red', true);
      console.log(`Paragraph ${i}: `, this); // this refers to the current element
  });
@@ -184,7 +181,6 @@ d3.select(&quot;body&quot;)
     .append(&quot;h2&quot;)       // adds a new &lt;h2&gt; as the last child
     .text(&quot;Footer&quot;);
 </code></pre>
-
 <p>The <code>append()</code> and <code>insert()</code> methods can also be chained, since they return the nodes they added. You just have to pay attention to the current so you don't modify or add data to the wrong elements. The <code>remove()</code> method returns the removed selection (a node or a set of nodes) after it's detached from the DOM (<strong>null</strong> parent).</p>
 <p>D3 selections are not limited to HTML. In fact, they are most commonly applied to SVG elements, but can also be used with any embedded XML. This was a brief introduction. In Chapter 4, <strong>Data Binding</strong>, we will explore these methods in detail.</p>
 <h3 id="binding-data">Binding Data</h3>
@@ -198,31 +194,26 @@ d3.select(&quot;body&quot;)
 <p><img alt="architecture" src="../architecture.png" /></p>
 <p>Let's try an example. Create an HTML page with this code in the <code>&lt;body&gt;</code> and open it in a browser (or use <code>Binding/1-binding.html</code>):</p>
 <p>In a <code>&lt;script&gt;</code> block, create this array of numbers (or type it in your JavaScript console):</p>
-<pre><code class="js">const numbers = [6, 2, 5, 7, 9];
+<pre><code class="language-js">const numbers = [6, 2, 5, 7, 9];
 </code></pre>
-
 <p>The following code will bind each number in the array to a paragraph. The data will be copied to an internal array and can be used to change the attributes, styles, or contents of the existing paragraphs:</p>
-<pre><code class="js">const selection = d3.select(&quot;#section&quot;)
+<pre><code class="language-js">const selection = d3.select(&quot;#section&quot;)
                     .selectAll(&quot;p&quot;)
                     .data(numbers);
 </code></pre>
-
 <p>The <code>data()</code> method returns the current selection. The value of each item in the array is received as the first parameter of a callback function in attr(),style(),text(), and so on. The text() method is used in the following code that replaces the contents of each paragraph with the first two values of the array:</p>
-<pre><code class="js">selection.text(d =&gt; d); // binds to existing paragraphs (update)
+<pre><code class="language-js">selection.text(d =&gt; d); // binds to existing paragraphs (update)
 </code></pre>
-
 <p>But we need more paragraphs, since we have five elements of data. By calling <code>enter()</code>, a new selection is created with three more placeholder nodes, containing the remaining data, but not yet mapped to any element:</p>
-<pre><code class="js">const newSelection = 
+<pre><code class="language-js">const newSelection = 
      selection.enter(); // binds data to a selection of placeholders
 </code></pre>
-
 <p>We can't just call <code>text()</code> on the selection yet. First, we need to append or insert those elements into the DOM tree. You call <code>append()</code> only once, and it will be executed three times. Now, you can use <code>text()</code> to print the paragraph with the data:</p>
-<pre><code class="js">newSelection.append(&quot;p&quot;)
+<pre><code class="language-js">newSelection.append(&quot;p&quot;)
              .text(d =&gt; d); // binds to new paragraphs (enter)
 </code></pre>
-
 <p>Normally, the entire selecting-binding-appending process is written as a chain of commands. The following code achieves the same result, using the same array and paragraphs (see <code>Binding/3-chain-text.html</code>):</p>
-<pre><code class="js">d3.select(&quot;body&quot;)         // select the body element
+<pre><code class="language-js">d3.select(&quot;body&quot;)         // select the body element
     .select(&quot;div&quot;)        // select the first div element inside &lt;body&gt;
     .selectAll(&quot;p&quot;)       // select all &lt;p&gt; elements (there are two)
     .data(numbers)        // load the data from the numbers array
@@ -231,10 +222,9 @@ d3.select(&quot;body&quot;)
     .append(&quot;p&quot;)          // add 3 new &lt;p&gt; elements to end of &lt;div&gt;
     .text(d =&gt; d);        // set the contents of the new paragraphs
 </code></pre>
-
 <p>It's simpler (and more common, when using D3) to use JavaScript  (and not HTML) to create <strong>all</strong> of the elements you need. After all, data is dynamic and you won't always know how many items you have to display. Most of the time, HTML is just used to provide the basic structure, such as the <code>&lt;body&gt;</code> tag, a container <code>&lt;div&gt;</code>, or <code>&lt;svg&gt;</code>.</p>
 <p>The following code achieves the same result starting with an empty <code>&lt;body&gt;</code> tag (and the same data array). The <code>&lt;div&gt;</code> and all the <code>&lt;p&gt;</code> are created using D3 commands (see <code>Binding/4-empty-binding.html</code>):</p>
-<pre><code class="js">d3.select(&quot;body&quot;)        // select the body element
+<pre><code class="language-js">d3.select(&quot;body&quot;)        // select the body element
     .append(&quot;div&quot;)       // append a div element inside &lt;body&gt;
     .selectAll(&quot;p&quot;)      // select all &lt;p&gt; elements (there are none)
     .data(numbers)       // load the data from the numbers array
@@ -242,10 +232,9 @@ d3.select(&quot;body&quot;)
     .append(&quot;p&quot;)         // create 5 new &lt;p&gt; elements and add to end of &lt;div&gt;
     .text(d =&gt; d);       // set the contents of the new paragraphs
 </code></pre>
-
 <p>Note that even though there are no <code>&lt;p&gt;</code> elements in the page, the <code>selectAll("p")</code> command is still necessary, since it provides the selection context for the data binding. The <code>selectAll()</code> command can use any CSS selectors to locate its elements, but it should return a selection containing the same type of elements added by the <code>append()</code> command.</p>
 <p>As you have seen, once you have data bound to DOM elements, you can use the data to change attributes, styles, classes, and properties, using callbacks. The callback function has a second parameter that contains the index of the data array, which is used in the following example to change the contents and style of list items:</p>
-<pre><code class="js">d3.select(&quot;body&quot;)         // select the body element
+<pre><code class="language-js">d3.select(&quot;body&quot;)         // select the body element
     .append(&quot;ul&quot;)         // append an &lt;ul&gt; element inside &lt;body&gt;
     .selectAll(&quot;li&quot;)      // select all &lt;li&gt; elements (there are none)
     .data(numbers)        // load the data from the numbers array
@@ -258,16 +247,14 @@ d3.select(&quot;body&quot;)
     return ((i+2) * 5) + &quot;pt&quot;;
     });
 </code></pre>
-
 <p>The result is shown in the following screenshot:
 <img alt="list_example" src="../list_example.png" /></p>
 <p>D3 used to create and style new elements from data. Code: <code>Binding/5-callbacks.html</code>.</p>
 <p>Callback functions also have a third parameter that contains the array of elements in the selection. You might need it if you want to obtain the current element when using arrow functions, since the <code>this</code> reference in these functions doesn't refer to the current element:</p>
-<pre><code class="js">.text( (d, i, nodes) =&gt; console.log(&quot;Current element: &quot; + nodes[i]) );
+<pre><code class="language-js">.text( (d, i, nodes) =&gt; console.log(&quot;Current element: &quot; + nodes[i]) );
 </code></pre>
-
 <p>You can easily reuse the preceding code with different types of data. If you have an array of objects containing values of different types, you don't need to convert it to an array of numbers. You can directly pass the entire object array to the <code>data()</code> method, and later select which properties of each object you wish to use. For example, you can use practically the same code that was shown previously to display the contents of the following array:</p>
-<pre><code class="js">const distances = [
+<pre><code class="language-js">const distances = [
     {name: &quot;Mercury&quot;, distance: 0.387},
     {name: &quot;Venus&quot;, distance: 0.723},
     {name: &quot;Earth&quot;, distance: 1},
@@ -283,9 +270,8 @@ d3.select(&quot;body&quot;)
     {name: &quot;Makemake&quot;, distance: 45.346}
 ];
 </code></pre>
-
 <p>The object array is received by the <code>data()</code> command. Each array item is available as the first parameter of the callback, which can be used to extract the property that contains the data (see <code>Binding/6-object-array.html</code>):</p>
-<pre><code class="js">d3.select(&quot;body&quot;)    // select the body element
+<pre><code class="language-js">d3.select(&quot;body&quot;)    // select the body element
     .append(&quot;ul&quot;)     // append an &lt;ul&gt; element inside &lt;body&gt;
     .selectAll(&quot;li&quot;)  // select all &lt;li&gt; elements (there are none)
     .data(distances)  // load the data from the numbers array
@@ -295,9 +281,8 @@ d3.select(&quot;body&quot;)
         return d.name + &quot;: &quot; + d.distance;
     });
 </code></pre>
-
 <p>Since D3 Version 5.8, you can replace <code>enter().append(element)</code> in simple binding operations, as shown with the <code>join(element)</code> method (see <code>Binding/7-join.html</code>):</p>
-<pre><code class="js">d3.select(&quot;body&quot;) 
+<pre><code class="language-js">d3.select(&quot;body&quot;) 
    .append(&quot;ul&quot;) 
    .selectAll(&quot;li&quot;) 
    .data(distances) 
@@ -306,14 +291,13 @@ d3.select(&quot;body&quot;)
        return d.name + &quot;: &quot; + d.distance;
    });
 </code></pre>
-
 <p>The preceding code will generate an HTML list with the data.</p>
 <h2 id="creating-a-bar-chart-with-d3-and-html">Creating a bar chart with D3 and HTML</h2>
 <p>Now that you have had a quick introduction to D3's basic data-binding mechanisms, let's create some full data visualization examples that will demonstrate the power of D3. You should know HTML very well, so we will start with a simple bar chart using HTML and CSS. Later, we will repeat the exact same procedure using SVG, the main standard used by D3 to create visualizations.</p>
 <p>All the code for these examples is available in the GitHub repository for this chapter.</p>
 <h3 id="binding-data-to-html">Binding data to HTML</h3>
 <p>In this example, we will draw a horizontal bar chart using HTML <code>&lt;div&gt;</code> elements. The colors and length of each bar are controlled by CSS, which we can configure using the <code>selection.style()</code> command. We will use the object array containing planetary distances from the last example. First, let's create a style sheet with classes for the <code>bar-chart</code> and each individual <code>bar</code>:</p>
-<pre><code class="html">&lt;style&gt;
+<pre><code class="language-html">&lt;style&gt;
     .bar-chart {
         border: solid 1px gray; /* a gray border around the container */
         position: relative;
@@ -325,9 +309,8 @@ d3.select(&quot;body&quot;)
     }
 &lt;/style&gt;
 </code></pre>
-
 <p>The bars are positioned absolutely. Since each bar has an equal height (20px), we need to position each bar slightly below the previous one. This can be achieved by setting the value for the CSS <code>top</code> property (in pixels) so that it contains the sum of the heights of all the previous bars, plus an extra pixel to keep them slightly apart. The <code>top</code> property can be dynamically calculated as proportional to each entry's array index, using a callback in <code>selection.style()</code> (see <code>HTML_Bar/1-bar-chart.html</code>):</p>
-<pre><code class="js">d3.select(&quot;body&quot;)
+<pre><code class="language-js">d3.select(&quot;body&quot;)
     .append(&quot;div&quot;).attr(&quot;class&quot;, &quot;bar-chart&quot;)                 // container div for the chart
     .style(&quot;height&quot;, () =&gt; distances.length * 21 + &quot;px&quot;)      // set chart height
     .selectAll(&quot;div&quot;).data(distances)                         // binds data
@@ -336,13 +319,11 @@ d3.select(&quot;body&quot;)
     .style(&quot;top&quot;, (d,i) =&gt; i * 21 + &quot;px&quot;)                     // stacks bars 
     .style(&quot;width&quot;, &quot;100px&quot;)                                  // fixed width
 </code></pre>
-
 <p>output:</p>
 <p><img alt="bar_chart_0" src="../bar_chart_0.png" /></p>
 <p>This prints all the bars, one on top of the other, but they all have the same static width! We need to use a callback to change the width of each individual bar. In a bar chart, the actual width should be <strong>proportional</strong> to the distance. A solution would be to multiply each value by 10. This will make the smallest bar three pixels wide, and the largest over 670 pixels:</p>
-<pre><code class="js">.style(&quot;width&quot;, d =&gt; (d.distance * 10) + &quot;px&quot;)
+<pre><code class="language-js">.style(&quot;width&quot;, d =&gt; (d.distance * 10) + &quot;px&quot;)
 </code></pre>
-
 <p>Now, the lengths of the bars are proportional to the data values. This code is in <code>HTML_Bar/2-bar-width.html</code>. The result is shown as follows:</p>
 <p><img alt="bar_chart_1" src="../bar_chart_1.png" /></p>
 <p>HTML bar chart with D3: Drawing DIVs and using the data to change the CSS width. Code: <code>HTML_Bar/2-bar-width.html</code></p>
@@ -350,55 +331,46 @@ d3.select(&quot;body&quot;)
 <p>What if a new planet is discovered that is 10 times the largest distance? The bars wouldn't fit and their widths would need to be recalculated! D3 also provides a solution for this: <code>scales</code>.</p>
 <p>Scales are mappings between different dimensions. In our case, we have to deal with two dimensions: the dimension of the data, called the <code>domain</code>, and the dimension of the graphics context where the data will be displayed, called the <code>range</code>. Before using a scale, you have to configure its domain and range. There are several different kinds of scales in D3, including linear and logarithmic scales, with many configuration options.</p>
 <p>A scale is created with a special generator function available in the <code>d3-scale</code> module. To use this module, you need to load several dependencies, so let's replace the <code>&lt;script&gt;</code> tag with the default bundle:</p>
-<pre><code class="html">&lt;script src=&quot;https://d3js.org/d3.v5.min.js&quot;&gt;&lt;/script&gt;
+<pre><code class="language-html">&lt;script src=&quot;https://d3js.org/d3.v5.min.js&quot;&gt;&lt;/script&gt;
 </code></pre>
-
 <p>To create a scale function, you call a special generator function. A linear scale function can be created using the following:</p>
-<pre><code class="js">const barScale = d3.scaleLinear();
+<pre><code class="language-js">const barScale = d3.scaleLinear();
 </code></pre>
-
 <p>To use the scale function you created, you pass a value as the argument and receive the converted result:</p>
-<pre><code class="js">const result = barScale(45); // returns 45
+<pre><code class="language-js">const result = barScale(45); // returns 45
 </code></pre>
-
 <p>This will return <code>45</code>, because the scale hasn't been configured yet (the default scale is 1:1). To configure the scale, you need to call two methods to set up the domain (data dimensions) and range (graphical dimensions). Each method receives an array. For example, we can set up the domain as follows:</p>
-<pre><code class="js">barScale.domain([0, 100]); // input domain from 0 to 100
+<pre><code class="language-js">barScale.domain([0, 100]); // input domain from 0 to 100
 </code></pre>
-
 <p>This fits all the distances in our data. The range is set up in a similar fashion:</p>
-<pre><code class="js">barScale.range([0, 600]); // output domain from 0 to 600
+<pre><code class="language-js">barScale.range([0, 600]); // output domain from 0 to 600
 </code></pre>
-
 <p>This means that zero is mapped to zero, and 100 <strong>astronomical units (AU)</strong> is mapped to 600 (pixels). Intermediate values will be interpolated.</p>
 <p>If you now call <code>barScale(45)</code>, you will get <code>270</code>. We can use the scale to convert the distances in AU to pixels, replacing the previous expression with a scale conversion (see <code>HTML_Bar/3-scales.html</code>):</p>
-<pre><code class="js">.style(&quot;width&quot;, d =&gt; barScale(d.distance) + &quot;px&quot;);
+<pre><code class="language-js">.style(&quot;width&quot;, d =&gt; barScale(d.distance) + &quot;px&quot;);
 </code></pre>
-
 <h3 id="array-utilities">Array utilities</h3>
 <p>We chose 100 as the upper limit in our scale domain because it's larger than any of the distances in the data, but the choice was rather arbitrary. We could have chosen the largest value in the array. If you have hundreds of lines of data, you can use JavaScript array functions (see <strong>Chapter 1, Introduction</strong>) to find out the maximum value.</p>
 <p>D3 also includes a collection of array manipulation functions that extend JavaScript's native functions. Some look similar but may be more efficient for data manipulation (for example, by ignoring <code>null</code>, <code>NaN</code>, and <code>undefined</code> values). In order to use them, you need the d3-array module (which is also part of the default bundle).</p>
 <p>Here, we changed the configuration of our <code>barScale()</code> function so that it uses the largest distance from the <code>distances</code> object array as the upper value for the domain. This is achieved with by calling the <code>d3.max()</code> function, which receives an array and an accessor function for each array element, as follows:</p>
-<pre><code class="js">const barScale = d3.scaleLinear()
+<pre><code class="language-js">const barScale = d3.scaleLinear()
                    .domain([0, d3.max(distances, d =&gt; d.distance)]) 
                    .range([0, 600]);
 </code></pre>
-
 <p>The <code>d3.max()</code> function will scan the <code>distances</code> array and compare the <code>distance</code> property of each object, returning the largest one.</p>
 <p>There are many more useful functions in <strong>d3-array</strong>, which we will cover in the next chapter. Two of them, <code>d3.descending(a,b)</code> and <code>d3.ascending(a,b)</code>, are used to provide a sorting rule for JavaScript's native <code>sort()</code> method. We can use it to sort the array by the distance:</p>
-<pre><code class="js">distances.sort((a,b) =&gt; d3.ascending(a.distance, b.distance));
+<pre><code class="language-js">distances.sort((a,b) =&gt; d3.ascending(a.distance, b.distance));
 </code></pre>
-
 <p>See and run the code after these transformations in <code>HTML_Bar/4-max-sort.html</code>.</p>
 <h3 id="adding-labels">Adding labels</h3>
 <p>Since the <code>&lt;div&gt;</code> elements in HTML can contain text, you can call the <code>text()</code> method for each <code>&lt;div&gt;</code> and set its contents based on the data:</p>
-<pre><code class="js">d3.select(&quot;body&quot;)
+<pre><code class="language-js">d3.select(&quot;body&quot;)
         .append(&quot;div&quot;).attr(&quot;class&quot;, &quot;bar-chart&quot;)
         // ...all previous code to build chart
         .text(d =&gt; d.distance); // display distance in the &lt;div&gt;
 </code></pre>
-
 <p>With CSS, we can right-align the text and adjust the fonts. Since these styles are static and don't change with the data, instead of calling <code>style()</code> for each property, you should use a style sheet:</p>
-<pre><code class="html">&lt;style&gt;
+<pre><code class="language-html">&lt;style&gt;
     /* ... */
     .bar {
         height: 20px;
@@ -412,13 +384,12 @@ d3.select(&quot;body&quot;)
     }
 &lt;/style&gt;
 </code></pre>
-
 <p>As a result, the labels are placed inside the bars, as follows:
 <img alt="bar_chart_2" src="../bar_chart_2.png" /></p>
 <p>Adding labels to the bars. Code: <code>HTML_Bar/5-labels.html</code>.</p>
 <h3 id="more-labels-formatting-and-colors">More labels, formatting, and colors</h3>
 <p>Each object in our data array also contains a name property that can be used to label each bar. To position text outside the bar, we will need to refactor the code so that each data entry contains a container <code>&lt;div&gt;</code>, which will be bound to the data values. This entry <code>&lt;div&gt;</code> will then contain three other <code>&lt;div&gt;</code> elements: a category label (the name of the planet), the bar, and a value label (the distance). Classes will be used to identify each <code>&lt;div&gt;</code>. The following style sheet contains the static properties for these elements:</p>
-<pre><code class="html">&lt;style&gt;
+<pre><code class="language-html">&lt;style&gt;
     .bar-chart {         /* The container &lt;div&gt; for the entire chart */
         border: solid 1px gray;
         position: relative;
@@ -451,9 +422,8 @@ d3.select(&quot;body&quot;)
     }
 &lt;/style&gt;
 </code></pre>
-
 <p>Since each entry <code>&lt;div&gt;</code> has three children, we need to keep a reference to its selection so that the child elements can be appended. The following code saves references for each one of the container <code>&lt;div&gt;</code> elements. The <code>chart</code> constant contains a selection of the root <code>&lt;div&gt;</code> element, and the <code>entries</code> constant contains the selection of all entry <code>&lt;div&gt;</code> elements:</p>
-<pre><code class="js">// selects the entire chart (one node)
+<pre><code class="language-js">// selects the entire chart (one node)
  const chart = d3.select(&quot;body&quot;)
                  .append(&quot;div&quot;).attr(&quot;class&quot;, &quot;bar-chart&quot;)
                  .style(&quot;height&quot;, distances.length * 21 + &quot;px&quot;);
@@ -464,9 +434,8 @@ d3.select(&quot;body&quot;)
          .attr(&quot;class&quot;, &quot;entry&quot;)
          .style(&quot;top&quot;, (d,i) =&gt; i * 21 + &quot;px&quot;);
 </code></pre>
-
 <p>You can now use the <code>entries</code> constant to append the child elements to each entry <code>&lt;div&gt;</code> (see <code>HTML_Bar/6-entries.html</code>):</p>
-<pre><code class="js">entries.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;label category&quot;)
+<pre><code class="language-js">entries.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;label category&quot;)
         .text(d =&gt; d.name);
 
 entries.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;bar&quot;)
@@ -476,10 +445,9 @@ entries.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;label value&quot;)
         .style(&quot;left&quot;, d =&gt; (barScale(d.distance) + 100) + &quot;px&quot;)
         .text(d =&gt; d.distance + &quot; AU&quot;);
 </code></pre>
-
 <p>Each <code>append()</code> shown is called once for each entry. The attributes, style, and text are set using the data that was bound to the parent container.</p>
 <p>You can add child elements without having to break the selection chain with the <code>selection.each()</code> method, which calls a function for each entry. Inside it, you can obtain a selection to the current element using <code>d3.select(this)</code>. The following code produces the same result (see <code>HTML_Bar/7-entries-each.html</code>):</p>
-<pre><code class="js">entries.each(function(d) { 
+<pre><code class="language-js">entries.each(function(d) { 
     const entry = d3.select(this); // the current entry
     entry.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;label category&quot;)
          .text(d.name);
@@ -492,40 +460,35 @@ entries.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;label value&quot;)
          .text(d.distance + &quot; AU&quot;);
 });
 </code></pre>
-
 <p>We can improve the rendering of the labels by formatting the numbers to display only two decimal places, using the <code>d3.format()</code> generator function (from the <code>d3-format</code> module). The following code creates a function <code>fmt()</code> that can be used to format numbers:</p>
-<pre><code class="js">const fmt = d3.format(&quot;.2f&quot;);
+<pre><code class="language-js">const fmt = d3.format(&quot;.2f&quot;);
 </code></pre>
-
 <p>Now, we can use it to format the distances:</p>
-<pre><code class="js">.text(d =&gt; fmt(d.distance) + &quot; AU&quot;);
+<pre><code class="language-js">.text(d =&gt; fmt(d.distance) + &quot; AU&quot;);
 </code></pre>
-
 <p>The final result is shown as follows:
 <img alt="bar_chart_3" src="../bar_chart_3.png" /></p>
 <p>Adding category names and placing the formatted label values outside the bars. Code: <code>HTML_Bar/7-entries-each.html</code></p>
 <h3 id="changing-colors">Changing colors</h3>
 <p>The <strong>d3-colors</strong> module contains functions to generate, convert, and transform colors. Passing any CSS-compatible color representation to <code>d3.color()</code> generates an object with methods that can be used to modify the color. The <code>darker()</code> and <code>brighter()</code> methods receive a value between 0 (no change) and 1 (maximum change) to adjust the lightness component of a color and return a hexadecimal color string.</p>
 <p>Let's use this feature to darken the bars when the distance from the sun increases. We will need a scale that maps the <code>distance</code> domain to the [0-1] range, which contains the values accepted by the <code>darker()</code> function:</p>
-<pre><code class="js">colorScale = d3.scaleLinear()
+<pre><code class="language-js">colorScale = d3.scaleLinear()
         .domain([0, d3.max(distances, d =&gt; d.distance)])
         .range([0,1])
 </code></pre>
-
 <p>Now, this colorScale can be used to generate different tones for the bars:</p>
-<pre><code class="js">entry.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;bar&quot;)
+<pre><code class="language-js">entry.append(&quot;div&quot;).attr(&quot;class&quot;, &quot;bar&quot;)
     .style(&quot;width&quot;, barScale(d.distance) + &quot;px&quot;)
     .style(&quot;background-color&quot;, d3.color('orange')
     .darker(colorScale(d.distance)))
 </code></pre>
-
 <p>See the code in <code>HTML_Bar/8-colors.html</code>. The result is shown as follows:
 <img alt="bar_chart_4" src="../bar_chart_4.png" /></p>
 <p>Changing bar colors with the distance. Code: <code>HTML_Bar/8-colors.html</code></p>
 <h3 id="loading-external-files">Loading external files</h3>
 <p>Usually, your data will come from external files that need to be loaded with an Ajax request. You can, of course, use jQuery or ECMAScript <code>fetch()</code> commands (and promises, if you need to load multiple files). After loading, you will also need to parse the data and convert it into JavaScript arrays and objects. D3 again provides a more efficient solution in the <code>d3-fetch</code> module: a set of convenient methods for loading and parsing files in popular formats, such as XML, JSON, or CSV. The <code>d3-fetch</code> module is also included in the default bundle.</p>
 <p>The planetary data we used in the previous examples is actually part of a larger JSON file containing several properties for planets, asteroids, and satellites. The basic structure of this file (<code>Data/sol_2016.json</code>) is shown as follows:</p>
-<pre><code class="js">{
+<pre><code class="language-js">{
      &quot;star&quot;:{…},
      &quot;planets&quot;:[
          {
@@ -570,10 +533,9 @@ function draw(distances) {
       .text(d =&gt; d.name + &quot; (&quot; + d.distance + &quot; AU)&quot;);
 }
 </code></pre>
-
 <p>To apply this to our chart, you just need to replace the contents of the <code>draw()</code> method shown with the entire code used in the previous examples (except for the distances array). See an example in <code>HTML_Bar/9-load-json.html</code>. As an exercise, try feeding the bar chart with a list of Jupiter's moons, instead of the planets (use <code>data.planets[4].satellites</code> to obtain the array, and the <code>semiMajorAxisKm</code> property as the distance, and <code>d3.format(",.0f")</code> to format the distance values).</p>
 <p>Full Example:</p>
-<pre><code class="js">d3.json(&quot;https://raw.githubusercontent.com/PacktPublishing/Learn-D3.js/master/Chapter03/Data/sol_2016.json&quot;) // if you use the git hub data. This is so cool!
+<pre><code class="language-js">d3.json(&quot;https://raw.githubusercontent.com/PacktPublishing/Learn-D3.js/master/Chapter03/Data/sol_2016.json&quot;) // if you use the git hub data. This is so cool!
         .then(function(data) {
             const planets = [];
             data.planets.forEach(function(obj) {
@@ -621,14 +583,13 @@ function draw(distances) {
     });
 }
 </code></pre>
-
 <h2 id="creating-a-bar-chart-with-d3-and-svg">Creating a bar chart with D3 and SVG</h2>
 <p>It's easy to create a horizontal bar chart in HTML. It's a bit trickier to make a vertical one, and quite challenging to create other charts, such as line charts, pie charts, and network diagrams, since HTML wasn't intended for vector graphics. <strong>While you can create such charts using HTML and CSS, it's not at all simple, nor is it recommended</strong>. You can, of course, use Canvas, but there are no graphical DOM elements to bind in Canvas. Canvas is used in D3 charts, but mostly for performance optimization. <strong>D3 works best with SVG</strong>.</p>
 <p>The same bar chart that we created with HTML can be created with SVG. Do you think you can do it? Why not try it as an exercise before proceeding? You already learned how to use D3 and HTML, and you know the basics of SVG rectangles, attributes, and styles. That's all you need!</p>
 <p>Most of the code is the same. You can reuse the scales, formatting function, sorting function, and JSON parsing code. The CSS will be simpler, since positioning is done in SVG. You only need to change the selection code, replacing the bar <code>&lt;div&gt;</code> element with <code>&lt;rect&gt;</code>, text label <code>&lt;div&gt;</code> elements with <code>&lt;text&gt;</code>, and container <code>&lt;div&gt;</code> elements with <code>&lt;g&gt;</code>. Remember to use fill (and not background-color) to fill the bars.</p>
 <p>The same step-by-step files that were used in the HTML example are available for the SVG example in the <code>SVG_Bar/ folder</code>. The following, final code produces exactly the same chart as the HTML version.</p>
 <p>This is the CSS style sheet that's used. Since all positioning is done in SVG, it's much smaller:</p>
-<pre><code class="html">&lt;style&gt;
+<pre><code class="language-html">&lt;style&gt;
      * {
          font-family: sans-serif;
      }
@@ -648,25 +609,22 @@ function draw(distances) {
      }
  &lt;/style&gt;
 </code></pre>
-
 <p>The main container is the <code>&lt;svg&gt;</code> element, which is appended to the body, as shown in the following code snippet. We renamed the chart object <code>svg</code>:</p>
-<pre><code class="js">
+<pre><code class="language-js">
 // selects the entire chart (one node)
  const svg = d3.select(&quot;body&quot;)
                .append(&quot;svg&quot;).attr(&quot;class&quot;, &quot;bar-chart&quot;)
                .style(&quot;height&quot;, distances.length * 21);
 </code></pre>
-
 <p>The containers used for each entry are <code>&lt;g&gt;</code> elements, which group several child elements and can have their own coordinate system configured using a <strong>transform</strong>. Although the <code>transform</code> property is supported in both CSS and SVG, you should use the SVG version (selected with the <code>attr()</code> method), because it considers pixel values and degrees as the default. You don't have to append <code>deg</code> or <code>px</code> to any values:</p>
-<pre><code class="js">// selects each entry (a nodelist)
+<pre><code class="language-js">// selects each entry (a nodelist)
  const entries = svg.selectAll(&quot;g&quot;).data(distances)
                     .enter().append(&quot;g&quot;)
                     .attr(&quot;class&quot;, &quot;entry&quot;)
                     .attr(&quot;transform&quot;, (d,i) =&gt; `translate(0, ${i * 21})`);
 </code></pre>
-
 <p>The <code>entries</code> are appended to the container <code>&lt;g&gt;</code> in the <code>each()</code> method, as follows. Compare this code to the HTML version:</p>
-<pre><code class="js">
+<pre><code class="language-js">
 // sort distances
 distances = distances.sort((a,b) =&gt; d3.ascending(a.distance, b.distance));
 
@@ -714,12 +672,11 @@ entries.each(function(d) {
         .text(fmt(d.distance) + &quot; AU&quot;);
 });
 </code></pre>
-
 <p>Try the full code from <code>SVG_Bar/9-load-json.html</code>. If you open it in your browser, you will notice that the result is identical to the one you get with <code>HTML_Bar/9-load-json.html</code>. To explore more D3 features, in the next sections, we will use the SVG version of this bar chart.</p>
 <h2 id="updating-data-visualizations">Updating Data Visualizations</h2>
 <p>Once the data is bound to SVG elements, you can change the original data values and reflect the changes in the chart. Values can change immediately or transition smoothly. This section will provide an introduction on how to trigger data updates and configure smooth transitions using D3.</p>
 <p>First, we need more data. Let's change the code where we create our data object and include two more values that use the same dimensions: the <strong>aphelium</strong> (the longest distance between a planet and the sun) in the <code>max</code> property, and the <strong>perihelium</strong> (the shortest distance) in the <code>min</code> property. The distance is now stored in the avg property (see <code>Updating/1-three-charts.html</code>):</p>
-<pre><code class="js">const planets = []; // this array will store all the data when loaded
+<pre><code class="language-js">const planets = []; // this array will store all the data when loaded
 
  d3.json(&quot;../Data/sol_2016.json&quot;)
    .then(function(data) {
@@ -733,9 +690,8 @@ entries.each(function(d) {
        init();
    });
 </code></pre>
-
 <p>You can create bar charts with any of these three values, or all of them. Let's create an application where the user can choose which chart to display using HTML buttons. The following is the HTML code for the page; it includes an <code>&lt;svg&gt;</code> element and some buttons:</p>
-<pre><code class="html">&lt;body&gt;
+<pre><code class="language-html">&lt;body&gt;
 &lt;h1&gt;&lt;span id=&quot;chart&quot;&gt;Average&lt;/span&gt; distance from the Sun&lt;/h1&gt;
 &lt;svg class=&quot;bar-chart&quot;&gt;&lt;/svg&gt;
 &lt;form&gt;
@@ -747,33 +703,29 @@ entries.each(function(d) {
 &lt;script&gt;...&lt;/script&gt;
 &lt;/body&gt;
 </code></pre>
-
 <p>These buttons will be attached to event handlers. They will select the data that should be displayed in the bar charts. The following array relates a key to a title and a color. The key contains the name of a property from each element in the planets array. It's also used for the button IDs:</p>
-<pre><code class="js">const charts = [
+<pre><code class="language-js">const charts = [
     {key: &quot;avg&quot;, title: &quot;Average&quot;, color: &quot;orange&quot;},
     {key: &quot;max&quot;, title: &quot;Maximum&quot;, color: &quot;blue&quot;},
     {key: &quot;min&quot;, title: &quot;Minimum&quot;, color: &quot;red&quot;},
 ];
 </code></pre>
-
 <p>The chart object stores the dimensions of the current chart (which may have a variable height) and the chart that is currently displayed:</p>
-<pre><code class="js">const chart = {
+<pre><code class="language-js">const chart = {
     width: 800,
     height: 0,          // the height is set after data is loaded
     current: charts[0]  // chart to display first
 }
 </code></pre>
-
 <p>These other global constants initialize scales, a formatting function, and a selection of the <code>svg</code> object:</p>
-<pre><code class="js">const barScale = d3.scaleLinear().range([0, 600]);
+<pre><code class="language-js">const barScale = d3.scaleLinear().range([0, 600]);
 const colorScale = d3.scaleLinear().range([0, 1]);
 const format = d3.format(&quot;.2f&quot;);
 
 const svg = d3.select(&quot;svg.bar-chart&quot;); // the container SVG
 </code></pre>
-
 <p>The <code>init()</code> function that is called right after the data is loaded and the planets array is populated performs basic initialization that requires the loaded data. In this case, it sets the height of the chart:</p>
-<pre><code class="js">function init() {   // runs once
+<pre><code class="language-js">function init() {   // runs once
     chart.height = planets.length * 21;
     svg.attr(&quot;width&quot;, chart.width)
        .attr(&quot;height&quot;, chart.height);
@@ -783,9 +735,8 @@ const svg = d3.select(&quot;svg.bar-chart&quot;); // the container SVG
     // ...
 }
 </code></pre>
-
 <p>The <code>setupView()</code> function called inside <code>init()</code> configures the current view. It disables the button that refers to the currently displayed view, replaces the <code>&lt;span&gt;</code> element in the title with the title of the current chart, sorts the planets array, and initializes the domains of the scales, based on the current data:</p>
-<pre><code class="js">function setupView() {
+<pre><code class="language-js">function setupView() {
     // disable all buttons
     d3.selectAll(&quot;button&quot;).property(&quot;disabled&quot;, false);
 
@@ -805,9 +756,8 @@ const svg = d3.select(&quot;svg.bar-chart&quot;); // the container SVG
     colorScale.domain([0, maxValue]);
 }
 </code></pre>
-
 <p>After setting up the view, the <code>init()</code> function uses the <code>current</code> data to render the chart. This code is identical to the code we used in the previous examples. The only difference is that it uses a key reference to access the data property: instead of <code>d.avg</code>, it uses <code>d[chart.current.key]</code>. This will allow the chart to reference other properties when the current key changes:</p>
-<pre><code class="js">function init() {
+<pre><code class="language-js">function init() {
      // ...
      setupView();
 
@@ -837,35 +787,31 @@ const svg = d3.select(&quot;svg.bar-chart&quot;); // the container SVG
         });
 }
 </code></pre>
-
 <p>The result is shown as follows. It's the same chart we created before, with a title and some buttons that don't work yet:</p>
 <p><img alt="bar_chart_5" src="../bar_chart_5.png" /></p>
 <p>The previous example adapted to show three different charts. Code: Updating/1-three-charts.html.</p>
 <h3 id="handling-events">Handling events</h3>
 <p>The <code>on()</code> method is used to handle events, and it can be called from any selection. The first parameter is a standard JavaScript event name string (such as <strong>click</strong> or <strong>mouseover</strong>), and the second parameter is the handler function that will execute when the event happens.</p>
 <p>The following code obtains a selection containing all button objects and attaches an event handler to all of them. It obtains the <code>id</code> of the button that was clicked and uses it to change the current chart by assigning a corresponding object from the <code>charts</code> array. After changing the current chart, it calls the <code>draw()</code> function, which will update the chart. This code should be placed in a global context, since it only needs to run once:</p>
-<pre><code class="js">d3.selectAll(&quot;button&quot;)
+<pre><code class="language-js">d3.selectAll(&quot;button&quot;)
      .on(&quot;click&quot;, function() {
          chart.current = charts.filter(c =&gt; c.key == this.id)[0];
          draw();
      });
 </code></pre>
-
 <p>The <code>draw</code> function in this example only prints the current array. You can use it to test whether the buttons are selecting the correct chart, as expected. The call to <code>setupView()</code> will disable/enable the buttons and update the chart's title according to the current view (see <code>Updating/2-events.html</code>):</p>
-<pre><code class="js">function draw() {
+<pre><code class="language-js">function draw() {
      console.log(chart.current.key);
      setupView();
  }
 </code></pre>
-
 <h3 id="data-updates">Data updates</h3>
 <p>To update the data on a selection, you just need to update the styles and attributes. If the data has changed, you should call the <code>selection.data()</code> method with the new data, and then update everything that depends on it, such as attributes and styles, and any functions called by them, such as scales.</p>
 <p>In our case, the data bound to the container <code>g.entry</code> object is the entire <code>planets</code> array, which may have been sorted in a different order (in the <code>setupView()</code> function). It can be updated simply by reassigning it to the selection:</p>
-<pre><code class="js">svg.selectAll(&quot;g.entry&quot;).data(planets)
+<pre><code class="language-js">svg.selectAll(&quot;g.entry&quot;).data(planets)
 </code></pre>
-
 <p>Then, you need to update the attributes and styles, which depend on properties from this array that have changed, but <strong>before</strong> doing that, you need to update the scales' domains, since they are called from the <code>style()</code> and <code>attr()</code> methods, and their maximum value depends on the new data. The scales were updated in the <code>setupView()</code> function. The rest of the <code>draw()</code> function contains the data updates:</p>
-<pre><code class="js">function draw() {
+<pre><code class="language-js">function draw() {
     setupView(); // sorts data and updates scales
 
     svg.selectAll(&quot;g.entry&quot;).data(planets)
@@ -882,14 +828,13 @@ const svg = d3.select(&quot;svg.bar-chart&quot;); // the container SVG
         });
 }
 </code></pre>
-
 <p>Now, when you click any button, a new bar chart will be displayed. The chart reuses the same graphical elements, changing its colors, dimensions, and text contents. Bars are always sorted in ascending order (see <code>Updating/3-updates.html</code>):</p>
 <p><img alt="bar_chart_6" src="../bar_chart_6.png" /></p>
 <p>Each button replaces the current chart with a new chart, reusing the same chart elements. Code: <code>Updating/3-updates.html</code>.</p>
 <h3 id="smooth-transitions">Smooth transitions</h3>
 <p>Instead of immediately replacing one chart with another, you can add transitions, so that they occur in smooth animations. Adding a transition is very easy. You just need to call the <code>transition()</code> method on a selection before setting the new properties and styles. Instead of changing the old data with the new data, it will interpolate intermediate values during a quarter of a second. Add it to your update selections, and you will notice that when you change the chart, the bars and labels will animate to their new sizes, colors, and positions.</p>
 <p>In our examples, transitions were added before changing the color and width of each bar, and before changing the position of each value label (see <code>Updating/4-transitions.html</code>):</p>
-<pre><code class="js">svg.selectAll(&quot;g.entry&quot;).data(planets)
+<pre><code class="language-js">svg.selectAll(&quot;g.entry&quot;).data(planets)
      .each(function (d) {
          d3.select(this).select(&quot;.label.category&quot;).text(d.name); 
          d3.select(this).select(&quot;.bar&quot;)
@@ -903,18 +848,16 @@ const svg = d3.select(&quot;svg.bar-chart&quot;); // the container SVG
              .text(format(d[chart.current.key]) + &quot; AU&quot;);
      });
 </code></pre>
-
 <p>If you want a slower transition, just add <code>duration(value)</code> after the <code>transition()</code> command, with a value in milliseconds. The following code will make the animation last one second (see <code>Updating/5-durations.html</code>):</p>
-<pre><code class="js">d3.select(this).select(&quot;.bar&quot;)
+<pre><code class="language-js">d3.select(this).select(&quot;.bar&quot;)
    .transition()
    .duration(1000)               // animate during a second
      .attr(&quot;width&quot;, barScale(d[chart.current.key]))
      .style(&quot;fill&quot;, d3.color(chart.current.color)
                       .darker(colorScale(d[chart.current.key])));
 </code></pre>
-
 <p>You can also configure a delay before the transition starts with the <code>delay()</code> method. It can receive a fixed value in milliseconds, or a callback function that will apply a different delay for each object. In the following example, each bar will wait an amount of milliseconds proportional to its array index (the second parameter in the <code>each()</code> function), making each bar animate in a sequence:</p>
-<pre><code class="js">.each(function (d,i) {     // include the i (index) parameter
+<pre><code class="language-js">.each(function (d,i) {     // include the i (index) parameter
      // ...
      d3.select(this).select(&quot;.bar&quot;)
        .transition()
@@ -926,7 +869,6 @@ const svg = d3.select(&quot;svg.bar-chart&quot;); // the container SVG
      // ...
  });
 </code></pre>
-
 <p>The following diagram shows a snapshot of the animation captured in the middle of a transition. Try it out and see the effects for yourself (see the code in <code>Updating/6-delays.html</code>):</p>
 <p><img alt="bar_chart_7" src="../bar_chart_7.png" /></p>
 <p>Transition with delay. Code: <code>Updating/6-delays.html</code>.</p>

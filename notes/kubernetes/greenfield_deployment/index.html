@@ -94,13 +94,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <ol>
 <li>Create AD Service Principal:</li>
 </ol>
-<pre><code class="bash">az ad sp create-for-rbac --skip-assignment -o json &gt; auth.json
+<pre><code class="language-bash">az ad sp create-for-rbac --skip-assignment -o json &gt; auth.json
 appId=$(jq -r &quot;.appId&quot; auth.json)
 password=$(jq -r &quot;.password&quot; auth.json)
 </code></pre>
-
 <p>which makes this auth.json:</p>
-<pre><code class="bash">{
+<pre><code class="language-bash">{
   &quot;appId&quot;: &quot;3c3a801c-5ad1-468b-b7e7-787363800352&quot;,
   &quot;displayName&quot;: &quot;azure-cli-2020-10-23-23-08-43&quot;,
   &quot;name&quot;: &quot;http://azure-cli-2020-10-23-23-08-43&quot;,
@@ -108,22 +107,19 @@ password=$(jq -r &quot;.password&quot; auth.json)
   &quot;tenant&quot;: &quot;e72101ce-ef5d-49e3-baec-01191775dcc7&quot;
 }
 </code></pre>
-
 <ol>
 <li>Get object ID:</li>
 </ol>
 <p>This is the new Service Principal id.</p>
-<pre><code class="bash">objectId=$(az ad sp show --id $appId --query &quot;objectId&quot; -o tsv)
+<pre><code class="language-bash">objectId=$(az ad sp show --id $appId --query &quot;objectId&quot; -o tsv)
 </code></pre>
-
-<pre><code class="bash">$ echo $objectId
+<pre><code class="language-bash">$ echo $objectId
 dd3b3bcb-9b0c-4a64-8316-0f0150d39e0d
 </code></pre>
-
 <ol>
 <li>Create <code>parameters.json</code> for use in the ARM (Azure Resource Manager) template.</li>
 </ol>
-<pre><code class="bash">cat &lt;&lt;EOF &gt; parameters.json
+<pre><code class="language-bash">cat &lt;&lt;EOF &gt; parameters.json
 {
   &quot;aksServicePrincipalAppId&quot;: { &quot;value&quot;: &quot;$appId&quot; },
   &quot;aksServicePrincipalClientSecret&quot;: { &quot;value&quot;: &quot;$password&quot; },
@@ -132,16 +128,14 @@ dd3b3bcb-9b0c-4a64-8316-0f0150d39e0d
 }
 EOF
 </code></pre>
-
 <p>mine became:</p>
-<pre><code class="bash">{
+<pre><code class="language-bash">{
   &quot;aksServicePrincipalAppId&quot;: { &quot;value&quot;: &quot;3c3a801c-5ad1-468b-b7e7-787363800352&quot; },
   &quot;aksServicePrincipalClientSecret&quot;: { &quot;value&quot;: &quot;FNhe_Ln_nCiIiSRVv_lAm7bD-miRxhNpVD&quot; },
   &quot;aksServicePrincipalObjectId&quot;: { &quot;value&quot;: &quot;dd3b3bcb-9b0c-4a64-8316-0f0150d39e0d&quot; },
   &quot;aksEnableRBAC&quot;: { &quot;value&quot;: false }
 }
 </code></pre>
-
 <p>To deploy an RBAC (Role Based Authentication Control) Id cluster, set the <code>aksEnabledRBAC</code> field to <code>true</code>.</p>
 <h2 id="deploy-components">Deploy Components</h2>
 <p>The next few steps will add the following list of components to your Azure subscription:</p>
@@ -157,16 +151,15 @@ EOF
 <p>Download ARM template into template.json:</p>
 </li>
 </ul>
-<pre><code class="bash">wget https://raw.githubusercontent.com/Azure/application-gateway-kubernetes-ingress/master/deploy/azuredeploy.json -O template.json
+<pre><code class="language-bash">wget https://raw.githubusercontent.com/Azure/application-gateway-kubernetes-ingress/master/deploy/azuredeploy.json -O template.json
 </code></pre>
-
 <blockquote>
 <p>Note: The template had version 1.15 for kubernetes. I changed to 1.19 after running <code>az aks get-versions --location westus</code></p>
 </blockquote>
 <ol>
 <li>Deploy the ARM template with <code>az</code> and use flags and their values to set certain values:</li>
 </ol>
-<pre><code class="bash">resourceGroupName=&quot;flask_demo&quot;
+<pre><code class="language-bash">resourceGroupName=&quot;flask_demo&quot;
 location=&quot;eastus&quot;
 deploymentName=&quot;ingress-appgw&quot;
 az group create -n $resourceGroupName -l $location

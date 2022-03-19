@@ -89,7 +89,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <h2 id="terminal-install">Terminal Install:</h2>
 <h3 id="pre-requisites">Pre-requisites:</h3>
 <p>On Ubuntu or Debian install the following dependencies:</p>
-<pre><code class="bash">sudo apt-get update &amp;&amp; sudo apt-get install -y \
+<pre><code class="language-bash">sudo apt-get update &amp;&amp; sudo apt-get install -y \
     build-essential \
     uuid-dev \
     libgpgme-dev \
@@ -100,34 +100,29 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     git \
     cryptsetup-bin
 </code></pre>
-
 <p>Install Go:</p>
-<pre><code class="bash">export VERSION=1.5.12 OS=linux ARCH=amd64 &amp;&amp; \
+<pre><code class="language-bash">export VERSION=1.5.12 OS=linux ARCH=amd64 &amp;&amp; \
     wget https://dl.google.com/go/go$VERSION.$OS-$ARCH.tar.gz &amp;&amp; \
     sudo tar -C /usr/local -xzvf go$VERSION.$OS-$ARCH.tar.gz &amp;&amp; \
     rm go$VERSION.$OS-$ARCH.tar.gz
 </code></pre>
-
-<pre><code class="bash">echo 'export GOPATH=${HOME}/go' &gt;&gt; ~/.bashrc &amp;&amp; \
+<pre><code class="language-bash">echo 'export GOPATH=${HOME}/go' &gt;&gt; ~/.bashrc &amp;&amp; \
     echo 'export PATH=/usr/local/go/bin:${PATH}:${GOPATH}/bin' &gt;&gt; ~/.bashrc &amp;&amp; \
     source ~/.bashrc
 </code></pre>
-
 <h3 id="install-singularity">Install Singularity:</h3>
-<pre><code class="bash">export VERSION=3.6.3 &amp;&amp; # adjust this as necessary \
+<pre><code class="language-bash">export VERSION=3.6.3 &amp;&amp; # adjust this as necessary \
     wget https://github.com/sylabs/singularity/releases/download/v${VERSION}/singularity-${VERSION}.tar.gz &amp;&amp; \
     tar -xzf singularity-${VERSION}.tar.gz &amp;&amp; \
     cd singularity
 </code></pre>
-
 <p>then check out code from git:</p>
-<pre><code class="bash">git clone https://github.com/sylabs/singularity.git &amp;&amp; \
+<pre><code class="language-bash">git clone https://github.com/sylabs/singularity.git &amp;&amp; \
     cd singularity &amp;&amp; \
     git checkout v3.6.3
 </code></pre>
-
 <p>Now compile Singularity:</p>
-<pre><code class="bash">./mconfig &amp;&amp; \
+<pre><code class="language-bash">./mconfig &amp;&amp; \
     make -C ./builddir &amp;&amp; \
     sudo make -C ./builddir install
 </code></pre>

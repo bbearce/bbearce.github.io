@@ -95,34 +95,31 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <ol>
 <li>add(x) Method: Adds the item x to set if it is not already present in the set.</li>
 </ol>
-<pre><code class="python">&gt;&gt;&gt; s3.add(9)
+<pre><code class="language-python">&gt;&gt;&gt; s3.add(9)
 &gt;&gt;&gt; s3
 {9, 3}
 2. union(s) Method: Returns a union of two set.Using the ‘|’ operator between 2 sets is the same as writing set1.union(set2)
 </code></pre>
-
 <h2 id="union">union()</h2>
-<pre><code class="python">&gt;&gt;&gt; s1.union(s2)
+<pre><code class="language-python">&gt;&gt;&gt; s1.union(s2)
 {1, 2, 3, 4, 5}
 
 &gt;&gt;&gt; s1 | s2
 {1, 2, 3, 4, 5}
 3. intersect(s) Method: Returns an intersection of two sets.The ‘&amp;’ operator comes can also be used in this case.
 </code></pre>
-
 <h2 id="intersection">intersection()</h2>
-<pre><code class="python">&gt;&gt;&gt; s1.intersection(s2)
+<pre><code class="language-python">&gt;&gt;&gt; s1.intersection(s2)
 {3}
 
 &gt;&gt;&gt; s1 &amp; s2
 {3}
 </code></pre>
-
 <h2 id="difference">difference</h2>
 <ol>
 <li>difference(s) Method: Returns a set containing all the elements of invoking set but not of the second set. We can use ‘-‘ operator here.</li>
 </ol>
-<pre><code class="python">&gt;&gt;&gt; s1.difference(s2)
+<pre><code class="language-python">&gt;&gt;&gt; s1.difference(s2)
 {1, 2}
 
 &gt;&gt;&gt; s1 - s2
@@ -137,23 +134,21 @@ set()
 &gt;&gt;&gt; s2
 set()
 </code></pre>
-
 <h2 id="discard">discard()</h2>
 <ol>
 <li>discard() Method: The discard() method takes a single element x and removes it from the set (if present).</li>
 </ol>
-<pre><code class="python">&gt;&gt;&gt; s1
+<pre><code class="language-python">&gt;&gt;&gt; s1
 {1, 2, 3}
 &gt;&gt;&gt; s1.discard(1)
 &gt;&gt;&gt; s1
 {2, 3}
 </code></pre>
-
 <h2 id="issubset">issubset()</h2>
 <ol>
 <li>issubset() Method: The issubset() method returns True if all elements of a set are present in another set (passed as an argument). If not, it returns False.</li>
 </ol>
-<pre><code class="python">&gt;&gt;&gt; s1
+<pre><code class="language-python">&gt;&gt;&gt; s1
 {1, 2, 3}
 &gt;&gt;&gt; s1.issubset({1,2,3,4})
 True

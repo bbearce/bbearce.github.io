@@ -89,7 +89,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <li>If a single iterable is passed, zip() returns an iterator of 1-tuples. Meaning, the number of elements in each tuple is 1  </li>
 <li>If multiple iterables are passed, ith tuple contains ith iterable values from all iterables. Suppose, two iterables are passed; one iterable containing 3 and other containing 5 elements, then the returned iterator will have 3 tuples  </li>
 </ul>
-<pre><code class="python">&gt;&gt;&gt; zip()
+<pre><code class="language-python">&gt;&gt;&gt; zip()
 &lt;zip object at 0x102c9be48&gt;
 
 # length 0
@@ -110,9 +110,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 &gt;&gt;&gt; list(zip(x,y))
 [(1, 4), (2, 5), (3, 6)]
 </code></pre>
-
 <p>iterables - can be built-in iterables (like: list, set, tuple, string, dict...), or user-defined iterables (object that has <strong>iter</strong> method).</p>
-<pre><code class="python">x, y, z = [1,2,3], [4,5,6], {'a':4,'b':5,'c':6}
+<pre><code class="language-python">x, y, z = [1,2,3], [4,5,6], {'a':4,'b':5,'c':6}
 
 # dictionaries use keys by default
 results_default = set(zip(x,y,z))
@@ -124,18 +123,16 @@ print(results_default) # {(3, 6, 'c'), (1, 4, 'a'), (2, 5, 'b')}
 print(results_2) # {(3, 6, 'c'), (1, 4, 'a'), (2, 5, 'b')}
 print(results_3) # {(1, 4, 4), (3, 6, 6), (2, 5, 5)}
 </code></pre>
-
 <p>View the zip contents with a list or set or tuple data type:</p>
-<pre><code class="python">&gt;&gt;&gt; list(zip(x,y))
+<pre><code class="language-python">&gt;&gt;&gt; list(zip(x,y))
 [(1, 4), (2, 5), (3, 6)]
 &gt;&gt;&gt; set(zip(x,y))
 {(2, 5), (3, 6), (1, 4)}
 &gt;&gt;&gt; tuple(zip(x,y))
 ((1, 4), (2, 5), (3, 6))
 </code></pre>
-
 <p>Unzipping is possible too:</p>
-<pre><code class="python">&gt; x
+<pre><code class="language-python">&gt; x
 [1, 2, 3]
 &gt;&gt;&gt; y
 [4, 5, 6, 7]
@@ -156,12 +153,10 @@ print(results_3) # {(1, 4, 4), (3, 6, 6), (2, 5, 5)}
 (4, 5, 6)
 &gt;&gt;&gt; 
 </code></pre>
-
 <p>Watch what happens when you try to view a zip object with a dictionary:</p>
-<pre><code class="python">&gt;&gt;&gt; dict(zip([1,2],['a','b']))
+<pre><code class="language-python">&gt;&gt;&gt; dict(zip([1,2],['a','b']))
 {1: 'a', 2: 'b'}
 </code></pre>
-
 <p>We can create dictionaries from individual unassociated key, values lists!</p>
 
   <br>

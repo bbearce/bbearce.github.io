@@ -97,19 +97,17 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </blockquote>
 <p>To run Jupyter Lab on a login node, you need to open 2 terminal windows. In the first window:</p>
 <p>Note to self, when doing this for containers, run this remembering we are mapping the container port <code>5678</code> to server port <code>5678</code> with <code>-p 5678:5678</code>. Example command:</p>
-<pre><code class="bash">docker run -it --ipc=host --name=ben_pytorch_tutorial -p 5678:5678 --runtime=nvidia -v /home/bb927/Documents/pytorch:/workspace pytorch/pytorch:latest bash
+<pre><code class="language-bash">docker run -it --ipc=host --name=ben_pytorch_tutorial -p 5678:5678 --runtime=nvidia -v /home/bb927/Documents/pytorch:/workspace pytorch/pytorch:latest bash
 </code></pre>
-
 <blockquote>
 <p>Note, additional step to install jupyter could be required <code>$ pip install jupyterlab</code>. (You'll need a container with python in it)</p>
 </blockquote>
 <p>Then inside the container start jupyter:</p>
-<pre><code class="bash">$ jupyter lab --ip 0.0.0.0 --port 5678 --no-browser --allow-root
+<pre><code class="language-bash">$ jupyter lab --ip 0.0.0.0 --port 5678 --no-browser --allow-root
 
 </code></pre>
-
 <p>and see it running...</p>
-<pre><code class="bash">[I 22:05:13.843 LabApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
+<pre><code class="language-bash">[I 22:05:13.843 LabApp] Writing notebook server cookie secret to /root/.local/share/jupyter/runtime/notebook_cookie_secret
 [I 22:05:14.047 LabApp] JupyterLab extension loaded from /opt/conda/lib/python3.7/site-packages/jupyterlab
 [I 22:05:14.047 LabApp] JupyterLab application directory is /opt/conda/share/jupyter/lab
 [I 22:05:14.050 LabApp] Serving notebooks from local directory: /workspace
@@ -125,15 +123,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
         http://353e1fa49ecd:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
      or http://127.0.0.1:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
-
 <p>Then in the second terminal window run:</p>
-<pre><code class="bash">$ ssh -CNL localhost:5678:localhost:5678 username@hostname
+<pre><code class="language-bash">$ ssh -CNL localhost:5678:localhost:5678 username@hostname
 </code></pre>
-
 <p>Finally copy the link from the jupyter lab step into your browser (http://127.0.0.1:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX).</p>
 <h3 id="run-jupyter-remotely-from-server">Run jupyter remotely from server</h3>
 <p>Log into server and start jupyter:</p>
-<pre><code class="bash">$ ssh username@hostname
+<pre><code class="language-bash">$ ssh username@hostname
 $ jupyter lab --no-browser --port=5678
 ...
 [I 10:17:14.160 LabApp] Use Control-C to stop this server and shut down all kernels (twice to skip confirmation).
@@ -143,11 +139,9 @@ $ jupyter lab --no-browser --port=5678
     to login with a token:
         http://localhost:5678/?token=XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 </code></pre>
-
 <p>Then in the second window (local machine) run:</p>
-<pre><code class="bash">$ ssh -CNL localhost:5678:localhost:5678 username@hostname
+<pre><code class="language-bash">$ ssh -CNL localhost:5678:localhost:5678 username@hostname
 </code></pre>
-
 <p>You should be able to go to http://localhost:5678 to see jupyter lab now.</p>
 
   <br>

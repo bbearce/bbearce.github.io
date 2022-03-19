@@ -107,14 +107,13 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 </ul>
 <h2 id="installation-of-sqlite">Installation of SQLite</h2>
 <p>If you downloaded the optional documentation, issue the following command to install the documentation into the source tree:</p>
-<pre><code class="bash">unzip -q ../sqlite-doc-3300100.zip
+<pre><code class="language-bash">unzip -q ../sqlite-doc-3300100.zip
 </code></pre>
-
 <p>Install SQLite by running the following commands:</p>
 <blockquote>
 <p>before that unzip with <code>tar zxvf sqlite-autoconf-3300100.tar.gz</code> and <code>cd sqlite-autoconf-3300100</code></p>
 </blockquote>
-<pre><code class="bash">./configure --prefix=/usr     \
+<pre><code class="language-bash">./configure --prefix=/usr     \
             --disable-static  \
             --enable-fts5     \
             CFLAGS=&quot;-g -O2                    \
@@ -127,10 +126,9 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
             -DSQLITE_ENABLE_FTS3_TOKENIZER=1&quot; &amp;&amp;
 make
 </code></pre>
-
 <p>This package does not come with a test suite.</p>
 <p>Now, as the root user run <code>sudo make install</code>:</p>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Downloads/sqlite-autoconf-3300100$ sudo make install
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~/Downloads/sqlite-autoconf-3300100$ sudo make install
 make[1]: Entering directory '/home/bbearce/Downloads/sqlite-autoconf-3300100'
  /bin/mkdir -p '/usr/lib'
  /bin/bash ./libtool   --mode=install /usr/bin/install -c   libsqlite3.la '/usr/lib'
@@ -154,11 +152,10 @@ libtool: install: /usr/bin/install -c sqlite3 /usr/bin/sqlite3
 make[1]: Leaving directory '/home/bbearce/Downloads/sqlite-autoconf-3300100'
 
 </code></pre>
-
 <blockquote>
 <p>Not sure what <code>warning: remember to run 'libtool --finish /usr/local/lib'</code> is for but I ran it and it didn't break anything and output this message:</p>
 </blockquote>
-<pre><code class="bash">bbearce@bbearce-XPS-15-9560:~/Downloads/sqlite-autoconf-3300100$ libtool --finish /usr/local/lib
+<pre><code class="language-bash">bbearce@bbearce-XPS-15-9560:~/Downloads/sqlite-autoconf-3300100$ libtool --finish /usr/local/lib
 libtool: finish: PATH=&quot;/home/bbearce/gems/bin:/home/bbearce/bin:/home/bbearce/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/sbin&quot; ldconfig -n /usr/local/lib
 ----------------------------------------------------------------------
 Libraries have been installed in:
@@ -180,11 +177,10 @@ more information, such as the ld(1) and ld.so(8) manual pages.
 ----------------------------------------------------------------------
 
 </code></pre>
-
 <p>...a little background from <a href="https://www.gnu.org/software/libtool/">gnu</a>:</p>
 <p><em>GNU libtool is a generic library support script. Libtool hides the complexity of using shared libraries behind a consistent, portable interface.</em></p>
 <p>If you downloaded the optional documentation, issue the following commands as the root user to install it:</p>
-<pre><code class="bash">install -v -m755 -d /usr/share/doc/sqlite-3.30.1 &amp;&amp;
+<pre><code class="language-bash">install -v -m755 -d /usr/share/doc/sqlite-3.30.1 &amp;&amp;
 cp -v -R sqlite-doc-3300100/* /usr/share/doc/sqlite-3.30.1
 </code></pre>
 
