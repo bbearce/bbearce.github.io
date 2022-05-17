@@ -47,6 +47,7 @@
               {title: "Tagging", url: "#tagging" },
               {title: "Log", url: "#log" },
               {title: "Replace Local Changes", url: "#replace-local-changes" },
+              {title: "Fetching Remote Branch", url: "#fetching-remote-branch" },
               {title: "Useful Hints", url: "#useful-hints" },
               {title: "Clone Single Branch", url: "#clone-single-branch" },
           ]},
@@ -75,12 +76,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../common_operations/" class="btn btn-xs btn-default pull-right">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../common_operations/" class="btn btn-xs btn-link">
-        Common Operations
+      <a href="../git_sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
       </a>
     </div>
     
@@ -272,6 +273,37 @@ and the repository exists.
 <pre><code class="language-bash">git fetch origin
 git reset --hard origin/master
 </code></pre>
+<h2 id="fetching-remote-branch">Fetching Remote Branch</h2>
+<p><a href="https://stackoverflow.com/questions/9537392/git-fetch-remote-branch">Source</a>
+<a href="https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches#_tracking_branches">Github</a></p>
+<h3 id="update">Update:</h3>
+<p>A new command, git switch has been added that simplifies the effort.</p>
+<p>If daves_branch exists on the remote repository, but not on your local branch, you can simply type:</p>
+<pre><code class="language-bash">git switch daves_branch
+</code></pre>
+<p>Since you do not have the branch locally, this will automatically make switch look on the remote repo. It will then also automatically set up remote branch tracking.</p>
+<h3 id="original-way">Original Way:</h3>
+<p>Checking out a local branch from a remote-tracking branch automatically creates what is called a “tracking branch” (and the branch it tracks is called an “upstream branch”). Tracking branches are local branches that have a direct relationship to a remote branch. If you’re on a tracking branch and type <code>git pull</code>, Git automatically knows which server to fetch from and which branch to merge in.</p>
+<p>When you clone a repository, it generally automatically creates a <code>master</code> branch that tracks <code>origin/master</code>. However, you can set up other tracking branches if you wish — ones that track branches on other remotes, or don’t track the <code>master</code> branch. The simple case is the example you just saw, running <code>git checkout -b &lt;branch&gt; &lt;remote&gt;/&lt;branch&gt;</code>. This is a common enough operation that Git provides the <code>--track</code> shorthand:</p>
+<pre><code class="language-bash">$ git checkout --track origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+</code></pre>
+<p>In fact, this is so common that there’s even a shortcut for that shortcut. If the branch name you’re trying to checkout (a) doesn’t exist and (b) exactly matches a name on only one remote, Git will create a tracking branch for you:</p>
+<pre><code class="language-bash">$ git checkout serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+</code></pre>
+<p>To set up a local branch with a different name than the remote branch, you can easily use the first version with a different local branch name:</p>
+<pre><code class="language-bash">$ git checkout -b sf origin/serverfix
+Branch sf set up to track remote branch serverfix from origin.
+Switched to a new branch 'sf'
+</code></pre>
+<p>Now, your local branch <code>sf</code> will automatically pull from <code>origin/serverfix</code>.</p>
+<p>If you already have a local branch and want to set it to a remote branch you just pulled down, or want to change the upstream branch you’re tracking, you can use the <code>-u</code> or <code>--set-upstream-to</code> option to <code>git branch</code> to explicitly set it at any time.</p>
+<pre><code class="language-bash">$ git branch -u origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+</code></pre>
 <h2 id="useful-hints">Useful Hints</h2>
 <p>If you want a built-in git GUI, use:</p>
 <p><code>gitk</code></p>
@@ -299,12 +331,12 @@ git reset --hard origin/master
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../common_operations/" class="btn btn-xs btn-default pull-right">
+      <a href="../git_sub_trees/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../common_operations/" class="btn btn-xs btn-link">
-        Common Operations
+      <a href="../git_sub_trees/" class="btn btn-xs btn-link">
+        Subtrees
       </a>
     </div>
     
