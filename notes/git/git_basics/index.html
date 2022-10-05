@@ -240,6 +240,25 @@ and the repository exists.
 <p><code>git branch -d feature_x</code></p>
 <p>A branch is not available to others unless you push the branch to your remote repository:</p>
 <p><code>git push origin &lt;branch&gt;</code></p>
+<h3 id="show-remote-branches-and-their-local-associations">Show remote branches and their local associations</h3>
+<pre><code>git remote show origin
+</code></pre>
+<h3 id="see-what-remote-branch-your-local-branch-is-tracking">See what remote branch your local branch is tracking</h3>
+<pre><code>git branch -vv
+</code></pre>
+<p>Ex:</p>
+<pre><code>debian@codabench-test-acl-220627:~/codabench$ git branch -vv
+  develop                   46c1ff7 [origin/develop] Merge pull request #696 from codalab/remove-vnc
+* leaderboard_v2_comp_fixes 7c2811e edit compute worker so that yaml gets correct amount of inputs
+</code></pre>
+<blockquote>
+<p>local develop tracks remote develop branch at remote "origin". leaderboard_v2_comp_fixes is currently not tracking a remote branch</p>
+</blockquote>
+<h3 id="add-local-branch-to-remote">Add local branch to remote</h3>
+<pre><code>git push -u origin &lt;branch&gt;
+# short for
+git push --set-upstream origin &lt;branch&gt;
+</code></pre>
 <h2 id="update-and-merge">Update and Merge</h2>
 <p>To update your local repository to the newest commit, execute:</p>
 <p><code>git pull</code></p>
