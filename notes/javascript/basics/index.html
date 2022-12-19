@@ -465,67 +465,6 @@ const array3 = Array.from(map.values()); // an array of keys
     console.log('This is in the catch '+ message)
 })
 </code></pre>
-<h3 id="promises-versus-async-functions">Promises versus Async Functions</h3>
-<pre><code class="language-js">var start = function(){
-  console.log(&quot;start&quot;)
-  return new Promise(function(resolve, reject){
-    setTimeout(() =&gt; resolve(&quot;start sending this off&quot;), 1000);
-  })
-};
-
-var func1 = function(from_before){
-  console.log(from_before);
-  return new Promise(function(resolve, reject){
-    setTimeout(() =&gt; {console.log(&quot;func1&quot;); resolve(&quot;func1 sending this off&quot;)}, 1000);
-  })
-};
-
-var func2 = function(from_before){
-  console.log(from_before);
-  return new Promise(function(resolve, reject){
-    setTimeout(() =&gt; {console.log(&quot;func2&quot;); resolve(&quot;func2 sending this off&quot;)}, 1000);
-  })
-};
-
-start()
-.then(func1)
-.then(func2)
-.then(function(res){ console.log(res) });
-
-
-// async await
-var func1 = async function(from_before){
-  console.log(from_before);
-  return new Promise(resolve =&gt; {
-    setTimeout(function(){ resolve(&quot;func1 sending this off&quot;) }, 1000)
-  })
-};
-
-var func2 = async function(from_before){
-  console.log(from_before);
-  return new Promise(resolve =&gt; {
-    setTimeout(function(){ resolve(&quot;func2 sending this off&quot;) }, 1000)
-  })
-};
-
-var func3 = async function(from_before){
-  console.log(from_before);
-  return new Promise(resolve =&gt; {
-    setTimeout(function(){ resolve(&quot;func3 sending this off&quot;) }, 1000)
-  })
-};
-
-
-var start = async function(){
-  console.log(&quot;start&quot;)
-  fun1_out = await func1(&quot;start sending this off&quot;)
-  fun2_out = await func2(fun1_out)
-  fun3_out = await func3(fun2_out)
-};
-start();
-
-
-</code></pre>
 
   <br>
     
@@ -561,7 +500,7 @@ start();
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>

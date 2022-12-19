@@ -34,6 +34,9 @@
         
         var pageToc = [
           {title: "DICOM Conversion to Viewable Image", url: "#_top", children: [
+              {title: "to png", url: "#to-png" },
+              {title: "cv2", url: "#cv2" },
+              {title: "Scale between 0 and 1 based on BitsStored", url: "#scale-between-0-and-1-based-on-bitsstored" },
           ]},
         ];
 
@@ -82,6 +85,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="dicom-conversion-to-viewable-image">DICOM Conversion to Viewable Image</h1>
+<h2 id="to-png">to png</h2>
 <blockquote>
 <p>Much simpler than previous example and rescales appropriately.</p>
 </blockquote>
@@ -125,6 +129,7 @@ def saveimage(adjust_for_contrast=False):
 
 saveimage(adjust_for_contrast=True)
 </code></pre>
+<h2 id="cv2">cv2</h2>
 <p>Source: <a href="https://medium.com/@vivek8981/dicom-to-jpg-and-extract-all-patients-information-using-python-5e6dd1f1a07d">medium</a></p>
 <blockquote>
 <p>This example doesn't scale the DICOM pixel array between values of 0-255 and therefore clips all data between 255 and whatever max value the pixel array has. Likewise for negative numbers, which are clipped by 0.</p>
@@ -153,6 +158,53 @@ if __name__ == &quot;__main__&quot;:
         if n % 50 == 0:
             print('{} image converted'.format(n))
 
+</code></pre>
+<h2 id="scale-between-0-and-1-based-on-bitsstored">Scale between 0 and 1 based on BitsStored</h2>
+<pre><code class="language-python">import os
+import pydicom
+import numpy as np
+import cv2
+import csv
+from glob import glob
+from copy import copy
+from medpy.io.load import load
+#
+curr_file = '/home/ken.chang@ccds.io/mnt/2015P002510/MammoDensity/datapulls/MGH/Cohort2010/1003105_13094616/1.dcm'
+#
+ds = pydicom.dcmread(curr_file,stop_before_pixels=True)
+#Use DR and not CR
+if ds.Modality == 'DR':
+    curr_img, curr_header = load(curr_file)
+    curr_img = np.squeeze(curr_img).T.astype(np.float)
+    #
+    #Invert intensities if monochrome 1
+    if '1' in ds.PhotometricInterpretation:
+        curr_img2 = copy(curr_img)*-1
+    else:
+        curr_img2 = copy(curr_img)
+    #
+    #Can modify as well to handle other bit and monochrome combinations
+    if (ds.BitsStored == 12) and '1' in ds.PhotometricInterpretation:
+        curr_img3 = curr_img2+4095
+        curr_img3 = curr_img3/4095.0
+    elif (ds.BitsStored == 12) and '2' in ds.PhotometricInterpretation:
+        curr_img3 = curr_img2/4095.0
+    elif (ds.BitsStored == 14) and '1' in ds.PhotometricInterpretation:
+        curr_img3 = curr_img2+16383
+        curr_img3 = curr_img3/16383.0
+    elif (ds.BitsStored == 14) and '2' in ds.PhotometricInterpretation:
+        curr_img3 = curr_img3/16383.0
+    else:
+        print('error')
+else:
+    print('error')
+#
+# #resize and replicate into 3 channels
+curr_img4 = cv2.resize(curr_img3, (224, 224))
+curr_img4 = np.concatenate((curr_img4[:,:,np.newaxis],curr_img4[:,:,np.newaxis],curr_img4[:,:,np.newaxis]),axis=-1)
+#
+savename = #define the savename
+np.save(savename,curr_img4)
 </code></pre>
 
   <br>
@@ -189,7 +241,7 @@ if __name__ == &quot;__main__&quot;:
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>

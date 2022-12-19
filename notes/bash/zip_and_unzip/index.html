@@ -36,7 +36,6 @@
           {title: "Zipping and Unzipping", url: "#_top", children: [
               {title: "zip, unzip", url: "#zip-unzip" },
               {title: "Tar Files", url: "#tar-files" },
-              {title: "RAR Files", url: "#rar-files" },
           ]},
         ];
 
@@ -261,28 +260,6 @@ test.tar  test.txt
 <pre><code class="language-bash">tar zxvf Slicer-4.8.1-linux-amd64.tar.gz
 </code></pre>
 <p>FYI: (<a href="https://stackoverflow.com/questions/21929223/what-does-zxvf-mean-in-tar-zxvf-filename">Link</a>)</p>
-<h2 id="rar-files">RAR Files</h2>
-<p><a href="https://linuxhint.com/extract_rar_files_ubuntu/">linuxhint</a></p>
-<h3 id="install-rar-and-unrar">Install rar and unrar</h3>
-<h4 id="rar">rar</h4>
-<pre><code class="language-bash">sudo apt-get install rar
-</code></pre>
-<pre><code class="language-bash">rar a filename.rar filename1
-</code></pre>
-<p>This will make a filename.rar with a folder filename1 in it and files won't be at root in te directory. To do that do the following:</p>
-<pre><code class="language-bash">cd filename1
-rar a ../filename.rar ./
-cd ../ # to return to original directory
-</code></pre>
-<h4 id="unrar">unrar</h4>
-<pre><code class="language-bash">sudo apt-get install unrar
-</code></pre>
-<p>Extract into current directory</p>
-<pre><code class="language-bash">unrar e filename.rar
-</code></pre>
-<p>Extract into specific directory (/home):</p>
-<pre><code class="language-bash">unrar  e filename.rar /home/
-</code></pre>
 
   <br>
     
@@ -318,7 +295,7 @@ cd ../ # to return to original directory
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>
