@@ -62,6 +62,33 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../tim_sort/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../tim_sort/" class="btn btn-xs btn-link">
+        Tim Sort
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../insertion_sort/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../insertion_sort/" class="btn btn-xs btn-link">
+        Insertion Sort
+      </a>
+    </div>
+    
+  </div>
+
+    
 
     <h1 id="merge-sort">Merge Sort</h1>
 <blockquote>
@@ -153,6 +180,7 @@ def mergeSort(a):
             # final merge should consider
             # unmerged sublist if input arr
             # size is not power of 2            
+            print(f&quot;merge({a}, {l}, {m}, {r})&quot;)
             merge(a, l, m, r)
             l += width*2
         # Increasing sub array size by powers of 2
@@ -161,6 +189,75 @@ def mergeSort(a):
 
 # Merge Function
 def merge(a, l, m, r):
+    n1 = m - l + 1
+    n2 = r - m
+    L = [0] * n1
+    R = [0] * n2
+    for i in range(0, n1):
+        L[i] = a[l + i]
+    for i in range(0, n2):
+        R[i] = a[m + i + 1]
+    print(f&quot;n1: {n1} n2: {n2} L: {L} R: {R}&quot;)
+    i, j, k = 0, 0, l
+    while i &lt; n1 and j &lt; n2:
+        if L[i] &lt;= R[j]:
+            a[k] = L[i]
+            i += 1
+        else:
+            a[k] = R[j]
+            j += 1
+        k += 1
+    while i &lt; n1:
+        a[k] = L[i]
+        i += 1
+        k += 1
+    while j &lt; n2:
+        a[k] = R[j]
+        j += 1
+        k += 1
+
+
+# Driver code
+a = [-74,48,-20,2,10,-84,-5,-9,11,-24,-91,2,-71,64,63,80,28,-30,-58,-11,-44,-87,-22,54,-74,-10,-55,-28,-46,29,10,50,-72,34,26,25,8,51,13,30,35,-8,50,65,-6,16,-2,21,-78,35,-13,14,23,-3,26,-90,86,25,-56,91,-13,92,-25,37,57,-20,-69,98,95,45,47,29,86,-28,73,-44,-46,65,-84,-96,-24,-12,72,-68,93,57,92,52,-45,-2,85,-63,56,55,12,-85,77,-39]
+a = [-1,5,12,11,13,5,6,-2,0,7]
+print(&quot;Given array is &quot;)
+print(a)
+mergeSort(a)
+
+print(&quot;Sorted array is &quot;)
+print(a)
+
+# Contributed by Madhur Chhangani [RCOEM]
+# corrected and improved by @mahee96
+
+</code></pre>
+<pre><code class="language-python">
+# perform bottom up merge
+def mergeSort(a):
+    # start with least partition size of 2^0 = 1
+    width = 1
+    n = len(a)                                         
+    # subarray size grows by powers of 2
+    # since growth of loop condition is exponential,
+    # time consumed is logarithmic (log2n)
+    while (width &lt; n):
+        # always start from leftmost
+        l=0;
+        while (l &lt; n):
+            r = min(l+(width*2-1), n-1)        
+            m = min(l+width-1,n-1)
+            # final merge should consider
+            # unmerged sublist if input arr
+            # size is not power of 2             
+            merge(a, l, m, r)
+            l += width*2
+        # Increasing sub array size by powers of 2
+        width *= 2
+    return a
+
+# Merge Function
+def merge(a, l, m, r):
+    print(f&quot;{a}, {l}, {m}, {r})&quot;)
     n1 = m - l + 1
     n2 = r - m
     L = [0] * n1
@@ -200,19 +297,43 @@ mergeSort(a)
 print(&quot;Sorted array is &quot;)
 print(a)
 
-# Contributed by Madhur Chhangani [RCOEM]
-# corrected and improved by @mahee96
-
 </code></pre>
 
   <br>
     
 
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../tim_sort/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../tim_sort/" class="btn btn-xs btn-link">
+        Tim Sort
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../insertion_sort/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../insertion_sort/" class="btn btn-xs btn-link">
+        Insertion Sort
+      </a>
+    </div>
+    
+  </div>
+
     <br>
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>

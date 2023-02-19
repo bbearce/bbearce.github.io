@@ -47,6 +47,7 @@
               {title: "Tagging", url: "#tagging" },
               {title: "Log", url: "#log" },
               {title: "Replace Local Changes", url: "#replace-local-changes" },
+              {title: "Fetching Remote Branch", url: "#fetching-remote-branch" },
               {title: "Useful Hints", url: "#useful-hints" },
               {title: "Clone Single Branch", url: "#clone-single-branch" },
           ]},
@@ -117,6 +118,7 @@ Initialized empty Git repository in /home/bbearce/Desktop/git_practice/.git/
 <p>Your local repository consists of three "trees" maintained by git. the first one is your <code>Working Directory</code> which holds the actual files. The second one is the <code>Index</code> which acts as a staging area and finally the <code>HEAD</code> which points to the last commit you've made.</p>
 <p><img alt="Basic Git Workflow" src="/notes/git/git_trees.png" /></p>
 <h2 id="add-and-commit">Add and Commit</h2>
+<h3 id="basics">Basics</h3>
 <p>You can propose changes (add it to the Index) using:</p>
 <pre><code class="language-bash">git add &lt;filename&gt;
 </code></pre>
@@ -139,6 +141,37 @@ OPTIONS
        -v, --verbose
            Be a little more verbose and show remote url after name. NOTE: This must be placed between remote and subcommand.
 </code></pre>
+<h3 id="add-hunks">Add hunks</h3>
+<blockquote>
+<p><a href="https://stackoverflow.com/questions/1085162/commit-only-part-of-a-files-changes-in-git">Source</a></p>
+</blockquote>
+<p>You can use:</p>
+<pre><code>git add --patch &lt;filename&gt;
+</code></pre>
+<p>or for short:</p>
+<pre><code>git add -p &lt;filename&gt;
+</code></pre>
+<p>Git will break down your file into what it thinks are sensible "hunks" (portions of the file). It will then prompt you with this question:</p>
+<pre><code>Stage this hunk [y,n,q,a,d,/,j,J,g,s,e,?]?
+</code></pre>
+<p>Here is a description of each option:</p>
+<ul>
+<li>y stage this hunk for the next commit</li>
+<li>n do not stage this hunk for the next commit</li>
+<li>q quit; do not stage this hunk or any of the remaining hunks</li>
+<li>a stage this hunk and all later hunks in the file</li>
+<li>d do not stage this hunk or any of the later hunks in the file</li>
+<li>g select a hunk to go to</li>
+<li>/ search for a hunk matching the given regex</li>
+<li>j leave this hunk undecided, see next undecided hunk</li>
+<li>J leave this hunk undecided, see next hunk</li>
+<li>k leave this hunk undecided, see previous undecided hunk</li>
+<li>K leave this hunk undecided, see previous hunk</li>
+<li>s split the current hunk into smaller hunks</li>
+<li>e manually edit the current hunk
+You can then edit the hunk manually by replacing +/- by # (thanks veksen)</li>
+<li>? print hunk help</li>
+</ul>
 <h2 id="adding-a-new-remote">Adding a New Remote</h2>
 <blockquote>
 <p>Courtesy of <a href="https://articles.assembla.com/en/articles/1136998-how-to-add-a-new-remote-to-your-git-repo#targetText=To%20add%20a%20new%20remote%2C%20use%20the%20git%20remote%20add,tab%20of%20your%20Git%20repo">articles.assembla.com</a></p>
@@ -239,6 +272,29 @@ and the repository exists.
 <p><code>git branch -d feature_x</code></p>
 <p>A branch is not available to others unless you push the branch to your remote repository:</p>
 <p><code>git push origin &lt;branch&gt;</code></p>
+<h3 id="show-remote-branches-and-their-local-associations">Show remote branches and their local associations</h3>
+<pre><code>git remote show origin
+</code></pre>
+<h3 id="see-what-remote-branch-your-local-branch-is-tracking">See what remote branch your local branch is tracking</h3>
+<pre><code>git branch -vv
+</code></pre>
+<p>Ex:</p>
+<pre><code>debian@codabench-test-acl-220627:~/codabench$ git branch -vv
+  develop                   46c1ff7 [origin/develop] Merge pull request #696 from codalab/remove-vnc
+* leaderboard_v2_comp_fixes 7c2811e edit compute worker so that yaml gets correct amount of inputs
+</code></pre>
+<blockquote>
+<p>local develop tracks remote develop branch at remote "origin". leaderboard_v2_comp_fixes is currently not tracking a remote branch</p>
+</blockquote>
+<h3 id="add-local-branch-to-remote">Add local branch to remote</h3>
+<pre><code>git push -u origin &lt;branch&gt;
+# short for
+git push --set-upstream origin &lt;branch&gt;
+</code></pre>
+<h3 id="check-out-a-pr-from-your-repos-branch-or-anothers">Check out a PR from your repo's branch or another's:</h3>
+<pre><code class="language-bash">git fetch origin pull/763/head:anyname
+git checkout anyname
+</code></pre>
 <h2 id="update-and-merge">Update and Merge</h2>
 <p>To update your local repository to the newest commit, execute:</p>
 <p><code>git pull</code></p>
@@ -271,6 +327,37 @@ and the repository exists.
 <p>If you instead want to drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this:</p>
 <pre><code class="language-bash">git fetch origin
 git reset --hard origin/master
+</code></pre>
+<h2 id="fetching-remote-branch">Fetching Remote Branch</h2>
+<p><a href="https://stackoverflow.com/questions/9537392/git-fetch-remote-branch">Source</a>
+<a href="https://git-scm.com/book/en/v2/Git-Branching-Remote-Branches#_tracking_branches">Github</a></p>
+<h3 id="update">Update:</h3>
+<p>A new command, git switch has been added that simplifies the effort.</p>
+<p>If daves_branch exists on the remote repository, but not on your local branch, you can simply type:</p>
+<pre><code class="language-bash">git switch daves_branch
+</code></pre>
+<p>Since you do not have the branch locally, this will automatically make switch look on the remote repo. It will then also automatically set up remote branch tracking.</p>
+<h3 id="original-way">Original Way:</h3>
+<p>Checking out a local branch from a remote-tracking branch automatically creates what is called a “tracking branch” (and the branch it tracks is called an “upstream branch”). Tracking branches are local branches that have a direct relationship to a remote branch. If you’re on a tracking branch and type <code>git pull</code>, Git automatically knows which server to fetch from and which branch to merge in.</p>
+<p>When you clone a repository, it generally automatically creates a <code>master</code> branch that tracks <code>origin/master</code>. However, you can set up other tracking branches if you wish — ones that track branches on other remotes, or don’t track the <code>master</code> branch. The simple case is the example you just saw, running <code>git checkout -b &lt;branch&gt; &lt;remote&gt;/&lt;branch&gt;</code>. This is a common enough operation that Git provides the <code>--track</code> shorthand:</p>
+<pre><code class="language-bash">$ git checkout --track origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+</code></pre>
+<p>In fact, this is so common that there’s even a shortcut for that shortcut. If the branch name you’re trying to checkout (a) doesn’t exist and (b) exactly matches a name on only one remote, Git will create a tracking branch for you:</p>
+<pre><code class="language-bash">$ git checkout serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
+Switched to a new branch 'serverfix'
+</code></pre>
+<p>To set up a local branch with a different name than the remote branch, you can easily use the first version with a different local branch name:</p>
+<pre><code class="language-bash">$ git checkout -b sf origin/serverfix
+Branch sf set up to track remote branch serverfix from origin.
+Switched to a new branch 'sf'
+</code></pre>
+<p>Now, your local branch <code>sf</code> will automatically pull from <code>origin/serverfix</code>.</p>
+<p>If you already have a local branch and want to set it to a remote branch you just pulled down, or want to change the upstream branch you’re tracking, you can use the <code>-u</code> or <code>--set-upstream-to</code> option to <code>git branch</code> to explicitly set it at any time.</p>
+<pre><code class="language-bash">$ git branch -u origin/serverfix
+Branch serverfix set up to track remote branch serverfix from origin.
 </code></pre>
 <h2 id="useful-hints">Useful Hints</h2>
 <p>If you want a built-in git GUI, use:</p>
@@ -322,7 +409,7 @@ git reset --hard origin/master
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>
