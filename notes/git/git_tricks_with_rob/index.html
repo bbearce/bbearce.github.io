@@ -11,7 +11,7 @@
     
     <link rel="shortcut icon" href="../../../img/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    <title>HTML - Ben's Code Journal</title>
+    <title>Git Tricks with Rob - Ben's Code Journal</title>
     <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
     <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
     <link href="../../../css/base.css" rel="stylesheet">
@@ -33,7 +33,7 @@
       var is_top_frame = false;
         
         var pageToc = [
-          {title: "HTML", url: "#_top", children: [
+          {title: "Git Tricks with Rob", url: "#_top", children: [
           ]},
         ];
 
@@ -53,76 +53,48 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     
-    
-      
-    
 
-  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
-    
-    <div class="wm-article-nav pull-right">
-      <a href="../../css/css/" class="btn btn-xs btn-default pull-right">
-        Next
-        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-      </a>
-      <a href="../../css/css/" class="btn btn-xs btn-link">
-        CSS
-      </a>
-    </div>
-    
-    <div class="wm-article-nav">
-      <a href="../../sql/mysql/mySQL/" class="btn btn-xs btn-default pull-left">
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../sql/mysql/mySQL/" class="btn btn-xs btn-link">
-        mySQL
-      </a>
-    </div>
-    
-  </div>
+    <h1 id="git-tricks-with-rob">Git Tricks with Rob</h1>
+<pre><code class="language-bash"># Show config
+git config -l
 
-    
+# Show origin tracking 
+git remote show origin
 
-    <h1 id="html">HTML</h1>
-<p>The basic html tree is as follows:</p>
-<pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;title&gt;&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
 
-&lt;/body&gt;
-&lt;/html&gt;
+https://stackoverflow.com/questions/6591213/how-do-i-rename-a-local-git-branch
+
+
+# To rename a branch while pointed to any branch:
+git branch -m &lt;oldname&gt; &lt;newname&gt;
+To rename the current branch:
+
+# Rename local branch
+git branch -m &lt;newname&gt;
+
+
+
+# ssh key login
+ssh -T git@github.com
+
+# remote 
+git branch -r
+
+git remote update # get's all new remote branches; fetch for all versus 1 remote
+
+git hist upstream
+
+
+# 
+git checkout upstream/cervix_fgs -- &lt;path to file name - relative&gt;
+
+
+# Unstage (un-add) back to git branch creation if this is a new branch
+git reset HEAD &lt;path to file name - relative&gt;
 </code></pre>
 
   <br>
     
-
-    
-    
-      
-    
-
-  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
-    
-    <div class="wm-article-nav pull-right">
-      <a href="../../css/css/" class="btn btn-xs btn-default pull-right">
-        Next
-        <i class="fa fa-chevron-right" aria-hidden="true"></i>
-      </a>
-      <a href="../../css/css/" class="btn btn-xs btn-link">
-        CSS
-      </a>
-    </div>
-    
-    <div class="wm-article-nav">
-      <a href="../../sql/mysql/mySQL/" class="btn btn-xs btn-default pull-left">
-        <i class="fa fa-chevron-left" aria-hidden="true"></i>
-        Previous</a><a href="../../sql/mysql/mySQL/" class="btn btn-xs btn-link">
-        mySQL
-      </a>
-    </div>
-    
-  </div>
 
     <br>
 </div>
