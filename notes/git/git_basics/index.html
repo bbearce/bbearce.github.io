@@ -38,6 +38,7 @@
               {title: "Checkout a Repo", url: "#checkout-a-repo" },
               {title: "Workflow", url: "#workflow" },
               {title: "Add and Commit", url: "#add-and-commit" },
+              {title: "Undo a Commit", url: "#undo-a-commit" },
               {title: "Adding a New Remote", url: "#adding-a-new-remote" },
               {title: "Pushing Changes", url: "#pushing-changes" },
               {title: "Push Without User:Pass", url: "#push-without-userpass" },
@@ -173,6 +174,19 @@ OPTIONS
 You can then edit the hunk manually by replacing +/- by # (thanks veksen)</li>
 <li>? print hunk help</li>
 </ul>
+<h2 id="undo-a-commit">Undo a Commit</h2>
+<p>There are two main ways to undo commits:
+* soft: commit undone and changes left un-staged</p>
+<pre><code class="language-bash">git reset --soft HEAD~1
+</code></pre>
+<ul>
+<li>hard: commit undone and changes completely removed (lost forever)</li>
+</ul>
+<pre><code class="language-bash">git reset --hard HEAD~1
+</code></pre>
+<blockquote>
+<p>Here the ~1 indicates go back one commit</p>
+</blockquote>
 <h2 id="adding-a-new-remote">Adding a New Remote</h2>
 <blockquote>
 <p>Courtesy of <a href="https://articles.assembla.com/en/articles/1136998-how-to-add-a-new-remote-to-your-git-repo#targetText=To%20add%20a%20new%20remote%2C%20use%20the%20git%20remote%20add,tab%20of%20your%20Git%20repo">articles.assembla.com</a></p>
