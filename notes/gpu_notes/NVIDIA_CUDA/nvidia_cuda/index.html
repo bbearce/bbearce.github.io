@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>NVIDIA / CUDA - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "NVIDIA and CUDA Setup", url: "#_top", children: [
+              {title: "Intro", url: "#intro" },
+              {title: "Following along (summary)", url: "#following-along-summary" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../.." class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../a100_mig/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../a100_mig/" class="btn btn-xs btn-link">
+        MIG
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="nvidia-and-cuda-setup">NVIDIA and CUDA Setup</h1>
+<h2 id="intro">Intro</h2>
+<p>This almost never works however I did just get it to work so I will document what worked.</p>
+<p>First (extremely abbreviated):</p>
+<ol>
+<li>Deployed Azure VM Type: <code>Standard NC6s v3 (6 vcpus, 112 GiB memory)</code>  </li>
+<li>Expanded the disk (not required but I ran out of room some how)  </li>
+</ol>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ sudo sh cuda_12.1.1_530.30.02_linux.run
+
+Extraction failed.
+Ensure there is enough space in /tmp and that the installation package is not corrupt
+Signal caught, cleaning up
+</code></pre>
+<p>so...you need more than <code>8GB</code> of disk space...</p>
+<blockquote>
+<p>Use these docs : <a href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html">docs.nvidia.com</a></p>
+</blockquote>
+<h2 id="following-along-summary">Following along (summary)</h2>
+<h3 id="21-verify-you-have-a-cuda-capable-gpu">2.1. Verify You Have a CUDA-Capable GPU</h3>
+<pre><code class="language-bash">$ lspci | grep -i nvidia
+0001:00:00.0 3D controller: NVIDIA Corporation GV100GL [Tesla V100 PCIe 16GB] (rev a1)
+</code></pre>
+<p>Sweet we are good to go.</p>
+<h3 id="22-verify-you-have-a-supported-version-of-linux">2.2. Verify You Have a Supported Version of Linux</h3>
+<pre><code class="language-bash">x86_64
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=20.04
+DISTRIB_CODENAME=focal
+DISTRIB_DESCRIPTION=&quot;Ubuntu 20.04.3 LTS&quot;
+NAME=&quot;Ubuntu&quot;
+VERSION=&quot;20.04.3 LTS (Focal Fossa)&quot;
+ID=ubuntu
+ID_LIKE=debian
+PRETTY_NAME=&quot;Ubuntu 20.04.3 LTS&quot;
+VERSION_ID=&quot;20.04&quot;
+HOME_URL=&quot;https://www.ubuntu.com/&quot;
+SUPPORT_URL=&quot;https://help.ubuntu.com/&quot;
+BUG_REPORT_URL=&quot;https://bugs.launchpad.net/ubuntu/&quot;
+PRIVACY_POLICY_URL=&quot;https://www.ubuntu.com/legal/terms-and-policies/privacy-policy&quot;
+VERSION_CODENAME=focal
+UBUNTU_CODENAME=focal
+</code></pre>
+<p>Ubuntu 20+ is fairly new as of 06_02_2023 so I'd say yes...</p>
+<h3 id="23-verify-the-system-has-gcc-installed">2.3. Verify the System Has gcc Installed</h3>
+<pre><code class="language-bash">$ gcc --version
+gcc (Ubuntu 9.4.0-1ubuntu1~20.04.1) 9.4.0
+Copyright (C) 2019 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+</code></pre>
+<p>I think I had to install but that was trivial:</p>
+<pre><code class="language-bash">$ sudo apt install gcc
+</code></pre>
+<h3 id="24-verify-the-system-has-the-correct-kernel-headers-and-development-packages-installed">2.4. Verify the System has the Correct Kernel Headers and Development Packages Installed</h3>
+<p>Under the ubuntu section I used:</p>
+<pre><code class="language-bash">sudo apt-get install linux-headers-$(uname -r)
+</code></pre>
+<h3 id="25-install-mlnx_ofed">2.5. Install MLNX_OFED</h3>
+<p>Totally skipped this section...don't know what it is...</p>
+<h3 id="26-choose-an-installation-method">2.6. Choose an Installation Method</h3>
+<p>Secret sauce right here!</p>
+<p>...from docs</p>
+<p>"The CUDA Toolkit can be installed using either of two different installation mechanisms: distribution-specific packages (RPM and Deb packages), or a <code>distribution-independent package (runfile packages)</code>.</p>
+<p>The distribution-independent package has the advantage of working across a wider set of Linux distributions, but does not update the distribution’s native package management system. The distribution-specific packages interface with the distribution’s native package management system. It is recommended to use the distribution-specific packages, where possible."</p>
+<blockquote>
+<p>I'm sure the distribution-specific is better but it wasn't working and I don't have time for that...so independent it is! A little confusing but the link you want is in the next section...so on we go.</p>
+</blockquote>
+<h3 id="27-download-the-nvidia-cuda-toolkit">2.7. Download the NVIDIA CUDA Toolkit</h3>
+<p>The NVIDIA CUDA Toolkit is available at <a href="https://developer.nvidia.com/cuda-downloads">https://developer.nvidia.com/cuda-downloads</a>.</p>
+<p><img alt="operating_system.png" src="../operating_system.png" /></p>
+<p>Code of course:</p>
+<pre><code class="language-bash">wget https://developer.download.nvidia.com/compute/cuda/12.1.1/local_installers/cuda_12.1.1_530.30.02_linux.run
+
+sudo sh cuda_12.1.1_530.30.02_linux.run
+</code></pre>
+<h3 id="yay-it-worked-right">YaY! it worked right?</h3>
+<p>Of course not. Why would such a good UI with filters let you down...2023 baby...life ain't perfect yet.........so here we go wtf...</p>
+<h4 id="first-error-disk-space">First Error: Disk space</h4>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ sudo sh cuda_12.1.1_530.30.02_linux.run
+
+Extraction failed.
+Ensure there is enough space in /tmp and that the installation package is not corrupt
+Signal caught, cleaning up
+</code></pre>
+<p>Add more space...</p>
+<h4 id="second-error-nouveau">Second Error: Nouveau???</h4>
+<p>We have to disable the Nauveau kernel driver. Enter the <a href="https://askubuntu.com/questions/841876/how-to-disable-nouveau-kernel-driver">stack</a>. This discussion led to this link <a href="http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#pre-installation-actions">NVIDIA developer zone</a>. The thing is this is the same guide we've been using! However <a href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#disabling-nouveau">WHAT YOU NEED</a> is much further down.</p>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ cat /var/log/cuda-installer.log
+[INFO]: Driver not installed.
+[INFO]: Checking compiler version...
+[INFO]: gcc location: /usr/bin/gcc
+
+[INFO]: gcc version: gcc version 9.4.0 (Ubuntu 9.4.0-1ubuntu1~20.04.1) 
+
+[INFO]: Initializing menu
+[INFO]: nvidia-fs.setKOVersion(2.15.3)
+[INFO]: Setup complete
+[INFO]: Installing: Driver
+[INFO]: Installing: 530.30.02
+[INFO]: Executing NVIDIA-Linux-x86_64-530.30.02.run --ui=none --no-questions --accept-license --disable-nouveau --no-cc-version-check --install-libglvnd  2&gt;&amp;1
+[INFO]: Finished with code: 256
+[ERROR]: Install of driver component failed. Consult the driver log at /var/log/nvidia-installer.log for more details.
+[ERROR]: Install of 530.30.02 failed, quitting
+
+
+.... we need to look in  /var/log/nvidia-installer.log ....
+
+
+
+azureuser@gpu-worker:~$ cat /var/log/nvidia-installer.log
+nvidia-installer log file '/var/log/nvidia-installer.log'
+creation time: Fri Jun  2 20:09:52 2023
+installer version: 530.30.02
+
+PATH: /tmp/makeself.qlAaARJl:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin
+
+nvidia-installer command line:
+    ./nvidia-installer
+    --ui=none
+    --no-questions
+    --accept-license
+    --disable-nouveau
+    --no-cc-version-check
+    --install-libglvnd
+
+Using built-in stream user interface
+-&gt; Detected 6 CPUs online; setting concurrency level to 6.
+-&gt; Installing NVIDIA driver version 530.30.02.
+ERROR: The Nouveau kernel driver is currently in use by your system.  This driver is incompatible with the NVIDIA driver, and must be disabled before proceeding.  Please consult the NVIDIA driver README and your Linux distribution's documentation for details on how to correctly disable the Nouveau kernel driver.
+WARNING: One or more modprobe configuration files to disable Nouveau are already present at: /usr/lib/modprobe.d/nvidia-installer-disable-nouveau.conf, /etc/modprobe.d/nvidia-installer-disable-nouveau.conf.  Please be sure you have rebooted your system since these files were written.  If you have rebooted, then Nouveau may be enabled for other reasons, such as being included in the system initial ramdisk or in your X configuration file.  Please consult the NVIDIA driver README and your Linux distribution's documentation for details on how to correctly disable the Nouveau kernel driver.
+-&gt; For some distributions, Nouveau can be disabled by adding a file in the modprobe configuration directory.  Would you like nvidia-installer to attempt to create this modprobe file for you? (Answer: Yes)
+-&gt; One or more modprobe configuration files to disable Nouveau have been written.  For some distributions, this may be sufficient to disable Nouveau; other distributions may require modification of the initial ramdisk.  Please reboot your system and attempt NVIDIA driver installation again.  Note if you later wish to re-enable Nouveau, you will need to delete these files: /usr/lib/modprobe.d/nvidia-installer-disable-nouveau.conf, /etc/modprobe.d/nvidia-installer-disable-nouveau.conf
+ERROR: Installation has failed.  Please see the file '/var/log/nvidia-installer.log' for details.  You may find suggestions on fixing installation problems in the README available on the Linux driver download page at www.nvidia.com.
+</code></pre>
+<p>Notice lots of text about Nouveau...Let's fix that.</p>
+<h5 id="section-836-ubuntu">Section: 8.3.6. Ubuntu</h5>
+<p>Create a file at /etc/modprobe.d/blacklist-nouveau.conf with the following contents:</p>
+<pre><code class="language-bash">blacklist nouveau
+options nouveau modeset=0
+</code></pre>
+<p>Regenerate the kernel initramfs:</p>
+<pre><code class="language-bash">sudo update-initramfs -u
+</code></pre>
+<p>I restarted the VM after that. Not sure if that was necessary but the stack over flow discussion recommended it.</p>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ sudo sh cuda_12.1.1_530.30.02_linux.run
+ Installation failed. See log at /var/log/cuda-installer.log for details.
+</code></pre>
+<p>Mother....!</p>
+<h4 id="third-error-install-make">Third Error: install make</h4>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ cat /var/log/cuda-installer.log
+...
+
+[ERROR]: Install of driver component failed. Consult the driver log at /var/log/nvidia-installer.log for more details.
+[ERROR]: Install of 530.30.02 failed, quitting
+
+
+azureuser@gpu-worker:~$ cat /var/log/nvidia-installer.log
+...
+
+ERROR: Unable to find the development tool `make` in your path; please make sure that you have the package 'make' installed.  If make is installed on your system, then please check that `make` is in your PATH.
+ERROR: Installation has failed.  Please see the file '/var/log/nvidia-installer.log' for details.  You may find suggestions on fixing installation problems in the README available on the Linux driver download page at www.nvidia.com.
+</code></pre>
+<p>Ok this one is easy:</p>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ sudo apt install make
+</code></pre>
+<h4 id="success">Success!</h4>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ sudo sh cuda_12.1.1_530.30.02_linux.run
+===========
+= Summary =
+===========
+
+Driver:   Installed
+Toolkit:  Installed in /usr/local/cuda-12.1/
+
+Please make sure that
+ -   PATH includes /usr/local/cuda-12.1/bin
+ -   LD_LIBRARY_PATH includes /usr/local/cuda-12.1/lib64, or, add /usr/local/cuda-12.1/lib64 to /etc/ld.so.conf and run ldconfig as root
+
+To uninstall the CUDA Toolkit, run cuda-uninstaller in /usr/local/cuda-12.1/bin
+To uninstall the NVIDIA Driver, run nvidia-uninstall
+Logfile is /var/log/cuda-installer.log
+
+</code></pre>
+<p>As they suggest add paths to PATH and LD_LIBRARY_PATH. Add this to ~/.bashrc</p>
+<pre><code class="language-bash"># cuda
+export PATH=/usr/local/cuda-12.1/bin:$PATH
+export LD_LIBRARY_PATH=/usr/local/cuda-12.1/lib64:$LD_LIBRARY_PATH
+</code></pre>
+<pre><code class="language-bash">azureuser@gpu-worker:~$ nvidia-smi
+Fri Jun  2 20:24:58 2023       
++---------------------------------------------------------------------------------------+
+| NVIDIA-SMI 530.30.02              Driver Version: 530.30.02    CUDA Version: 12.1     |
+|-----------------------------------------+----------------------+----------------------+
+| GPU  Name                  Persistence-M| Bus-Id        Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp  Perf            Pwr:Usage/Cap|         Memory-Usage | GPU-Util  Compute M. |
+|                                         |                      |               MIG M. |
+|=========================================+======================+======================|
+|   0  Tesla V100-PCIE-16GB            Off| 00000001:00:00.0 Off |                  Off |
+| N/A   22C    P0               34W / 250W|      0MiB / 16384MiB |      0%      Default |
+|                                         |                      |                  N/A |
++-----------------------------------------+----------------------+----------------------+
+
++---------------------------------------------------------------------------------------+
+| Processes:                                                                            |
+|  GPU   GI   CI        PID   Type   Process name                            GPU Memory |
+|        ID   ID                                                             Usage      |
+|=======================================================================================|
+|  No running processes found                                                           |
++---------------------------------------------------------------------------------------+
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../.." class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../a100_mig/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../a100_mig/" class="btn btn-xs btn-link">
+        MIG
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
