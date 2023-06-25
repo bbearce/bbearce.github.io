@@ -329,6 +329,21 @@ git checkout anyname
 <p><code>git add &lt;filename&gt;</code></p>
 <p>Before merging changes, you can also preview them by using:</p>
 <p><code>git diff &lt;source_branch&gt; &lt;target_branch&gt;</code></p>
+<h3 id="undo-merge">Undo Merge</h3>
+<blockquote>
+<p>Source <a href="https://freecodecamp.org/news/git-undo-merge-how-to-revert-the-last-merge-commit-in-git/">freecodecamp</a></p>
+</blockquote>
+<p>Use <code>git reflog</code> to find commit before merge. Why? Because what if you merged in like 30 commits (I did). Then you have to go one by one to find the correct commit to go back to.</p>
+<p>Checkout reflog at the bottom of this page under Useful Hints.</p>
+<h4 id="using-merge-safer">Using merge (safer)</h4>
+<p>Git provides a safer flag which is <code>--merge</code>. Use the <code>HEAD</code> keyword with the <code>--merge</code> flag by running <code>git reset --merge HEAD~1</code>.</p>
+<p>Run <code>git reset --merge &lt;previous-commit&gt;</code> for a specific commit.</p>
+<blockquote>
+<p>If you don’t get a response from this command when you use the --merge flag, don’t worry, it works.</p>
+</blockquote>
+<h4 id="using-reset-dangerous">Using reset (dangerous)</h4>
+<p>If you are not sure of the hash of the last commit, you can run <code>git reset --hard HEAD~1</code> to go back to the commit before the merge</p>
+<p>When you get the hash of the commit you want to get back to, run <code>git reset --hard &lt;commit-before-the-merge&gt;</code></p>
 <h2 id="tagging">Tagging</h2>
 <p>It's recommended to create tags for software releases. This is a known concept, which also exists in SVN. You can create a new tag named 1.0.0 by executing:</p>
 <p><code>git tag 1.0.0 1b2e1d63ff</code></p>
@@ -385,6 +400,42 @@ Switched to a new branch 'sf'
 Branch serverfix set up to track remote branch serverfix from origin.
 </code></pre>
 <h2 id="useful-hints">Useful Hints</h2>
+<h3 id="log_1">log</h3>
+<h4 id="general">General</h4>
+<p><code>git log</code> - shows commits.</p>
+<h4 id="commit-diff-between-branches">Commit diff between branches</h4>
+<p>2 dots:</p>
+<p>Suppose you are on myBranch, and you want to see only changes SINCE branching from master. </p>
+<pre><code class="language-bash">git log --oneline master..myBranch
+</code></pre>
+<p>3 dots:</p>
+<p>The three-dot version gives all changes from the tip of master to the tip of myBranch</p>
+<pre><code class="language-bash">git log --oneline master..myBranch
+</code></pre>
+<h3 id="reflog">Reflog</h3>
+<blockquote>
+<p><a href="https://staragile.com/blog/git-reflog">Source</a></p>
+</blockquote>
+<p>Reference logs, sometimes known as "reflogs" keep track of when the tips of branches and other references in the local repository are modified. Reflogs can be used in various Git operations to specify the previous value of a reference. </p>
+<pre><code>git reflog &lt;subcommand&gt; &lt;options&gt;
+</code></pre>
+<p>The git reflog can be found in the “.git” directory under the following paths:</p>
+<p>.git/logs/refs/heads/</p>
+<p>.git/logs/HEAD</p>
+<p>.git/logs/refs/stash #if stash has been utilised</p>
+<p>Default (<code>git reflog</code>):</p>
+<pre><code>git reflog show
+</code></pre>
+<p>Ouptut:</p>
+<pre><code class="language-bash">82cdf5f (HEAD -&gt; download_buttons) HEAD@{0}: merge develop: Merge made by the 'ort' strategy.
+81fade0 HEAD@{1}: checkout: moving from develop to download_buttons
+8b575df (origin/develop, origin/HEAD, develop) HEAD@{2}: pull: Fast-forward
+f55e5cc HEAD@{3}: pull: Fast-forward
+2b8de96 HEAD@{4}: checkout: moving from manual_comp_create_queue to develop
+eca5272 (origin/manual_comp_create_queue) HEAD@{5}: commit: remove debug statement
+c035cbe HEAD@{6}: commit: undefined calendar var in initial phase creation
+</code></pre>
+<h3 id="gitk">Gitk</h3>
 <p>If you want a built-in git GUI, use:</p>
 <p><code>gitk</code></p>
 <p>Use colorful git output:</p>
@@ -434,7 +485,7 @@ Branch serverfix set up to track remote branch serverfix from origin.
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>
