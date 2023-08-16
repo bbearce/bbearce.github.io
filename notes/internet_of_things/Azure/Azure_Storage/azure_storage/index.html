@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Azure Storage - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Overview of Azure Storage", url: "#_top", children: [
+              {title: "Blob Container", url: "#blob-container" },
+              {title: "File Share", url: "#file-share" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../overview/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../overview/" class="btn btn-xs btn-link">
+        Overview
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="overview-of-azure-storage">Overview of Azure Storage</h1>
+<h2 id="blob-container">Blob Container</h2>
+<h3 id="code">Code</h3>
+<pre><code class="language-bash"># https://learn.microsoft.com/en-us/azure/storage/blobs/blobfuse2-how-to-deploy?tabs=Ubuntu
+
+# How to install BlobFuse2
+## Option 1: Install BlobFuse2 from the Microsoft software repositories for Linux
+### To check your version of Linux, run the following command:
+cat /etc/*-release
+
+### Install libfuse-dev
+sudo wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+sudo apt-get update
+sudo apt-get install libfuse-dev # ubuntu 18.04
+# sudo apt-get install libfuse3-dev fuse3 # didn't work; this is for ubuntu &gt; 18.04
+
+### Install BlobFuse2
+sudo apt-get install blobfuse2
+
+
+# How to configure BlobFuse2
+## Create Blobfuse Config File(s)
+CONFIG=/home/azureuser/blobfuse-config.yaml
+touch $CONFIG
+vim $CONFIG
+
+## Create an empty directory to mount the blob container
+CONTAINER_DIR=/mnt/dlsparseviewctchallenge/bundles
+sudo mkdir -p $CONTAINER_DIR
+# echo $CONTAINER_DIR
+
+sudo blobfuse2 mount $CONTAINER_DIR --config-file=$CONFIG
+
+ls $CONTAINER_DIR
+</code></pre>
+<h3 id="config">Config</h3>
+<p><a href="https://github.com/Azure/azure-storage-fuse/blob/main/sampleStreamingConfig.yaml">Sample</a></p>
+<pre><code class="language-bash"># Refer ./setup/baseConfig.yaml for full set of config parameters
+
+allow-other: true
+
+logging:
+  type: syslog
+  level: log_debug
+
+components:
+  - libfuse
+  - stream
+  - attr_cache
+  - azstorage
+
+libfuse:
+  attribute-expiration-sec: 120
+  entry-expiration-sec: 120
+  negative-entry-expiration-sec: 240
+
+stream:
+  block-size-mb: 8
+  blocks-per-file: 3
+  cache-size-mb: 1024
+
+attr_cache:
+  timeout-sec: 7200
+
+azstorage:
+  type: block
+  account-name: mystorageaccount
+  account-key: mystoragekey
+  endpoint: https://mystorageaccount-CHANGEME.blob.core.windows.net
+  mode: key
+  container: mycontainer
+
+</code></pre>
+<h2 id="file-share">File Share</h2>
+<pre><code class="language-bash">sudo apt update -y;
+sudo apt remove azure-cli -y &amp;&amp; sudo apt autoremove -y
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+# Microsoft Account
+az login --use-device-code
+
+RESOURCE_GROUP_NAME=&quot;&quot;
+STORAGE_ACCOUNT_NAME=&quot;&quot;
+
+# This command assumes you have logged in with az login
+HTTP_ENDPOINT=$(az storage account show \
+    --resource-group $RESOURCE_GROUP_NAME \
+    --name $STORAGE_ACCOUNT_NAME \
+    --query &quot;primaryEndpoints.file&quot; --output tsv | tr -d '&quot;')
+SMBPATH=$(echo $HTTP_ENDPOINT | cut -c7-${#HTTP_ENDPOINT})
+FILE_HOST=$(echo $SMBPATH | tr -d &quot;/&quot;)
+
+# Test
+nc -zvw3 $FILE_HOST 445
+
+
+FILE_SHARE_NAME=&quot;&quot;
+
+MNT_ROOT=&quot;/mnt&quot;
+MNT_PATH=&quot;$MNT_ROOT/$STORAGE_ACCOUNT_NAME/$FILE_SHARE_NAME&quot;
+
+sudo mkdir -p $MNT_PATH
+
+# This command assumes you have logged in with az login
+HTTP_ENDPOINT=$(az storage account show \
+    --resource-group $RESOURCE_GROUP_NAME \
+    --name $STORAGE_ACCOUNT_NAME \
+    --query &quot;primaryEndpoints.file&quot; --output tsv | tr -d '&quot;')
+SMB_PATH=$(echo $HTTP_ENDPOINT | cut -c7-${#HTTP_ENDPOINT})$FILE_SHARE_NAME
+
+STORAGE_ACCOUNT_KEY=$(az storage account keys list \
+    --resource-group $RESOURCE_GROUP_NAME \
+    --account-name $STORAGE_ACCOUNT_NAME \
+    --query &quot;[0].value&quot; --output tsv | tr -d '&quot;')
+
+sudo mount -t cifs $SMB_PATH $MNT_PATH -o username=$STORAGE_ACCOUNT_NAME,password=$STORAGE_ACCOUNT_KEY,uid=$(id -u),gid=$(id -g),serverino,nosharesock,actimeo=30,mfsymlinks
+
+ls $MNT_PATH
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../overview/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../overview/" class="btn btn-xs btn-link">
+        Overview
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -195,7 +195,19 @@ You can then edit the hunk manually by replacing +/- by # (thanks veksen)</li>
 <p>In Git, the revert command is used to perform a revert operation, i.e., to revert some changes. It is similar to the reset command, but the only difference here is that you perform a new commit to go back to a particular commit. <strong>In short, it is fair to say that the git revert command is a commit</strong>.</p>
 <p>The Git revert command does not delete any data while performing the revert operation.</p>
 <h3 id="rebase">Rebase</h3>
-<p>ebase can sometimes be a little confusing to understand because it is very similar to a merge. The goal of merging and rebasing both is to take the commits from my feature branch and put them on to a master branch or any other branch. </p>
+<p>Rebase can sometimes be a little confusing to understand because it is very similar to a merge. The goal of merging and rebasing both is to take the commits from my feature branch and put them on to a master branch or any other branch. </p>
+<p>Get yourself into the right state which is an up to date develop\main branch and then checkout your feature branch which is a little behind develop\main but has a new feature.</p>
+<p>Ex:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/codabench$ git checkout download_buttons                                                                                                                                                                                                                                                                   
+Switched to branch 'download_buttons'                                                                                                                                             
+Your branch is up to date with 'origin/download_buttons'.                                                                                                                         
+
+bbearce@pop-os:~/Documents/codabench$ git branch                                                                                                                                  
+  develop
+* download_buttons
+
+
+</code></pre>
 <h2 id="adding-a-new-remote">Adding a New Remote</h2>
 <blockquote>
 <p>Courtesy of <a href="https://articles.assembla.com/en/articles/1136998-how-to-add-a-new-remote-to-your-git-repo#targetText=To%20add%20a%20new%20remote%2C%20use%20the%20git%20remote%20add,tab%20of%20your%20Git%20repo">articles.assembla.com</a></p>
