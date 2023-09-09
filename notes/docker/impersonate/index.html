@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Impersonate - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Impersonate", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../fast.ai/introduction/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../fast.ai/introduction/" class="btn btn-xs btn-link">
+        Introduction
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../docker-compose/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../docker-compose/" class="btn btn-xs btn-link">
+        Docker Compose
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="impersonate">Impersonate</h1>
+<p>To impersonate a user on a linux machine with docker, do this:</p>
+<pre><code class="language-bash"># Become someone else
+WHO_DO_YOU_WANT_TO_BE=bearceb;
+
+# Raw users
+echo $WHO_DO_YOU_WANT_TO_BE
+export UID_faked=$(id -u $WHO_DO_YOU_WANT_TO_BE);
+export GID_faked=$(id -g $WHO_DO_YOU_WANT_TO_BE);
+
+echo $UID_faked
+echo $GID_faked
+
+# Get group id by name if different group
+group_name=&quot;soms-slce-oph1-users&quot;
+GID_faked=$(getent group &quot;$group_name&quot; | cut -d: -f3)
+echo $GID_faked
+
+## It's best to not mount / but a specific directory and laser focus on what you're doing
+VOL_OF_INTEREST=/projects/Chronicle/couchdb_data;
+
+# Another tutorial mentioned using the --user to attach as this user but 
+# That user doesn't exist inside with mounting other directories ... /etc/gropups /etc/passwd...etc
+# I think we need to build the image with this user in there or add them and edit uid and gid to 
+# match local. It's too complex...or just overly so.
+# Ex: --user $UID_faked:$GID_faked \
+
+# Below is a better way:
+docker run -it --rm \
+    --workdir=&quot;$VOL_OF_INTEREST&quot; \
+    --volume=&quot;$VOL_OF_INTEREST:$VOL_OF_INTEREST&quot; \
+    -e UID_faked=$UID_faked \
+    -e GID_faked=$GID_faked \
+    ubuntu:latest bash
+
+# Check them
+echo $UID_faked
+echo $GID_faked
+
+# Now we can just change owner to the actual ids, not names
+chown $UID_faked:$GID_faked /projects/Chronicle/couchdb_data
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../fast.ai/introduction/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../fast.ai/introduction/" class="btn btn-xs btn-link">
+        Introduction
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../docker-compose/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../docker-compose/" class="btn btn-xs btn-link">
+        Docker Compose
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
