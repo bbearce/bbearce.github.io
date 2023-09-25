@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Environments - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Environments", url: "#_top", children: [
+              {title: "Venv (virtualenv in python2)", url: "#venv-virtualenv-in-python2" },
+              {title: "Pyenv", url: "#pyenv" },
+              {title: "PDM", url: "#pdm" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../base_modules/collections/Counter/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../base_modules/collections/Counter/" class="btn btn-xs btn-link">
+        Counter
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Installs/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Installs/" class="btn btn-xs btn-link">
+        Base
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="environments">Environments</h1>
+<p>You need to install <a href="../Installs/">python</a> first.</p>
+<h2 id="venv-virtualenv-in-python2">Venv (virtualenv in python2)</h2>
+<p><a href="https://packaging.python.org/en/latest/guides/installing-using-pip-and-virtual-environments/">packaging.python.org</a></p>
+<h3 id="install-pip">Install pip</h3>
+<pre><code class="language-bash">python3 -m pip install --user --upgrade pip
+python3 -m pip --version
+python3 -m pip install --user virtualenv
+</code></pre>
+<h3 id="create-virtual-environment">Create Virtual Environment</h3>
+<pre><code class="language-bash">python3 -m venv env
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ python3 -m venv env
+bbearce@pop-os:~/Desktop/venv_demo$ ls
+env
+bbearce@pop-os:~/Desktop/venv_demo$ source env/bin/activate
+(env) bbearce@pop-os:~/Desktop/venv_demo$ deactivate
+bbearce@pop-os:~/Desktop/venv_demo$ . env/bin/activate # abreviated
+(env) bbearce@pop-os:~/Desktop/venv_demo$
+</code></pre>
+<h3 id="install-packages">Install Packages</h3>
+<pre><code class="language-bash">python3 -m pip install pandas
+python3 -m pip uninstall -y pandas
+</code></pre>
+<p>Short:</p>
+<pre><code class="language-bash">pip install pandas
+pip uninstall -y pandas
+</code></pre>
+<pre><code class="language-bash">(env) bbearce@pop-os:~/Desktop/venv_demo$ python3 -m pip install pandas
+Looking in indexes: https://pypi.org/simple, https://packagecloud.io/github/git-lfs/pypi/simple
+Collecting pandas
+  Obtaining dependency information for pandas from https://files.pythonhosted.org/packages/d9/26/895a49ebddb4211f2d777150f38ef9e538deff6df7e179a3624c663efc98/pandas-2.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Downloading pandas-2.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (18 kB)
+Collecting numpy&gt;=1.23.2 (from pandas)
+  Obtaining dependency information for numpy&gt;=1.23.2 from https://files.pythonhosted.org/packages/c4/36/161e2f8110f8c49e59f6107bd6da4257d30aff9f06373d0471811f73dcc5/numpy-1.26.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata
+  Downloading numpy-1.26.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl.metadata (58 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 58.5/58.5 kB 1.2 MB/s eta 0:00:00
+Collecting python-dateutil&gt;=2.8.2 (from pandas)
+  Using cached python_dateutil-2.8.2-py2.py3-none-any.whl (247 kB)
+Collecting pytz&gt;=2020.1 (from pandas)
+  Obtaining dependency information for pytz&gt;=2020.1 from https://files.pythonhosted.org/packages/32/4d/aaf7eff5deb402fd9a24a1449a8119f00d74ae9c2efa79f8ef9994261fc2/pytz-2023.3.post1-py2.py3-none-any.whl.metadata
+  Downloading pytz-2023.3.post1-py2.py3-none-any.whl.metadata (22 kB)
+Collecting tzdata&gt;=2022.1 (from pandas)
+  Downloading tzdata-2023.3-py2.py3-none-any.whl (341 kB)
+     ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 341.8/341.8 kB 8.4 MB/s eta 0:00:00
+Collecting six&gt;=1.5 (from python-dateutil&gt;=2.8.2-&gt;pandas)
+  Using cached six-1.16.0-py2.py3-none-any.whl (11 kB)
+Downloading pandas-2.1.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (12.6 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 12.6/12.6 MB 46.8 MB/s eta 0:00:00
+Downloading numpy-1.26.0-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (18.2 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 18.2/18.2 MB 34.0 MB/s eta 0:00:00
+Downloading pytz-2023.3.post1-py2.py3-none-any.whl (502 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 502.5/502.5 kB 51.5 MB/s eta 0:00:00
+Installing collected packages: pytz, tzdata, six, numpy, python-dateutil, pandas
+Successfully installed numpy-1.26.0 pandas-2.1.0 python-dateutil-2.8.2 pytz-2
+
+(env) bbearce@pop-os:~/Desktop/venv_demo$
+
+(env) bbearce@pop-os:~/Desktop/venv_demo$ python3 -m pip uninstall -y pandas
+Found existing installation: pandas 2.1.0
+Uninstalling pandas-2.1.0:
+  Successfully uninstalled pandas-2.1.0
+</code></pre>
+<blockquote>
+<p>It's best practive to put virtual environments in ~/.virtualenvs. VSCode and other IDE's will look here by default for python virtual environments.</p>
+</blockquote>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.virtualenvs
+total 16
+drwxrwxr-x  4 bbearce bbearce 4096 Jul 22  2022 .
+drwxr-xr-x 77 bbearce bbearce 4096 Sep 17 15:40 ..
+drwxrwxr-x  6 bbearce bbearce 4096 Jul 22  2022 venv3.10.4
+</code></pre>
+<p>VSCode Example:
+<img alt="venv3.10." src="vscode-venv.jpg" /></p>
+<h2 id="pyenv">Pyenv</h2>
+<p><a href="https://github.com/pyenv/pyenv">Official Docs</a><br />
+<a href="https://realpython.com/intro-to-pyenv/#installing-pyenv">realpython.com</a> (they use the above to guide you)</p>
+<p>If <code>venv</code> was manual, <code>pyenv</code> is automatic and steamlined to create many different environments and virtual environments.</p>
+<p>When you use <code>venv</code> you are copying your main python installation into a virtual environment. You are locked into that version for virtual environements unless you manually install different python versions on your system.</p>
+<p>With <code>pyenv</code>, you do have to have these base python environments, but instead of installing where they normally go on your os, they are collected and managed by pyenv in <code>~/.pyenv/versions</code>: </p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv
+-rw-r--r--  1 bbearce bbearce      7 Sep 16 16:02 version
+drwxr-xr-x  3 bbearce bbearce   4096 Sep 16 16:29 versions
+...
+
+bbearce@pop-os:~/Desktop/venv_demo$ ls ~/.pyenv/versions
+3.11.5  venv3.11.5
+</code></pre>
+<p>Via special pyenv bash scripts, not python installations as with venv above, we can install multiple python versions (<code>3.11.5</code>) and virtual environments(<code>venv3.11.5</code>). They live in the same directory, though the virtual environments are sylinks to ./envs/ under each actual python version.</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv/versions/
+drwxr-xr-x  7 bbearce bbearce 4096 Sep 16 16:29 3.11.5
+lrwxrwxrwx  1 bbearce bbearce   52 Sep 16 16:29 venv3.11.5 -&gt; /home/bbearce/.pyenv/versions/3.11.5/envs/venv3.11.5
+
+bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv/versions/3.11.5/envs/
+drwxr-xr-x 5 bbearce bbearce 4096 Sep 16 16:29 venv3.11.5
+</code></pre>
+<p>So you can have <em>any</em> python version with <em>any</em> number of unique virtual environments.</p>
+<h3 id="create-install-environment">Create (install) Environment</h3>
+<p>See environments availabe:</p>
+<pre><code class="language-bash">pyenv install --list # all
+pyenv install --list | grep &quot; 3\.[678]&quot; # get specific
+  3.6.0
+  3.6-dev
+  3.6.1
+  3.6.2
+  3.6.3
+  3.6.4
+  3.6.5
+  3.6.6
+  3.6.7
+  3.6.8
+  3.7.0
+  3.7-dev
+  3.7.1
+  3.7.2
+  3.8-dev
+</code></pre>
+<pre><code class="language-bash">pyenv install 3.10.4
+# pyenv uninstall 3.10.4 # Uninstall
+# rm -rf ~/.pyenv/versions/3.10.4 # Equivalent
+
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv install 3.10.4
+Downloading Python-3.10.4.tar.xz...
+-&gt; https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tar.xz
+Installing Python-3.10.4...
+...
+Installing Python-3.10.4...
+Installed Python-3.10.4 to /home/bbearce/.pyenv/versions/3.10.4
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv/versions
+drwxr-xr-x  6 bbearce bbearce 4096 Sep 17 17:03 3.10.4
+drwxr-xr-x  7 bbearce bbearce 4096 Sep 16 16:29 3.11.5
+lrwxrwxrwx  1 bbearce bbearce   52 Sep 16 16:29 venv3.11.5 -&gt; /home/bbearce/.pyenv/versions/3.11.5/envs/venv3.11.5
+</code></pre>
+<h3 id="create-virtual-environment_1">Create Virtual Environment</h3>
+<blockquote>
+<p>You need a pyenv plugin called <a href="https://github.com/pyenv/pyenv-virtualenv">pyenv-virtualenv</a>.</p>
+</blockquote>
+<pre><code class="language-bash"># Ubuntu based install...check for your os
+git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
+</code></pre>
+<p>Create:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv virtualenv 3.10.4 venv3.10.4
+
+bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv/versions
+drwxr-xr-x  6 bbearce bbearce 4096 Sep 17 17:03 3.10.4
+drwxr-xr-x  7 bbearce bbearce 4096 Sep 16 16:29 3.11.5
+lrwxrwxrwx  1 bbearce bbearce   52 Sep 16 16:29 venv3.11.5 -&gt; /home/bbearce/.pyenv/versions/3.11.5/envs/venv3.11.5
+
+bbearce@pop-os:~/Desktop/venv_demo$ pyenv virtualenv 3.10.4 venv3.10.4
+bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv/versions
+drwxr-xr-x  7 bbearce bbearce 4096 Sep 17 17:19 3.10.4
+drwxr-xr-x  7 bbearce bbearce 4096 Sep 16 16:29 3.11.5
+lrwxrwxrwx  1 bbearce bbearce   52 Sep 17 17:19 venv3.10.4 -&gt; /home/bbearce/.pyenv/versions/3.10.4/envs/venv3.10.4
+lrwxrwxrwx  1 bbearce bbearce   52 Sep 16 16:29 venv3.11.5 -&gt; /home/bbearce/.pyenv/versions/3.11.5/envs/venv3.11.5
+</code></pre>
+<h3 id="using-environments">Using Environments</h3>
+<p>There are a variety of ways to specify when and which env\venv you want to use. Here are the most basic.</p>
+<h4 id="global">Global</h4>
+<p>By default you are using a global <code>pyenv</code> version specified by a file in <code>~/.pyenv/version</code>.</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ cat ~/.pyenv/version
+3.11.5
+</code></pre>
+<p>Set it with:</p>
+<pre><code class="language-bash">pyenv global &lt;version&gt;
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv version
+3.11.5 (set by /home/bbearce/.pyenv/version)
+
+bbearce@pop-os:~/Desktop/venv_demo$ pyenv versions
+  system
+  3.10.4
+  3.10.4/envs/venv3.10.4
+* 3.11.5 (set by /home/bbearce/.pyenv/version)
+  3.11.5/envs/venv3.11.5
+  venv3.10.4 --&gt; /home/bbearce/.pyenv/versions/3.10.4/envs/venv3.10.4
+  venv3.11.5 --&gt; /home/bbearce/.pyenv/versions/3.11.5/envs/venv3.11.5
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ python
+Python 3.11.5 (main, Sep 16 2023, 15:49:34) [GCC 11.4.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt;
+</code></pre>
+<h4 id="shell">Shell</h4>
+<p>Activates for quick use (essentially the same as <code>venv</code>).</p>
+<pre><code class="language-bash">pyenv shell &lt;version&gt;
+</code></pre>
+<p>Regular env:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv shell 3.11.5
+bbearce@pop-os:~/Desktop/venv_demo$ pyenv version
+3.11.5 (set by PYENV_VERSION environment variable)
+</code></pre>
+<p>Virtualenv:</p>
+<pre><code class="language-bash">pyenv activate &lt;version&gt;
+pyenv deactivate
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv activate venv3.11.5
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ pyenv version
+venv3.11.5 (set by PYENV_VERSION environment variable)
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ pyenv deactivate
+bbearce@pop-os:~/Desktop/venv_demo$ 
+</code></pre>
+<p>You can use these with shell too.</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv shell venv3.11.5
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ pyenv version
+venv3.11.5 (set by PYENV_VERSION environment variable)
+</code></pre>
+<p>However deactivate doesn't work:</p>
+<pre><code class="language-bash">(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ pyenv deactivate
+bbearce@pop-os:~/Desktop/venv_demo$ pyenv shell venv3.11.5
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ pyenv deactivate
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ deactivate
+pyenv-virtualenv: deactivate must be sourced. Run 'source deactivate' instead of 'deactivate'
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ source deactivate
+pyenv-virtualenv: deactivate 3.11.5/envs/venv3.11.5
+# Need to use shell again to switch
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ pyenv shell 3.11.5
+</code></pre>
+<h4 id="local">Local</h4>
+<p>This is set for a direcory or project and creates a <code>.python-version</code> inside the directory</p>
+<pre><code class="language-bash">pyenv local &lt;version&gt;
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv version
+3.11.5 (set by /home/bbearce/.pyenv/version)
+bbearce@pop-os:~/Desktop/venv_demo$ pyenv local venv3.11.5
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ ls -la
+drwxrwxr-x 5 bbearce bbearce  4096 Sep 17 15:32 env
+-rw-rw-r-- 1 bbearce bbearce    11 Sep 17 17:29 .python-version
+-rw-rw-r-- 1 bbearce bbearce 22572 Sep 17 15:48 vscode-venv.jpg
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ cat .python-version 
+venv3.11.5
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ pyenv version
+venv3.11.5 (set by /home/bbearce/Desktop/venv_demo/.python-version)
+(venv3.11.5) bbearce@pop-os:~/Desktop/venv_demo$ rm .python-version # deactivates and removes .python-version
+bbearce@pop-os:~/Desktop/venv_demo$
+</code></pre>
+<h2 id="pdm">PDM</h2>
+<p><a href="https://pdm.fming.dev/latest/">pdm.fming.dev/latest</a></p>
+<blockquote>
+<p>Warning: <a href="https://pdm.fming.dev/2.9/usage/pep582/">PEP 582 has been rejected</a></p>
+</blockquote>
+<p>PDM was created to mimic npm whereby you don't need virtualenvs. All you need are base pythons and <code>__pypackages__</code>. Instead of bundling your packages with venvs, which are copies of base environmetns, why don't we use a single <code>3.11.5</code> and have <strong>projects</strong> with packages that all use the same base <code>3.11.5</code> version or any other version you'd like. </p>
+<p>PS: You can and unfortunately should use vitualenvs with pdm as PEP 582 has been rejected which was the whole point. Nonetheless this package manager is nice and organized. It uses .toml files like <a href="https://python-poetry.org/">Poetry</a> to manage depedencies so it is nice still. </p>
+<h3 id="install">Install</h3>
+<pre><code class="language-bash"># Linux\Mac
+curl -sSL https://pdm.fming.dev/install-pdm.py | python3 -
+</code></pre>
+<h3 id="new-project">New Project</h3>
+<pre><code class="language-bash">mkdir ~/Documents/pdm_setup_and_experimentation &amp;&amp; cd ~/Documents/pdm_setup_and_experimentation
+</code></pre>
+<pre><code class="language-bash">pdm init
+</code></pre>
+<h4 id="virtualenvs-and-not-pep-582">Virtualenvs and not PEP 582</h4>
+<p><a href="https://pdm.fming.dev/latest/usage/venv/">Source</a></p>
+<p>You can choose the backend used by PDM to create a virtualenv. Currently it supports three backends:</p>
+<ul>
+<li>virtualenv(default)  </li>
+<li>venv  </li>
+<li>conda  </li>
+</ul>
+<h5 id="local-virtual-environment">Local Virtual Environment</h5>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm init
+Creating a pyproject.toml for PDM...
+Please enter the Python interpreter to use
+0. /home/bbearce/.pyenv/shims/python3 (3.11)
+1. /home/bbearce/.pyenv/versions/3.11.5/bin/python (3.11)
+2. /home/bbearce/.pyenv/versions/3.11.5/bin/python3.11 (3.11)
+3. /home/bbearce/.pyenv/shims/python3.11 (3.11)
+4. /home/bbearce/.pyenv/shims/python (3.11)
+5. /home/bbearce/.pyenv/shims/python3.10 (3.10)
+6. /usr/bin/python3.10 (3.10)
+7. /home/bbearce/.pyenv/versions/3.10.4/bin/python3.10 (3.10)
+Please select (0): 6
+Would you like to create a virtualenv with /usr/bin/python3.10? [y/n] (y): y
+Virtualenv is created successfully at /home/bbearce/Documents/pdm_setup_and_experimentation/.venv
+Is the project a library that is installable?
+If yes, we will need to ask a few more questions to include the project name and build backend [y/n] (n): n
+License(SPDX name) (MIT):  
+Author name (Benjamin Bearce): 
+Author email (bbearce@gmail.com): 
+Python requires('*' to allow any) (&gt;=3.10): 
+Project is initialized successfully
+</code></pre>
+<blockquote>
+<p>We can use any environment (regular or virtual) to start this project, including virtual ones we make upon running <code>pdm init</code>.</p>
+</blockquote>
+<p>We can see the .venv directory which was made from <code>/usr/bin/python3.10</code>.</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ ls -la
+total 40
+drwxrwxr-x  6 bbearce bbearce 4096 Sep 17 18:25 .
+drwxr-xr-x 36 bbearce bbearce 4096 Sep 17 14:17 ..
+-rw-r--r--  1 bbearce bbearce 3102 Sep 17 13:47 .gitignore
+-rw-rw-r--  1 bbearce bbearce   69 Sep 17 18:24 .pdm-python
+drwxrwxr-x  2 bbearce bbearce 4096 Sep 17 18:25 __pycache__
+-rw-rw-r--  1 bbearce bbearce  217 Sep 17 18:25 pyproject.toml
+-rw-r--r--  1 bbearce bbearce   18 Sep 17 13:47 README.md
+drwxrwxr-x  3 bbearce bbearce 4096 Sep 17 18:25 src
+drwxrwxr-x  3 bbearce bbearce 4096 Sep 17 18:25 tests
+drwxrwxr-x  4 bbearce bbearce 4096 Sep 17 18:24 .venv
+</code></pre>
+<p>PDM Info:</p>
+<blockquote>
+<p>If Project Packages is None (as show below by it not being present), virtualenv mode is enabled.</p>
+</blockquote>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm info
+PDM version:
+  2.9.2
+Python Interpreter:
+  /home/bbearce/Documents/pdm_setup_and_experimentation/.venv/bin/python (3.10)
+Project Root:
+  /home/bbearce/Documents/pdm_setup_and_experimentation
+Local Packages:
+
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm info --env
+{
+  &quot;implementation_name&quot;: &quot;cpython&quot;,
+  &quot;implementation_version&quot;: &quot;3.10.12&quot;,
+  &quot;os_name&quot;: &quot;posix&quot;,
+  &quot;platform_machine&quot;: &quot;x86_64&quot;,
+  &quot;platform_release&quot;: &quot;6.4.6-76060406-generic&quot;,
+  &quot;platform_system&quot;: &quot;Linux&quot;,
+  &quot;platform_version&quot;: &quot;#202307241739~1694621917~22.04~ac5e1a8 SMP PREEMPT_DYNAMIC Wed S&quot;,
+  &quot;python_full_version&quot;: &quot;3.10.12&quot;,
+  &quot;platform_python_implementation&quot;: &quot;CPython&quot;,
+  &quot;python_version&quot;: &quot;3.10&quot;,
+  &quot;sys_platform&quot;: &quot;linux&quot;
+}
+</code></pre>
+<h5 id="create-your-own-virtual-environment">Create Your Own Virtual Environment</h5>
+<pre><code class="language-bash"># Create a virtualenv based on 3.8 interpreter
+$ pdm venv create 3.8
+# Assign a different name other than the version string
+$ pdm venv create --name for-test 3.8
+# Use venv as the backend to create, support 3 backends: virtualenv(default), venv, conda
+$ pdm venv create --with venv 3.9
+</code></pre>
+<p>Notice you need an interpreter installed to use correctly:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv create 3.8
+[VirtualenvCreateError]: Can't resolve python interpreter 3.8
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv create --name for-test 3.8
+[VirtualenvCreateError]: Can't resolve python interpreter 3.8
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv create --with venv 3.9
+[VirtualenvCreateError]: Can't resolve python interpreter 3.9
+</code></pre>
+<p>Use <code>3.11.5</code> that we have:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv create 3.11.5
+Virtualenv /home/bbearce/Documents/pdm_setup_and_experimentation/.venv is created successfully
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ ls -la
+total 44
+drwxrwxr-x  6 bbearce bbearce 4096 Sep 17 19:00 .
+drwxr-xr-x 36 bbearce bbearce 4096 Sep 17 14:17 ..
+-rw-r--r--  1 bbearce bbearce 3102 Sep 17 13:47 .gitignore
+-rw-rw-r--  1 bbearce bbearce 8119 Sep 17 18:39 pdm.lock
+drwxrwxr-x  2 bbearce bbearce 4096 Sep 17 18:25 __pycache__
+-rw-rw-r--  1 bbearce bbearce  239 Sep 17 18:39 pyproject.toml
+-rw-r--r--  1 bbearce bbearce   18 Sep 17 13:47 README.md
+drwxrwxr-x  3 bbearce bbearce 4096 Sep 17 18:25 src
+drwxrwxr-x  3 bbearce bbearce 4096 Sep 17 18:25 tests
+drwxrwxr-x  4 bbearce bbearce 4096 Sep 17 19:00 .venv
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv create --name for-test 3.11.5
+Virtualenv /home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-test is created successfully
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv create --with venv 3.11.5
+Virtualenv /home/bbearce/Documents/pdm_setup_and_experimentation/.venv is created successfully
+</code></pre>
+<p>Reuse the virtualenv you created elsewhere:
+This will create file <code>.pdm-python</code>:</p>
+<pre><code class="language-bash">pdm use -f /home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-test 
+
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ cat .pdm-python 
+/home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-test/bin/python3
+</code></pre>
+<p>List all virtualenvs created with this projects:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv list
+Virtualenvs created with this project:
+
+-  in-project: /home/bbearce/Documents/pdm_setup_and_experimentation/.venv
+*  for-test: /home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-testbbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv list
+Virtualenvs created with this project:
+
+-  in-project: /home/bbearce/Documents/pdm_setup_and_experimentation/.venv
+*  for-test: /home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-test
+</code></pre>
+<p>Remove a virtualenv:</p>
+<pre><code class="language-bash">pdm venv remove for-test
+</code></pre>
+<p>Activate a virtualenv:</p>
+<pre><code class="language-bash">eval $(pdm venv activate)
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ eval $(pdm venv activate)
+(pdm_setup_and_experimentation-3.11) bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ which python
+/home/bbearce/Documents/pdm_setup_and_experimentation/.venv/bin/python
+
+
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ eval $(pdm venv activate for-test)
+(pdm_setup_and_experimentation-3.11) bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ which python
+/home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-test/bin/python
+</code></pre>
+<blockquote>
+<p>Remember the python interpreter you are using in this project is set in <code>.pdm-python</code></p>
+</blockquote>
+<h4 id="pep-582">PEP 582</h4>
+<p>Don't make a virtualenv:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm init
+Creating a pyproject.toml for PDM...
+Please enter the Python interpreter to use
+0. /home/bbearce/.pyenv/shims/python3 (3.11)
+1. /home/bbearce/.pyenv/versions/3.11.5/bin/python (3.11)
+2. /home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-test/bin/python (3.11)
+3. /home/bbearce/.pyenv/versions/3.11.5/bin/python3.11 (3.11)
+4. /home/bbearce/.pyenv/shims/python3.11 (3.11)
+5. /home/bbearce/.pyenv/shims/python (3.11)
+6. /home/bbearce/.pyenv/shims/python3.10 (3.10)
+7. /usr/bin/python3.10 (3.10)
+8. /home/bbearce/.pyenv/versions/3.10.4/bin/python3.10 (3.10)
+Please select (0): 7
+Would you like to create a virtualenv with /usr/bin/python3.10? [y/n] (y): n 
+You are using the PEP 582 mode, no virtualenv is created.
+For more info, please visit https://peps.python.org/pep-0582/
+Is the project a library that is installable?
+If yes, we will need to ask a few more questions to include the project name and build backend [y/n] (n): n
+License(SPDX name) (MIT): 
+Author name (Benjamin Bearce): 
+Author email (bbearce@gmail.com): 
+Python requires('*' to allow any) (&gt;=3.10): 
+Project is initialized successfully
+</code></pre>
+<p>Notice there is no <code>.venv</code> directory:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ cat .pdm-python 
+/usr/bin/python3.10
+
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ ls -la
+-rw-r--r--  1 bbearce bbearce 3102 Sep 17 13:47 .gitignore
+-rw-rw-r--  1 bbearce bbearce   19 Sep 17 19:17 .pdm-python
+drwxrwxr-x  2 bbearce bbearce 4096 Sep 17 19:17 __pycache__
+-rw-rw-r--  1 bbearce bbearce  217 Sep 17 19:17 pyproject.toml
+-rw-r--r--  1 bbearce bbearce   18 Sep 17 13:47 README.md
+drwxrwxr-x  3 bbearce bbearce 4096 Sep 17 19:17 src
+drwxrwxr-x  3 bbearce bbearce 4096 Sep 17 19:17 tests
+</code></pre>
+<h3 id="manage-depedencies">Manage Depedencies</h3>
+<p><a href="https://pdm.fming.dev/latest/usage/dependency/">Source</a></p>
+<pre><code class="language-bash">pdm add &lt;dependency&gt;
+</code></pre>
+<pre><code class="language-bash">pdm add pandas
+</code></pre>
+<p>Let's look at the files used to manage this project:
+<code>pyproject.toml</code>: Overall project management (check into git)</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ cat pyproject.toml
+[project]
+name = &quot;&quot;
+version = &quot;&quot;
+description = &quot;&quot;
+authors = [
+    {name = &quot;Benjamin Bearce&quot;, email = &quot;bbearce@gmail.com&quot;},
+]
+dependencies = [
+    &quot;pandas&gt;=2.1.0&quot;,
+]
+requires-python = &quot;&gt;=3.10&quot;
+readme = &quot;README.md&quot;
+license = {text = &quot;MIT&quot;}
+</code></pre>
+<p><code>pdm.lock</code>: All pandas (and or others as needed) dependencies and is not to be touched (check into git)</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ cat pdm.lock
+# This file is @generated by PDM.
+# It is not intended for manual editing.
+
+[metadata]
+groups = [&quot;default&quot;]
+cross_platform = true
+static_urls = false
+lock_version = &quot;4.3&quot;
+content_hash = &quot;sha256:dc9eafceda8a739aabf7f0d33d89566090337630b57dbc7a482740a5b8863523&quot;
+
+[[package]]
+name = &quot;numpy&quot;
+version = &quot;1.26.0&quot;
+requires_python = &quot;&lt;3.13,&gt;=3.9&quot;
+summary = &quot;Fundamental package for array computing in Python&quot;
+files = [
+...
+</code></pre>
+<p><code>.pdm-python</code>: Interpreter (do not check into git)</p>
+<pre><code class="language-bash">cat .pdm-python
+/home/bbearce/Documents/pdm_setup_and_experimentation/.venv/bin/python
+</code></pre>
+<pre><code class="language-bash">pdm list
+
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm list
+╭─────────────────┬──────────────┬──────────╮
+│ name            │ version      │ location │
+├─────────────────┼──────────────┼──────────┤
+│ numpy           │ 1.26.0       │          │
+│ pytz            │ 2023.3.post1 │          │
+│ six             │ 1.16.0       │          │
+│ tzdata          │ 2023.3       │          │
+│ pandas          │ 2.1.0        │          │
+│ python-dateutil │ 2.8.2        │          │
+╰─────────────────┴──────────────┴──────────╯
+
+bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm list --graph
+pandas 2.1.0 [ required: &gt;=2.1.0 ]
+├── numpy 1.26.0 [ required: &gt;=1.22.4 ]
+├── python-dateutil 2.8.2 [ required: &gt;=2.8.2 ]
+│   └── six 1.16.0 [ required: &gt;=1.5 ]
+├── pytz 2023.3.post1 [ required: &gt;=2020.1 ]
+└── tzdata 2023.3 [ required: &gt;=2022.1 ]
+</code></pre>
+<h3 id="using-python">Using Python:</h3>
+<h4 id="packages-with-venv">Packages with venv</h4>
+<p>When in this mode packages are in <code>__pypackages__</code>:</p>
+<pre><code class="language-bash">bbearce@terry:~/Documents/pdm_setup_and_experimentation$ tree -L 3 __pypackages__
+__pypackages__
+└── 3.10
+    ├── bin
+    │   └── f2py
+    ├── include
+    └── lib
+        ├── dateutil
+        ├── numpy
+        ├── numpy-1.26.0.dist-info
+        ├── numpy.libs
+        ├── pandas
+        ├── pandas-2.1.0.dist-info
+        ├── python_dateutil-2.8.2.dist-info
+        ├── pytz
+        ├── pytz-2023.3.post1.dist-info
+        ├── six-1.16.0.dist-info
+        ├── six.py
+        ├── tzdata
+        └── tzdata-2023.3.dist-info
+</code></pre>
+<h4 id="packages-with-pep-582">Packages with PEP 582</h4>
+<p>When in this mode packages are in <code>.venv/site-pypackages</code>:</p>
+<pre><code class="language-bash">bbearce@terry:~/Documents/pdm_setup_and_experimentation$ tree -L 3 .venv/lib
+.venv/lib
+└── python3.10
+    └── site-packages
+        ├── dateutil
+        ├── numpy
+        ├── numpy-1.26.0.dist-info
+        ├── numpy.libs
+        ├── pandas
+        ├── pandas-2.1.0.dist-info
+        ├── __pycache__
+        ├── python_dateutil-2.8.2.dist-info
+        ├── pytz
+        ├── pytz-2023.3.post1.dist-info
+        ├── six-1.16.0.dist-info
+        ├── six.py
+        ├── tzdata
+        ├── tzdata-2023.3.dist-info
+        ├── _virtualenv.pth
+        └── _virtualenv.py
+</code></pre>
+<p>If using a pdm created venv with a name in <code>~/.local/share/pdm/venvs/</code> then it would be under <code>~/.local/share/pdm/venvs/&lt;venv name&gt;/site-packages</code>.</p>
+<p>When in this mode if you want a shell using this projects packages and interpreter you use <code>pdm run python</code>:</p>
+<pre><code class="language-bash">bbearce@terry:~/Documents/pdm_setup_and_experimentation$ pdm run python
+Python 3.10.6 (main, Mar 10 2023, 10:55:28) [GCC 11.3.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import pandas
+&gt;&gt;&gt; pandas
+&lt;module 'pandas' from '/home/bbearce/Documents/pdm_setup_and_experimentation/__pypackages__/3.10/lib/pandas/__init__.py'&gt;
+</code></pre>
+<p>Notice without <code>pdm run</code>, your system starts the same interpreter but doesn't have packages installed:</p>
+<pre><code class="language-bash">bbearce@terry:~/Documents/pdm_setup_and_experimentation$ python3
+Python 3.10.6 (main, Mar 10 2023, 10:55:28) [GCC 11.3.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import pandas
+Traceback (most recent call last):
+  File &quot;&lt;stdin&gt;&quot;, line 1, in &lt;module&gt;
+ModuleNotFoundError: No module named 'pandas'
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../base_modules/collections/Counter/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../base_modules/collections/Counter/" class="btn btn-xs btn-link">
+        Counter
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Installs/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Installs/" class="btn btn-xs btn-link">
+        Base
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

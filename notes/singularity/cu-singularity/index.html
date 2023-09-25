@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Demo for CU - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Apptainer", url: "#_top", children: [
+              {title: "Build", url: "#build" },
+              {title: "Shell", url: "#shell" },
+              {title: "Sandbox", url: "#sandbox" },
+              {title: "Run", url: "#run" },
+              {title: "Alpine", url: "#alpine" },
+              {title: "Set important environment variables", url: "#set-important-environment-variables" },
+              {title: "Create Recipe", url: "#create-recipe" },
+              {title: "Sylabs Container Registry", url: "#sylabs-container-registry" },
+              {title: "Remote Builder (Haven\u0027t got working )", url: "#remote-builder-havent-got-working" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav">
+      <a href="../demo_for_qtim/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../demo_for_qtim/" class="btn btn-xs btn-link">
+        Demo for QTIM
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="apptainer">Apptainer</h1>
+<h2 id="build">Build</h2>
+<blockquote>
+<p>Singularity is now <code>apptainer</code>. </p>
+</blockquote>
+<pre><code class="language-bash">apptainer build ubuntu_latest.sif docker://ubuntu:latest
+</code></pre>
+<pre><code class="language-bash">apptainer build pytorch_w_cuda.sif pytorch_based.recipe
+</code></pre>
+<h3 id="recipe-file">Recipe File</h3>
+<p>"pytorch_based.recipe"</p>
+<pre><code class="language-bash">Bootstrap: docker
+From: pytorch/pytorch:latest
+
+%help
+    This is where you can add some useful info.
+
+%labels
+    Creator Ben
+
+%environment
+    export MY_VAR='~~~~~some environment variable~~~~~'
+
+%files
+    test.py /
+    requirements.txt /
+
+%post
+    apt-get -qq -y update
+    pip install -r requirements.txt
+
+
+%runscript
+    python /test.py
+</code></pre>
+<h2 id="shell">Shell</h2>
+<pre><code class="language-bash">apptainer shell &lt;image name&gt;
+</code></pre>
+<blockquote>
+<p>Notice we can write/see to <code>~/singularity</code> and not <code>/mnt</code>.</p>
+</blockquote>
+<pre><code class="language-bash">bearceb@ophlapps03:~/singularity$ ls
+pytorch_based.recipe  pytorch_based.sif  README.md  requirements.txt  test.py  ubuntu_latest.sif
+
+bearceb@ophlapps03:~/singularity$ apptainer shell ubuntu_latest.sif
+Apptainer&gt; ls
+README.md  pytorch_based.recipe  pytorch_based.sif  requirements.txt  test.py  ubuntu_latest.sif
+
+Apptainer&gt; pwd
+/home/bearceb/singularity
+
+Apptainer&gt; touch test.txt
+
+Apptainer&gt; touch /mnt/test.txt
+touch: cannot touch '/mnttest.txt': Read-only file system
+</code></pre>
+<p>Only mounted directories have write permissions (<code>$PWD</code> is one automatically mounted). Shelling provides read-only access to images.</p>
+<ul>
+<li>
+<p>By default most user-owned files and directories are available to any container that is run on Alpine and Blanca</p>
+</li>
+<li>
+<p>This includes files in:  </p>
+</li>
+<li>/home/$USER  </li>
+<li>/projects/$USER  </li>
+<li>/scratch/summit/$USER  </li>
+<li>/rc_scratch/$USER)  </li>
+</ul>
+<h2 id="sandbox">Sandbox</h2>
+<pre><code class="language-bash">apptainer build --sandbox &lt;sandbox&gt; &lt;*.sif&gt;
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/singularity$ apptainer build --sandbox s_ubuntu ubuntu_latest.sif
+INFO:    Starting build...
+INFO:    Verifying bootstrap image ubuntu_latest.sif
+INFO:    Creating sandbox directory...
+INFO:    Build complete: s_ubuntu
+bbearce@pop-os:~/Desktop/singularity$ ls
+pytorch_based.recipe  s_ubuntu  ubuntu_latest.sif
+README.md             test.py
+requirements.txt      test.txt
+</code></pre>
+<p>You need the <code>--writable</code> flag to write in the sandbox. Natively it too is read-only.</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/singularity$ apptainer shell s_ubuntu 
+Apptainer&gt; touch /mnt/test.txt
+touch: cannot touch '/mnt/test.txt': Read-only file system
+Apptainer&gt; 
+exit
+bbearce@pop-os:~/Desktop/singularity$ apptainer shell --writable s_ubuntu 
+WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
+Apptainer&gt; touch /mnt/test.txt
+Apptainer&gt; 
+</code></pre>
+<p>To build back into an image:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/singularity$ apptainer build s_ubuntu_modified s_ubuntu
+INFO:    Starting build...
+INFO:    Creating SIF file...
+INFO:    Build complete: s_ubuntu_modified
+</code></pre>
+<p>Installing software</p>
+<pre><code class="language-bash">
+</code></pre>
+<h2 id="run">Run</h2>
+<blockquote>
+<p>Work on this</p>
+</blockquote>
+<pre><code class="language-bash">singularity run ubuntu_latest.sif
+</code></pre>
+<h2 id="alpine">Alpine</h2>
+<p>Picking up where Scott left off we want to run on Alpine.</p>
+<blockquote>
+<p>login: https://ondemand-rmacc.rc.colorado.edu/ </p>
+</blockquote>
+<pre><code class="language-bash">[bbearce@xsede.org@login-ci1 ~]$ 
+</code></pre>
+<pre><code class="language-bash">[bbearce@xsede.org@login-ci1 ~]$ curc-quota
+------------------------------------------------------------------------
+                                       Used         Avail    Quota Limit
+------------------------------------------------------------------------
+/home/bbearce@xsede.org                   0          2.0G           2.0G
+/projects/bbearce@xsede.org               0          250G           250G
+/scratch/alpine1                         0G         9537G          9537G
+
+[bbearce@xsede.org@login-ci1 ~]$ cd /projects/bbearce@xsede.org
+[bbearce@xsede.org@login-ci1 bbearce@xsede.org]$ ls
+ondemand  README.mdwn
+</code></pre>
+<h2 id="set-important-environment-variables">Set important environment variables</h2>
+<p>This is to not fill up your quota:</p>
+<pre><code class="language-bash">module load singularity/3.6.4
+export TMP=/scratch/alpine/$USER
+export TEMP=/scratch/alpine/$USER
+export TMPDIR=/scratch/alpine/$USER
+export TEMPDIR=/scratch/alpine/$USER
+export ALPINE_SCRATCH=/gpfs/alpine1/scratch/$USER
+export APPTAINER_TMPDIR=$ALPINE_SCRATCH/singularity/tmp
+export APPTAINER_CACHEDIR=$ALPINE_SCRATCH/singularity/cache
+mkdir -pv $APPTAINER_CACHEDIR $APPTAINER_TMPDIR
+</code></pre>
+<blockquote>
+<p>Work in <code>/projects</code> and cache images and layers <code>/scratch</code></p>
+</blockquote>
+<h2 id="create-recipe">Create Recipe</h2>
+<pre><code class="language-bash">[bbearce@xsede.org@c3cpu-a5-u34-3 singularity]$ cd /projects/bbearce@xsede.org/singularity
+
+[bbearce@xsede.org@c3cpu-c15-u11-4 singularity]$ apptainer build pytorch_w_cuda.sif pytorch_based.recipe
+INFO:    Environment variable SINGULARITY_TMPDIR is set, but APPTAINER_TMPDIR is preferred
+INFO:    User not listed in /etc/subuid, trying root-mapped namespace
+INFO:    Environment variable SINGULARITY_TMPDIR is set, but APPTAINER_TMPDIR is preferred
+INFO:    The %post section will be run under fakeroot
+INFO:    Environment variable SINGULARITY_CACHEDIR is set, but APPTAINER_CACHEDIR is preferred
+INFO:    Starting build...
+Getting image source signatures
+Copying blob 99803d4b97f3 done  
+Copying blob 4f4fb700ef54 done  
+Copying blob 4ade0a4bc5d5 done  
+Copying blob 2185b402c9ca done  
+Copying blob 035a286326d6 [=========&gt;----------------------------] 782.8MiB / 2.9GiB
+</code></pre>
+<p>sinteractive --partition=atesting --ntasks-per-node=1 --nodes=1 --time=00:10:00</p>
+<h2 id="sylabs-container-registry">Sylabs Container Registry</h2>
+<p>List Remotes:</p>
+<pre><code class="language-bash">apptainer remote list
+Cloud Services Endpoints
+========================
+
+NAME           URI                  ACTIVE  GLOBAL  EXCLUSIVE  INSECURE
+DefaultRemote  cloud.apptainer.org  YES     YES     NO         NO
+
+Keyservers
+==========
+
+URI                       GLOBAL  INSECURE  ORDER
+https://keys.openpgp.org  YES     NO        1*
+
+* Active cloud services keyserver
+</code></pre>
+<p>Sylabs was the default but we have to add retroactvely.</p>
+<pre><code class="language-bash">apptainer remote add --no-login SylabsCloud cloud.sycloud.io
+</code></pre>
+<p>Switch remote:</p>
+<pre><code class="language-bash">apptainer remote use SylabsCloud
+</code></pre>
+<p>Login:</p>
+<pre><code class="language-bash">apptainer remote login
+Generate an access token at https://cloud.sycloud.io/auth/tokens, and paste it here.
+Token entered will be hidden for security.
+Access Token: 
+INFO:    Access Token Verified!
+INFO:    Token stored in /home/bearceb/.apptainer/remote.yaml
+</code></pre>
+<p>Push (<code>-U</code> means unsigned. <a href="https://cloud.sylabs.io/keystore">Sign</a> for more security):</p>
+<pre><code class="language-bash">apptainer push -U ubuntu_latest.sif library://bbearce/ubuntu/dockerhub:pushed
+WARNING: Skipping container verification
+28.4MiB / 28.4MiB [================================================================] 100 % 6.0 MiB/s 0s
+</code></pre>
+<p>Pull:</p>
+<pre><code class="language-bash">apptainer pull library://bbearce/ubuntu/dockerhub:latest
+
+bearceb@ophlapps03:~/singularity$ ls
+dockerhub_latest.sif
+</code></pre>
+<h2 id="remote-builder-havent-got-working">Remote Builder (Haven't got working )</h2>
+<p><a href="https://curc.readthedocs.io/en/latest/software/Containerizationon.html?highlight=singularity#singularity">Remote Builder</a></p>
+<p>Build images remotely.</p>
+<h3 id="make-a-syslabs-token">Make a syslabs token</h3>
+<pre><code class="language-bash">cd ~
+mkdir .singularity; cd .singularity
+echo “&lt;your-token&gt;” &gt; ~/.singularity/sylabs-token
+singularity build --remote &lt;desired-image-name&gt; &lt;your-recipe&gt;
+</code></pre>
+<pre><code class="language-bash">singularity build --remote pytorch.sif pytorch_based.recipe
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav">
+      <a href="../demo_for_qtim/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../demo_for_qtim/" class="btn btn-xs btn-link">
+        Demo for QTIM
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
