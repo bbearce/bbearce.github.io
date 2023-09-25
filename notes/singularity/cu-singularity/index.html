@@ -39,8 +39,6 @@
               {title: "Sandbox", url: "#sandbox" },
               {title: "Run", url: "#run" },
               {title: "Alpine", url: "#alpine" },
-              {title: "Sylabs Container Registry", url: "#sylabs-container-registry" },
-              {title: "Remote Builder (Haven\u0027t got working )", url: "#remote-builder-havent-got-working" },
           ]},
         ];
 
@@ -178,11 +176,12 @@ INFO:    Creating SIF file...
 INFO:    Build complete: s_ubuntu_modified
 </code></pre>
 <h2 id="run">Run</h2>
-<blockquote>
-<p>Work on this</p>
-</blockquote>
 <pre><code class="language-bash">singularity run ubuntu_latest.sif
+Apptainer&gt;
 </code></pre>
+<blockquote>
+<p>For this image brings you to bash</p>
+</blockquote>
 <h2 id="alpine">Alpine</h2>
 <p>Picking up where Scott left off we want to run on Alpine.</p>
 <blockquote>
@@ -233,7 +232,7 @@ Copying blob 4ade0a4bc5d5 done
 Copying blob 2185b402c9ca done  
 Copying blob 035a286326d6 [=========&gt;----------------------------] 782.8MiB / 2.9GiB
 </code></pre>
-<h2 id="sylabs-container-registry">Sylabs Container Registry</h2>
+<h3 id="sylabs-container-registry">Sylabs Container Registry</h3>
 <p>List Remotes:</p>
 <pre><code class="language-bash">apptainer remote list
 Cloud Services Endpoints
@@ -274,17 +273,6 @@ WARNING: Skipping container verification
 
 bearceb@ophlapps03:~/singularity$ ls
 dockerhub_latest.sif
-</code></pre>
-<h2 id="remote-builder-havent-got-working">Remote Builder (Haven't got working )</h2>
-<p><a href="https://curc.readthedocs.io/en/latest/software/Containerizationon.html?highlight=singularity#singularity">Remote Builder</a></p>
-<p>Build images remotely.</p>
-<h3 id="make-a-syslabs-token">Make a syslabs token</h3>
-<pre><code class="language-bash">cd ~
-mkdir .singularity; cd .singularity
-echo “&lt;your-token&gt;” &gt; ~/.singularity/sylabs-token
-singularity build --remote &lt;desired-image-name&gt; &lt;your-recipe&gt;
-</code></pre>
-<pre><code class="language-bash">singularity build --remote pytorch.sif pytorch_based.recipe
 </code></pre>
 
   <br>
