@@ -134,7 +134,7 @@ Apptainer&gt; pwd
 Apptainer&gt; touch test.txt
 
 Apptainer&gt; touch /mnt/test.txt
-touch: cannot touch '/mnttest.txt': Read-only file system
+touch: cannot touch '/mnt/test.txt': Read-only file system
 </code></pre>
 <p>Only mounted directories have write permissions (<code>$PWD</code> is one automatically mounted). Shelling provides read-only access to images.</p>
 <ul>
@@ -171,16 +171,13 @@ exit
 bbearce@pop-os:~/Desktop/singularity$ apptainer shell --writable s_ubuntu 
 WARNING: Skipping mount /etc/localtime [binds]: /etc/localtime doesn't exist in container
 Apptainer&gt; touch /mnt/test.txt
-Apptainer&gt; 
+Apptainer&gt; pip install &lt;package&gt;
 </code></pre>
 <p>To build back into an image:</p>
 <pre><code class="language-bash">bbearce@pop-os:~/Desktop/singularity$ apptainer build s_ubuntu_modified s_ubuntu
 INFO:    Starting build...
 INFO:    Creating SIF file...
 INFO:    Build complete: s_ubuntu_modified
-</code></pre>
-<p>Installing software</p>
-<pre><code class="language-bash">
 </code></pre>
 <h2 id="run">Run</h2>
 <blockquote>
@@ -207,8 +204,10 @@ INFO:    Build complete: s_ubuntu_modified
 [bbearce@xsede.org@login-ci1 bbearce@xsede.org]$ ls
 ondemand  README.mdwn
 </code></pre>
+<pre><code class="language-bash">acompile # start session
+</code></pre>
 <h2 id="set-important-environment-variables">Set important environment variables</h2>
-<p>This is to not fill up your quota:</p>
+<p>This is to now fill up your quota:</p>
 <pre><code class="language-bash">module load singularity/3.6.4
 export TMP=/scratch/alpine/$USER
 export TEMP=/scratch/alpine/$USER
@@ -219,9 +218,6 @@ export APPTAINER_TMPDIR=$ALPINE_SCRATCH/singularity/tmp
 export APPTAINER_CACHEDIR=$ALPINE_SCRATCH/singularity/cache
 mkdir -pv $APPTAINER_CACHEDIR $APPTAINER_TMPDIR
 </code></pre>
-<blockquote>
-<p>Work in <code>/projects</code> and cache images and layers <code>/scratch</code></p>
-</blockquote>
 <h2 id="create-recipe">Create Recipe</h2>
 <pre><code class="language-bash">[bbearce@xsede.org@c3cpu-a5-u34-3 singularity]$ cd /projects/bbearce@xsede.org/singularity
 
@@ -239,7 +235,6 @@ Copying blob 4ade0a4bc5d5 done
 Copying blob 2185b402c9ca done  
 Copying blob 035a286326d6 [=========&gt;----------------------------] 782.8MiB / 2.9GiB
 </code></pre>
-<p>sinteractive --partition=atesting --ntasks-per-node=1 --nodes=1 --time=00:10:00</p>
 <h2 id="sylabs-container-registry">Sylabs Container Registry</h2>
 <p>List Remotes:</p>
 <pre><code class="language-bash">apptainer remote list
