@@ -39,8 +39,6 @@
               {title: "Sandbox", url: "#sandbox" },
               {title: "Run", url: "#run" },
               {title: "Alpine", url: "#alpine" },
-              {title: "Set important environment variables", url: "#set-important-environment-variables" },
-              {title: "Create Recipe", url: "#create-recipe" },
               {title: "Sylabs Container Registry", url: "#sylabs-container-registry" },
               {title: "Remote Builder (Haven\u0027t got working )", url: "#remote-builder-havent-got-working" },
           ]},
@@ -206,7 +204,7 @@ ondemand  README.mdwn
 </code></pre>
 <pre><code class="language-bash">acompile # start session
 </code></pre>
-<h2 id="set-important-environment-variables">Set important environment variables</h2>
+<h3 id="set-important-environment-variables">Set important environment variables</h3>
 <p>This is to now fill up your quota:</p>
 <pre><code class="language-bash">module load singularity/3.6.4
 export TMP=/scratch/alpine/$USER
@@ -218,7 +216,7 @@ export APPTAINER_TMPDIR=$ALPINE_SCRATCH/singularity/tmp
 export APPTAINER_CACHEDIR=$ALPINE_SCRATCH/singularity/cache
 mkdir -pv $APPTAINER_CACHEDIR $APPTAINER_TMPDIR
 </code></pre>
-<h2 id="create-recipe">Create Recipe</h2>
+<h3 id="create-from-recipe">Create From Recipe</h3>
 <pre><code class="language-bash">[bbearce@xsede.org@c3cpu-a5-u34-3 singularity]$ cd /projects/bbearce@xsede.org/singularity
 
 [bbearce@xsede.org@c3cpu-c15-u11-4 singularity]$ apptainer build pytorch_w_cuda.sif pytorch_based.recipe
