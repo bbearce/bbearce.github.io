@@ -35,6 +35,7 @@
         var pageToc = [
           {title: "Environments", url: "#_top", children: [
               {title: "Venv (virtualenv in python2)", url: "#venv-virtualenv-in-python2" },
+              {title: "Poetry", url: "#poetry" },
               {title: "Pyenv", url: "#pyenv" },
               {title: "PDM", url: "#pdm" },
           ]},
@@ -158,6 +159,18 @@ drwxrwxr-x  6 bbearce bbearce 4096 Jul 22  2022 venv3.10.4
 </code></pre>
 <p>VSCode Example:
 <img alt="venv3.10." src="vscode-venv.jpg" /></p>
+<h2 id="poetry">Poetry</h2>
+<p><a href="https://python-poetry.org/docs/">Poetry</a></p>
+<h3 id="install">Install</h3>
+<pre><code class="language-bash">curl -sSL https://install.python-poetry.org | python3 -
+</code></pre>
+<h3 id="uninstall">Uninstall</h3>
+<pre><code class="language-bash">curl -sSL https://install.python-poetry.org | python3 - --uninstall
+</code></pre>
+<h3 id="version">Version</h3>
+<pre><code class="language-bash">$ poetry --version
+Poetry (version 1.6.1)
+</code></pre>
 <h2 id="pyenv">Pyenv</h2>
 <p><a href="https://github.com/pyenv/pyenv">Official Docs</a><br />
 <a href="https://realpython.com/intro-to-pyenv/#installing-pyenv">realpython.com</a> (they use the above to guide you)</p>
@@ -328,7 +341,7 @@ bbearce@pop-os:~/Desktop/venv_demo$
 </blockquote>
 <p>PDM was created to mimic npm whereby you don't need virtualenvs. All you need are base pythons and <code>__pypackages__</code>. Instead of bundling your packages with venvs, which are copies of base environmetns, why don't we use a single <code>3.11.5</code> and have <strong>projects</strong> with packages that all use the same base <code>3.11.5</code> version or any other version you'd like. </p>
 <p>PS: You can and unfortunately should use vitualenvs with pdm as PEP 582 has been rejected which was the whole point. Nonetheless this package manager is nice and organized. It uses .toml files like <a href="https://python-poetry.org/">Poetry</a> to manage depedencies so it is nice still. </p>
-<h3 id="install">Install</h3>
+<h3 id="install_1">Install</h3>
 <pre><code class="language-bash"># Linux\Mac
 curl -sSL https://pdm.fming.dev/install-pdm.py | python3 -
 </code></pre>
@@ -697,7 +710,7 @@ ModuleNotFoundError: No module named 'pandas'
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>
