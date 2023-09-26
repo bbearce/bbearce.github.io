@@ -171,6 +171,149 @@ drwxrwxr-x  6 bbearce bbearce 4096 Jul 22  2022 venv3.10.4
 <pre><code class="language-bash">$ poetry --version
 Poetry (version 1.6.1)
 </code></pre>
+<h3 id="project-setup">Project Setup</h3>
+<pre><code class="language-bash">cd ~/Desktop
+poetry new poetry-demo
+</code></pre>
+<pre><code class="language-bash">bbearce@terry:~/Desktop$ ls
+poetry-demo
+
+bbearce@terry:~/Desktop$ ls poetry-demo
+poetry_demo  poetry.lock  pyproject.toml  README.md  tests
+</code></pre>
+<h3 id="dependencies">Dependencies</h3>
+<p>Store them under <code>[tool.poetry.dependencies]</code> in pyproject.toml:</p>
+<pre><code class="language-bash">[tool.poetry.dependencies]
+python = &quot;^3.10&quot;
+pendulum = &quot;^2.1.2&quot;
+</code></pre>
+<p>Install with <code>poetry install</code>:</p>
+<pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ poetry install
+Installing dependencies from lock file
+
+No dependencies to install or update
+
+Installing the current project: poetry-demo (0.1.0)
+</code></pre>
+<h4 id="adding-dependencies">Adding Dependencies:</h4>
+<p>You can specify dependencies in pyproject.toml as above or use poetry's cli to add them:</p>
+<pre><code class="language-bash">poetry add pendulum
+</code></pre>
+<p>This makes a <strong>virtual environment</strong> automatically:</p>
+<pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ poetry add pendulum
+Creating virtualenv poetry-demo-yD2F6f32-py3.10 in /home/bbearce/.cache/pypoetry/virtualenvs
+Using version ^2.1.2 for pendulum
+
+Updating dependencies
+Resolving dependencies... Downloading https://files.pythonhosted.org/packages/e0/4f/4474bda990ee740a020cbc3eb271925ef7daa7c844424
+Resolving dependencies... (0.6s)
+
+Package operations: 4 installs, 0 updates, 0 removals
+
+  • Installing six (1.16.0)
+  • Installing python-dateutil (2.8.2)
+  • Installing pytzdata (2020.1)
+  • Installing pendulum (2.1.2)
+
+Writing lock file
+</code></pre>
+<p>From above:</p>
+<pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ source /home/bbearce/.cache/pypoetry/virtualenvs/poetry-demo-yD2F6f32-py3.10/bin/activate
+(poetry-demo-py3.10) bbearce@terry:~/Desktop/poetry-demo$ deactivate
+bbearce@terry:~/Desktop/poetry-demo$
+</code></pre>
+<p>By default, Poetry creates a virtual environment in <code>{cache-dir}/virtualenvs</code>. You can change the <a href="https://python-poetry.org/docs/configuration/#cache-dir">cache-dir</a> value by editing the Poetry configuration. Additionally, you can use the <a href="https://python-poetry.org/docs/configuration/#virtualenvsin-project">virtualenvs.in-project</a> configuration variable to create virtual environments within your project directory.</p>
+<h3 id="virtual-environments-still-poetry">Virtual Environments (still Poetry)</h3>
+<p>As mentioned above we can add <a href="https://python-poetry.org/docs/configuration/#cache-dir">cache-dir</a> and <a href="https://python-poetry.org/docs/configuration/#virtualenvsin-project">virtualenvs.in-project</a> to our project to affect where poetry virtual environments go and or which virtual environments are associated with the project</p>
+<h4 id="cache-dir">cache-dir</h4>
+<p>Type: <code>string</code>
+Environment Variable: <code>POETRY_CACHE_DIR</code>
+The path to the cache directory used by Poetry.</p>
+<p>Defaults to one of the following directories:</p>
+<p>macOS: ~/Library/Caches/pypoetry
+Windows: C:\Users\<username>\AppData\Local\pypoetry\Cache
+Unix: ~/.cache/pypoetry</p>
+<pre><code class="language-bash">ls ~/.cache/pypoetry
+artifacts  cache  virtualenvs
+</code></pre>
+<p>See project envs:</p>
+<pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ poetry env list
+poetry-demo-yD2F6f32-py3.10 (Activated)
+</code></pre>
+<p>See project config:</p>
+<pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ poetry config --list
+cache-dir = &quot;/home/bbearce/.cache/pypoetry&quot;
+experimental.system-git-client = false
+installer.max-workers = null
+installer.modern-installation = true
+installer.no-binary = null
+installer.parallel = true
+virtualenvs.create = true
+virtualenvs.in-project = null
+virtualenvs.options.always-copy = false
+virtualenvs.options.no-pip = false
+virtualenvs.options.no-setuptools = false
+virtualenvs.options.system-site-packages = false
+virtualenvs.path = &quot;{cache-dir}/virtualenvs&quot;  # /home/bbearce/.cache/pypoetry/virtualenvs
+virtualenvs.prefer-active-python = false
+virtualenvs.prompt = &quot;{project_name}-py{python_version}&quot;
+</code></pre>
+<p>Set project config:</p>
+<pre><code class="language-bash">poetry config cache-dir ./cache
+
+bbearce@terry:~/Desktop/poetry-demo$ cat ~/.config/pypoetry/config.toml 
+cache-dir = &quot;cache&quot;
+
+# reset
+poetry config cache-dir /home/bbearce/.cache/pypoetry
+</code></pre>
+<h4 id="virtualenvsin-project">virtualenvs.in-project</h4>
+<p>Type: <code>boolean</code>
+Default: <code>None</code>
+Environment Variable: <code>POETRY_VIRTUALENVS_IN_PROJECT</code></p>
+<p>Create the virtualenv inside the project’s root directory.</p>
+<p>If not set explicitly, poetry by default will create a virtual environment under {cache-dir}/virtualenvs or use the {project-dir}/.venv directory if one already exists.</p>
+<p>If set to true, the virtualenv will be created and expected in a folder named .venv within the root directory of the project.</p>
+<pre><code class="language-bash">poetry config virtualenvs.in-project true
+poetry config virtualenvs.in-project false # to unset
+</code></pre>
+<p>Now install:</p>
+<pre><code class="language-bash">poetry install
+
+Creating virtualenv poetry-demo-yD2F6f32-py3.10 in cache/virtualenvs
+Installing dependencies from lock file
+
+Package operations: 4 installs, 0 updates, 0 removals
+
+  • Installing six (1.16.0)
+  • Installing python-dateutil (2.8.2)
+  • Installing pytzdata (2020.1)
+  • Installing pendulum (2.1.2)
+
+Installing the current project: poetry-demo (0.1.0)
+bbearce@terry:~/Desktop/poetry-demo$ ls
+cache  poetry_demo  poetry.lock  pyproject.toml  README.md  tests
+bbearce@terry:~/Desktop/poetry-demo$ ls cache/
+artifacts  cache  virtualenvs
+bbearce@terry:~/Desktop/poetry-demo$ ls cache/virtualenvs/
+poetry-demo-yD2F6f32-py3.10
+</code></pre>
+<h4 id="activate-virtual-environments">Activate Virtual Environments</h4>
+<p>Use <code>poetry shell</code> to activate the virtual environment within a nested shell.</p>
+<pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ poetry shell
+Spawning shell within /home/bbearce/.cache/pypoetry/virtualenvs/poetry-demo-yD2F6f32-py3.10
+. /home/bbearce/.cache/pypoetry/virtualenvs/poetry-demo-yD2F6f32-py3.10/bin/activate
+bbearce@terry:~/Desktop/poetry-demo$ . /home/bbearce/.cache/pypoetry/virtualenvs/poetry-demo-yD2F6f32-py3.10/bin/activate
+
+# Deactivate with `exit`
+(poetry-demo-py3.10) bbearce@terry:~/Desktop/poetry-demo$ exit
+exit
+</code></pre>
+<blockquote>
+<p>To deactivate the virtual environment and exit this new shell type <code>exit</code>. To deactivate the virtual environment without leaving the shell use <code>deactivate</code>.</p>
+</blockquote>
+<h3 id="git">Git</h3>
+<p>Always commit both the <code>pyproject.toml</code> and <code>poetry.lock</code> files to your project.</p>
 <h2 id="pyenv">Pyenv</h2>
 <p><a href="https://github.com/pyenv/pyenv">Official Docs</a><br />
 <a href="https://realpython.com/intro-to-pyenv/#installing-pyenv">realpython.com</a> (they use the above to guide you)</p>
