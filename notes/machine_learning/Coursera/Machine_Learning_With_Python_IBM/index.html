@@ -160,7 +160,18 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Remember dependent variables have to be continuous</p>
 </blockquote>
-<p>$y = \theta_0 + \theta_1 x_1$</p>
+<p>$y(hat) = \theta_0 + \theta_1 x_1$</p>
+<p>A residual error is the difference between y which is the data itself (x,y) from the csv and y(hat), the regression line evaluated at x (x, y(hat)).</p>
+<p>The mean of all residual errors shows how poorly the estimation approximates the best regression. This is called the Mean Squared Error:</p>
+<p>$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2$</p>
+<p>It can be shown that $\theta_0$ and $\theta_1$ are:</p>
+<p>$\theta_1 = \frac{\sum_{i=1}^{S} (x_i - x_m) (y_i - y_m)}{\sum_{i=1}^{S} (x_i - x_m)^2}$</p>
+<p>$\theta_0 = y_m - \theta_1 x_m$</p>
+<p>where:</p>
+<ul>
+<li>$x_m$ is the mean of all x values</li>
+<li>$y_m$ is the mean of all y values</li>
+</ul>
 <p>Let's use code:</p>
 <pre><code class="language-python">
 </code></pre>
