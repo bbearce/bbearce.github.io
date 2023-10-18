@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Intro - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Machine Learning With Python", url: "#_top", children: [
+              {title: "Supervised and Unsupervised Learning", url: "#supervised-and-unsupervised-learning" },
+              {title: "Regression", url: "#regression_1" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
+        Cluster
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../layouts/holy_grail/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../layouts/holy_grail/" class="btn btn-xs btn-link">
+        Holy Grail
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="machine-learning-with-python">Machine Learning With Python</h1>
+<p>Source: <a href="https://www.coursera.org/learn/machine-learning-with-python">Machine_Learning_With_Python_IBM</a></p>
+<h2 id="supervised-and-unsupervised-learning">Supervised and Unsupervised Learning</h2>
+<h3 id="supervised">Supervised</h3>
+<p>Overall this is labeled data. Data from a csv is labeled. However be careful. <em>Supervised</em> learning is predicting a column for which you already have data but for a new observation or row that you haven't seen yet.</p>
+<p>There are two types of supervised techniques.</p>
+<h4 id="classification">Classification</h4>
+<p>Predict discrete class label or category</p>
+<p>So with a csv like:</p>
+<pre><code class="language-bash">animal_id|eye_size|num_legs|weight|animal
+...
+</code></pre>
+<p>We could predict the <em>animal</em> col as we have that label.</p>
+<h4 id="regression">Regression</h4>
+<p>Predict continuous value. So with a csv like:</p>
+<pre><code class="language-bash">car_id|engine_size|cylinders|fuel_consumption|co2_emissions
+...
+</code></pre>
+<p>If you have many observations, you could attempt to predict <em>co2_emissions</em>  for a new observation</p>
+<h3 id="unsupervised">Unsupervised</h3>
+<p>Overall this is unlabeled data. This could still be from the same csv of data but you would be predicting a new column you don't know about yet. So with a csv like:</p>
+<pre><code class="language-bash">car_id|engine_size|cylinders|fuel_consumption|co2_emissions
+...
+</code></pre>
+<h4 id="dimension-reduction">Dimension Reduction</h4>
+<p>Feature selection and dimension reduction reduces redundant features to make the clasification easier.</p>
+<h4 id="density-estimation">Density Estimation</h4>
+<p>Simple concept to explore the data to find structue within it.</p>
+<h4 id="market-basket-analysis">Market Basket Analysis</h4>
+<p>If you buy a certain group of items, you are likely to buy another group of items.</p>
+<h4 id="clustering">Clustering</h4>
+<p>Grouping data points and objects that are somehow similar.</p>
+<ul>
+<li>Discover structure</li>
+<li>Summarization</li>
+<li>Anomaly detection</li>
+</ul>
+<p>Summary supervised learning has labeled data and unsupervised does not.</p>
+<h2 id="regression_1">Regression</h2>
+<p>Take this dataset:</p>
+<pre><code class="language-bash">car_id|engine_size|cylinders|fuel_consumption|co2_emissions
+...
+</code></pre>
+<p>Can we predict the co2 emissions of the car given all features but co2?</p>
+<p><em>Dependent</em> (y) variables are the goal we study. The the dependent variables have to be continuous.</p>
+<p><em>Independent</em> (x) variables are the causes of the dependent variable states. Independent variables can be continuous or categorical.</p>
+<h3 id="simple-regression">Simple Regression</h3>
+<p>One independent variable is used to predict a dependent variable. </p>
+<h3 id="multiple-regression">Multiple Regression</h3>
+<p>Multiple independent variables are used to predict a dependent variable. </p>
+<h3 id="applications-of-regression">Applications of Regression</h3>
+<ul>
+<li>Sales forecasting</li>
+<li>Satisfaction analysis</li>
+<li>Price estimation</li>
+<li>Employment income prediction</li>
+</ul>
+<h3 id="regression-algorithms">Regression Algorithms</h3>
+<ul>
+<li>Ordinal regression</li>
+<li>Poisson regression</li>
+<li>Fast forest quantile regression</li>
+<li>Linear, Polynomial, Lasson, Stepwise, Ridge regression</li>
+<li>Bayesian linear regression</li>
+<li>Neural network regression</li>
+<li>Decision forest regression</li>
+<li>Boosted decision tree regression</li>
+<li>KNN (K-nearest neighbors)</li>
+</ul>
+<h3 id="linear-regression">Linear Regression</h3>
+<p>Return to this this dataset:</p>
+<pre><code class="language-bash">car_id|engine_size|cylinders|fuel_consumption|co2_emissions
+...
+</code></pre>
+<blockquote>
+<p>Remember dependent variables have to be continuous</p>
+</blockquote>
+<p>$y = \theta_0 + \theta_1 x_1$</p>
+<p>Let's use code:</p>
+<pre><code class="language-python">
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
+        Cluster
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../../layouts/holy_grail/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../../layouts/holy_grail/" class="btn btn-xs btn-link">
+        Holy Grail
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -220,14 +220,15 @@ Package operations: 4 installs, 0 updates, 0 removals
 
 Writing lock file
 </code></pre>
-<p>From above:</p>
-<pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ source /home/bbearce/.cache/pypoetry/virtualenvs/poetry-demo-yD2F6f32-py3.10/bin/activate
-(poetry-demo-py3.10) bbearce@terry:~/Desktop/poetry-demo$ deactivate
-bbearce@terry:~/Desktop/poetry-demo$
-</code></pre>
-<p>By default, Poetry creates a virtual environment in <code>{cache-dir}/virtualenvs</code>. You can change the <a href="https://python-poetry.org/docs/configuration/#cache-dir">cache-dir</a> value by editing the Poetry configuration. Additionally, you can use the <a href="https://python-poetry.org/docs/configuration/#virtualenvsin-project">virtualenvs.in-project</a> configuration variable to create virtual environments within your project directory.</p>
-<h3 id="virtual-environments-still-poetry">Virtual Environments (still Poetry)</h3>
-<p>As mentioned above we can add <a href="https://python-poetry.org/docs/configuration/#cache-dir">cache-dir</a> and <a href="https://python-poetry.org/docs/configuration/#virtualenvsin-project">virtualenvs.in-project</a> to our project to affect where poetry virtual environments go and or which virtual environments are associated with the project</p>
+<p>By default, Poetry creates a virtual environment in <code>{cache-dir}/virtualenvs</code>. You can change the <a href="https://python-poetry.org/docs/configuration/#cache-dir">cache-dir</a> value by editing the Poetry configuration. Additionally, you can use the <a href="https://python-poetry.org/docs/configuration/#virtualenvsin-project">virtualenvs.in-project</a> configuration variable to create virtual environments within your project directory. Finally <a href="https://python-poetry.org/docs/configuration/#virtualenvscreate">virtualenvs.create</a> let's poetry know if you want it to create a virtualenv or not. If <code>false</code>, if it detects an already enabled virtual environment or an existing one in <code>{cache-dir}/virtualenvs</code> or <code>{project-dir}/.venv</code> it will install dependencies into them, otherwise it will install dependencies into the systems python environment. If a virtualenv isn't activated it will use system <code>PATH</code> and will use system python and or pyenv if that is what you are using.</p>
+<blockquote>
+<p>We explore this a litte deeper below</p>
+</blockquote>
+<h3 id="config">Config</h3>
+<p>As mentioned above we can set these config variables:<br />
+<em> <a href="https://python-poetry.org/docs/configuration/#cache-dir">cache-dir</a><br />
+</em> <a href="https://python-poetry.org/docs/configuration/#virtualenvsin-project">virtualenvs.in-project</a><br />
+* <a href="https://python-poetry.org/docs/configuration/#virtualenvscreate">virtualenvs.create</a>  </p>
 <h4 id="cache-dir">cache-dir</h4>
 <p>Type: <code>string</code>
 Environment Variable: <code>POETRY_CACHE_DIR</code>
@@ -283,28 +284,54 @@ Environment Variable: <code>POETRY_VIRTUALENVS_IN_PROJECT</code></p>
 poetry config virtualenvs.in-project false # to unset
 </code></pre>
 <p>Now install:</p>
-<pre><code class="language-bash">poetry install
-
-Creating virtualenv poetry-demo-yD2F6f32-py3.10 in cache/virtualenvs
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/poetry-demo$ poetry install
 Installing dependencies from lock file
 
-Package operations: 4 installs, 0 updates, 0 removals
+Package operations: 11 installs, 0 updates, 0 removals
 
   • Installing six (1.16.0)
+  • Installing certifi (2023.7.22)
+  • Installing charset-normalizer (3.3.0)
+  • Installing idna (3.4)
+  • Installing numpy (1.26.0)
   • Installing python-dateutil (2.8.2)
-  • Installing pytzdata (2020.1)
-  • Installing pendulum (2.1.2)
+  • Installing pytz (2023.3.post1)
+  • Installing tzdata (2023.3)
+  • Installing urllib3 (2.0.6)
+  • Installing pandas (2.1.1)
+  • Installing requests (2.31.0)
 
 Installing the current project: poetry-demo (0.1.0)
-bbearce@terry:~/Desktop/poetry-demo$ ls
-cache  poetry_demo  poetry.lock  pyproject.toml  README.md  tests
-bbearce@terry:~/Desktop/poetry-demo$ ls cache/
-artifacts  cache  virtualenvs
-bbearce@terry:~/Desktop/poetry-demo$ ls cache/virtualenvs/
-poetry-demo-yD2F6f32-py3.10
+
+bbearce@pop-os:~/Desktop/poetry-demo$ ls -la .venv/lib/python3.10/site-packages/ | grep pandas
+drwxrwxr-x 15 bbearce bbearce  4096 Oct  7 18:16 pandas
+drwxrwxr-x  2 bbearce bbearce  4096 Oct  7 18:16 pandas-2.1.1.dist-info
 </code></pre>
+<h4 id="virtualenvscreate">virtualenvs.create</h4>
+<p>This config setting tells poetry to make a virtualenv in <code>./.venv</code> or <code>{cache-dir}/virtualenvs</code>. We've seen how to create venvs but lets' see what happens if we don't.</p>
+<pre><code class="language-bash">bearce@pop-os:~/Desktop/poetry-demo$ poetry config virtualenvs.create false
+bbearce@pop-os:~/Desktop/poetry-demo$ poetry config --list
+cache-dir = &quot;/home/bbearce/.cache/pypoetry&quot;
+...
+virtualenvs.create = false
+virtualenvs.in-project = false
+...
+virtualenvs.path = &quot;{cache-dir}/virtualenvs&quot;  # /home/bbearce/.cache/pypoetry/virtualenvs
+...
+</code></pre>
+<p>In this mode poetry will use the first python on the <code>PATH</code>. This could be:<br />
+<em> the system python<br />
+</em> an activated virtual environment
+* a local pyenv
+* a global pyenv
+* ...</p>
 <h4 id="activate-virtual-environments">Activate Virtual Environments</h4>
-<p>Use <code>poetry shell</code> to activate the virtual environment within a nested shell.</p>
+<p>Source like normal:</p>
+<pre><code class="language-bash">bash: .venv/bin/activatae: No such file or directory
+bbearce@pop-os:~/Desktop/poetry-demo$ source .venv/bin/activate
+(poetry-demo-py3.10) bbearce@pop-os:~/Desktop/poetry-demo$ 
+</code></pre>
+<p>Or use <code>poetry shell</code> to activate the virtual environment within a nested shell.</p>
 <pre><code class="language-bash">bbearce@terry:~/Desktop/poetry-demo$ poetry shell
 Spawning shell within /home/bbearce/.cache/pypoetry/virtualenvs/poetry-demo-yD2F6f32-py3.10
 . /home/bbearce/.cache/pypoetry/virtualenvs/poetry-demo-yD2F6f32-py3.10/bin/activate
@@ -319,6 +346,54 @@ exit
 </blockquote>
 <h3 id="git">Git</h3>
 <p>Always commit both the <code>pyproject.toml</code> and <code>poetry.lock</code> files to your project.</p>
+<h3 id="use-pyenv-environments-with-poetry">Use Pyenv environments with Poetry</h3>
+<p>If you want to use pyenv with its virtualenv extension to manage virtual environments, but still leverage Poetry's caching mechanism for PyPI packages, you can follow these steps:</p>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop$ pyenv versions
+* system (set by /home/bbearce/.pyenv/version)
+  3.10.4
+
+bbearce@pop-os:~/Desktop$ pyenv virtualenv 3.10.4 venv3.10.4
+
+bbearce@pop-os:~/Desktop$ pyenv versions
+* system (set by /home/bbearce/.pyenv/version)
+  3.10.4
+  3.10.4/envs/venv3.10.4
+  venv3.10.4 --&gt; /home/bbearce/.pyenv/versions/3.10.4/envs/venv3.10.4
+
+bbearce@pop-os:~/Desktop$ poetry new poetry-demo
+Created package poetry_demo in poetry-demo
+bbearce@pop-os:~/Desktop$ cd poetry-demo/
+bbearce@pop-os:~/Desktop/poetry-demo$ poetry config virtualenvs.create false
+bbearce@pop-os:~/Desktop/poetry-demo$ poetry config virtualenvs.in-project false
+
+bbearce@pop-os:~/Desktop/poetry-demo$ pyenv activate venv3.10.4 
+
+(venv3.10.4) bbearce@pop-os:~/Desktop/poetry-demo$ poetry add requests
+Using version ^2.31.0 for requests
+
+Updating dependencies
+Resolving dependencies... (0.2s)
+
+Package operations: 5 installs, 0 updates, 0 removals
+
+  • Installing certifi (2023.7.22)
+  • Installing charset-normalizer (3.3.0)
+  • Installing idna (3.4)
+  • Installing urllib3 (2.0.6)
+  • Installing requests (2.31.0)
+
+Writing lock file
+
+(venv3.10.4) bbearce@pop-os:~/Desktop/poetry-demo$ python
+Python 3.10.4 (main, Oct  7 2023, 16:49:10) [GCC 11.4.0] on linux
+Type &quot;help&quot;, &quot;copyright&quot;, &quot;credits&quot; or &quot;license&quot; for more information.
+&gt;&gt;&gt; import requests
+&gt;&gt;&gt; import sys
+&gt;&gt;&gt; sys.executable
+'/home/bbearce/.pyenv/versions/venv3.10.4/bin/python'
+&gt;&gt;&gt; 
+
+</code></pre>
 <h2 id="pyenv">Pyenv</h2>
 <p><a href="https://github.com/pyenv/pyenv">Official Docs</a><br />
 <a href="https://realpython.com/intro-to-pyenv/#installing-pyenv">realpython.com</a> (they use the above to guide you)</p>
@@ -388,9 +463,9 @@ lrwxrwxrwx  1 bbearce bbearce   52 Sep 16 16:29 venv3.11.5 -&gt; /home/bbearce/.
 git clone https://github.com/pyenv/pyenv-virtualenv.git $(pyenv root)/plugins/pyenv-virtualenv
 </code></pre>
 <p>Create:</p>
-<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv virtualenv 3.10.4 venv3.10.4
-
-bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv/versions
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ pyenv virtualenv 3.10.4 &lt;venv-name&gt;
+</code></pre>
+<pre><code class="language-bash">bbearce@pop-os:~/Desktop/venv_demo$ ls -la ~/.pyenv/versions
 drwxr-xr-x  6 bbearce bbearce 4096 Sep 17 17:03 3.10.4
 drwxr-xr-x  7 bbearce bbearce 4096 Sep 16 16:29 3.11.5
 lrwxrwxrwx  1 bbearce bbearce   52 Sep 16 16:29 venv3.11.5 -&gt; /home/bbearce/.pyenv/versions/3.11.5/envs/venv3.11.5
@@ -625,10 +700,6 @@ bbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ cat .pdm-python
 Virtualenvs created with this project:
 
 -  in-project: /home/bbearce/Documents/pdm_setup_and_experimentation/.venv
-*  for-test: /home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-testbbearce@pop-os:~/Documents/pdm_setup_and_experimentation$ pdm venv list
-Virtualenvs created with this project:
-
--  in-project: /home/bbearce/Documents/pdm_setup_and_experimentation/.venv
 *  for-test: /home/bbearce/.local/share/pdm/venvs/pdm_setup_and_experimentation-wABLsGD0-for-test
 </code></pre>
 <p>Remove a virtualenv:</p>
@@ -805,7 +876,7 @@ __pypackages__
         ├── tzdata
         └── tzdata-2023.3.dist-info
 </code></pre>
-<p>If using a pdm created venv with a name in <code>~/.local/share/pdm/venvs/</code> then it would be under <code>~/.local/share/pdm/venvs/&lt;venv name&gt;/site-packages</code>.</p>
+<p>If using a pdm created venv with a name in <code>~/.local/share/pdm/venvs/</code> then packages would be under <code>~/.local/share/pdm/venvs/&lt;venv name&gt;/site-packages</code>.</p>
 <p>When in this mode if you want a shell using this projects packages and interpreter you use <code>pdm run python</code>:</p>
 <pre><code class="language-bash">bbearce@terry:~/Documents/pdm_setup_and_experimentation$ pdm run python
 Python 3.10.6 (main, Mar 10 2023, 10:55:28) [GCC 11.3.0] on linux
