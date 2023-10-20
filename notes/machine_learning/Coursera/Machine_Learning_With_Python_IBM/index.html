@@ -40,7 +40,10 @@
         ];
 
     </script>
-    <script src="../../../../js/base.js"></script> 
+    <script src="../../../../js/base.js"></script>
+      <script src="../../../../javascripts/mathjax.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
 </head>
 
 <body>
@@ -160,21 +163,79 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <blockquote>
 <p>Remember dependent variables have to be continuous</p>
 </blockquote>
-<p>$y(hat) = \theta_0 + \theta_1 x_1$</p>
-<p>A residual error is the difference between y which is the data itself (x,y) from the csv and y(hat), the regression line evaluated at x (x, y(hat)).</p>
+<p><span class="arithmatex">\(\hat{y} = \theta_0 + \theta_1 x_1\)</span></p>
+<p>A residual error is the difference between y which is the data itself (x,y) from the csv and y(hat), the regression line evaluated at x (x, <span class="arithmatex">\(\hat{y}\)</span>).</p>
 <p>The mean of all residual errors shows how poorly the estimation approximates the best regression. This is called the Mean Squared Error:</p>
-<p>$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2$</p>
-<p>It can be shown that $\theta_0$ and $\theta_1$ are:</p>
-<p>$\theta_1 = \frac{\sum_{i=1}^{S} (x_i - x_m) (y_i - y_m)}{\sum_{i=1}^{S} (x_i - x_m)^2}$</p>
-<p>$\theta_0 = y_m - \theta_1 x_m$</p>
+<p><span class="arithmatex">\(MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y_i})^2\)</span></p>
+<p>It can be shown that <span class="arithmatex">\(\theta_0\)</span> and <span class="arithmatex">\(\theta_1\)</span> are:</p>
+<p><span class="arithmatex">\(\theta_1 = \frac{\sum_{i=1}^{S} (x_i - \bar{x}) (y_i - \bar{y})}{\sum_{i=1}^{S} (x_i - \bar{x})^2}\)</span></p>
+<p><span class="arithmatex">\(\theta_0 = \bar{y} - \theta_1 \bar{x}\)</span></p>
 <p>where:</p>
 <ul>
-<li>$x_m$ is the mean of all x values</li>
-<li>$y_m$ is the mean of all y values</li>
+<li><span class="arithmatex">\(\bar{x}\)</span> is the mean of all x values</li>
+<li><span class="arithmatex">\(\bar{y}\)</span> is the mean of all y values</li>
 </ul>
 <p>Let's use code:</p>
-<pre><code class="language-python">
+<pre><code class="language-python">import pandas as pd
+
+engine_size = [2.0,2.4,1.5,3.5,3.5,3.5,3.5,3.7,3.7]
+cylinders = [4,4,4,6,6,6,6,6,6]
+fuel_consumption_comb = [8.5,9.6,5.9,11.1,10.6,10.0,10.1,11.1,11.6]
+co2_emissions = [196,221,136,255,244,230,232,255,267]
+
+engines = pd.DataFrame({'engine_size':engine_size,
+                        'cylinders':cylinders,
+                        'fuel_consumption_comb':fuel_consumption_comb,
+                        'co2_emissions':co2_emissions})
+
+engines
+
+theta_0 = 100
+theta_1 = 30
+x1 = 4
+
+y = theta_0 + theta_1 * 4
+y
 </code></pre>
+<p>Pros of regressions:
+* Very fast
+* No parameter tuning
+* East to understand, and highly interpretable</p>
+<h3 id="model-evaluation-approaches">Model Evaluation Approaches</h3>
+<ul>
+<li>Train and Test on the Same Dataset</li>
+<li>Train/Test Split</li>
+</ul>
+<h4 id="train-and-test-on-the-same-dataset">Train and Test on the Same Dataset</h4>
+<p>Identify a testing subset of all data having observations for a given <em>dependent</em> variable. We train on all the data then predict on the testing subset and compare predictions of the <em>dependent</em> variable from the test set to the observations of the test set for the same variable.</p>
+<ul>
+<li>Training set is <em>all</em> data.</li>
+<li>Testing set is <em>subset</em> of training.</li>
+</ul>
+<p>Let's evaluate the error (<span class="arithmatex">\(y_i\)</span> being the actual observation and <span class="arithmatex">\(\hat{y}_j\)</span> being the prediction):</p>
+<p>Error = <span class="arithmatex">\(\frac{1}{n}\sum_{j=1}^{n}|y_i - \hat{y}_j|\)</span></p>
+<p>It's the <em>average</em> error across all values.</p>
+<p>This approach has a high <em>training accuracy</em> but a low <em>out-of-sample</em> accuracy. High training accuracy isn't necessarily a good thing. It results in overfitting. It's important that our models have a high, out-of-sample accuracy.</p>
+<blockquote>
+<p>The quiz made a point that I want to record. If a model is overly trained to the dataset, it may capture noise and produce a non-generalized model.</p>
+</blockquote>
+<h4 id="traintest-split">Train/Test Split</h4>
+<p>Let's select a train/test split. </p>
+<ul>
+<li>Training set is <em>subset</em> of data.</li>
+<li>Testing set is also a <em>subset</em> of data but with no overlap with the training set.</li>
+<li>Training and Test data are <em>mutually exclusive</em>, which is a statistical term describing two or more events that cannot happen simultaneously.</li>
+</ul>
+<p>This is more realistic for real world problems.</p>
+<p>One problem with this approach is the model is highly dependent on which datasets the data is trained and tested.</p>
+<h4 id="k-fold-cross-validation">K-Fold Cross-Validation</h4>
+<p>Another evaluation model called <strong>K-fold cross-validation</strong> can resolve most of these issues. How do you fix a high variation that results from a dataset dependency? Well you average it.</p>
+<p>Example:
+Take a dataset and make a train\test split where 75% of the data is training and 25% is test. If we have <strong>K equals four folds</strong>, then we make 4 train/test splits. In the <strong>first</strong> fold for example, we use the <strong>first</strong> 25 percent of the dataset for testing and the rest for training. The model is built using the training set and is evaluated using the test set. Then, in the next round or in the <strong>second</strong> fold, the <strong>second</strong> 25 percent of the dataset is used for testing and the rest for training the model. Again, the accuracy of the model is calculated. We continue for all folds. Finally, the result of all four evaluations are averaged. That is, the accuracy of each fold is then averaged, keeping in mind that each fold is distinct, <strong>where no training data in one fold is used in another</strong>. K-fold cross-validation in its simplest form performs multiple train/test splits, using the same dataset where each split is different. Then, the result is average to produce a more consistent out-of-sample accuracy.</p>
+<blockquote>
+<p>However, going in depth with K-fold cross-validation model is out of the scope for this course.</p>
+</blockquote>
+<h3 id="evaluation-metrics-in-regression-models">Evaluation Metrics in Regression Models</h3>
 
   <br>
     
