@@ -65,12 +65,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+      <a href="../Classification_IBM/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
-        Cluster
+      <a href="../Classification_IBM/" class="btn btn-xs btn-link">
+        Classification
       </a>
     </div>
     
@@ -321,15 +321,67 @@ print(&quot;R2-score: %.2f&quot; % r2_score(test_y , test_y_) )
 <span class="arithmatex">\(\hat{y} = \theta_0 + \theta_1x_1 + \theta_2x_2 + ... + \theta_nx_n\)</span></p>
 <p>Vector Form (more concise):<br />
 <span class="arithmatex">\(\hat{y} = \theta^TX\)</span> "Theta Transpose X, it's really just missing <span class="arithmatex">\(\theta_0\)</span> from above expanded form. That is <em>bias</em>."</p>
-<p><span class="arithmatex">\(\theta^T = [\theta^0,\theta^1,\theta^2,...]\)</span><br />
-$X = \left[
-\begin{array}{ccc}
-1 \
-x_1 \
-x_2 \
-\end{array}
-\right]
-$</p>
+<p><span class="arithmatex">\(\theta^T = [\theta^0,\theta^1,\theta^2,...]\)</span></p>
+<p><span class="arithmatex">\(X = \left[ \begin{array}{c} 1 \\ x_1 \\ x_2 \\ \end{array} \right]\)</span></p>
+<h4 id="estimating-multiple-linear-regression-parameters">Estimating Multiple Linear Regression Parameters</h4>
+<p>How to estimate <span class="arithmatex">\(\theta^T\)</span>?
+* Ordinary Least Squares
+  * Linear algebra operations
+  * Takes a long time for large datasets (10K+rows)
+* An optimized algorithm
+  * Gradient Descent
+  * Proper approach if you have a very large dataset.</p>
+<p>Questions to consider:<br />
+* How to determine whether to use simple or multiple linear regression?
+* How many independent variables should you use?
+  * Too many causes overfit. It's too specific.
+* Should the indendent variable be continuous?
+* What are the linear relationships between the dependent variable and the independent variables?</p>
+<h4 id="sklearn-multiple-lenear-regression">Sklearn Multiple Lenear Regression</h4>
+<pre><code class="language-bash"># Setup Environment
+cd ~/Desktop; mkdir temp; cd temp; pyenv activate venv3.10.4;
+wget -O FuelConsumption.csv https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-ML0101EN-SkillsNetwork/labs/Module%202/data/FuelConsumptionCo2.csv
+# cd ~/Desktop; rm -r temp; # To remove
+</code></pre>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import pandas as pd
+import pylab as pl
+import numpy as np
+from sklearn import linear_model
+# train\teset
+df = pd.read_csv(&quot;FuelConsumption.csv&quot;)
+cdf = df[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_CITY','FUELCONSUMPTION_HWY','FUELCONSUMPTION_COMB','CO2EMISSIONS']]
+msk = np.random.rand(len(df)) &lt; 0.8
+train = cdf[msk]
+test = cdf[~msk]
+# multiple regression model
+regr = linear_model.LinearRegression()
+x = np.asanyarray(train[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB']])
+y = np.asanyarray(train[['CO2EMISSIONS']])
+regr.fit (x, y)
+# The coefficients
+print ('Coefficients: ', regr.coef_)
+</code></pre>
+<p>As mentioned before, <strong>Coefficient</strong> and <strong>Intercept</strong>  are the parameters of the fitted line. 
+Given that it is a multiple linear regression model with 3 parameters and that the parameters are the intercept and coefficients of the hyperplane, sklearn can estimate them from our data. Scikit-learn uses plain <strong>Ordinary Least Squares</strong> method to solve this problem.</p>
+<p>It tries to minimize the sum of squared errors (SSE) or mean squared error (MSE) between the target variable (y) and our predicted output (<span class="arithmatex">\(\hat{y}\)</span>) over all samples in the dataset.</p>
+<p>OLS can find the best parameters using of the following methods:
+* Solving the model parameters analytically using closed-form equations
+* Using an optimization algorithm (Gradient Descent, Stochastic Gradient Descent, Newton’s Method, etc.)</p>
+<p>Prediction:</p>
+<pre><code class="language-python">y_hat= regr.predict(test[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB']])
+x = np.asanyarray(test[['ENGINESIZE','CYLINDERS','FUELCONSUMPTION_COMB']])
+y = np.asanyarray(test[['CO2EMISSIONS']])
+print(&quot;Mean Squared Error (MSE) : %.2f&quot;
+      % np.mean((y_hat - y) ** 2))
+
+# Explained variance score: 1 is perfect prediction
+print('Variance score: %.2f' % regr.score(x, y))
+</code></pre>
+<p><strong>Explained variance regression score (<span class="arithmatex">\(R^2\)</span>):</strong><br />
+Let <span class="arithmatex">\(\hat{y}\)</span> be the estimated target output, y the corresponding (correct) target output, and Var be the Variance (the square of the standard deviation). Then the explained variance is estimated as follows:</p>
+<p><span class="arithmatex">\(\texttt{explainedVariance}(y, \hat{y}) = 1 - \frac{Var\{ y - \hat{y}\}}{Var\{y\}}\)</span><br />
+The best possible score is 1.0, the lower values are worse.</p>
 
   <br>
     
@@ -342,12 +394,12 @@ $</p>
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+      <a href="../Classification_IBM/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
-        Cluster
+      <a href="../Classification_IBM/" class="btn btn-xs btn-link">
+        Classification
       </a>
     </div>
     

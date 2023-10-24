@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Classification - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Classification", url: "#_top", children: [
+              {title: "KNN (K-Nearest Neighbors)", url: "#knn-k-nearest-neighbors" },
+              {title: "Classification Accuracy (little shaky..review)", url: "#classification-accuracy-little-shakyreview" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script>
+      <script src="../../../../javascripts/mathjax.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
+        Cluster
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Machine_Learning_With_Python_IBM/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Machine_Learning_With_Python_IBM/" class="btn btn-xs btn-link">
+        Intro
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="classification">Classification</h1>
+<p>Source: <a href="https://www.coursera.org/learn/machine-learning-with-python">Machine_Learning_With_Python_IBM</a></p>
+<ul>
+<li>Supervised learning</li>
+<li>Unknown items into discrete categories</li>
+<li>
+<p>Multiple inputs (values) to predict a single field (output column</p>
+</li>
+<li>
+<p>Decisions trees</p>
+</li>
+<li>Naive bayes</li>
+<li>Linear discriminant analysis</li>
+<li>k-Nearsest neighbors</li>
+<li>Logistic regression</li>
+<li>Neural networks</li>
+<li>Support vector machines (SVM)</li>
+</ul>
+<h2 id="knn-k-nearest-neighbors">KNN (K-Nearest Neighbors)</h2>
+<ul>
+<li>independent variables: (<span class="arithmatex">\(x_n\)</span>)</li>
+<li>target field: dependent var (y) - might have n classes</li>
+</ul>
+<p>Ex:
+<span class="arithmatex">\(x_n\)</span>'s = age and income</p>
+<ul>
+<li>Literally cluster a bit...maybe 5 nearest neighbors. k is 5.</li>
+<li>Classify cases based on their similarity to other cases</li>
+<li>Cases that are near each other are said to be neighbors</li>
+<li>
+<p>Based on similar cases with same class labels are near each other</p>
+</li>
+<li>
+<p>Pick a value for k.</p>
+</li>
+<li>Calc distance to unknown case from allcases</li>
+<li>Select the k-obserservations ,............</li>
+<li>Predict the response of the unknown data point using the most poilar responsecale from the K-nearest neighbors</li>
+</ul>
+<p>Ex:
+Customer1 = {age: 34}
+Customer2 = {age: 30}</p>
+<p><span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{\sum_{i=0}^{n}(x_{1i}-x_{2i})^2}\)</span><br />
+<span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{\sum_{i=0}^{n}(34-30)^2}\)</span></p>
+<p>2 independent variables:
+<span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{\sum_{i=0}^{n}(x_{1i}^<code>-x_{2i}^</code>)^2+(x_{1i}^{<code>}-x_{2i}^{</code>})^2}\)</span>  </p>
+<h3 id="so-how-do-we-choose-the-right-k">So, how do we choose the right K?</h3>
+<ul>
+<li>A low value of K causes a highly complex model and causes overfitting.</li>
+<li>A high value is too general.</li>
+<li>We're not sure yet... loop over k and test accuracy</li>
+</ul>
+<h2 id="classification-accuracy-little-shakyreview">Classification Accuracy (little shaky..review)</h2>
+<p>Compare predictions <span class="arithmatex">\(y\)</span> and actual <span class="arithmatex">\(\hat{y}\)</span> of test data set.</p>
+<h3 id="jaccard-index">Jaccard index</h3>
+<p><span class="arithmatex">\(J(y, \hat{y}) = \frac{|y\cap\hat{y}|}{|y\cup\hat{y}|} = \frac{|y\cap\hat{y}|}{|y|+|\hat{y}|-|y\cap\hat{y}|}\)</span></p>
+<h3 id="f1-score">F1-score</h3>
+<ul>
+<li>Precision = TP / (TP + FP)</li>
+<li>Recall =  TP / (TP + FN)</li>
+<li>F1-score = 2x(prc x rec)/(prc + rec)</li>
+</ul>
+<h3 id="log-loss">Log Loss</h3>
+<p>Probability of label versus label itself. Only for binary output.</p>
+<p><span class="arithmatex">\(LogLoss = \frac{1}{n}\sum_{i=1}^{i}(y\log(\hat{y}) +(1-y)*\log(1-\hat{y}))\)</span></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
+        Cluster
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Machine_Learning_With_Python_IBM/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Machine_Learning_With_Python_IBM/" class="btn btn-xs btn-link">
+        Intro
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
