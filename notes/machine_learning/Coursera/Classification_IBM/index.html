@@ -131,9 +131,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 Customer1 = {age: 34}
 Customer2 = {age: 30}</p>
 <p><span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{\sum_{i=0}^{n}(x_{1i}-x_{2i})^2}\)</span><br />
-<span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{\sum_{i=0}^{n}(34-30)^2}\)</span></p>
-<p>2 independent variables:
-<span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{\sum_{i=0}^{n}(x_{1i}^<code>-x_{2i}^</code>)^2+(x_{1i}^{<code>}-x_{2i}^{</code>})^2}\)</span>  </p>
+<span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{(34-30)^2}\)</span></p>
+<blockquote>
+<p>n here is attributes and the 1 and 2 are neighbors 1 and 2.</p>
+</blockquote>
+<p>2 independent variables (age and income):<br />
+Customer1 = {age: 34, income: 190}<br />
+Customer2 = {age: 30, income: 200}<br />
+<span class="arithmatex">\(Dis(x_1, x_2) = \sqrt{(34-30)^2+(190-200)^2}\)</span></p>
 <h3 id="so-how-do-we-choose-the-right-k">So, how do we choose the right K?</h3>
 <ul>
 <li>A low value of K causes a highly complex model and causes overfitting.</li>
