@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Decision Trees - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Decision Trees", url: "#_top", children: [
+              {title: "What Is A Decision Tree", url: "#what-is-a-decision-tree" },
+              {title: "Building Decision Trees", url: "#building-decision-trees" },
+              {title: "Entropy", url: "#entropy" },
+              {title: "Information Gain", url: "#information-gain" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script>
+      <script src="../../../../javascripts/mathjax.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
+        Cluster
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Classification_IBM/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Classification_IBM/" class="btn btn-xs btn-link">
+        Classification
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="decision-trees">Decision Trees</h1>
+<p>Source: <a href="https://www.coursera.org/learn/machine-learning-with-python">Machine_Learning_With_Python_IBM</a></p>
+<h2 id="what-is-a-decision-tree">What Is A Decision Tree</h2>
+<p>Image a csv with patients and demographics and the target is the drug that each patient responded to. Part of your job is to build a model to find out which drug might be appropriate for a future patient with the same illness.</p>
+<table>
+<thead>
+<tr>
+<th>patient_id</th>
+<th>age</th>
+<th>sex</th>
+<th>BP</th>
+<th>cholesterol</th>
+<th>drug</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>p1</td>
+<td>Young</td>
+<td>F</td>
+<td>High</td>
+<td>Normal</td>
+<td>Drug A</td>
+</tr>
+<tr>
+<td>p2</td>
+<td>Young</td>
+<td>F</td>
+<td>High</td>
+<td>High</td>
+<td>Drug A</td>
+</tr>
+<tr>
+<td>p3</td>
+<td>Middle-age</td>
+<td>F</td>
+<td>High</td>
+<td>Normal</td>
+<td>Drug B</td>
+</tr>
+<tr>
+<td>p4</td>
+<td>Senior</td>
+<td>F</td>
+<td>Young</td>
+<td>Normal</td>
+<td>Drug B</td>
+</tr>
+</tbody>
+</table>
+<p><img alt="Basic Decision Tree" src="../Images/decision_trees/basic_decision_tree.jpg" /></p>
+<blockquote>
+<p>Note "B" is drug B and "A" is drug A.</p>
+</blockquote>
+<ol>
+<li>If Middle-age recommend drug B</li>
+<li>If either Young or Senior proceed to that branch and ask another relevant question...and so on</li>
+</ol>
+<h2 id="building-decision-trees">Building Decision Trees</h2>
+<p>Refer to above dataset again. Use recursive partitioning to classify the data. We need to determine which attribute is the best or more predictive to split data based on the feature. Let's choose Cholesterol.</p>
+<ul>
+<li>
+<p>If patient has high cholesterol we can't say with high confidence that drugB might be suitable. Same for normal.<br />
+<img alt="Attribute Choice" src="../Images/decision_trees/attribute_choice.jpg" /></p>
+</li>
+<li>
+<p>Let's try sex. It is seems much better but not perfect.<br />
+<img alt="Sex Attribute" src="../Images/decision_trees/sex_attribute.jpg" /></p>
+</li>
+<li>
+<p>Let's got a step further<br />
+<img alt="Impurity Entropy" src="../Images/decision_trees/impurity_entropy.jpg" /></p>
+</li>
+<li>
+<p>For the male patient branch, we again test other attributes to split the sub-tree. We test cholesterol again here, as you can see it results in even more pure leaves. So we can easily make a decision here. For example, if a patient is male and his cholesterol is high, we can certainly prescribe drug A, but if it is normal, we can prescribe drug B with high confidence.</p>
+</li>
+<li>
+<p>As you might notice, the choice of attribute to split data is very important and it is all about purity of the leaves after the split. A node in the tree is considered pure if in 100 percent of the cases, the nodes fall into a specific category of the target field.</p>
+</li>
+</ul>
+<h2 id="entropy">Entropy</h2>
+<p>Impurity of nodes is calculated by entropy of data in the node. What is entropy? Entropy is the amount of information disorder or the amount of randomness in the data. The entropy in the node depends on how much random data is in that node and is calculated for each node. In decision trees, we're looking for trees that have the smallest entropy in their nodes.</p>
+<ul>
+<li>{"DrugA": 0, "DrugB": 8 } -&gt; Entropy is 0</li>
+<li>{"DrugA": 1, "DrugB": 7 } -&gt; Entropy is Low</li>
+<li>{"DrugA": 3, "DrugB": 5 } -&gt; Entropy is High</li>
+<li>{"DrugA": 4, "DrugB": 4 } -&gt; Entropy is 1</li>
+</ul>
+<p>The lower the entropy , the less uniform the distribution.</p>
+<p><span class="arithmatex">\(Entropy = -p(A)\log_2(p(A)) - p(B)\log_2(p(B))\)</span></p>
+<blockquote>
+<p><span class="arithmatex">\(p(A)\)</span> is the probability of drug A and is also x on the graph below</p>
+</blockquote>
+<p>For reference: <span class="arithmatex">\(y(x)=log_2(x)\)</span></p>
+<pre><code class="language-bash">  |
+  |
+  |----0.1----0.2----0.3----0.4----0.5----0.6----0.7----0.8----0.9---- . ----
+  |                                                .                      
+-1|                                 .                   
+  |                         .                           
+  |                   .                                
+-2|               .                                    
+  |           .                                         
+  |         .                                          
+-3|       .                                             
+</code></pre>
+<ul>
+<li>Calculate entropy before splitting it<br />
+<img alt="Entropy 1" src="../Images/decision_trees/entropy_1.jpg" /></li>
+<li>After split<br />
+<img alt="Entropy 2" src="../Images/decision_trees/entropy_2.jpg" /></li>
+<li>Another node, which has the least entropy? The answer is the tree with the higher information gain after splitting.<br />
+<img alt="Entropy 3" src="../Images/decision_trees/entropy_3.jpg" /></li>
+</ul>
+<h2 id="information-gain">Information Gain</h2>
+<p>Information gain is the information that can increase the level of certainty after splitting. It is the entropy of a tree before the split minus the weighted entropy after the split by an attribute. We can think of information gain and entropy as opposites.</p>
+<p>As entropy or the amount of randomness decreases, the information gain or amount of certainty increases and vice versa.</p>
+<p><span class="arithmatex">\(Information Gain = (EntropyBeforeSplit) - (WeightedEntropyAfterSplit)\)</span>  </p>
+<p>Ex:<br />
+<img alt="Entropy 4" src="../Images/decision_trees/entropy_4.jpg" /></p>
+<blockquote>
+<p>Weights come from each node. For each decision, count total observations of that decision over total observations from both decisions</p>
+</blockquote>
+<p>What we learn is that we should choose sex first when choosing between sex and cholesterol. How do we choose the next branch? Well, as you can guess, we should repeat the process for each branch and test each of the other attributes to continue to reach the most pure leaves. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../Martinos/cluster/cluster/" class="btn btn-xs btn-link">
+        Cluster
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Classification_IBM/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Classification_IBM/" class="btn btn-xs btn-link">
+        Classification
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
