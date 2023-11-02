@@ -158,10 +158,25 @@ of logistic regression. </p>
 <p>Let's use age to predict chrun (categorical value). We need to plot churn versus age which will have two horizontal areas of points for churn=0 and churn=1.</p>
 <p><img alt="logistic_regression_2" src="../Images/logistic_regression_2.jpg" /></p>
 <ul>
-<li><span class="arithmatex">\(\hat{y}=\theta_0 + \theta_1x_1\)</span></li>
-<li><span class="arithmatex">\(\theta^T=[\theta_0,\theta_1]\)</span></li>
-<li>Formally the line is <span class="arithmatex">\(\theta^TX=\theta_0+\theta_1x_1\)</span></li>
+<li>Prediction can be represented as <span class="arithmatex">\(\hat{y}=\theta_0 + \theta_1x_1\)</span></li>
+<li>Where <span class="arithmatex">\(\theta^T=[\theta_0,\theta_1,...,\theta_n]\)</span></li>
+<li>Formally the line is <span class="arithmatex">\(\theta^TX=\theta_0+\theta_1x_1+\theta_2x_2+...+\theta_nx_n\)</span></li>
+<li>X (feature set) can be represented as: <span class="arithmatex">\(X = \left[ \begin{array}{c} 1 \\ x_1 \\ x_2 \\ \end{array} \right]\)</span></li>
 </ul>
+<p>Seen here we can estimate the regression line and predict churn with <span class="arithmatex">\(\theta^TX\)</span>. Let's try with 13 for <span class="arithmatex">\(x_1\)</span>.</p>
+<p><img alt="logistic_regression_3.jpg" src="../Images/logistic_regression_3.jpg" /></p>
+<p>Then set a threshold of 0.5 for determining 0 or 1. Finally <span class="arithmatex">\(\hat{y}\)</span> can be represented as a piecewise function to force it to be categorical. In this example <span class="arithmatex">\(P_1=[13]\)</span> is Class 0. There is one problem here. What is the probability that this customer belongs to class zero?</p>
+<p>As you can see, it's not the best model to solve this problem. Also, there are some other issues which verify that linear regression is not the proper method for classification problems. So, as mentioned, if we use the regression line to calculate the class of a point, it always returns a number such as three or negative two, and so on. Then, we should use a threshold, for example, 0.5, to assign that point to either class of zero or one. This threshold works as a step function that outputs zero or one regardless of how big or small, positive or negative the input is. So, using the threshold, we can find the class of a record. Notice that in the step function, no matter how big the value is, as long as it's greater than 0.5, it simply equals one and vice versa. Regardless of how small the value y is, the output would be zero if it is less than 0.5. In other words, there is no difference between a customer who has a value of one or 1,000. The outcome would be one. Instead of having this step function, wouldn't it be nice if we had a smoother line, one that would project these values between zero and one? </p>
+<p>Let's use the <strong>Sigmoid Function</strong>.
+<img alt="logistic_regression_4.jpg" src="../Images/logistic_regression_4.jpg" /></p>
+<p>It gives a non-step function approach that gives us the probabilty that a point belongs to a certain class instead of the value of y directly.</p>
+<p>Instead of calculating the value of Theta transpose x directly, it returns the probability that a Theta transpose x is very big or very small. It always returns a value between 0 and 1, depending on how large the Theta transpose x actually is. </p>
+<p>Now, our model is <span class="arithmatex">\(\hat{y}=\sigma(\theta^TX)\)</span>, which represents the probability that the output is 1 given x.</p>
+<h4 id="sigmoid-function">Sigmoid Function</h4>
+<p><span class="arithmatex">\(\sigma(\theta^TX)=\frac{1}{1+e^{-\theta^TX}}\)</span></p>
+<p>When <span class="arithmatex">\(\theta^T\)</span> goes up <span class="arithmatex">\(\sigma(\theta^TX)\)</span> tends towards 1 and when small it tends to 0. This is the probability not the class itself.</p>
+<p>...stopped at "what is the output of our model 10:52"</p>
+<h4 id="logistic-regression_1">Logistic Regression</h4>
 
   <br>
     
