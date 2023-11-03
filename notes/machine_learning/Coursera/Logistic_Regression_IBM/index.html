@@ -35,6 +35,8 @@
         var pageToc = [
           {title: "Logistic Regression", url: "#_top", children: [
               {title: "Intro to Logistic Regression", url: "#intro-to-logistic-regression" },
+              {title: "Applications", url: "#applications" },
+              {title: "Logistic Regression vs Linear Regression", url: "#logistic-regression-vs-linear-regression" },
           ]},
         ];
 
@@ -93,7 +95,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p>Logistic regression is analogous to linear regression but tries to predict a categorical or discrete target field instead of a numeric one. In linear regression, we might try to predict a continuous value of variables such as the price of a house, blood pressure of a patient, or fuel consumption of a car. But in logistic regression, we predict a variable which is binary such as yes/no, true/false, successful or not successful, pregnant/not pregnant, and so on, all of which can be coded as zero or one.</p>
 <p>In logistic regression independent variables should be continuous. If categorical, they should be dummy or indicator coded. This means we have to transform them to some continuous value.</p>
 <p>Please note that logistic regression can be used for both binary classification and multi-class classification.</p>
-<h3 id="applications">Applications</h3>
+<h2 id="applications">Applications</h2>
 <ul>
 <li>To predict the probability of a person having a heart attack within a specified time period</li>
 <li>Predict the chance of mortality in an injured patient</li>
@@ -137,7 +139,7 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <li>Ideally, a logistic regression model, so-called Y hat, can predict that the class of the customer is one, given its features X: <span class="arithmatex">\(\hat{y} = P(y=1|x)\)</span><br />
  It can also be shown quite easily that the probability of a customer being in class zero can be calculated as one minus the probability that the class of the customer is one: <span class="arithmatex">\(P(y=0|x)= 1 - P(y=1|x)\)</span></li>
 </ul>
-<h3 id="logistic-regression-vs-linear-regression">Logistic Regression vs Linear Regression</h3>
+<h2 id="logistic-regression-vs-linear-regression">Logistic Regression vs Linear Regression</h2>
 <ul>
 <li>
 <p>We will learn the difference between linear regression and logistic regression.</p>
@@ -154,7 +156,7 @@ of logistic regression. </p>
 <blockquote>
 <p>y is the label's vector, also called <strong>actual values</strong>, that we would like to predict, and <span class="arithmatex">\(\hat{y}\)</span> is the vector of the predicted values by our model.</p>
 </blockquote>
-<h4 id="lets-try-linear-regression">Let's Try Linear Regression</h4>
+<h3 id="lets-try-linear-regression">Let's Try Linear Regression</h3>
 <p>Let's use age to predict chrun (categorical value). We need to plot churn versus age which will have two horizontal areas of points for churn=0 and churn=1.</p>
 <p><img alt="logistic_regression_2" src="../Images/logistic_regression_2.jpg" /></p>
 <ul>
@@ -175,8 +177,66 @@ of logistic regression. </p>
 <h4 id="sigmoid-function">Sigmoid Function</h4>
 <p><span class="arithmatex">\(\sigma(\theta^TX)=\frac{1}{1+e^{-\theta^TX}}\)</span></p>
 <p>When <span class="arithmatex">\(\theta^T\)</span> goes up <span class="arithmatex">\(\sigma(\theta^TX)\)</span> tends towards 1 and when small it tends to 0. This is the probability not the class itself.</p>
-<p>...stopped at "what is the output of our model 10:52"</p>
-<h4 id="logistic-regression_1">Logistic Regression</h4>
+<h5 id="what-is-the-output-of-our-model">What is the output of our model?</h5>
+<ul>
+<li><span class="arithmatex">\(P(Y=1|X)\)</span> - probability of Y=1 given X  </li>
+<li><span class="arithmatex">\(P(Y=0|X) = 1-P(Y=1|X)\)</span> - probability of Y=0 given X</li>
+</ul>
+<p>Ex:
+* <span class="arithmatex">\(P(Churn=1|income,age)\)</span> = 0.8
+* <span class="arithmatex">\(P(Churn=0|income,age)\)</span> = 1- 0.8 = 0.2</p>
+<p>Now we can train our model to set its parameter values in such a way that our model is a good estimate of the probablity of Y given X:  <span class="arithmatex">\(\sigma(\theta^TX)\)</span> -&gt; <span class="arithmatex">\(P(y=1|x)\)</span>.</p>
+<ul>
+<li><span class="arithmatex">\(\sigma\)</span> is model.</li>
+<li><span class="arithmatex">\(P(y=1|x)\)</span> and <span class="arithmatex">\(P(y=0|x)\)</span> are actual probabilities. </li>
+</ul>
+<h5 id="how-to-train-this-model">How to train this model?</h5>
+<p><span class="arithmatex">\(\sigma(\theta^TX)\)</span> -&gt; <span class="arithmatex">\(P(y=1|x)\)</span></p>
+<ol>
+<li>Initialize <span class="arithmatex">\(\theta\)</span> with random values: <span class="arithmatex">\(\theta\)</span> = [-1, 2]</li>
+<li>Calculate model output <span class="arithmatex">\(\hat{y} = \sigma(\theta^TX)\)</span> for a sample customer.<br />
+<span class="arithmatex">\(\hat{y} = \sigma([-1,2]] x [2,5])\)</span> = 0.7 - "2 and 5 are age and income"</li>
+<li>Compare the output of <span class="arithmatex">\(\hat{y}\)</span> with the actual output of custom, y, and record it as error. Example: <span class="arithmatex">\(Error = 1 - 0.7 = 0.3\)</span>. 1 Here was Churn and 0.7 was the probability of Chrun from model</li>
+<li>Calculate the error for all customers. Add up these errors. Total error is the cost of your model and is calculated by your models cost function. The cost function, by the way, basically represents how to calculate the error of the model which is the difference between the actual and the models predicted values. You want low cost (preferrably 0).</li>
+<li>Cost is high right now. We need to change to get lower cost. We change <span class="arithmatex">\(\theta\)</span> in such a way to hopefully reduce the total cost. </li>
+<li>Go back to step 2. and iterate to get a new cost. We do this until the cost is low enough.</li>
+</ol>
+<p>One of the most popular ways is gradient descent. Also, there are various ways to stop iterations, but essentially you stop training by calculating the accuracy of your model and stop it when it's satisfactory. </p>
+<h3 id="logistic-regression-training">Logistic Regression Training</h3>
+<p>Objective - <span class="arithmatex">\(\sigma(\theta^TX)\)</span> -&gt; <span class="arithmatex">\(P(y=1|x)\)</span></p>
+<p>Let's look at the cost function.</p>
+<p>Cost(<span class="arithmatex">\(\hat{y}, y\)</span>) = <span class="arithmatex">\(\sigma(\theta^TX) - y\)</span></p>
+<p>Usually the square of this equation is used because of the possibility of the negative result and for the sake of simplicity, half of this value is considered as the cost function through the derivative process.</p>
+<p>Cost(<span class="arithmatex">\(\hat{y}, y\)</span>) = <span class="arithmatex">\(\frac{(\sigma(\theta^TX) - y)^2}{2}\)</span></p>
+<blockquote>
+<p>Note this is for a particular sample.</p>
+</blockquote>
+<p>If we want for all samples we need a new equation:<br />
+<span class="arithmatex">\(J(\theta) = \frac{1}{m} \sum_{i-1}^mCost(\hat{y},y)\)</span></p>
+<blockquote>
+<p>This confused me for a second as <span class="arithmatex">\(\theta\)</span> refers to the models parameters. It's the cost across all samples divided by the number of samples. This is also called <strong>mean squared error</strong>. The reason it's a function of <span class="arithmatex">\(\theta\)</span> is because all this "cost" we are measuring is for a specific set of <span class="arithmatex">\(\theta\)</span> parameters.</p>
+</blockquote>
+<p>Now, how do we find or set the best weights or parameters that minimize this cost function? The answer is, we should calculate the minimum point of this cost function and it will show us the best parameters for our model.</p>
+<p>Although we can find the minimum point of a function using the derivative of a function, there's not an easy way to find the global minimum point for such an equation. Given this complexity, describing how to reach the global minimum for this equation is outside the scope of this video.</p>
+<p>So, what is the solution? Well we should find another cost function instead, one which has the same behavior but is easier to find its minimum point. Let's plot the desirable cost function for our model. </p>
+<p>Let's plot the desirable cost function for our model. Recall that our model is y hat. Our actual value is y which equals zero or one, and our model tries to estimate it as we want to find a simple cost function for our model.</p>
+<p>This means our model is best if it estimates y equals one. In this case, we need a cost function that returns zero if the outcome of our model is one, which is the same as the actual label. And the cost should keep increasing as the outcome of our model gets farther from one. And cost should be very large if the outcome of our model is close to zero. </p>
+<p>We can see that a function <span class="arithmatex">\(-log(\hat{y})\)</span> looks similar to how we want to model this:</p>
+<p><img alt="logistic_regression_5.jpg" src="../Images/logistic_regression_5.jpg" /></p>
+<p>Recall the derivative of the cost function was hard to calculate. So instead we define as:</p>
+<div class="arithmatex">\[
+Cost(\hat{y},y) = 
+\begin{cases}
+  -log(\hat{y}) &amp; \text{if } y = 1 \\
+  -log(1-\hat{y}) &amp; \text{if } y = 0
+\end{cases}
+\]</div>
+<p>and redefine <span class="arithmatex">\(J(\theta)\)</span> as:<br />
+<span class="arithmatex">\(J(\theta) = \frac{1}{m} \sum_{i-1}^m y^i log(\hat{y}^i) + (1-y^i) log(1-\hat{y}^i)\)</span></p>
+<h3 id="gradient-descent-to-minimize-the-cost">Gradient Descent To Minimize the Cost</h3>
+<p>Let's assume <span class="arithmatex">\(\hat{y} = \sigma(\theta_1x_i + \theta_2x_2)\)</span>  </p>
+<p>and</p>
+<p><span class="arithmatex">\(J(\theta) = \frac{1}{m} \sum_{i-1}^m y^i log(\hat{y}^i) + (1-y^i) log(1-\hat{y}^i)\)</span></p>
 
   <br>
     
