@@ -37,6 +37,7 @@
               {title: "Intro to Clustering", url: "#intro-to-clustering" },
               {title: "K-Means Clustering", url: "#k-means-clustering" },
               {title: "More On K-Means (Evaluate Accuracy)", url: "#more-on-k-means-evaluate-accuracy" },
+              {title: "Lab", url: "#lab" },
           ]},
         ];
 
@@ -160,6 +161,157 @@ Customer segmentation is the practice of partitioning a customer base into group
 Play video starting at :2:49 and follow transcript2:49
 But the problem is that with increasing the number of clusters, the distance of centroids to data points will always reduce. This means increasing K will always decrease the error. So, the value of the metric as a function of K is plotted and the elbow point is determined where the rate of decrease sharply shifts. It is the right K for clustering. This method is called the elbow method.</p>
 <p>So let's recap k-Means clustering: k-Means is a partition-based clustering which is A, relatively efficient on medium and large sized data sets; B, produces sphere-like clusters because the clusters are shaped around the centroids; and C, its drawback is that we should pre-specify the number of clusters, and this is not an easy task. Thanks for watching. </p>
+<h2 id="lab">Lab</h2>
+<h3 id="generated-data-blobs">Generated Data (Blobs)</h3>
+<pre><code class="language-bash"># Setup Environment
+cd ~/Desktop; rm -r temp; # To remove
+cd ~/Desktop; mkdir temp; cd temp; pyenv activate venv3.10.4;
+# Data
+path='https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-ML0101EN-SkillsNetwork/labs/Module%204/data/Cust_Segmentation.csv'
+wget $path
+</code></pre>
+<pre><code class="language-python">import random 
+import numpy as np 
+import matplotlib.pyplot as plt 
+import pandas as pd
+from sklearn.cluster import KMeans 
+from sklearn.datasets import make_blobs 
+from sklearn.preprocessing import StandardScaler
+import matplotlib.pyplot as plt
+np.random.seed(0)
+
+# Data
+path='https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-ML0101EN-SkillsNetwork/labs/Module%204/data/Cust_Segmentation.csv'
+
+</code></pre>
+<p>Next we will be making random clusters of points by using the <strong>make_blobs</strong> class. The <strong>make_blobs</strong> class can take in many inputs, but we will be using these specific ones.</p>
+<p>Input:<br />
+<em> n_samples: 5000 - total num of points equally divided among clusters.<br />
+</em> center: [[4,4],[-2,-1],[2,-3],[1,1]] num of centers to generate, or the fixed center locations.<br />
+* cluster_std: 0.9 the standard deviation of the clusters.  </p>
+<p>Output:
+* X: Array of shape [n_samples, n_features]. (Feature Matrix) - generated samples.<br />
+* y: Arayy of shape [n_samples] (Response Vector) - the integer labels for cluster membership of each sample.</p>
+<pre><code class="language-python">X, y = make_blobs(n_samples=5000, centers=[[4,4], [-2, -1], [2, -3], [1, 1]], cluster_std=0.9)
+# plot
+plt.scatter(X[:, 0], X[:, 1], marker='.')
+plt.show()
+</code></pre>
+<p>The KMeans class has many parameters that can be used, but we will be using these three:</p>
+<ul>
+<li><strong>init</strong>: Initialization method of the centroids.</li>
+<li>Value will be: "k-means++"</li>
+<li>k-means++: Selects initial cluster centers for k-mean clustering in a smart way to speed up convergence.</li>
+<li><strong>n_clusters</strong>: The number of clusters to form as well as the number of centroids to generate.</li>
+<li>Value will be: 4 (since we have 4 centers)</li>
+<li><strong>n_init</strong>: Number of time the k-means algorithm will be run with different centroid seeds. The final results will be the best output of n_init consecutive runs in terms of inertia.</li>
+<li>Value will be: 12 </li>
+</ul>
+<pre><code class="language-python">k_means = KMeans(init = &quot;k-means++&quot;, n_clusters = 4, n_init = 12)
+# fit
+k_means.fit(X)
+</code></pre>
+<p>Now let's grab the labels for each point in the model using KMeans' <strong>.labels_</strong> attribute and save it as <strong>k_means_labels</strong>.</p>
+<pre><code class="language-python">k_means_labels = k_means.labels_
+k_means_labels # 5000 points labeled
+</code></pre>
+<p>We will also get the coordinates of the cluster centers using KMeans' <strong>.cluster_centers_</strong> and save it as <strong>k_means_cluster_centers</strong>.</p>
+<pre><code class="language-python">k_means_cluster_centers = k_means.cluster_centers_
+k_means_cluster_centers
+</code></pre>
+<pre><code class="language-python"># Creating the visual plot
+def plot():
+    # Initialize the plot with the specified dimensions.
+    fig = plt.figure(figsize=(6, 4))
+    # Colors uses a color map, which will produce an array of colors based on
+    # the number of labels there are. We use set(k_means_labels) to get the
+    # unique labels.
+    colors = plt.cm.Spectral(np.linspace(0, 1, len(set(k_means_labels))))
+    # Create a plot
+    ax = fig.add_subplot(1, 1, 1)
+    # For loop that plots the data points and centroids.
+    # k will range from 0-3, which will match the possible clusters that each
+    # data point is in.
+    for k, col in zip(range(len([[4,4], [-2, -1], [2, -3], [1, 1]])), colors):
+        # Create a list of all data points, where the data points that are 
+        # in the cluster (ex. cluster 0) are labeled as true, else they are
+        # labeled as false.
+        my_members = (k_means_labels == k)
+        # Define the centroid, or cluster center.
+        cluster_center = k_means_cluster_centers[k]
+        # Plots the datapoints with color col.
+        ax.plot(X[my_members, 0], X[my_members, 1], 'w', markerfacecolor=col, marker='.')
+        # Plots the centroids with specified color, but with a darker outline
+        ax.plot(cluster_center[0], cluster_center[1], 'o', markerfacecolor=col,  markeredgecolor='k', markersize=6)
+    # Title of the plot
+    ax.set_title('KMeans')
+    # Remove x-axis ticks
+    ax.set_xticks(())
+    # Remove y-axis ticks
+    ax.set_yticks(())
+    # Show the plot
+    plt.show()
+
+plot()
+</code></pre>
+<h3 id="customer-segmentation">Customer Segmentation</h3>
+<p>Imagine that you have a customer dataset, and you need to apply customer segmentation on this historical data.
+Customer segmentation is the practice of partitioning a customer base into groups of individuals that have similar characteristics. It is a significant strategy as a business can target these specific groups of customers and effectively allocate marketing resources. For example, one group might contain customers who are high-profit and low-risk, that is, more likely to purchase products, or subscribe for a service. A business task is to retain those customers. Another group might include customers from non-profit organizations and so on.</p>
+<pre><code class="language-python">cust_df = pd.read_csv(&quot;Cust_Segmentation.csv&quot;)
+cust_df.head()
+# Pre-processing (address is categorical; not applicable for k-means)
+df = cust_df.drop('Address', axis=1)
+df.head()
+# Normalizing over standard deviation
+## Normalization is a statistical method that helps mathematical-based algorithms to interpret features with different magnitudes and distributions equally. We use StandardScaler() to normalize our dataset.
+X = df.values[:,1:] # age and onwards...don't use CustomerId; not a feature
+X = np.nan_to_num(X)
+Clus_dataSet = StandardScaler().fit_transform(X)
+Clus_dataSet
+# Modeling
+clusterNum = 3
+k_means = KMeans(init = &quot;k-means++&quot;, n_clusters = clusterNum, n_init = 12)
+k_means.fit(X)
+labels = k_means.labels_
+print(labels)
+# Insights (We assign the labels to each row in the dataframe.)
+df[&quot;Clus_km&quot;] = labels
+df.head(5)
+# Check centroids by averaging the features in each cluster
+## Note Customer ID meaningless here...
+df.groupby('Clus_km').mean()
+# Look at distribution of customers based on their age and income:
+area = np.pi * ( X[:, 1])**2  
+plt.scatter(X[:, 0], X[:, 3], s=area, c=labels.astype(float), alpha=0.5)
+plt.xlabel('Age', fontsize=18)
+plt.ylabel('Income', fontsize=16)
+plt.show()
+
+# What is this?
+from mpl_toolkits.mplot3d import Axes3D 
+fig = plt.figure(1, figsize=(8, 6))
+plt.clf()
+ax = Axes3D(fig, rect=[0, 0, .95, 1], elev=48, azim=134)
+
+plt.cla()
+# plt.ylabel('Age', fontsize=18)
+# plt.xlabel('Income', fontsize=16)
+# plt.zlabel('Education', fontsize=16)
+ax.set_xlabel('Education')
+ax.set_ylabel('Age')
+ax.set_zlabel('Income')
+
+ax.scatter(X[:, 1], X[:, 0], X[:, 3], c= labels.astype(float))
+plt.show()
+</code></pre>
+<p>k-means will partition your customers into mutually exclusive groups, for example, into 3 clusters. The customers in each cluster are similar to each other demographically.
+Now we can create a profile for each group, considering the common characteristics of each cluster.
+For example, the 3 clusters can be:</p>
+<ul>
+<li>AFFLUENT, EDUCATED AND OLD AGED</li>
+<li>MIDDLE AGED AND MIDDLE INCOME</li>
+<li>YOUNG AND LOW INCOME</li>
+</ul>
 
   <br>
     
@@ -195,7 +347,7 @@ But the problem is that with increasing the number of clusters, the distance of 
 </div>
 
 <footer class="col-md-12 wm-page-content">
-  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="">Windmill Dark</a> theme by None (noraj).</p>
 </footer>
 
 </body>
