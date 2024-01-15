@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>2. Artificial Neural Networks - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Artificial_Neural_Networks", url: "#_top", children: [
+              {title: "Gradient Descent", url: "#gradient-descent" },
+              {title: "Backpropogation", url: "#backpropogation" },
+              {title: "Vanishing Gradient", url: "#vanishing-gradient" },
+              {title: "Activation Functions", url: "#activation-functions" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Keras_And_Deep_Learning_Libraries/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Keras_And_Deep_Learning_Libraries/" class="btn btn-xs btn-link">
+        3. Keras and Deep Learning Libraries
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Intro_Deep_Neural_Nets/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Intro_Deep_Neural_Nets/" class="btn btn-xs btn-link">
+        1. Intro to Neural Networks and Deep Learning
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="artificial_neural_networks">Artificial_Neural_Networks</h1>
+<h2 id="gradient-descent">Gradient Descent</h2>
+<h3 id="cost-function">Cost Function</h3>
+<p>We fit a line to data. If we nail the weight <span class="arithmatex">\(w\)</span> then we have 0 loss. There is much loss if <span class="arithmatex">\(w\)</span> is not ideal and the loss increases exponentially the further we get from the origin with the loss function we defined. We need derivatives or "gradients" so we know if we change <span class="arithmatex">\(w\)</span> that the loss will be lower. We do this iteravely adjusting learning rate <span class="arithmatex">\(\eta\)</span>. </p>
+<p><img alt="Images/artificial_neural_networks/cost_func_gradient_descent_1.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_1.png" /><br />
+<img alt="Images/artificial_neural_networks/cost_func_gradient_descent_2.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_2.png" /><br />
+<img alt="Images/artificial_neural_networks/cost_func_gradient_descent_3.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_3.png" /><br />
+<img alt="Images/artificial_neural_networks/cost_func_gradient_descent_4.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_4.png" /><br />
+<img alt="Images/artificial_neural_networks/cost_func_gradient_descent_5.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_5.png" /><br />
+<img alt="Images/artificial_neural_networks/cost_func_gradient_descent_6.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_6.png" /><br />
+<img alt="Images/artificial_neural_networks/cost_func_gradient_descent_7.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_7.png" />  </p>
+<h2 id="backpropogation">Backpropogation</h2>
+<p>How do we train and optimize weights and biases. Training is done in a supervised setting with a ground truth.</p>
+<h3 id="calculus">Calculus</h3>
+<ol>
+<li>Calculate error between GT and estimated output. Denote this <span class="arithmatex">\(E\)</span>.</li>
+<li>
+<p>Propogate this error back into the network and update each weight and bias as per the following equation:</p>
+<p><span class="arithmatex">\(w_i \rightarrow w_i - \eta * \frac{\delta E}{\delta w_i}\)</span></p>
+<p><span class="arithmatex">\(b_i \rightarrow b_i - \eta * \frac{\delta E}{\delta b_i}\)</span></p>
+</li>
+<li>
+<p>Backpropogation</p>
+<p>For a two neuron network we can calculate <span class="arithmatex">\(E\)</span> for an observation. For multiple observations the equation is as follows:</p>
+<p><span class="arithmatex">\(E = \frac{1}{2m} \sum_{i=1}^{m} (T_i - a_{2,i})^2\)</span></p>
+<p><img alt="Images/artificial_neural_networks/cost_func_gradient_descent_8.png" src="../Images/artificial_neural_networks/cost_func_gradient_descent_8.png" /></p>
+<blockquote>
+<p>This is a total aggregate error.</p>
+</blockquote>
+</li>
+<li>
+<p>Chain Rule</p>
+<p>Notice how <span class="arithmatex">\(E\)</span> is not directly a function of <span class="arithmatex">\(w_2\)</span>. Through a <a href="https://github.com/bbearce/code-journal/blob/master/docs/notes/data_science/Coursera/keras/Images/artificial_neural_networks/Partial_Derivatives_Backpropagation.pdf">proof</a> we can show that updating weights and biases is as follows (noticed small exponent errors...fyi):</p>
+<p><img alt="Images/artificial_neural_networks/updating_w2_1.png" src="../Images/artificial_neural_networks/updating_w2_1.png" />
+<img alt="Images/artificial_neural_networks/updating_w2_2.png" src="../Images/artificial_neural_networks/updating_w2_2.png" /></p>
+<p><img alt="Images/artificial_neural_networks/updating_b2.png" src="../Images/artificial_neural_networks/updating_b2.png" /></p>
+<p><img alt="Images/artificial_neural_networks/updating_w1_1.png" src="../Images/artificial_neural_networks/updating_w1_1.png" />
+<img alt="Images/artificial_neural_networks/updating_w1_2.png" src="../Images/artificial_neural_networks/updating_w1_2.png" /></p>
+<p><img alt="Images/artificial_neural_networks/updating_b1.png" src="../Images/artificial_neural_networks/updating_b1.png" /></p>
+<p>Example:</p>
+<p><img alt="Images/artificial_neural_networks/backprop_example_1.png" src="../Images/artificial_neural_networks/backprop_example_1.png" /></p>
+<p>Assume ground truth is <span class="arithmatex">\(T=0.25\)</span>. Compute error between <span class="arithmatex">\(a_2\)</span> and <span class="arithmatex">\(T\)</span>. Update weights and biases for predefined number of <span class="arithmatex">\(epochs\)</span> like 1000 for example or until error is under a certain threshold <span class="arithmatex">\(\epsilon = 0.001\)</span>.</p>
+<p><img alt="Images/artificial_neural_networks/backprop_example_2.png" src="../Images/artificial_neural_networks/backprop_example_2.png" /></p>
+<p>Update w2<br />
+<img alt="Images/artificial_neural_networks/update_w2.png" src="../Images/artificial_neural_networks/update_w2.png" /></p>
+<p>Update b2<br />
+<img alt="Images/artificial_neural_networks/update_b2.png" src="../Images/artificial_neural_networks/update_b2.png" /></p>
+<p>Update w1<br />
+<img alt="Images/artificial_neural_networks/update_w1.png" src="../Images/artificial_neural_networks/update_w1.png" /></p>
+<p>Update b1<br />
+<img alt="Images/artificial_neural_networks/update_b1.png" src="../Images/artificial_neural_networks/update_b1.png" /></p>
+</li>
+</ol>
+<h3 id="summary">Summary</h3>
+<ol>
+<li>Initialize the weights and biases to random values</li>
+<li>Then, we iteratively repeat the following steps:</li>
+<li>Calculate the network output using forward propagation. </li>
+<li>Calculate the error between the ground truth and the estimated or predicted output of the network. </li>
+<li>Update the weights and the biases through backpropagation.</li>
+<li>Repeat the above three steps until the number of iterations or epochs is reached or the error between the ground truth and the predicted output is below a predefined threshold.</li>
+</ol>
+<h2 id="vanishing-gradient">Vanishing Gradient</h2>
+<p>There is a problem with the sigmoid activation function.
+<img alt="Images/artificial_neural_networks/vanishing_gradient.png" src="../Images/artificial_neural_networks/vanishing_gradient.png" /></p>
+<p>Recall from the previous video, with a very simple network of two neurons only, the derivatives of the error with respect to the weights were as follows:</p>
+<p><span class="arithmatex">\(\frac{\delta E}{\delta w_1} = 0.001021\)</span></p>
+<p><span class="arithmatex">\(\frac{\delta E}{\delta w_2} = 0.05706\)</span></p>
+<p>Well it turns out that because we are using the sigmoid function as the activation function, then all the intermediate values in the network are between 0 and 1.</p>
+<p>So when we do backpropagation, we keep multiplying factors that are less than 1 by each other, and so their gradients tend to get smaller and smaller as we keep on moving backward in the network. </p>
+<p>This means that the neurons in the earlier layers learn very slowly as compared to the neurons in the later layers in the network. The earlier layers in the network, are the slowest to train. The result is a training process that takes too long and a prediction accuracy that is compromised.</p>
+<p>Accordingly, this is the reason why we do not use the sigmoid function or similar functions as activation functions, since they are prone to the vanishing gradient problem. </p>
+<h2 id="activation-functions">Activation Functions</h2>
+<p>These play a major role in the learning process of a neural network.</p>
+<p>7 Types of activation functions you can use:
+1. Binary step function
+2. Linear Function
+3. Sigmoid Function - most popular
+4. Hyperbolic Tangent Function - most popular
+5. ReLU (Rectified Linear Unit) - most popular
+6. Leaky ReLU
+7. Softmax Function - most popular</p>
+<h3 id="sigmoid-function">Sigmoid Function</h3>
+<p><img alt="Images/artificial_neural_networks/sigmoid_function.png" src="../Images/artificial_neural_networks/sigmoid_function.png" /></p>
+<p>Sigmoid functions used to be widely used as activation functions in the hidden layers of a neural network. However, as you can see, the function is pretty flat beyond the +3 and -3 region. This means that once the function falls in that region, the gradients become very small.</p>
+<p>Another problem with the sigmoid function is that the values only range from 0 to 1. This means that the sigmoid function is not symmetric around the origin. The values received are all positive. Well, not all the times would we desire that values going to the next neuron be all of the same sign. This can be addressed by scaling the sigmoid function, and this brings us to the next activation function: the hyperbolic tangent function.</p>
+<h3 id="hyperbolic-tangent-function">Hyperbolic Tangent Function</h3>
+<p><img alt="Images/artificial_neural_networks/hyperbolic_tangent_function.png" src="../Images/artificial_neural_networks/hyperbolic_tangent_function.png" /></p>
+<p>It is very similar to the sigmoid function. It is actually just a scaled version of the sigmoid function, but unlike the sigmoid function, it's symmetric over the origin. It ranges from -1 to +1. However, although it overcomes the lack of symmetry of the sigmoid function, it also leads to the vanishing gradient problem in very deep neural networks.</p>
+<h3 id="relu-function">ReLU Function</h3>
+<p><img alt="Images/artificial_neural_networks/rectified_linear_unit.png" src="../Images/artificial_neural_networks/rectified_linear_unit.png" /></p>
+<p>The rectified linear unit, or ReLU, function is the most widely used activation function when designing networks today.</p>
+<p>In addition to it being nonlinear, the main advantage of using the ReLU, function over the other activation functions is that it does not activate all the neurons at the same time. </p>
+<p>According to the plot here, if the input is negative it will be converted to 0, and the neuron does not get activated. This means that at a time, only a few neurons are activated, making the network sparse and very efficient. Also, the ReLU function was one of the main advancements in the field of deep learning that led to overcoming the vanishing gradient problem.</p>
+<h3 id="softmax-function">Softmax Function</h3>
+<p>Sigmoid type function that is handy for classification problems.</p>
+<p><img alt="Images/artificial_neural_networks/softmax.png" src="../Images/artificial_neural_networks/softmax.png" /></p>
+<p>Maps outputs to between 0 and 1. This way, it is easier for us to classify a given data point and determine to which category it belongs.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Keras_And_Deep_Learning_Libraries/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Keras_And_Deep_Learning_Libraries/" class="btn btn-xs btn-link">
+        3. Keras and Deep Learning Libraries
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Intro_Deep_Neural_Nets/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Intro_Deep_Neural_Nets/" class="btn btn-xs btn-link">
+        1. Intro to Neural Networks and Deep Learning
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

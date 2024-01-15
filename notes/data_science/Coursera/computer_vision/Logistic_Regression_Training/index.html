@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>9. Logistic Regression Training - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Logistic Regression Training: Gradient Descent", url: "#_top", children: [
+              {title: "Cost and Loss", url: "#cost-and-loss" },
+              {title: "Mini-Batch Gradient Descent", url: "#mini-batch-gradient-descent" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Image_Classification/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Image_Classification/" class="btn btn-xs btn-link">
+        8. Image Classification
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="logistic-regression-training-gradient-descent">Logistic Regression Training: Gradient Descent</h1>
+<p>In the last video, we learned we could use a plane to automatically classify an image. In this video, we will learn how to determine the plane. We will use the dataset of images to train the classifier. When we have an unknown sample, we can classify the image. </p>
+<h2 id="cost-and-loss">Cost and Loss</h2>
+<p>Training is where you find the best learnable parameters of the decision boundary.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_1.png" /></p>
+<p>In this case, we will randomly select a set of learnable parameters, w and b, the superscript is the guess number. In this case, the decision boundary does a horrible job as it classifies all the images as cats.
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_2.png" /></p>
+<p>The second decision boundary does better. Finally, this decision boundary performs the best. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_3.png" /></p>
+<p>First, we need a way to determine how good our decision boundary is. A loss function tells you how good your prediction is. The following loss is called the classification loss.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_4.png" /></p>
+<p>The first column will show the output of the loss function. Each time our prediction is correct, the loss function will output a zero. Each time our prediction is incorrect, the loss function will output a one. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_5.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_5.png" /></p>
+<p>The cost is the sum of the loss. The cost tells us how good our learnable parameters are doing on the dataset.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_6.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_6.png" /></p>
+<p>In this case, our model output y hat is incorrect, predicting a cat as a dog and a dog as a cat. In this case, our model output is correct, predicting a dog is a dog and a cat is a cat. For each incorrectly classified samples, the loss is one, increasing the cost. Correctly classified samples do not change the cost.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_7.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_7.png" /></p>
+<p>For this decision boundary, the cost is three.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_8.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_8.png" /></p>
+<p>For this decision boundary the cost is one.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_9.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_9.png" /></p>
+<p>For this decision boundary the cost is zero.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_10.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_10.png" /></p>
+<p>The cost is a function of the learnable parameters. We see a set of learnable parameters. The decision boundary misclassifies three points.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_11.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_11.png" /></p>
+<p>Changing the learnable parameters misclassifies the following points.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_12.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_12.png" /></p>
+<p>The final learnable parameters perform perfectly.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_13.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_13.png" /></p>
+<p>To simplify, let's look at the cost as a function of the bias parameter b. We can plot the cost with respect to learnable parameters. In this case, we plot the cost with respect to the bias parameter b.
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_14.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_14.png" /></p>
+<p>Let's see the relationship between cost and the decision boundary. We see the first line misclassifies the following points, thus the value of the cost for this value of b is three. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_15.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_15.png" /></p>
+<p>The second misclassifies the following two points, hence the value of the cost is two. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_16.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_16.png" /></p>
+<p>The final lines perform perfectly. The cost is zero. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_17.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/logistic_regression_training_17.png" /></p>
+<h3 id="cross-entropy-loss">Cross Entropy Loss</h3>
+<p>In reality, the cost is a function of multiple parameters w and b, even our super simple 2D example has too many parameters to plot. In practice, classification error is difficult to work with. We use the cross entropy loss that uses the output of the logistic function as opposed to the prediction y hat.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/cross_entropy_loss_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/cross_entropy_loss_1.png" /></p>
+<p>The cost is still the sum of the loss. The cross entropy deals with how likely the image belongs to a specific class. If the likelihood of belonging to an incorrect class is large, the cross entropy loss in turn will be large.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/cross_entropy_loss_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/cross_entropy_loss_2.png" /></p>
+<p>If the likelihood of belonging to the correct class is correct, the cross entropy is small, but not zero.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/cross_entropy_loss_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/cross_entropy_loss_3.png" /></p>
+<h3 id="gradient-descent">Gradient Descent</h3>
+<p>Mosty review. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_1.png" /></p>
+<p>However, an interesting piece. It's challenging to perform gradient descent on the threshold function.</p>
+<blockquote>
+<p>Threshold func is the line or plane that separates data and you sweep it through data to decide what is what. However that results in a non-smooth cost function as depicted below.</p>
+</blockquote>
+<p>The slope is zero in many regions. If we get stuck in these regions, the gradient will be zero and not update. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_2.png" /></p>
+<p>The decision plane has multiple parameters.</p>
+<blockquote>
+<p>As opposed to threshold because with a plane you consider 2+ variables which will turn cost into a bowl and smooth.</p>
+</blockquote>
+<p>As a result, the gradient is a vector. We can update the parameter, it's a set of vectors. For the two dimensional case we can plot it as a surface. It's a bowl shape. When we update the parameter it will find the minimum.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_3.png" /></p>
+<p>Usually we plot cost with respect to each iteration i. This is called the learning curve. Generally, the more parameters you have, the more images and iterations you need to make the model work.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_4.png" /></p>
+<p>Let's look at different learning curves. We can choose the learning rate that's way too large as shown in the one dimensional example. We can choose a learning rate that's too small. We can choose a learning rate that's too large. With a good learning rate, we will reach the minimum of the cost.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_5.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_5.png" /></p>
+<h2 id="mini-batch-gradient-descent">Mini-Batch Gradient Descent</h2>
+<p>Until now we have been using every sample for gradient descent. In Mini-Batch Gradient Descent we use a few samples at a time for each iteration, it's helpful to think about it as if you are minimizing a mini cost function or the total loss.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_6.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_6.png" /></p>
+<p>When we use all the samples in the dataset we call it an epoch. When we use all the samples it’s called <strong>batch gradient descent</strong>, where <code>one</code> iteration equals <code>one</code> epoch.</p>
+<p>We use a few samples to calculate the cost, it’s sometimes referred to as the <code>total loss</code>.</p>
+<blockquote>
+<p>Very important. Creates a saw toothed shape because of a loss calculation on each mini batch in an epoch.</p>
+</blockquote>
+<p>For the first iteration we use the first two samples. For the second iteration we use the second two samples For the 3rd iteration we use the last two samples, therefore with a batch size of three to complete one run or Epoch through the data it took 3 iterations.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_7.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_7.png" /></p>
+<p>For the second Epoch it also takes three iterations.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_8.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_8.png" /></p>
+<p>In this case our batch size is 2. It only takes two iterations to complete one epoch. For the second epoch it also takes 2 iterations.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_9.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_9.png" /></p>
+<p>Let's see how we can determine the number of iterations for different batch sizes and epochs. </p>
+<p>To obtain the number of iterations we simply divide the number of training examples by the batch size.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_10.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_10.png" /></p>
+<p>Let's verify that. For a batch size of one we get 6 iterations, we can verify this pictorially, we see for each iteration we use one sample For a batch size of 2 it takes three iterations, we can verify this pictorially. Each iteration uses two samples. Finally, for a batch size of 3 it takes two iterations.</p>
+<p>We can verify this pictorially. We calculate the total loss for each iteration. It’s a noisy version of the cost. At the end of each epoch we calculate the accuracy on the validation data. We repeat the process for the next iteration. If the accuracy decreases we have trained too much. This is called overfitting we will talk about this later</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_11.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/gradient_descent_11.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Image_Classification/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Image_Classification/" class="btn btn-xs btn-link">
+        8. Image Classification
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

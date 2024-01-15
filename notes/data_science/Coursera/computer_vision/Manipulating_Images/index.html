@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>4. Manipulating Images - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Manipulating Images", url: "#_top", children: [
+              {title: "Manipulating Images One Pixel At a Time", url: "#manipulating-images-one-pixel-at-a-time" },
+              {title: "Drawing", url: "#drawing" },
+              {title: "OpenCV Manipulations", url: "#opencv-manipulations" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Pixel_Transformations/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Pixel_Transformations/" class="btn btn-xs btn-link">
+        5. Pixel Transformations
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-link">
+        3. Image Processing With Pillow
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="manipulating-images">Manipulating Images</h1>
+<p>Copying allows you to create a new image independent of the original.</p>
+<pre><code class="language-python">from PIL import Image
+from PIL import ImageOps
+from PIL import ImageDraw
+from PIL import ImageFont
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+baboon = Image.open('baboon.png'); # baboon.show()
+id(baboon) # 140014182059888
+A = baboon
+id(A) # 140014182059888
+B = baboon.copy()
+id(B) # 140014180362048
+
+# basic flip
+im_flip = ImageOps.flip(baboon)
+im_flip.show()
+# mirror
+im_mirror = ImageOps.mirror(baboon)
+im_mirror.show()
+# transpose (has built in attributes for different transpositions)
+baboon.transpose(Image.FLIP_TOP_BOTTOM).show()
+
+
+# flip with cv2 (more control)
+baboon = cv2.imread('baboon.png'); # baboon.show()
+
+baboon = cv2.cvtColor(baboon, cv2.COLOR_BGR2RGB)
+im_flip = cv2.flip(baboon,0)
+im_rotate = cv2.rotate(baboon,cv2.ROTATE_90_CLOCKWISE)
+
+baboon_imshow = plt.imshow(baboon)
+baboon_flip_imshow = plt.imshow(im_flip)
+baboon_rotate_imshow = plt.imshow(im_rotate)
+
+plt.show() # show any one of those
+</code></pre>
+<h2 id="manipulating-images-one-pixel-at-a-time">Manipulating Images One Pixel At a Time</h2>
+<ul>
+<li>Cropping</li>
+<li>Changing Image Pixels</li>
+</ul>
+<pre><code class="language-python">baboon = Image.open('baboon.png'); # baboon.show()
+# Cropping
+baboon_np = np.array(baboon)
+baboon_np[2:5,:,0] # rows 3-5 of 1st channel
+baboon_np[2:5,3:7,0] # rows 3-5, cols 4-7 of 1st channel
+
+baboon_np[:,:,0] = 255
+plt.imshow(baboon_np); plt.show()
+
+
+</code></pre>
+<h2 id="drawing">Drawing</h2>
+<h3 id="rectangle">Rectangle</h3>
+<pre><code class="language-python">baboon = Image.open('baboon.png'); # baboon.show()
+img_copy = baboon.copy()
+image_fn = ImageDraw.Draw(im=img_copy)
+shape = [0,0,50,50]
+image_fn.rectangle(xy=shape,fill='red')
+img_array = np.array(img_copy)
+
+plt.imshow(img_array) # either works
+plt.imshow(img_copy) # either works
+plt.show()
+</code></pre>
+<h3 id="text">Text</h3>
+<pre><code class="language-python">baboon = Image.open('baboon.png'); # baboon.show()
+img_copy = baboon.copy()
+# Fonts: https://www.fontsquirrel.com/fonts/list/popular
+fnt = ImageFont.truetype('/home/bbearce/Downloads/open-sans/OpenSans-BoldItalic.ttf', 100)
+image_fn = ImageDraw.Draw(im=img_copy)
+image_fn.text(xy=(0,0),text=&quot;box&quot;, font=fnt,fill=(0,0,0))
+plt.imshow(img_copy)
+plt.show()
+</code></pre>
+<h3 id="cropped-image">Cropped Image</h3>
+<p>Consider the image “crop_image” of a cat. We also have the “image_lenna ”, we can superimpose the image of the cat over “image Lenna”, all we need is the coordinates indicating where to paste the picture. We use the paste() method, the input is the image we would like to super-impose and the box parameter specifies the top left corner of the image you would like to paste and the box parameter specifies the top left corner of the image you would like to paste </p>
+<pre><code class="language-python">baboon = Image.open('baboon.png'); # baboon.show()
+baboon_c = baboon.copy()
+lenna = Image.open('lenna.png'); # lenna.show()
+lenna_cropped = lenna.crop((0,0,300,300))
+
+left = 150
+upper = 150
+
+baboon_c.paste(lenna_cropped, box=(left,upper))
+
+plt.imshow(baboon_c)
+plt.show()
+</code></pre>
+<h2 id="opencv-manipulations">OpenCV Manipulations</h2>
+<pre><code class="language-python">baboon = cv2.imread('baboon.png'); # baboon.show()
+baboon = cv2.cvtColor(baboon, cv2.COLOR_BGR2RGB)
+baboon_c = np.copy(baboon)
+left = 150
+upper = 150
+right = 300
+lower = 300
+
+start_point, end_point = (left, upper),(right, lower)
+cv2.rectangle(baboon_c, pt1=start_point, pt2=end_point, color=(0,255,0), thickness=3)
+plt.imshow(baboon_c)
+plt.show()
+</code></pre>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/cv2_rectangle_on_baboon.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/cv2_rectangle_on_baboon.png" /></p>
+<pre><code class="language-python">cv2.putText(img=baboon_c, text=&quot;Stuff&quot;, org=(10,500), color=(255,255,255), fontFace=4, fontScale=5, thickness=9)
+plt.imshow(baboon_c)
+plt.show()
+</code></pre>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/cv2_rectangle_and_text_on_baboon.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/cv2_rectangle_and_text_on_baboon.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Pixel_Transformations/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Pixel_Transformations/" class="btn btn-xs btn-link">
+        5. Pixel Transformations
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-link">
+        3. Image Processing With Pillow
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

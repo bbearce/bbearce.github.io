@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>3. Image Processing With Pillow - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Image Processing With Pillow", url: "#_top", children: [
+              {title: "Image Files and Paths", url: "#image-files-and-paths" },
+              {title: "Greyscale", url: "#greyscale" },
+              {title: "Quantization", url: "#quantization" },
+              {title: "Color Channels", url: "#color-channels" },
+              {title: "Indexing", url: "#indexing" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Manipulating_Images/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Manipulating_Images/" class="btn btn-xs btn-link">
+        4. Manipulating Images
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../What_Is_A_Digital_Image/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../What_Is_A_Digital_Image/" class="btn btn-xs btn-link">
+        2. What Is A Digital Image
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="image-processing-with-pillow">Image Processing With Pillow</h1>
+<h2 id="image-files-and-paths">Image Files and Paths</h2>
+<pre><code class="language-bash"># Setup Environment
+cd ~/Desktop; rm -r temp; # To remove
+cd ~/Desktop; mkdir temp; cd temp; pyenv activate venv3.10.4;
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/lenna.png -O lenna.png
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/baboon.png -O baboon.png
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/barbara.png -O barbara.png  
+</code></pre>
+<p>Image processing and computer vision tasks include displaying, cropping, flipping, rotating,  image segmentation, classification, image restoration,  image recognition, image generation.  Also, working with images via the cloud requires storing, transmitting, and gathering images through the internet. </p>
+<pre><code class="language-python">import os
+from PIL import Image
+from PIL import ImageOps 
+import matplotlib.pyplot as plt
+import numpy as np
+# First, let's define a helper function to concatenate two images side-by-side. You will not need to understand the code below at this moment, but this function will be used repeatedly in this tutorial to showcase the results.
+
+def get_concat_h(im1, im2):
+    #https://note.nkmk.me/en/python-pillow-concat-images/
+    dst = Image.new('RGB', (im1.width + im2.width, im1.height))
+    dst.paste(im1, (0, 0))
+    dst.paste(im2, (im1.width, 0))
+    return dst
+
+my_image = &quot;lenna.png&quot;
+
+</code></pre>
+<p>File Types:
+* Joint Photographic Expert Group image (or <code>.jpg</code> <code>.jpeg</code>)
+* Portable Network Graphics (or <code>.png</code>)</p>
+<pre><code class="language-python">cwd = os.getcwd()
+image_path = os.path.join(cwd, my_image)
+image = Image.open(my_image)
+type(image) # &lt;class 'PIL.PngImagePlugin.PngImageFile'&gt;
+image.show()
+
+# Matplotlib
+plt.figure(figsize=(10,10))
+plt.imshow(image)
+plt.show()
+
+# Load in with PIL.Image
+image = Image.open(image_path)
+
+# Size
+print(image.size) # (512, 512)
+
+# Mode
+print(image.mode)
+
+</code></pre>
+<p>The <code>Image.open</code> method does not load image data into the computer memory. The <code>load</code> method of <code>PIL</code> object reads the file content, decodes it, and expands the image into memory.</p>
+<pre><code class="language-python">im = image.load() 
+
+# We can then check the intensity of the image at the $x$-th column and $y$-th row:
+x = 0
+y = 1
+im[y,x] # (226, 137, 125)
+
+# Save
+image.save(&quot;lenna.jpg&quot;)
+</code></pre>
+<h2 id="greyscale">Greyscale</h2>
+<pre><code class="language-python">image_gray = ImageOps.grayscale(image) 
+image_gray.show()
+image_gray.mode # Mode is L for greyscale.
+</code></pre>
+<h2 id="quantization">Quantization</h2>
+<p>The Quantization of an image is the number of unique intensity values any given pixel of the image can take. For a grayscale image, this means the number of different shades of gray. Most images have 256 different levels. You can decrease the levels using the method <code>quantize</code>. Let's repeatably cut the number of levels in half and observe what happens:</p>
+<pre><code class="language-python"># Half the levels do not make a noticable difference.
+image_gray.quantize(256 // 2)
+image_gray.show()
+
+# Let’s continue dividing the number of values by two and compare it to the original image.
+for n in range(3,8):
+    plt.figure(figsize=(10,10))
+    plt.imshow(get_concat_h(image_gray,  image_gray.quantize(256//2**n))) 
+    plt.title(&quot;256 Quantization Levels  left vs {}  Quantization Levels right&quot;.format(256//2**n))
+    plt.show()
+</code></pre>
+<h2 id="color-channels">Color Channels</h2>
+<pre><code class="language-python">baboon = Image.open('baboon.png')
+# We can obtain the different RGB color channels and assign them to the variables red, green and blue
+red, green, blue = baboon.split()
+
+# color vs each channel
+get_concat_h(baboon, red).show()
+get_concat_h(baboon, green).show()
+get_concat_h(baboon, blue).show()
+
+array= np.asarray(image)
+print(type(array))
+</code></pre>
+<p><code>np.asarray</code> turns the original image into a numpy array. Often, we don't want to manipulate the image directly, but instead, create a copy of the image to manipulate. The <code>np.array</code> method creates a new copy of the image, such that the original one will remain unmodified.</p>
+<pre><code class="language-python">array = np.array(image)
+# summarize shape
+print(array.shape)
+# The Intensity values are  8-bit unsigned datatype.
+array[0, 0]
+</code></pre>
+<h2 id="indexing">Indexing</h2>
+<p>You can plot the array as an image:</p>
+<pre><code class="language-python"># Review
+plt.figure(figsize=(10,10))
+plt.imshow(array)
+plt.show()
+
+# We can use numpy slicing, for example, we can return the first 256 rows corresponding to the top half of the image:
+rows = 256
+plt.figure(figsize=(10,10))
+plt.imshow(array[0:rows,:,:])
+plt.show()
+# We can also return the first 256 columns corresponding to the first half of the image.
+columns = 256
+plt.figure(figsize=(10,10))
+plt.imshow(array[:,0:columns,:])
+plt.show()
+# If you want to reassign an array to another variable, you should use the `copy` method (we will cover this in the next section).
+A = array.copy()
+plt.imshow(A)
+plt.show()
+# If we do not apply the method copy(), the variable will point to the same location in memory. Consider the array B. If we set all values of array A to zero, as B points to A, the values of B will be zero too:
+B = A
+A[:,:,:] = 0
+plt.imshow(B)
+plt.show()
+# We can also work with the different color channels. Consider the baboon image: 
+baboon_array = np.array(baboon)
+plt.figure(figsize=(10,10))
+plt.imshow(baboon_array)
+plt.show()
+# We can plot the red channel as intensity values of the red channel.
+baboon_array = np.array(baboon)
+plt.figure(figsize=(10,10))
+plt.imshow(baboon_array[:,:,0], cmap='gray')
+plt.show()
+# Or we can create a new array and set all but the red color channels to zero. Therefore, when we display the image it appears red:
+baboon_red=baboon_array.copy()
+baboon_red[:,:,1] = 0
+baboon_red[:,:,2] = 0
+plt.figure(figsize=(10,10))
+plt.imshow(baboon_red)
+plt.show()
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Manipulating_Images/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Manipulating_Images/" class="btn btn-xs btn-link">
+        4. Manipulating Images
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../What_Is_A_Digital_Image/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../What_Is_A_Digital_Image/" class="btn btn-xs btn-link">
+        2. What Is A Digital Image
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

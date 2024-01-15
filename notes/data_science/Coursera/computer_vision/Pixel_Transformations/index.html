@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>5. Pixel Transformations - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Pixel Transformations", url: "#_top", children: [
+              {title: "Histograms", url: "#histograms" },
+              {title: "Intensity Transformations", url: "#intensity-transformations" },
+              {title: "Image Negatives", url: "#image-negatives" },
+              {title: "Brightness and Contrast Adjustments", url: "#brightness-and-contrast-adjustments" },
+              {title: "Historgram Equalization", url: "#historgram-equalization" },
+              {title: "Thresholding and Simple Segmentation", url: "#thresholding-and-simple-segmentation" },
+              {title: "Code Lab", url: "#code-lab" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Geometric_Operations/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Geometric_Operations/" class="btn btn-xs btn-link">
+        6. Geometric Operations
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Manipulating_Images/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Manipulating_Images/" class="btn btn-xs btn-link">
+        4. Manipulating Images
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="pixel-transformations">Pixel Transformations</h1>
+<ol>
+<li>Histograms</li>
+<li>Intensity Transformations</li>
+<li>Thresholding and Simple Segmentation</li>
+</ol>
+<h2 id="histograms">Histograms</h2>
+<p>A histogram counts the number of occurrences of a pixel, and it's a useful tool for understanding and manipulating images.</p>
+<p>Consider the following toy image with three intensity values, we can plot the occurrence of each pixel we have one black pixel, 5 gray pixels and two white pixels instead of counting the pixels, we can count the intensity values. 
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_1.png" /></p>
+<p>Consider the following example as numbers ranging from 0 to 2, where 0 is black, 1 gray and 2 is white The histogram counts the pixel intensities. We represent these intensities as an array, the index of the array is the intensity level r in most images we have 256 levels, representing the count of the different intensity of gray levels consider the following image.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_2.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_3.png" /></p>
+<p>We can calculate the histogram as follows. We have the image, the channel we would like to calculate, in this video we use the gray scale, the number of channels. Finally we have the range of intensity values in yellow We can plot the histogram as a bar graph.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_4.png" /></p>
+<pre><code class="language-python">cv2.calcHist(images, channels, mask, histSize, ranges[, hist[, accumulate]])
+</code></pre>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_5.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_5.png" /></p>
+<h2 id="intensity-transformations">Intensity Transformations</h2>
+<p>An Intensity Transformation T depends on only one single point i,j, in the image array “f”, the image array ”f” is converted to array g.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_6.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_6.png" /></p>
+<p>The transform also operates on the intensity of gray levels “r” mapping them them to “s” This changes the histogram, lets apply a simple transform to a toy image.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_7.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_7.png" /></p>
+<p>We apply the following linear transform to the image array f, returning the array g, we apply the transform at the pixel located at the first row first column we get the following result at the same pixel location at array g We apply the transform at the pixel located at the second row first column We get the following result at the same index in array g We repeat the process for the entire array.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_8.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_8.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_9.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_9.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_10.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_10.png" /></p>
+<p>We have the histogram each pixel intensity is a function of “r” or histogram r The transform maps each intensity value at r to s we have the new intensity values s and it’s histogram s, let’s see the relationship between histogram “s” and “r” the value of histogram r has one intensity value at zero(click 1) the value of histogram r has one intensity value at zero when applying the transform to r we see the intensity value of zero is mapped to 1 the histogram s now has one intensity value at one we see the intensity value r =1 is mapped to 3 the histogram r has a value of 5 at r=1 In histogram s the value of 5 is mapped to s=3, and so on.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_11.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_11.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_12.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_12.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_13.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_13.png" /></p>
+<p>If we plot the histogram after applying the transform, we see the histogram is shifted and scaled.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_14.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixel_transformations_14.png" /></p>
+<h2 id="image-negatives">Image Negatives</h2>
+<p>Reverse intensity levels of an image. Consider the following image:</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/image_negatives_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/image_negatives_1.png" /></p>
+<p>The following is the transformed image:</p>
+<p>We can apply the transform as an array operation as follows The new image looks like this; we see the details are much more evident.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/image_negatives_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/image_negatives_2.png" /></p>
+<p>Consider the following histogram:
+  * We overlay transform as function of intensity (axis on right)
+  * This flips graph about the 125 intensity point on x-axis</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/image_negatives_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/image_negatives_3.png" /></p>
+<h2 id="brightness-and-contrast-adjustments">Brightness and Contrast Adjustments</h2>
+<p>A linear transform can be seen as applying Brightness and Contrast Adjustments. </p>
+<p>We can use the following linear model where alpha is Simple contrast control and beta is Simple brightness control We can use the following values, just changing beta we can adjust the brightness Rather than using array operations we use the function “convertScaleAbs” after applying the transformation. The function scales, calculates absolute values, so the intensity values fall in the 0 to 255 value range We see the image is much brighter.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_1.png" /></p>
+<p>We see the histogram of the bright image has shifted to the right. A lot of the intensity values have been mapped to the point value of 255.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_2.png" /></p>
+<p>We can adjust alpha to change the contrast.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_3.png" /></p>
+<p>We see the contrast in the darker areas have improved but the lighter areas the image appears washed out Comparing the original image histogram to the histogram of the new image We see the lower values exhibit more spread, but many of the larger values have been mapped to 255 explaining why the image appeared washed out.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/brightness_and_contrast_4.png" /></p>
+<h2 id="historgram-equalization">Historgram Equalization</h2>
+<p>We can use nonlinear functions, but let’s explore some algorithms that optimize contrast.  </p>
+<p>Consider, the following image with following histogram the function “equalizeHist” improves contrast, by using the histogram to determine a transform that flattens the histogram, the resulting image has improved contrast.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/histogram_equalization.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/histogram_equalization.png" /></p>
+<h2 id="thresholding-and-simple-segmentation">Thresholding and Simple Segmentation</h2>
+<p>A threshold function applies a threshold to every pixel, it can be used in extracting objects from an image this is called segmentation The following function applies a threshold to the input array input image array imput_out and outputs the result the following portion of the code will cycle through each pixel (𝑖,𝑗). If the pixel is greater then that threshold It will set a pixel in the array “image_out” pixel to some value, usually 1 or 255, Otherwise it will set it to another value, usually zero.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_1.png" /></p>
+<p>Consider the following array In this case the threshold value is 1 and the min value is 0 and the max value 255 the first loop increments through the rows, for each column in “input_img” we check the condition if the values greater than 1 we set the corresponding element in “image_out” to 255. Otherwise we set it to zeros.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_2.png" /></p>
+<p>We repeat the process for the second row As none of the columns are less than one all the corresponding rows in ”Image_out” is set to zero.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_3.png" /></p>
+<p>We repeat the process for the final row.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_4.png" /></p>
+<p>The result is all the values in the new image array are white or black.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_5.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_5.png" /></p>
+<p>Consider the following image, it’s histogram bimodal We see the camera man corresponds to the first mode i.e intensities under 87, the second mode is the back round. By setting the threshold accordingly we can segment the camera man. We use the function threshold to perform thresholding, the output new_image is the image after thresholding has been applied. Along with the image ld the input is the threshold and the max value is set to 255. The final parameter is the threshold type, in this case THRESH_BINARY. This means the output will be 0 or 255. In the output we see the camera has zero values and most of the background has values of 255.  </p>
+<p>We see the histograms intensities are mapped to black and wight after thresholding has been applied.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_6.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_6.png" /></p>
+<p>Sometimes its difficult to select a threshold, therefore we can use OTSU method to select the value automatically. ret is the threshold value determined, We see the image looks identical to the one using the manual threshold.<br />
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_7.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/thresholding_and_simple_segmentation_7.png" /></p>
+<h2 id="code-lab">Code Lab</h2>
+<pre><code class="language-bash"># Setup Environment
+cd ~/Desktop; rm -r temp; # To remove
+cd ~/Desktop; mkdir temp; cd temp; pyenv activate venv3.10.4;
+
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/lenna.png -O lenna.png
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/baboon.png -O baboon.png
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/goldhill.bmp -O goldhill.bmp
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/cameraman.jpeg -O cameraman.jpeg
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/zelda.png -O zelda.png
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-CV0101EN-SkillsNetwork/images%20/images_part_1/mammogram.png -O mammogram.png
+</code></pre>
+<pre><code class="language-python">import matplotlib.pyplot as plt
+import cv2
+import numpy as np
+
+# First, lets define a helper function to plot two images side-by-side. You will not need to understand this code at this moment, but this function will be used repeatedly in this tutorial to showcase the results.
+def plot_image(image_1, image_2,title_1=&quot;Orignal&quot;, title_2=&quot;New Image&quot;):
+    plt.figure(figsize=(10,10))
+    plt.subplot(1, 2, 1)
+    plt.imshow(image_1,cmap=&quot;gray&quot;)
+    plt.title(title_1)
+    plt.subplot(1, 2, 2)
+    plt.imshow(image_2,cmap=&quot;gray&quot;)
+    plt.title(title_2)
+    plt.show()
+
+# Lets define another helper function. The following one will plot two histograms side-by-side. Again, you do not need to understand the body of this function at this moment.
+def plot_hist(old_image, new_image,title_old=&quot;Orignal&quot;, title_new=&quot;New Image&quot;):
+    intensity_values=np.array([x for x in range(256)])
+    plt.subplot(1, 2, 1)
+    plt.bar(intensity_values, cv2.calcHist([old_image],[0],None,[256],[0,256])[:,0],width = 5)
+    plt.title(title_old)
+    plt.xlabel('intensity')
+    plt.subplot(1, 2, 2)
+    plt.bar(intensity_values, cv2.calcHist([new_image],[0],None,[256],[0,256])[:,0],width = 5)
+    plt.title(title_new)
+    plt.xlabel('intensity')
+    plt.show()
+</code></pre>
+<h3 id="histograms_1">Histograms</h3>
+<pre><code class="language-python"># Toy Example
+toy_image = np.array([[0,2,2],[1,1,1],[1,1,2]],dtype=np.uint8)
+plt.imshow(toy_image, cmap=&quot;gray&quot;)
+plt.show()
+print(&quot;toy_image:&quot;,toy_image)
+# toy_image: [[0 2 2]
+#  [1 1 1]
+#  [1 1 2]]
+
+# cv2.calcHist(images, channels, mask, histSize, ranges[, hist[, accumulate]])
+# We can use the caclHist function.
+# In this case, we use only three bins as there are only three values, and the index of the bins are from 1 to 3.
+hist_counts = cv2.calcHist([toy_image], [0], None, [3], [0,3])
+hist_counts_list = [i[0] for i in hist_counts]
+# array([[1.],
+#        [5.],
+#        [3.]], dtype=float32)
+plt.bar([x for x in range(3)],hist_counts_list)
+plt.show()
+</code></pre>
+<p>The histogram is a function where <span class="arithmatex">\(h[r]\)</span> where <span class="arithmatex">\(r \in {0,1,2}\)</span>. In the above example <span class="arithmatex">\(h[0]=1\)</span>,<span class="arithmatex">\(h[1]=5\)</span> and <span class="arithmatex">\(h[2]=3\)</span></p>
+<h3 id="gray-scale-histograms">Gray Scale Histograms</h3>
+<p>Histograms are used in grayscale images.  Grayscale images are used in many applications, including medical and industrial. Color images are split into luminance and chrominance. The luminance is the grayscale portion and is usually processed in many applications. Consider the following "Gold Hill" image:</p>
+<pre><code class="language-python">goldhill = cv2.imread(&quot;goldhill.bmp&quot;,cv2.IMREAD_GRAYSCALE)
+plt.figure(figsize=(10,10))
+plt.imshow(goldhill,cmap=&quot;gray&quot;)
+plt.show()
+
+# We can calculate the histogram using the `calcHist` function from the `cv2` module as follows, the shape is 256.
+
+hist = cv2.calcHist([goldhill],[0], None, [256], [0,256])
+</code></pre>
+<p>We can plot it as a bar graph, the <span class="arithmatex">\(x\)</span>-axis are the pixel intensities and the <span class="arithmatex">\(y\)</span>-axis is the number of times of occurrences that the corresponding pixel intensity value on <span class="arithmatex">\(x\)</span>-axis occurred.</p>
+<pre><code class="language-python">intensity_values = np.array([x for x in range(hist.shape[0])])
+plt.bar(intensity_values, hist[:,0], width = 5)
+plt.title(&quot;Bar histogram&quot;)
+plt.show()
+</code></pre>
+<p>The histogram is a function where <span class="arithmatex">\(h[r]\)</span> where <span class="arithmatex">\(r \in {0,1,..,255}\)</span>.</p>
+<pre><code class="language-python">PMF = hist / (goldhill.shape[0] * goldhill.shape[1])
+
+plt.plot(intensity_values,PMF)
+plt.title(&quot;PMF&quot;)
+plt.show()
+</code></pre>
+<p>We can also apply a histogram to each image color channel:</p>
+<pre><code class="language-python">baboon = cv2.imread(&quot;baboon.png&quot;)
+plt.imshow(cv2.cvtColor(baboon,cv2.COLOR_BGR2RGB))
+plt.show()
+
+# In the loop, the value for i specifies what color channel calcHist is going to calculate the histogram for.   
+color = ('blue','green','red')
+for i,col in enumerate(color):
+    histr = cv2.calcHist([baboon],[i],None,[256],[0,256])
+    plt.plot(intensity_values,histr,color = col,label=col+&quot; channel&quot;)
+    plt.xlim([0,256])
+
+plt.legend()
+plt.title(&quot;Histogram Channels&quot;)
+plt.show()
+</code></pre>
+<h3 id="intensity-transformations_1">Intensity Transformations</h3>
+<p>It's helpful to think of an image as a function <span class="arithmatex">\(f(x,y)\)</span> instead of an array at this point, where <code>x</code> is the row index and <code>y</code> is the column index. You can apply a transformation <span class="arithmatex">\(T\)</span> to the image and get a new image: 
+$$
+g(x,y)=T(f(x,y))
+$$</p>
+<p>An Intensity Transformation depends on only one single point <span class="arithmatex">\((x,y)\)</span>. For example, you can apply a linear transform <span class="arithmatex">\(g(x,y) = 2f(x,y) + 1\)</span>; this will multiply each image pixel by two and add one.</p>
+<p>As the Intensity transforms only depend on one value; as a result, it is sometimes referred to as a gray-level mapping. The variable if <span class="arithmatex">\(r\)</span> is the gray level intensity, similar to the histogram values. The new output s is given by:</p>
+<div class="arithmatex">\[
+s=T(r)
+\]</div>
+<h3 id="image-negatives_1">Image Negatives</h3>
+<p>Consider an image with <span class="arithmatex">\(L\)</span> intensity values ranging from <span class="arithmatex">\([0,L-1]\)</span>.  We can reverse the intensity levels by applying the following:</p>
+<div class="arithmatex">\[
+g(x,y)=L-1-f(x,y)
+\]</div>
+<p>Using the intensity transformation function notation 
+$$
+s = L - 1 - r
+$$</p>
+<p>This is called the image negative. For <span class="arithmatex">\(L= 256\)</span> the formulas simplifys to:</p>
+<div class="arithmatex">\[
+g(x,y)=255-f(x,y) \qquad and \qquad s=255-r
+\]</div>
+<p>We can perform intensity transformation on the toy image where <span class="arithmatex">\(L=3\)</span>.</p>
+<pre><code class="language-python">L = 3
+neg_toy_image = (L - 1) - toy_image
+
+print(&quot;toy image\n&quot;, neg_toy_image)
+print(&quot;image negatives\n&quot;, neg_toy_image)
+
+# We see darker intensity’s become brighter and brighter become darker, middle intensity’s remain the same.
+plt.figure(figsize=(10,10))
+plt.subplot(1, 2, 1) 
+plt.imshow(toy_image,cmap=&quot;gray&quot;)
+plt.subplot(1, 2, 2)
+plt.imshow(neg_toy_image,cmap=&quot;gray&quot;)
+plt.show()
+print(&quot;toy_image:&quot;,toy_image)
+
+# Reversing image intensity has many applications, including making it simpler to analyze medical images. Consider the mammogram with micro-calcifications on the upper quadrant:
+image = cv2.imread(&quot;mammogram.png&quot;, cv2.IMREAD_GRAYSCALE)
+cv2.rectangle(image, pt1=(160, 212), pt2=(250, 289), color = (255), thickness=2) 
+
+plt.figure(figsize = (10,10))
+plt.imshow(image, cmap=&quot;gray&quot;)
+plt.show()
+
+# Transform
+img_neg = -1 * image + 255
+
+# We see the micro-calcifications in the image negatives is easier it is to analyze:
+plt.figure(figsize=(10,10))
+plt.imshow(img_neg, cmap = &quot;gray&quot;)
+plt.show()
+</code></pre>
+<h3 id="brightness-and-color-adjustments">Brightness and Color Adjustments</h3>
+<p>We can use multiplication by <span class="arithmatex">\(\alpha\)</span> for contrast control and addition by <span class="arithmatex">\(\beta\)</span> to improve brightness control. This applies the Intensity Transformation as well. The image is <span class="arithmatex">\(f(x,y)\)</span> and the transformed image is <span class="arithmatex">\(g(x,y)\)</span>, where <span class="arithmatex">\(g(x,y) = \alpha f(x,y) + \beta\)</span>.</p>
+<p>Rather than implementing via array operations, we use the function  convertScaleAbs. It scales, calculates absolute values, and converts the result to 8-bit so the values fall between <span class="arithmatex">\([0,255]\)</span>. For brightness control, we can set <span class="arithmatex">\(\alpha\)</span> to 1 and <span class="arithmatex">\(\beta\)</span> to 100:</p>
+<p>Remember the Good Hill image, it’s dark and hazy so let's see if we can improve it. </p>
+<pre><code class="language-python">alpha = 1 # Simple contrast control
+beta = 100   # Simple brightness control   
+new_image = cv2.convertScaleAbs(goldhill, alpha=alpha, beta=beta)
+plot_image(goldhill, new_image, title_1 = &quot;Orignal&quot;, title_2 = &quot;brightness control&quot;)
+
+# We see the brighter image's histogram is shifted:     
+plt.figure(figsize=(10,5))
+plot_hist(goldhill, new_image, &quot;Orignal&quot;, &quot;brightness control&quot;)
+</code></pre>
+<p>We can increase the contrast by increasing <span class="arithmatex">\(\alpha\)</span>:</p>
+<pre><code class="language-python">plt.figure(figsize=(10,5))
+alpha = 2# Simple contrast control
+beta = 0 # Simple brightness control   # Simple brightness control
+new_image = cv2.convertScaleAbs(goldhill, alpha=alpha, beta=beta)
+plot_image(goldhill,new_image,&quot;Orignal&quot;,&quot;contrast control&quot;)
+plt.figure(figsize=(10,5))
+plot_hist(goldhill, new_image,&quot;Orignal&quot;,&quot;contrast control&quot;)
+
+# When plotting the image we see it's too bright. We can adapt the brightness by making the image darker and increasing the contrast at the same time. 
+plt.figure(figsize=(10,5))
+alpha = 3 # Simple contrast control
+beta = -200  # Simple brightness control   
+new_image = cv2.convertScaleAbs(goldhill, alpha=alpha, beta=beta)
+plot_image(goldhill, new_image, &quot;Orignal&quot;, &quot;brightness &amp; contrast control&quot;)
+plt.figure(figsize=(10,5))
+plot_hist(goldhill, new_image, &quot;Orignal&quot;, &quot;brightness &amp; contrast control&quot;)
+</code></pre>
+<h3 id="histogram-equalization">Histogram Equalization</h3>
+<p>Histogram Equalization increases the contrast of images, by stretching out the range of the grayscale pixels; It does this by flatting  the histogram. We simply apply the function cv2.equalizeHist.</p>
+<pre><code class="language-python">zelda = cv2.imread(&quot;zelda.png&quot;,cv2.IMREAD_GRAYSCALE)
+new_image = cv2.equalizeHist(zelda)
+# We can compare the image before and after Histogram Equalization, we see the contrast is improved. We see after the Histogram Equalization is applied, the histogram is stretched out:
+plot_image(zelda,new_image,&quot;Orignal&quot;,&quot;Histogram Equalization&quot;)
+plt.figure(figsize=(10,5))
+plot_hist(zelda, new_image,&quot;Orignal&quot;,&quot;Histogram Equalization&quot;)
+</code></pre>
+<h3 id="thresholding-and-simple-segmentation_1">Thresholding and Simple Segmentation</h3>
+<p>Thresholding is used in image segmentation this means extracting objects from an image. Image segmentation is used in many applications including extracting text, medical imaging, and industrial imaging.</p>
+<p>Thresholding an image takes a threshold; If a particular pixel (i,j) is greater than that threshold it will set that pixel to some value usually 1 or 255, otherwise, it will set it to another value, usually zero. We can write a Python function that will perform thresholding and output a new image given some input grayscale image:</p>
+<pre><code class="language-python">def thresholding(input_img,threshold,max_value=255, min_value=0):
+    N,M=input_img.shape
+    image_out=np.zeros((N,M),dtype=np.uint8)
+
+    for i  in range(N):
+        for j in range(M):
+            if input_img[i,j]&gt; threshold:
+                image_out[i,j]=max_value
+            else:
+                image_out[i,j]=min_value
+
+    return image_out   
+
+# Consider the following toy image:
+toy_image           
+# We can apply thresholding, by setting all the values less than two to zero. 
+threshold = 1
+max_value = 2
+min_value = 0
+thresholding_toy = thresholding(toy_image, threshold=threshold, max_value=max_value, min_value=min_value)
+thresholding_toy
+# We can compare the two images. In the new image we see all the gray values are now black:
+plt.figure(figsize=(10, 10))
+plt.subplot(1, 2, 1)
+plt.imshow(toy_image, cmap=&quot;gray&quot;)
+plt.title(&quot;Original Image&quot;)
+plt.subplot(1, 2, 2)
+plt.imshow(thresholding_toy, cmap=&quot;gray&quot;)
+plt.title(&quot;Image After Thresholding&quot;)
+plt.show()  
+# Consider the cameraman image:
+image = cv2.imread(&quot;cameraman.jpeg&quot;, cv2.IMREAD_GRAYSCALE)
+plt.figure(figsize=(10, 10))
+plt.imshow(image, cmap=&quot;gray&quot;)
+plt.show()
+# We can see the histogram as two peeks, this means that there is a large proportion of pixels in those two ranges:
+hist = cv2.calcHist([image], [0], None, [256], [0, 256])
+intensity_values = np.array([x for x in range(hist.shape[0])])
+plt.bar(intensity_values, hist[:, 0], width=5)
+plt.title(&quot;Bar histogram&quot;)
+plt.show()
+# The cameraman corresponds to the darker pixels, therefore we can set the Threshold in such a way as to segment the cameraman. In this case, it looks to be slightly less than 90, let’s give it a try:
+threshold = 87
+max_value = 255
+min_value = 0
+new_image = thresholding(image, threshold=threshold, max_value=max_value, min_value=min_value)
+# We see the pixels corresponding to the cameraman are now zero and the rest are set to 255:
+plot_image(image, new_image, &quot;Orignal&quot;, &quot;Image After Thresholding&quot;)
+plt.figure(figsize=(10,5))
+plot_hist(image, new_image, &quot;Orignal&quot;, &quot;Image After Thresholding&quot;)
+</code></pre>
+<p>The function cv2.threshold applies a threshold to the gray image, with the following parameters:</p>
+<pre><code class="language-python">cv2.THRESH_BINARY # 0
+# We can apply thresholding to the image as follows:
+ret, new_image = cv2.threshold(image,threshold,max_value,cv2.THRESH_BINARY)
+plot_image(image,new_image,&quot;Orignal&quot;,&quot;Image After Thresholding&quot;)
+plot_hist(image, new_image,&quot;Orignal&quot;,&quot;Image After Thresholding&quot;)
+</code></pre>
+<p><code>ret</code> is the threshold value and new_image is the image after thresholding has been applied. There are different threshold types, for example, <code>cv2.THRESH_TRUNC</code> will not change the values if the pixels are less than the threshold value:</p>
+<pre><code class="language-python">ret, new_image = cv2.threshold(image,86,255,cv2.THRESH_TRUNC)
+plot_image(image,new_image,&quot;Orignal&quot;,&quot;Image After Thresholding&quot;)
+plot_hist(image, new_image,&quot;Orignal&quot;,&quot;Image After Thresholding&quot;)
+# We see that the darker elements have not changed and the lighter values are set to 255.
+
+</code></pre>
+<p>Otsu's method <code>cv2.THRESH_OTSU</code> avoids having to choose a value and determines it automatically, using the histogram.</p>
+<pre><code class="language-python">ret, otsu = cv2.threshold(image,0,255,cv2.THRESH_OTSU)
+plot_image(image,otsu,&quot;Orignal&quot;,&quot;Otsu&quot;)
+plot_hist(image, otsu,&quot;Orignal&quot;,&quot; Otsu's method&quot;)
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Geometric_Operations/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Geometric_Operations/" class="btn btn-xs btn-link">
+        6. Geometric Operations
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Manipulating_Images/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Manipulating_Images/" class="btn btn-xs btn-link">
+        4. Manipulating Images
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

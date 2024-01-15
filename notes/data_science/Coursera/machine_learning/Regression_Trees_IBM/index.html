@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>4. Regression Trees - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Regression Trees", url: "#_top", children: [
+              {title: "What Is A Regression Tree", url: "#what-is-a-regression-tree" },
+              {title: "Criterion", url: "#criterion" },
+              {title: "How Regression Trees are Built?", url: "#how-regression-trees-are-built" },
+              {title: "Categorical Features", url: "#categorical-features" },
+              {title: "Numerical Features", url: "#numerical-features" },
+              {title: "Choosing the Decision", url: "#choosing-the-decision" },
+              {title: "When do we Stop?", url: "#when-do-we-stop" },
+              {title: "Adding Decisions", url: "#adding-decisions" },
+              {title: "Regression Trees Lab", url: "#regression-trees-lab" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Logistic_Regression_IBM/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Logistic_Regression_IBM/" class="btn btn-xs btn-link">
+        5. Logistic Regression
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Decision_Trees_IBM/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Decision_Trees_IBM/" class="btn btn-xs btn-link">
+        3. Decision Trees
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="regression-trees">Regression Trees</h1>
+<p>Source: <a href="https://www.coursera.org/learn/machine-learning-with-python">Machine_Learning_With_Python_IBM</a></p>
+<h2 id="what-is-a-regression-tree">What Is A Regression Tree</h2>
+<p>As we have already seen, decision trees can be used for classification, but we can also use them for regression, commonly called regression trees. </p>
+<p>The basic idea behind regression trees is to split our data into groups based on features, like in classification, and return a prediction that is the average across the data we have already seen. </p>
+<p>Consider the housing data below, where we are using the ‘Age’ to predict the ‘Price’ of a house. </p>
+<pre><code class="language-python">import pandas as pd
+import matplotlib.pyplot as plt
+age = [1,2,5,7,7,15,39,45,32,21,55,64,75,62,79]
+price = [515550.73, 491775.83, 457544.34, 506443.94, 524594.98, 368796.62, 362740.81, 361467.51, 411260.00, 390396.54, 94761.54, 115555.98, 73275.04, 116153.90, 135408.55]
+
+house_pricing_data_1 = pd.DataFrame({'Age':age, 'Price':price})
+
+house_pricing_data_1.plot.scatter(&quot;Age&quot;, &quot;Price&quot;)
+plt.show()
+</code></pre>
+<p>Here, we can see the difference age has on the house prices. Ages between 0 and 10 have an average price of approximately $500,000, ages between 10 and 50 have an average price of approximately $380,000 and houses older than 50 years have an average price of approximately $100,000. Using these general ranges, we can predict the price of a house. </p>
+<p>Using the data above, we can create the regression tree, as shown below. The prices were determined by calculating the average price of the houses in the age range. </p>
+<p><img alt="regression_tree" src="../Images/decision_trees/regression_tree.png" /></p>
+<h2 id="criterion">Criterion</h2>
+<p>The way the trees are built are similar to classification, but instead of using the entropy criterion. In Classification Trees, we choose features that increase the information gain. <strong>In Regression Trees, we choose features that minimize the error.</strong></p>
+<p>A popular one is the Mean Absolute Error, which we have also seen previously.</p>
+<p><span class="arithmatex">\(MAE =\frac{1}{n}\sum_{j=1}^{n}|y_j-\hat{y}_j|\)</span></p>
+<h2 id="how-regression-trees-are-built">How Regression Trees are Built?</h2>
+<p>Take the dataset sample shown below, the first step is to decide what the first decision is. We will do this by using the criterion and checking every single feature in the dataset to see which one produces the minimal error. </p>
+<p>but first...</p>
+<h2 id="categorical-features">Categorical Features</h2>
+<p>Categorical features are simple, here we have Near Water so all we need to do is calculate the error if we used this as the first feature. Near Water feature has two categories: ‘Yes’ and ‘No’, therefore, we must calculate the average ‘Price’ of houses in the ‘Yes’ and ‘No’ categories. Then we use those values to calculate the average error. </p>
+<pre><code class="language-python">
+index_1 = [0, 1, 2, 3, 4]
+near_water_1 = ['No']*5
+age_1 = [0,45,60,20,90]
+price_1 = [260831.34, 222939.35, 101882.1, 226868.52, 94868.94] 
+average_house_price_1 = sum(price_1)/len(price_1)
+absolute_error_no = [abs(i-average_house_price_1) for i in price_1]
+
+
+index_2 = [5,6,7,8,9]
+near_water_2 = ['Yes']*5
+age_2 = [100,5,10,55,25]
+price_2 = [197703.55, 347982.98, 343150.38, 206713.16, 329768.77] 
+average_house_price_2 = sum(price_2)/len(price_2)
+absolute_error_yes = [abs(i-average_house_price_2) for i in price_2]
+
+Index = index_1 + index_2
+Near_water = near_water_1 + near_water_2
+Age = age_1 + age_2
+Price = price_1 + price_2
+Average_house_prices = (average_house_price_1 , average_house_price_2)
+Absolue_error = absolute_error_no + absolute_error_yes
+
+MAE = sum(Absolue_error)/(len(Index))
+MAE # 66383.1772
+</code></pre>
+<h2 id="numerical-features">Numerical Features</h2>
+<p>Numerical features, like ‘Age’, are trickier to handle because we need to find a number, instead of using a category, to split the data by. We do this by creating a boundary between each point, then we calculate the error. </p>
+<p>For example, first we create the boundary between the first two data points, which are (0, 260831.34) and (5, 347982.98), so we create a boundary of x = 2.5 (The midpoint between the x component of the first two data points). </p>
+<pre><code class="language-python">house_pricing_data_2 = pd.DataFrame({&quot;near_water&quot;: Near_water, &quot;Age&quot;:Age, &quot;Price&quot;:Price})
+house_pricing_data_2.plot.scatter(&quot;Age&quot;,&quot;Price&quot;)
+plt.plot([2.5]*40, [i*10000 for i in range(1,41)]); plt.title('Housing Data')
+plt.show()
+</code></pre>
+<p>We now find the average price of the houses on the left and right sides of this boundary and use it to calculate the MAE.</p>
+<pre><code class="language-python">house_pricing_data_2.sort_values(&quot;Age&quot;, inplace=True) # Don't forget to run!
+house_pricing_data_2.reset_index(inplace=True) # Don't forget to run!
+left = house_pricing_data_2['Price'][0]
+right = house_pricing_data_2['Price'][1:]
+left_avg = left if isinstance(left, float) else sum(left)/len(left)
+right_avg = right if isinstance(right, float) else sum(right)/len(right)
+left_error = house_pricing_data_2['Price'][0] - left_avg
+right_error = abs(house_pricing_data_2['Price'][1:] - right_avg)
+MAE = sum(left_error + right_error)/len(house_pricing_data_2)
+
+MAE # 66055.242
+</code></pre>
+<pre><code class="language-python">boundaries = [(house_pricing_data_2.iloc[i]['Age'] + house_pricing_data_2.iloc[i+1]['Age'])/2 for i in range(house_pricing_data_2.shape[0]-1)]
+house_pricing_data_2.plot.scatter(&quot;Age&quot;,&quot;Price&quot;)
+for b in boundaries:
+    plt.plot([b]*40, [i*10000 for i in range(1,41)], 'r'); plt.title('Housing Data')
+
+plt.show()
+</code></pre>
+<p>This process is then repeated for each boundary between each pair of consecutive points. </p>
+<pre><code class="language-python">house_pricing_data_2.sort_values(&quot;Age&quot;, inplace=True) # Don't forget to run!
+house_pricing_data_2.reset_index(inplace=True) # Don't forget to run!
+
+MAEs = pd.DataFrame({&quot;boundary&quot;:[],&quot;MAE&quot;:[]})
+for i,boundary in enumerate(boundaries):
+    left = house_pricing_data_2['Price'][:i+1]
+    right = house_pricing_data_2['Price'][i+1:]
+    left_avg = left if isinstance(left, float) else sum(left)/len(left)
+    right_avg = right if isinstance(right, float) else sum(right)/len(right)
+    left_error = [abs(y - left_avg) for y in house_pricing_data_2['Price'][:i+1]]
+    right_error = [abs(y - right_avg) for y in house_pricing_data_2['Price'][i+1:]]
+    # import pdb; pdb.set_trace()
+    left; right;
+    left_avg; right_avg;
+    left_error; right_error;
+    MAE = sum(left_error + right_error)/len(house_pricing_data_2)
+    print(f&quot;MAE: {MAE}&quot;)
+    MAEs = pd.concat([MAEs, pd.DataFrame({&quot;boundary&quot;:[boundary],&quot;MAE&quot;:MAE})])
+
+MAEs.plot.scatter(&quot;boundary&quot;,&quot;MAE&quot;); plt.show()
+</code></pre>
+<p><img alt="lab_class_regression_tree_boundary.jpg" src="../Images/decision_trees/lab_class_regression_tree_boundary.jpg" /></p>
+<p>We can see that the boundary 35 results in the lowest MAE (<code>49726.547200</code>) in this feature. </p>
+<h2 id="choosing-the-decision">Choosing the Decision</h2>
+<p>Now, we compare the categorical MAE and the lowest numerical MAE, in this case, the categorical is <code>66383.1772</code>, and the numerical is <code>49726.55</code>. So, for the first decision, we will use the numerical ‘Age’ feature. We end up with a regression tree that looks like this: </p>
+<pre><code class="language-bash">  Age&lt;35
+      |
+  ----------
+  |        |
+  Yes      No
+  |        |
+</code></pre>
+<h2 id="when-do-we-stop">When do we Stop?</h2>
+<p>With the regression tree above, we have two options, we can either stop here and use the average value of the ‘Yes’ (left) and ‘No’ (right) to predict the house prices, or we can continue to add more decisions to either branch. There are a few conditions that are commonly used to stop growing regression trees: </p>
+<p>• Tree depth
+• Number of remaining samples on a branch
+• Number of samples on each branch if another decision is made </p>
+<p>The depth of the tree above, is 1, because there is a single decision and the number of samples on each side is 5. Let’s add more decisions until the depth of the tree is 2. First, we start with the ‘Yes’ (left) side and we calculate the MAE for the features using the houses that have ‘Age’ &lt; 35.</p>
+<h2 id="adding-decisions">Adding Decisions</h2>
+<p>Like before, we use the Near Water feature and calculate the MAE on houses with index 0, 3, 6, 7, and 9.</p>
+<pre><code class="language-python">Near_water = ['No','Yes','Yes','No','Yes','No','Yes','No','No','Yes']
+Age = [0,5,10,20,25,45,55,60,90,100]
+Price = [260831.34,347982.98,343150.38,226868.52,329768.77,222939.35,206713.16,101882.10, 94868.94,197703.55]
+house_pricing_data_2 = pd.DataFrame({&quot;near_water&quot;: Near_water, &quot;Age&quot;:Age, &quot;Price&quot;:Price})
+# First consider the age &lt; 35 branch
+house_pricing_data_2_l35 = house_pricing_data_2[house_pricing_data_2['Age'] &lt; 35]
+
+nw_age_l35 = house_pricing_data_2_l35[house_pricing_data_2_l35['near_water'] == 'Yes']['Age']
+nw_price_l35 = house_pricing_data_2_l35[house_pricing_data_2_l35['near_water'] == 'Yes']['Price']
+nw_avg_house_price = sum(nw_price_l35)/len(nw_price_l35)
+
+nnw_age_l35 = house_pricing_data_2_l35[house_pricing_data_2_l35['near_water'] == 'No']['Age']
+nnw_price_l35 = house_pricing_data_2_l35[house_pricing_data_2_l35['near_water'] == 'No']['Price']
+nnw_avg_house_price = sum(nnw_price_l35)/len(nnw_price_l35)
+
+nw_avg_house_price
+nnw_avg_house_price
+
+AEs = [abs(y - nw_avg_house_price) for y in nw_price_l35] + [abs(y - nnw_avg_house_price) for y in nnw_price_l35]
+MAE = sum(AEs)/len(AEs)
+MAE # 11005.339999999991
+
+# Now, we find the MAE for the boundaries in the ‘Age’ feature.
+boundaries = [(house_pricing_data_2_l35.iloc[i]['Age'] + house_pricing_data_2_l35.iloc[i+1]['Age'])/2 for i in range(house_pricing_data_2_l35.shape[0]-1)]
+
+house_pricing_data_2_l35.sort_values(&quot;Age&quot;, inplace=True) # Don't forget to run!
+house_pricing_data_2_l35.reset_index(inplace=True) # Don't forget to run!
+
+MAEs = pd.DataFrame({&quot;boundary&quot;:[],&quot;MAE&quot;:[]})
+for i,boundary in enumerate(boundaries):
+    left = house_pricing_data_2_l35['Price'][:i+1]
+    right = house_pricing_data_2_l35['Price'][i+1:]
+    left_avg = left if isinstance(left, float) else sum(left)/len(left)
+    right_avg = right if isinstance(right, float) else sum(right)/len(right)
+    left_error = [abs(y - left_avg) for y in house_pricing_data_2_l35['Price'][:i+1]]
+    right_error = [abs(y - right_avg) for y in house_pricing_data_2_l35['Price'][i+1:]]
+    # import pdb; pdb.set_trace()
+    left; right;
+    left_avg; right_avg;
+    left_error; right_error;
+    MAE = sum(left_error + right_error)/len(house_pricing_data_2_l35)
+    print(f&quot;MAE: {MAE}&quot;)
+    MAEs = pd.concat([MAEs, pd.DataFrame({&quot;boundary&quot;:[boundary],&quot;MAE&quot;:MAE})])
+
+MAEs.plot.scatter(&quot;boundary&quot;,&quot;MAE&quot;); plt.show()
+min(MAEs['MAE']) # lowest is 34029.657000000014
+</code></pre>
+<p>When compared to <code>11005.339999999991</code> from the near_water feature, <code>34029.65700000001</code> has more error. This means off of the 'Yes' branch or Age &lt; 35 decision, the next decision should be near_water or not.</p>
+<pre><code class="language-bash">            Age&lt;35
+              |
+         ----- -----
+         |         |
+         Yes       No
+         |         |
+     ---------- 
+     |        |
+   near_w  not_near_w
+</code></pre>
+<pre><code class="language-python"># Second consider the age &gt; 35 branch
+house_pricing_data_2_g35 = house_pricing_data_2[house_pricing_data_2['Age'] &gt; 35]
+
+nw_age_g35 = house_pricing_data_2_g35[house_pricing_data_2_g35['near_water'] == 'Yes']['Age']
+nw_price_g35 = house_pricing_data_2_g35[house_pricing_data_2_g35['near_water'] == 'Yes']['Price']
+nw_avg_house_price = sum(nw_price_g35)/len(nw_price_g35)
+
+nnw_age_g35 = house_pricing_data_2_g35[house_pricing_data_2_g35['near_water'] == 'No']['Age']
+nnw_price_g35 = house_pricing_data_2_g35[house_pricing_data_2_g35['near_water'] == 'No']['Price']
+nnw_avg_house_price = sum(nnw_price_g35)/len(nnw_price_g35)
+
+nw_avg_house_price
+nnw_avg_house_price
+
+AEs = [abs(y - nw_avg_house_price) for y in nw_price_g35] + [abs(y - nnw_avg_house_price) for y in nnw_price_g35]
+MAE = sum(AEs)/len(AEs)
+MAE # 35018.943333333336
+
+# Now, we find the MAE for the boundaries in the ‘Age’ feature.
+boundaries = [(house_pricing_data_2_g35.iloc[i]['Age'] + house_pricing_data_2_g35.iloc[i+1]['Age'])/2 for i in range(house_pricing_data_2_g35.shape[0]-1)]
+
+house_pricing_dathouse_pricing_data_2_g35a_2_g35.sort_values(&quot;Age&quot;, inplace=True) # Don't forget to run!
+house_pricing_data_2_g35.reset_index(inplace=True) # Don't forget to run!
+
+MAEs = pd.DataFrame({&quot;boundary&quot;:[],&quot;MAE&quot;:[]})
+for i,boundary in enumerate(boundaries):
+    left = house_pricing_data_2_g35['Price'][:i+1]
+    right = house_pricing_data_2_g35['Price'][i+1:]
+    left_avg = left if isinstance(left, float) else sum(left)/len(left)
+    right_avg = right if isinstance(right, float) else sum(right)/len(right)
+    left_error = [abs(y - left_avg) for y in house_pricing_data_2_g35['Price'][:i+1]]
+    right_error = [abs(y - right_avg) for y in house_pricing_data_2_g35['Price'][i+1:]]
+    # import pdb; pdb.set_trace()
+    left; right;
+    left_avg; right_avg;
+    left_error; right_error;
+    MAE = sum(left_error + right_error)/len(house_pricing_data_2_g35)
+    print(f&quot;MAE: {MAE}&quot;)
+    MAEs = pd.concat([MAEs, pd.DataFrame({&quot;boundary&quot;:[boundary],&quot;MAE&quot;:MAE})])
+
+MAEs.plot.scatter(&quot;boundary&quot;,&quot;MAE&quot;); plt.show()
+min(MAEs['MAE']) # lowest is 29732.71266666666
+</code></pre>
+<p>When compared to <code>35018.943333333336</code> from the near_water feature, <code>29732.71266666666</code> has less error. This means off of the 'No' branch or Age &gt; 35 decision, the next decision should be Age <em>again</em> with the boundary set to 57.5.</p>
+<pre><code class="language-bash">                            Age&lt;35
+                              |
+               --------------- ---------------
+               |                             |
+               Yes                           No
+               |                             |
+           --Near_water--               ---Age&lt;57.5--- 
+           |            |               |            |
+           Yes          No              Yes          No
+Price:     $A           $B              $C           $D
+Price:     $341,911.57  $243,849.93     $214,826.26  $131,484.86
+
+&gt;&gt;&gt; house_pricing_data_2_g35
+   index near_water  Age      Price
+0      5         No   45  222939.35
+1      6        Yes   55  206713.16
+2      7         No   60  101882.10
+3      8         No   90   94868.94
+4      9        Yes  100  197703.55
+&gt;&gt;&gt; house_pricing_data_2_l35
+   index near_water  Age      Price
+0      0         No    0  260831.34
+1      1        Yes    5  347982.98
+2      2        Yes   10  343150.38
+3      3         No   20  226868.52
+4      4        Yes   25  329768.77
+</code></pre>
+<pre><code class="language-python">&gt;&gt;&gt; A = (347982.98+347982.98+329768.77)/3 # 341,911.57666666666
+&gt;&gt;&gt; B = (260831.34+226868.52)/2 # 243,849.93
+&gt;&gt;&gt; C = (222939.35+206713.16)/2 # 214,826.255
+&gt;&gt;&gt; D = (101882.10+94868.94+ 197703.55)/3 # 131,484.8633333333
+</code></pre>
+<h2 id="regression-trees-lab">Regression Trees Lab</h2>
+<p>If the above was more the lecture, then this is hands on scikit-learn</p>
+<pre><code class="language-bash"># Setup Environment
+cd ~/Desktop; rm -r temp; # To remove
+cd ~/Desktop; mkdir temp; cd temp; pyenv activate venv3.10.4;
+wget https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/IBMDeveloperSkillsNetwork-ML0101EN-SkillsNetwork/labs/Module%203/data/real_estate_data.csv
+</code></pre>
+<h3 id="data">Data</h3>
+<p>Imagine you are a data scientist working for a real estate company that is planning to invest in Boston real estate. You have collected information about various areas of Boston and are tasked with created a model that can predict the median price of houses for that area so it can be used to make offers.</p>
+<p>The dataset had information on areas/towns not individual houses, the features are</p>
+<ul>
+<li>CRIM: Crime per capita</li>
+<li>ZN: Proportion of residential land zoned for lots over 25,000 sq.ft.</li>
+<li>INDUS: Proportion of non-retail business acres per town</li>
+<li>CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)</li>
+<li>NOX: Nitric oxides concentration (parts per 10 million)</li>
+<li>RM: Average number of rooms per dwelling</li>
+<li>AGE: Proportion of owner-occupied units built prior to 1940</li>
+<li>DIS: Weighted distances to ﬁve Boston employment centers</li>
+<li>RAD: Index of accessibility to radial highways</li>
+<li>TAX: Full-value property-tax rate per $10,000</li>
+<li>PTRAIO: Pupil-teacher ratio by town</li>
+<li>LSTAT: Percent lower status of the population</li>
+<li>MEDV: Median value of owner-occupied homes in $1000s</li>
+</ul>
+<pre><code class="language-python"># Pandas will allow us to create a dataframe of the data so it can be used and manipulated
+import pandas as pd
+# Regression Tree Algorithm
+from sklearn.tree import DecisionTreeRegressor
+# Split our data into a training and testing data
+from sklearn.model_selection import train_test_split
+
+data = pd.read_csv(&quot;real_estate_data.csv&quot;)
+data.head()
+data.shape
+# Counts per col of missing data
+data.isna().sum()
+# Let's drop for now
+data.dropna(inplace=True)
+data.isna().sum()
+# Lets split the dataset into our features and what we are predicting (target)
+X = data.drop(columns=[&quot;MEDV&quot;]) # indep vars
+Y = data[&quot;MEDV&quot;] # dep var
+# Use our buddy train_test_split
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=.2, random_state=1)
+</code></pre>
+<h3 id="create-regression-tree">Create Regression Tree</h3>
+<p>Regression Trees are implemented using <code>DecisionTreeRegressor</code> from <code>sklearn.tree</code>. The important parameters of <code>DecisionTreeRegressor</code> are:</p>
+<ul>
+<li><code>criterion</code>: {'squared_error', 'absolute_error', 'poisson', 'friedman_mse'} - The function used to measure error</li>
+<li><code>max_depth</code> - The max depth the tree can be: </li>
+<li><code>min_samples_split</code> - The minimum number of samples required to split a node</li>
+<li><code>min_samples_leaf</code> - The minimum number of samples that a leaf can contain</li>
+<li><code>max_features</code>: {"auto", "sqrt", "log2"} - The number of feature we examine looking for the best one, used to speed up training</li>
+</ul>
+<p>First lets start by creating a <code>DecisionTreeRegressor</code> object, setting the <code>criterion</code> parameter to <code>squared_error</code> for  Squared Error:</p>
+<h4 id="train">Train</h4>
+<pre><code class="language-python">regression_tree = DecisionTreeRegressor(criterion = &quot;squared_error&quot;)
+regression_tree.fit(X_train, Y_train)
+</code></pre>
+<h4 id="evaluation">Evaluation</h4>
+<p>To evaluate our dataset we will use the <code>score</code> method of the <code>DecisionTreeRegressor</code> object providing our testing data, this number is the <span class="arithmatex">\(R^2\)</span> value which indicates the coefficient of determination</p>
+<pre><code class="language-python"># This seems like a predict and score all in one action
+regression_tree.score(X_test, Y_test) # 0.8434693703647671
+# We can also find the average error in our testing set which is the average error in median home value prediction
+prediction = regression_tree.predict(X_test)
+print(&quot;$&quot;,(prediction - Y_test).abs().mean()*1000) # $ 2729.1139240506322
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Logistic_Regression_IBM/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Logistic_Regression_IBM/" class="btn btn-xs btn-link">
+        5. Logistic Regression
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Decision_Trees_IBM/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Decision_Trees_IBM/" class="btn btn-xs btn-link">
+        3. Decision Trees
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

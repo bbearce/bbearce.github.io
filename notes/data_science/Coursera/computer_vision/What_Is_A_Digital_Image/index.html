@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>2. What Is A Digital Image - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "What is a Digital Image", url: "#_top", children: [
+          ]},
+          {title: "PIL Intro", url: "#pil-intro", children: [
+          ]},
+          {title: "Numpy Intro", url: "#numpy-intro", children: [
+          ]},
+          {title: "OpenCV Intro", url: "#opencv-intro", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-link">
+        3. Image Processing With Pillow
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Overview/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Overview/" class="btn btn-xs btn-link">
+        1. Overview
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="what-is-a-digital-image">What is a Digital Image</h1>
+<p>A rectangular array of numbers.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixels_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixels_1.png" /></p>
+<p>In the real world, an image can take on an almost unlimited number of values, but digital images have intensity values between zero (black) and 255 (white). It turns out that's all we need, 256 different intensity values to represent an image.</p>
+<p>If we use less than 256 values, things will look cartoonish.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixels_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixels_2.png" /></p>
+<p>RGB:</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixels_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixels_3.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixels_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixels_4.png" /></p>
+<p>Image Masks:
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/pixels_5.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/pixels_5.png" /></p>
+<p>Basic Image Types:</p>
+<p>An image is a file on your computer. Two popular image formats, Joint Photographic Expert Group image or JPEG, and Portable Network Graphics or PNG, these formats reduce file size and have other features. No matter what Python library you use, you're going to have to load the image</p>
+<h1 id="pil-intro">PIL Intro</h1>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/PIL_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/PIL_1.png" /></p>
+<p>ImageOps:
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/PIL_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/PIL_2.png" /></p>
+<p>Quantizing:
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/PIL_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/PIL_3.png" /></p>
+<h1 id="numpy-intro">Numpy Intro</h1>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/numpy_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/numpy_1.png" /></p>
+<h1 id="opencv-intro">OpenCV Intro</h1>
+<p>OpenCV is a library used for computer vision. It has more functionality than the PIL library, but is more difficult to use.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/opencv_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/opencv_1.png" /></p>
+<p>We can plot the image using Imshow, but the colors appear off. This is because the order of each channel is different in OpenCV unlike PIL that is RGB. OpenCV is BGR. This is the main difference between the arrays and PIL versus OpenCV. We can change the color space with conversion code, this changes the color space. We use the function cvtColor, the input is the color image and the color code BGR to RGB or blue, green, red to red, green, blue. We can now plot the image. You can also convert the image to gray-scale using cvtColor. The input is the original image and the BGR to gray color code. We can plot the image. We can save the image using imright, the input is the path and the image array.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/opencv_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/opencv_2.png" /></p>
+<p>We can change the color space with conversion code, this changes the color space. We use the function cvtColor, the input is the color image and the color code BGR to RGB or blue, green, red to red, green, blue. We can now plot the image. You can also convert the image to gray-scale using cvtColor. The input is the original image and the BGR to gray color code. We can plot the image.
+<img alt="Images/Image_Processing_With_OpenCV_and_Pillow/opencv_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/opencv_3.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/opencv_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/opencv_4.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Image_Processing_With_Pillow/" class="btn btn-xs btn-link">
+        3. Image Processing With Pillow
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Overview/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Overview/" class="btn btn-xs btn-link">
+        1. Overview
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
