@@ -120,6 +120,9 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <li>
 <p>Chain Rule</p>
 <p>Notice how <span class="arithmatex">\(E\)</span> is not directly a function of <span class="arithmatex">\(w_2\)</span>. Through a <a href="https://github.com/bbearce/code-journal/blob/master/docs/notes/data_science/Coursera/keras/Images/artificial_neural_networks/Partial_Derivatives_Backpropagation.pdf">proof</a> we can show that updating weights and biases is as follows (noticed small exponent errors...fyi):</p>
+<blockquote>
+<p>Below <span class="arithmatex">\(\frac{\delta E a_2}{\delta z_2}\)</span> becomes <span class="arithmatex">\(a_2*(1-a_2)\)</span>. This isn't immediately obvious and <a href="../Images/artificial_neural_networks/deriving_w2.png">here is the derivation</a>.</p>
+</blockquote>
 <p><img alt="Images/artificial_neural_networks/updating_w2_1.png" src="../Images/artificial_neural_networks/updating_w2_1.png" />
 <img alt="Images/artificial_neural_networks/updating_w2_2.png" src="../Images/artificial_neural_networks/updating_w2_2.png" /></p>
 <p><img alt="Images/artificial_neural_networks/updating_b2.png" src="../Images/artificial_neural_networks/updating_b2.png" /></p>
