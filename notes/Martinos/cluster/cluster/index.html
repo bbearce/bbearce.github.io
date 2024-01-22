@@ -136,7 +136,7 @@ mlsc-login[0]:~$
 <p>Therefore everything (99% of everything) is stored on hard drives or network storage.</p>
 <p>Because of this the most important step is to symlink some important directories to change where the data stored for various programs (docker, singularity, python) will show up ultimately (not in ~/).</p>
 <blockquote>
-<p>Notice how <code>pwd</code> prints something like <strong>/homes/#/\&lt;username></strong> rather than <strong>/home/\&lt;username></strong>. This is because we all live in <strong>/homes</strong> which is special directory (drive) managed by <a href="help@nmr.mgh.harvard.edu">Help Desk</a>.</p>
+<p>Notice how <code>pwd</code> prints something like <strong>/homes/#/\&lt;username&gt;</strong> rather than <strong>/home/\&lt;username&gt;</strong>. This is because we all live in <strong>/homes</strong> which is special directory (drive) managed by <a href="help@nmr.mgh.harvard.edu">Help Desk</a>.</p>
 </blockquote>
 <p>Ex:</p>
 <pre><code class="language-bash">mlsc-login[0]:~$ pwd
@@ -286,7 +286,7 @@ alabaster                 0.7.12                   py37_0
 <blockquote>
 <p>Namely the <strong>Partition column</strong>. This is the resource you will select later. The 1st is a CPU and the last 3 are incrementally larger/faster GPUs.</p>
 </blockquote>
-<p>You should already be signed in. Change directory to the qtim cluster network storage now (be sure to have made your own directory with <code>mkdir &lt;username&gt;</code> where \&lt;username> is your Partners ID and it should be located at /cluster/qtim/users/. Also this directory is one level higher than your user directory):</p>
+<p>You should already be signed in. Change directory to the qtim cluster network storage now (be sure to have made your own directory with <code>mkdir &lt;username&gt;</code> where \&lt;username&gt; is your Partners ID and it should be located at /cluster/qtim/users/. Also this directory is one level higher than your user directory):</p>
 <p>Ex:</p>
 <pre><code class="language-bash">mlsc-login[0]:~$ cd /cluster/qtim/users
 </code></pre>
