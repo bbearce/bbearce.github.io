@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>12. Image Features - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Image Features", url: "#_top", children: [
+              {title: "HOG", url: "#hog" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Support_Vector_Machines/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Support_Vector_Machines/" class="btn btn-xs btn-link">
+        11. Support Vector Machines
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="image-features">Image Features</h1>
+<p>In this video we will review Image Features. </p>
+<p><img alt="Images/Image_Features/image_features1.png" src="../Images/Image_Features/image_features1.png" /></p>
+<p>In practice using the image intensities for classification does not function well. Here we convert the image to a vector. We use large patches for illustrative purposes instead of individual pixel values.</p>
+<p><img alt="Images/Image_Features/image_features2.png" src="../Images/Image_Features/image_features2.png" /></p>
+<p>Classifying an image involves the relationship between pixels; a slight change in the image affects this relationship, as discussed in the first chapter. Consider how a minor shift affects the feature vector. Comparing the two vectors we see the small shift in the image makes the vectors different.</p>
+<p><img alt="Images/Image_Features/image_features3.png" src="../Images/Image_Features/image_features3.png" /></p>
+<p>Features are measurements taken from the image that help with classification. For example here we have the color histogram. Determining the histogram of the shifted image and eliminating the zeros we see the histograms are similar. But the histograms only count intensities and does not consider the relationships between pixels.</p>
+<p><img alt="Images/Image_Features/image_features4.png" src="../Images/Image_Features/image_features4.png" /></p>
+<p>Here we have a circle and a square. The histogram only quantifies the fact that they have the same number of black pixels.</p>
+<p><img alt="Images/Image_Features/image_features5.png" src="../Images/Image_Features/image_features5.png" /></p>
+<p>One way too overcome this problem, to split image into sub-images and calculate the histogram for each sub-image. Here we have the histogram for the first 5 sub images. Here we have the histogram for the second 5 sub images and so on.</p>
+<p><img alt="Images/Image_Features/image_features6.png" src="../Images/Image_Features/image_features6.png" /></p>
+<p>Color is not always the best tool for classification, consider the task of classifying a circle. In this case many of the elements of the red channel would have large values. For the blue circle only the elements of the blue or green channel would have a large magnitude. </p>
+<p><img alt="Images/Image_Features/image_features7.png" src="../Images/Image_Features/image_features7.png" /></p>
+<p>Their histograms have to be the same. Although humans use colors too classify images it's hard for people to come up with features that use colors. </p>
+<p><img alt="Images/Image_Features/image_features8.png" src="../Images/Image_Features/image_features8.png" /></p>
+<p>Consider the similar circles. Converting the image to gray scale we see they look similar, surprisingly the gradients look identical. As a result we us features based on gradients. </p>
+<h2 id="hog">HOG</h2>
+<p>HOG Is one of many image features we can use, it's relatively simple to understand. <strong>Histogram of oriented gradients – H.O.G.</strong>, is one of many types of features that have been developed over the years. The technique counts occurrences of gradient orientation in localized portions of an image.</p>
+<p>HOG Is one of many image features we can use, it's relatively simple to understand Histogram of oriented gradients – H.O.G., is one of many types of features that have been developed over the years. The technique counts occurrences of gradient orientation in localized portions of an image. HOG would generate a Histogram for each of these regions separately. The histograms are created using the gradients and orientations of the pixel values, hence the name ‘Histogram of Oriented Gradients’. Let's give a basic idea of how hog works. Consider the unit circle:</p>
+<p><img alt="Images/Image_Features/image_features9.png" src="../Images/Image_Features/image_features9.png" /></p>
+<p>We expect the gradients to have the same magnitude. We can calculate the histogram where each bin index is the angle of the gradient. The value of the histogram is the magnitude. We can plot the gradians for the square. The square will have a different histogram. </p>
+<p><img alt="Images/Image_Features/image_features10.png" src="../Images/Image_Features/image_features10.png" /></p>
+<p>General (H.O.G.) is calculated as follows Assuming we have an image of a kitten. We will convert the image to grayscale, we calculate the magnitude and angles of the gradients using Sobel The images are divided in a grid fashion into cells, and for the pixels within each cell, a histogram of gradient directions is compiled. To improve imbalance to highlights and shadows in the image, cells are block normalized. </p>
+<p><img alt="Images/Image_Features/image_features11.png" src="../Images/Image_Features/image_features11.png" /></p>
+<p>The HOG feature vector is a combination of all pixel-level histograms and used with SVM to classify the image. This example is simplified. We must also consider other free parameters like number of image cells or how many angle bins in the histogram. There are other types of features for images like SURF and SIFT.</p>
+<p><img alt="Images/Image_Features/image_features12.png" src="../Images/Image_Features/image_features12.png" /></p>
+<p>We can summarize the entire machine learning process as follows. Feature extraction, Kernel i.e non-linear mapping, Linear classification.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Support_Vector_Machines/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Support_Vector_Machines/" class="btn btn-xs btn-link">
+        11. Support Vector Machines
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
