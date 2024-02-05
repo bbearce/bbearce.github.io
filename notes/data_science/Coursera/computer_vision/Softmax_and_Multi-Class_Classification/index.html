@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>10. Softmax and Multi-Class Classification - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Softmax and Multi-Class Classification", url: "#_top", children: [
+              {title: "Argmax review", url: "#argmax-review" },
+              {title: "Multiclass", url: "#multiclass" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Support_Vector_Machines/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Support_Vector_Machines/" class="btn btn-xs btn-link">
+        11. Support Vector Machines
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Logistic_Regression_Training/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Logistic_Regression_Training/" class="btn btn-xs btn-link">
+        9. Logistic Regression Training
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="softmax-and-multi-class-classification">Softmax and Multi-Class Classification</h1>
+<h2 id="argmax-review">Argmax review</h2>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_1.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_1.png" /></p>
+<p>The argmax function returns the index corresponding to the largest value in a sequence of numbers. Here the largest value in Z is 100 and the corresponding index is zero, thus the argmax function will return zero. </p>
+<h2 id="multiclass">Multiclass</h2>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_2.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_2.png" /></p>
+<p>Instead of using one plane to classify the data, we will use one plane for each class. In this case, we have three equations representing three classes, but we can generalize to any number of classes.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_3.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_3.png" /></p>
+<p>We can also use the graph to represent equations. In this case, nodes are representing the different components of X. We add nodes for each output Z. The edges represent the different learnable parameters with subscripts indicating the dimension. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_4.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_4.png" /></p>
+<p>This is the plane where Z equals zero, the line is where the decision plane intersects with the plane Z equals zero. We can overlay our sample images, we see the lines split the classes. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_5.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_5.png" /></p>
+<p>If the input is in the blue region, the value of z0 corresponding to the equation zero is the largest. This is where the blue plane has a higher value than the other regions. Therefore, anything in this region will be in class zero. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_6.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_6.png" /></p>
+<p>If the input is in the red region, the value of z1 corresponding to equation one is the largest. Therefore, anything in this region will be in class one. </p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_7.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_7.png" /></p>
+<p>If the input is in the yellow region, the value of z2 corresponding to equation Z is the largest. Therefore, anything in this region will be in class two. Just to note, the yellow line we see is where the plane is greater than zero. The yellow region is where the yellow plane is larger than the blue and red region. We can now use the planes to classify this unknown point.</p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_8.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_8.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_9.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_9.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_10.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_10.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_11.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_11.png" /></p>
+<p><img alt="Images/Image_Processing_With_OpenCV_and_Pillow/softmax_12.png" src="../Images/Image_Processing_With_OpenCV_and_Pillow/softmax_12.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Support_Vector_Machines/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Support_Vector_Machines/" class="btn btn-xs btn-link">
+        11. Support Vector Machines
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Logistic_Regression_Training/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Logistic_Regression_Training/" class="btn btn-xs btn-link">
+        9. Logistic Regression Training
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

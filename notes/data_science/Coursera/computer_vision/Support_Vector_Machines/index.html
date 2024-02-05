@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>11. Support Vector Machines - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Support Vector Machines", url: "#_top", children: [
+              {title: "Topics", url: "#topics" },
+              {title: "Kernels", url: "#kernels" },
+              {title: "Maximum Margin", url: "#maximum-margin" },
+              {title: "Lab", url: "#lab" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Softmax_and_Multi-Class_Classification/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Softmax_and_Multi-Class_Classification/" class="btn btn-xs btn-link">
+        10. Softmax and Multi-Class Classification
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="support-vector-machines">Support Vector Machines</h1>
+<h2 id="topics">Topics</h2>
+<ul>
+<li>Kernels</li>
+<li>Maximum Margin</li>
+</ul>
+<h2 id="kernels">Kernels</h2>
+<p>Sometimes data isn't linearly separable:
+<img alt="Images/Support_Vector_Machines/svm_1.png" src="../Images/Support_Vector_Machines/svm_1.png" /></p>
+<p>We can transform it to separate it:
+<img alt="Images/Support_Vector_Machines/svm_2.png" src="../Images/Support_Vector_Machines/svm_2.png" /></p>
+<p>Sometimes it is hard to calculate mapping:
+<img alt="Images/Support_Vector_Machines/svm_3.png" src="../Images/Support_Vector_Machines/svm_3.png" /></p>
+<p>We use a short cut called a kernel, there are different types, such as: - <em>Linear</em>, - <em>Polynomial</em>, - <em>Radial basis function (or RBF)</em>, The RBF is most widely used. Each of these functions has its own characteristics, its pros and cons. The RBF kernel finds the difference between two inputs X and X’ that is called a support vector.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_4.png" src="../Images/Support_Vector_Machines/svm_4.png" /></p>
+<p>The RBF kernel has the parameter Gamma, lets see how we select Gamma Consider the following dataset of cats and dogs, anything in this region is a dog, anything in this region is a cat, anything in this region is a dog, anything in this region is a cat Therefore any sample in the red or blue region should be classified accordingly. Unfortunately you can’t find a plane that separates the data.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_5.png" src="../Images/Support_Vector_Machines/svm_5.png" /></p>
+<p>Here we use a plane to separate a similar dataset, it does not separate the data, lets try the RBF kernel.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_6.png" src="../Images/Support_Vector_Machines/svm_6.png" /></p>
+<p>Using a value of gamma of 0.01 increases the flexibility of the classifier.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_7.png" src="../Images/Support_Vector_Machines/svm_7.png" /></p>
+<p>Using a value of gamma of 0.1 seems to be classifying more points.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_8.png" src="../Images/Support_Vector_Machines/svm_8.png" /></p>
+<p>The value of 0.5 classified almost all the points correctly but it does not seem to match the regions in the original slide. This is known as overfitting, where the classifier fits the data points not the actual pattern, higher gamma the more likely we will over fit, let's clarify this with an example.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_9.png" src="../Images/Support_Vector_Machines/svm_9.png" /></p>
+<p>The following images of cats look like dogs, they could be mislabeled or the photo could be taken at a bad angle or the cat could just look like a dog. </p>
+<p><img alt="Images/Support_Vector_Machines/svm_10.png" src="../Images/Support_Vector_Machines/svm_10.png" /></p>
+<p>As a result the image points will appear in the incorrect region.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_11.png" src="../Images/Support_Vector_Machines/svm_11.png" /></p>
+<p>Fitting the model with a high value of gamma we get the following results, the performs almost perfect on the training points We can represent the classifier with the following decision region, where every point is classified by the color accordingly this does not match our Decision regions; this is called overfitting where we do well on the training samples but we may do poorly when we encounter new Data. </p>
+<p><img alt="Images/Support_Vector_Machines/svm_12.png" src="../Images/Support_Vector_Machines/svm_12.png" /></p>
+<p>To avoid this we find the best value of gamma by using validation data. We split the data into training and validation sets. We use the validation samples to find the Hyperparameters.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_13.png" src="../Images/Support_Vector_Machines/svm_13.png" /></p>
+<p>We test the model for a gamma of 0.5. We get the following misclassified samples. </p>
+<p><img alt="Images/Support_Vector_Machines/svm_14.png" src="../Images/Support_Vector_Machines/svm_14.png" /></p>
+<p>We see a value for gamma of 0.1 performs better. As a result, we use a value of 0.1. </p>
+<p><img alt="Images/Support_Vector_Machines/svm_15.png" src="../Images/Support_Vector_Machines/svm_15.png" /></p>
+<p>In practice we try several different values of Gamma and select the value that does the best on the validation data. </p>
+<p><img alt="Images/Support_Vector_Machines/svm_16.png" src="../Images/Support_Vector_Machines/svm_16.png" /></p>
+<h2 id="maximum-margin">Maximum Margin</h2>
+<p>SVM’s work by finding the Maximum Margin. Witch of the three planes do you think perform better in classifying the data?</p>
+<p>Intuitively we choose green and even with some noise, would do well.
+<img alt="Images/Support_Vector_Machines/svm_17.png" src="../Images/Support_Vector_Machines/svm_17.png" /></p>
+<p>How to find best line? Maximize margine between line and data points with closest ones being <code>support vectors</code>. We can ignore other data samples when we have the support vectors. Hyperplane and boundary decision lines have their own equations. The math is involved. That said, the hyperplane is learned from training data using an optimization procedure that maximizes the margin; and like many other problems, this optimization problem can also be solved by gradient descent.</p>
+<p><img alt="Images/Support_Vector_Machines/svm_18.png" src="../Images/Support_Vector_Machines/svm_18.png" /></p>
+<p>When the classes are not separable the <code>Soft Margin SVM</code> can be used:</p>
+<p><img alt="Images/Support_Vector_Machines/svm_19.png" src="../Images/Support_Vector_Machines/svm_19.png" /></p>
+<p>This is usually controlled by the regularization parameter. This allows some samples to be misclassified We select gamma and the regulation parameter C by using the values that do best on the validation data.</p>
+<h2 id="lab">Lab</h2>
+<pre><code class="language-bash"># Setup Environment
+cd ~/Desktop; rm -r temp; # To remove
+cd ~/Desktop; mkdir temp; cd temp; pyenv activate venv3.10.4;
+</code></pre>
+<pre><code class="language-python">import numpy as np
+import matplotlib.pyplot as plt
+from sklearn import datasets, svm, metrics, model_selection
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import confusion_matrix
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score
+
+# Load Important Libraries and Digit Dataset
+digits = datasets.load_digits()
+target = digits.target
+flatten_digits = digits.images.reshape((len(digits.images), -1)) # (1797, 64)
+
+# Visualize Some Handwritten Images in the Dataset
+_, axes = plt.subplots(nrows=1, ncols=5, figsize=(10, 4))
+for ax, image, label in zip(axes, digits.images, target):
+    ax.set_axis_off()
+    ax.imshow(image, cmap=plt.cm.gray_r, interpolation='nearest')
+    ax.set_title('%i' % label)
+
+plt.show()
+
+# Divide Images into Training and Test Set
+X_train, X_test, y_train, y_test = train_test_split(flatten_digits, target, test_size=0.2)
+
+# Hand-written classification with Logistic Regression
+## Standardize the dataset to put all the features of the variables on the same scale
+scaler = StandardScaler()
+X_train_logistic = scaler.fit_transform(X_train)
+X_test_logistic = scaler.transform(X_test)
+</code></pre>
+<h3 id="logistic-regression">Logistic Regression</h3>
+<p>Create the logistic regression and fit the logistic regression and use the <code>l1</code> penalty. Note here that since this is a multiclass problem the Logistic Regression parameter <code>multi_class</code> is set to <code>multinomial</code>.</p>
+<pre><code class="language-python">logit = LogisticRegression(C=0.01, penalty='l1', solver='saga', tol=0.1, multi_class='multinomial')
+logit.fit(X_train_logistic, y_train)
+y_pred_logistic = logit.predict(X_test_logistic)
+# Get the accuracy of the logistic regression
+print(&quot;Accuracy: &quot;+str(logit.score(X_test_logistic, y_test)))
+# Lets plot out the confusion matrix, each row of the matrix represents the instances in a predicted class, while each column represents the instances in an actual class.
+label_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+cmx = confusion_matrix(y_test, y_pred_logistic, labels=label_names)
+</code></pre>
+<p>Accuracy is fine and above 80% but we can see some heavily misclassified values, The classifier had a hard time classifying <code>8</code>.</p>
+<pre><code class="language-python">df_cm = pd.DataFrame(cmx)
+# plt.figure(figsize=(10,7))
+sns.set(font_scale=1.4) # for label size
+sns.heatmap(df_cm, annot=True, annot_kws={&quot;size&quot;: 16}) # font size
+title = &quot;Confusion Matrix for Logistic Regression results&quot;
+plt.title(title)
+plt.show()
+</code></pre>
+<h3 id="svm">SVM</h3>
+<pre><code class="language-python">svm_classifier = svm.SVC(gamma='scale')
+svm_classifier.fit(X_train, y_train)
+y_pred_svm = svm_classifier.predict(X_test)
+print(&quot;Accuracy: &quot;+str(accuracy_score(y_test, y_pred_svm)))
+label_names = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+cmx = confusion_matrix(y_test, y_pred_svm, labels=label_names)
+
+df_cm = pd.DataFrame(cmx)
+# plt.figure(figsize=(10,7))
+sns.set(font_scale=1.4) # for label size
+sns.heatmap(df_cm, annot=True, annot_kws={&quot;size&quot;: 16}) # font size
+title = &quot;Confusion Matrix for SVM results&quot;
+plt.title(title)
+plt.show()
+</code></pre>
+<h3 id="comparing-both-svm-and-logistic-regression-with-k-fold-cross-validation">Comparing both SVM and Logistic Regression with K-Fold Cross Validation</h3>
+<p><strong>k-fold Cross validation is used when there are limited samples</strong>, the handwritten dataset contains about 1800 samples, this will give an opportunity for all the data to be in the training and test set at different given times. We will add <code>l2</code> regularization to visualize how well they both do against SVM.</p>
+<blockquote>
+<p>This is a comparing SVM to two different logistic regressions "using" k-fold cross validation</p>
+</blockquote>
+<pre><code class="language-python">algorithm = []
+algorithm.append(('SVM', svm_classifier))
+algorithm.append(('Logistic_L1', logit))
+algorithm.append(('Logistic_L2', LogisticRegression(C=0.01, penalty='l2', solver='saga', tol=0.1, multi_class='multinomial')))
+
+
+results = []
+names = []
+y = digits.target
+for name, algo in algorithm:
+    k_fold = model_selection.KFold(n_splits=10) #, random_state=10) # Got an error - BB
+    if name == 'SVM':
+        X = flatten_digits
+        cv_results = model_selection.cross_val_score(algo, X, y, cv=k_fold, scoring='accuracy')
+    else:
+        scaler = StandardScaler()
+        X = scaler.fit_transform(flatten_digits)
+        cv_results = model_selection.cross_val_score(algo, X, y, cv=k_fold, scoring='accuracy')
+
+    results.append(cv_results)
+    names.append(name)
+
+
+fig = plt.figure()
+fig.suptitle('Compare Logistic and SVM results')
+ax = fig.add_subplot()
+plt.boxplot(results)
+plt.ylabel('Accuracy')
+ax.set_xticklabels(names)
+plt.show()
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Softmax_and_Multi-Class_Classification/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Softmax_and_Multi-Class_Classification/" class="btn btn-xs btn-link">
+        10. Softmax and Multi-Class Classification
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
