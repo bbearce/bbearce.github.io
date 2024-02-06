@@ -103,8 +103,9 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 <p><img alt="Images/Image_Features/image_features8.png" src="../Images/Image_Features/image_features8.png" /></p>
 <p>Consider the similar circles. Converting the image to gray scale we see they look similar, surprisingly the gradients look identical. As a result we us features based on gradients. </p>
 <h2 id="hog">HOG</h2>
+<p><a href="https://learnopencv.com/histogram-of-oriented-gradients/">Essential HOG explaination</a></p>
 <p>HOG Is one of many image features we can use, it's relatively simple to understand. <strong>Histogram of oriented gradients – H.O.G.</strong>, is one of many types of features that have been developed over the years. The technique counts occurrences of gradient orientation in localized portions of an image.</p>
-<p>HOG Is one of many image features we can use, it's relatively simple to understand Histogram of oriented gradients – H.O.G., is one of many types of features that have been developed over the years. The technique counts occurrences of gradient orientation in localized portions of an image. HOG would generate a Histogram for each of these regions separately. The histograms are created using the gradients and orientations of the pixel values, hence the name ‘Histogram of Oriented Gradients’. Let's give a basic idea of how hog works. Consider the unit circle:</p>
+<p>HOG would generate a Histogram for each of these regions separately. The histograms are created using the gradients and orientations of the pixel values, hence the name ‘Histogram of Oriented Gradients’. Let's give a basic idea of how hog works. Consider the unit circle:</p>
 <p><img alt="Images/Image_Features/image_features9.png" src="../Images/Image_Features/image_features9.png" /></p>
 <p>We expect the gradients to have the same magnitude. We can calculate the histogram where each bin index is the angle of the gradient. The value of the histogram is the magnitude. We can plot the gradians for the square. The square will have a different histogram. </p>
 <p><img alt="Images/Image_Features/image_features10.png" src="../Images/Image_Features/image_features10.png" /></p>
