@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Azure Disk Backup - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../azure_storage/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../azure_storage/" class="btn btn-xs btn-link">
+        Azure Blob
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <p><a href="https://learn.microsoft.com/en-us/cli/azure/install-azure-cli">az cli install</a></p>
+<pre><code class="language-bash">curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+az login
+</code></pre>
+<p>Copy snapshot from one region to another:</p>
+<pre><code class="language-bash">SUBSCRIPTION_ID=a7ab1d40-7176-42a9-9156-0eb7fbe1ae3e
+</code></pre>
+<pre><code class="language-bash">az disk create \
+    --resource-group CHALLENGES \
+    --name qtim-challenges-os-disk-backup-disk-new \
+    --source qtim-challenges-os-disk-backup-eastus \
+    --zone 1 \
+    --location eastus
+
+</code></pre>
+<pre><code class="language-bash">az disk create \
+    --resource-group CHALLENGES \
+    --name qtim-challenges-disk-eastus \
+    --source /subscriptions/$SUBSCRIPTION_ID/resourceGroups/CHALLENGES/providers/Microsoft.Compute/disks/qtim-challenges_OsDisk_1_2739395aad8147d1954d583529de7dab \
+    --location eastus
+
+
+</code></pre>
+<pre><code class="language-bash">az snapshot show \
+    --resource-group CHALLENGES \
+    --name qtim-challenges-os-disk-backup-eastus
+
+</code></pre>
+<pre><code class="language-bash">az snapshot create \
+    --resource-group CHALLENGES \
+    --source /subscriptions/$SUBSCRIPTION_ID/resourceGroups/CHALLENGES/providers/Microsoft.Compute/disks/qtim-challenges_OsDisk_1_2739395aad8147d1954d583529de7dab \
+    --name qtim-challenges-os-disk-backup-eastus \
+    --location eastus
+
+</code></pre>
+<pre><code class="language-bash">az vm disk attach \
+    --resource-group CHALLENGES \
+    --vm-name qtim-challenges-new \
+    --name qtim-challenges-os-disk-backup-disk
+</code></pre>
+<pre><code class="language-bash">az snapshot create \
+    --resource-group CHALLENGES \
+    --source qtim-challenges-os-disk-backup-disk \
+    --name qtim-challenges-os-disk-backup-disk-snapshot
+
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../General%20Notes/" class="btn btn-xs btn-link">
+        General Notes
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../azure_storage/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../azure_storage/" class="btn btn-xs btn-link">
+        Azure Blob
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

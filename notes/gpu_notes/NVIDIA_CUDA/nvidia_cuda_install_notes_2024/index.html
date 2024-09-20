@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>2024 - Ben's Code Journal</title>
+    <link href="../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../css/highlight.css">
+    <link href="../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Install cuda drivers (cuda-toolkit)", url: "#_top", children: [
+          ]},
+          {title: "install nvidia-docker-toolkit", url: "#install-nvidia-docker-toolkit", children: [
+          ]},
+          {title: "nvidia sample image", url: "#nvidia-sample-image", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../.." class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../nvidia_cuda_install_notes_2023/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../nvidia_cuda_install_notes_2023/" class="btn btn-xs btn-link">
+        2023
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="install-cuda-drivers-cuda-toolkit">Install cuda drivers (cuda-toolkit)</h1>
+<p><a href="https://developer.nvidia.com/cuda-downloads">cuda-toolkit</a></p>
+<pre><code class="language-bash">wget https://developer.download.nvidia.com/compute/cuda/12.4.1/local_installers/cuda_12.4.1_550.54.15_linux.run
+
+sudo apt-get update
+
+sudo sh cuda_12.4.1_550.54.15_linux.run
+</code></pre>
+<h1 id="install-nvidia-docker-toolkit">install nvidia-docker-toolkit</h1>
+<p><a href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html">nvidia-docker-toolkit</a></p>
+<pre><code class="language-bash">sudo apt-get install -y nvidia-container-toolkit
+
+curl -fsSL https://nvidia.github.io/libnvidia-container/gpgkey | sudo gpg --dearmor -o /usr/share/keyrings/nvidia-container-toolkit-keyring.gpg   &amp;&amp; 
+
+curl -s -L https://nvidia.github.io/libnvidia-container/stable/deb/nvidia-container-toolkit.list |     sed 's#deb https://#deb [signed-by=/usr/share/keyrings/nvidia-container-toolkit-keyring.gpg] https://#g' |     sudo tee /etc/apt/sources.list.d/nvidia-container-toolkit.list
+</code></pre>
+<h1 id="nvidia-sample-image">nvidia sample image</h1>
+<p><a href="https://catalog.ngc.nvidia.com/orgs/nvidia/containers/cuda/tags">nvidia docker images</a></p>
+<pre><code class="language-bash">IMAGE=python:3.9
+IMAGE=nvcr.io/nvidia/cuda:12.6.0-cudnn-devel-ubuntu24.04
+
+# works
+docker run \
+  -it \
+  --rm \
+  --gpus all \
+  --runtime=nvidia \
+  --privileged \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  $IMAGE nvidia-smi
+
+# doesn't work
+docker run \
+  -it \
+  --rm \
+  --gpus all \
+  --runtime=nvidia \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  $IMAGE nvidia-smi
+</code></pre>
+<p>output:</p>
+<pre><code>azureuser@gpu-worker:~$ IMAGE=python:3.9
+azureuser@gpu-worker:~$ 
+# works
+docker run \
+  -it \
+  --rm \
+  --gpus all \
+  --runtime=nvidia \
+  --privileged \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  $IMAGE nvidia-smi
+Unable to find image 'python:3.9' locally
+3.9: Pulling from library/python
+903681d87777: Already exists 
+3cbbe86a28c2: Already exists 
+6ed93aa58a52: Already exists 
+787c78da4383: Already exists 
+74e6988984f8: Already exists 
+8f13d3184846: Already exists 
+a28b5664f47e: Already exists 
+777e0be36342: Already exists 
+Digest: sha256:8e0fd8e1bd3caa6ea74d1c408ad5a854c6b8f0e32c2ef9886d27d4d1bb9caeac
+Status: Downloaded newer image for python:3.9
+Fri Aug 23 15:22:19 2024       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla V100-PCIE-16GB           Off |   00000001:00:00.0 Off |                    0 |
+| N/A   34C    P0             38W /  250W |       0MiB /  16384MiB |      1%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+
+azureuser@gpu-worker:~$ IMAGE=nvcr.io/nvidia/cuda:12.6.0-cudnn-devel-ubuntu24.04
+azureuser@gpu-worker:~$ 
+# works
+docker run \
+  -it \
+  --rm \
+  --gpus all \
+  --runtime=nvidia \
+  --privileged \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  $IMAGE nvidia-smi
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION &amp; AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+Fri Aug 23 15:23:46 2024       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.54.15              Driver Version: 550.54.15      CUDA Version: 12.6     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  Tesla V100-PCIE-16GB           Off |   00000001:00:00.0 Off |                    0 |
+| N/A   35C    P0             38W /  250W |       0MiB /  16384MiB |      1%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+azureuser@gpu-worker:~$
+
+azureuser@gpu-worker:~$ 
+# doesn't work
+docker run \
+  -it \
+  --rm \
+  --gpus all \
+  --runtime=nvidia \
+  -v /var/run/docker.sock:/var/run/docker.sock \
+  $IMAGE nvidia-smi
+
+==========
+== CUDA ==
+==========
+
+CUDA Version 12.6.0
+
+Container image Copyright (c) 2016-2023, NVIDIA CORPORATION &amp; AFFILIATES. All rights reserved.
+
+This container image and its contents are governed by the NVIDIA Deep Learning Container License.
+By pulling and using the container, you accept the terms and conditions of this license:
+https://developer.nvidia.com/ngc/nvidia-deep-learning-container-license
+
+A copy of this license is made available in this container at /NGC-DL-CONTAINER-LICENSE for your convenience.
+
+Failed to initialize NVML: Unknown Error
+azureuser@gpu-worker:~$ 
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../.." class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../.." class="btn btn-xs btn-link">
+        Home
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../nvidia_cuda_install_notes_2023/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../nvidia_cuda_install_notes_2023/" class="btn btn-xs btn-link">
+        2023
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
