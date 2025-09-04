@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Find - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Find", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../zip_and_unzip/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../zip_and_unzip/" class="btn btn-xs btn-link">
+        Zip and Unzip
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../sftp/sftp/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../sftp/sftp/" class="btn btn-xs btn-link">
+        SFTP
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="find">Find</h1>
+<pre><code class="language-bash">find [path] [options] [expression]
+</code></pre>
+<ol>
+<li>Find file by name</li>
+</ol>
+<pre><code class="language-bash">cat test.txt
+# Output
+# a,1,2,3
+# b,2,4,6
+# c,3,6,9
+cat Test2.txt
+# Output
+# d,4,8,12
+# e,5,10,15
+# f,6,12,18
+
+find . -name &quot;test.txt&quot;
+# Output
+# ./test.txt
+
+find . -name &quot;Test2.txt&quot;
+# Output
+# ./Test2.txt
+</code></pre>
+<p>Case-insensitive:</p>
+<pre><code class="language-bash">find . -name &quot;test2.txt&quot;
+# Output
+
+find . -iname &quot;test2.txt&quot;
+# Output
+# ./Test2.txt
+
+find . -iname &quot;*.txt&quot;
+# Output
+# ./right.txt
+# ./test.txt
+# ./left.txt
+# ./Test2.txt
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt
+
+find . -name &quot;*.txt&quot;
+# Output
+# ./right.txt
+# ./test.txt
+# ./left.txt
+# ./Test2.txt
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt
+</code></pre>
+<ol>
+<li>Find file by type</li>
+</ol>
+<p>Regular files:</p>
+<pre><code class="language-bash"># Recursive so be careful
+find . -type f
+</code></pre>
+<p>Directories:</p>
+<pre><code class="language-bash"># Recursive so be careful
+find . -type d
+</code></pre>
+<p>Symbolic links:</p>
+<pre><code class="language-bash"># Recursive so be careful
+find . -type l
+</code></pre>
+<ol>
+<li>Find by size</li>
+</ol>
+<pre><code class="language-bash">find . -size +100M    # Larger than 100 MB
+find . -size -10k     # Smaller than 10 KB
+</code></pre>
+<ol>
+<li>Find by modification time</li>
+</ol>
+<pre><code class="language-bash">find . -mtime -1   # Modified in the last 24 hours
+find . -mtime +7   # Modified more than 7 days ago
+find . -mmin -30   # Modified in last 30 minutes
+</code></pre>
+<ol>
+<li>Find and execute a command</li>
+</ol>
+<blockquote>
+<p>{} = matched file, \; ends the command.</p>
+</blockquote>
+<pre><code class="language-bash">find . -name &quot;test.txt&quot; -exec cat {} \;
+# Output
+# a,1,2,3
+# b,2,4,6
+# c,3,6,9
+
+find . -name &quot;Test2.txt&quot; -exec cat {} \;
+# Output
+# d,4,8,12
+# e,5,10,15
+# f,6,12,18
+</code></pre>
+<p>!!!!!!!!!!
+You can run multiple commands using + for efficiency:</p>
+<pre><code class="language-bash">find . -name &quot;*.txt&quot; -exec ls {}
+find . -name &quot;*.txt&quot; -exec ls -l {} +
+find . -name &quot;*.txt&quot; -exec ls -lh {} +
+</code></pre>
+<p>!!!!!!!!!!</p>
+<ol>
+<li>Find and print details</li>
+</ol>
+<pre><code class="language-bash">find . -name &quot;*.txt&quot; -printf &quot;%p %k KB\n&quot;
+# Output
+# ./right.txt 4 KB
+# ./test.txt 4 KB
+# ./left.txt 4 KB
+# ./Test2.txt 4 KB
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt 4 KB
+</code></pre>
+<ol>
+<li>Combine conditions</li>
+</ol>
+<pre><code class="language-bash">find . -type f -name &quot;*.txt&quot; -size +1M
+# Output
+
+find . -type f -name &quot;*.txt&quot; -size +1k
+# Output
+# ./right.txt
+# ./left.txt
+
+find . -type f -name &quot;*.txt&quot; -size +10k
+# Output
+
+</code></pre>
+<blockquote>
+<p>Finds .txt files larger than 1 MB.</p>
+</blockquote>
+<ol>
+<li>Exclude directories</li>
+</ol>
+<p>TL;DR</p>
+<pre><code class="language-bash">find . -path &quot;./node_modules&quot; -prune -o -type f -name &quot;*.js&quot; -print
+</code></pre>
+<blockquote>
+<p>Finds .js files but ignores node_modules.</p>
+</blockquote>
+<p>...but like what and we are pruning (<code>-prune</code>) and there is an <code>-o</code> now...</p>
+<pre><code class="language-bash">find . -type f -name &quot;*.txt&quot;
+# Output
+# ./right.txt
+# ./test.txt
+# ./left.txt
+# ./Test2.txt
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt
+
+find . -path &quot;./ACTI-QUANT&quot; -type f -name &quot;*.txt&quot;
+# Output
+
+</code></pre>
+<p>...no output?</p>
+<blockquote>
+<p>So -path is looking for files/folders with ./ACTI-QUANT exactly in the path but what you don't see is an automatic "AND" with the other flags to the right. Here path has to match exactly! So there are no directories that match ./ACTI-QUANT "AND" are files that have a "*.txt" pattern.</p>
+</blockquote>
+<p>Let's explore:</p>
+<pre><code class="language-bash">find . -path &quot;./ACTI-QUANT/*.txt&quot; 
+# Output
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt
+
+
+find . -path &quot;./ACTI-QUANT/*.txt&quot; -type f -name &quot;*.txt&quot;
+# Output
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt
+</code></pre>
+<p><code>-o</code> - adds an "OR" with the other commands:</p>
+<pre><code class="language-bash">find . -path &quot;./ACTI-QUANT&quot; -o -type f -name &quot;*.txt&quot;
+# Output
+# ./right.txt
+# ./test.txt
+# ./left.txt
+# ./Test2.txt
+# ./ACTI-QUANT
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt
+</code></pre>
+<blockquote>
+<p>So directory ./ACTI-QUANT "OR" files that end in ".txt"</p>
+</blockquote>
+<p>Remember without <code>-type</code> directories are found too.</p>
+<pre><code class="language-bash">find . -path &quot;./ACTI-QUANT&quot;
+# Output
+# ./ACTI-QUANT
+</code></pre>
+<p><code>-prune</code> - says, do not descent into this directory.</p>
+<blockquote>
+<p>We don't have to descent to match <code>-path</code> directories</p>
+</blockquote>
+<pre><code class="language-bash">find . -path &quot;./ACTI-QUANT&quot; -prune 
+# Output
+# ./ACTI-QUANT
+
+find . -path &quot;./ACTI-QUANT&quot; -o -type f -name &quot;*.txt&quot;
+# ./right.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./test.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./left.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./Test2.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./ACTI-QUANT -&gt; matched with `find . -path &quot;./ACTI-QUANT&quot;`
+# ./ACTI-QUANT/app_scoring/input/res/submission.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+
+find . -path &quot;./ACTI-QUANT&quot; -prune -o -type f -name &quot;*.txt&quot;
+# ./right.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./test.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./left.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./Test2.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./ACTI-QUANT -&gt; matched with `find . -path &quot;./ACTI-QUANT&quot; -prune`
+
+# Same as:
+find . -path &quot;./ACTI-QUANT&quot; -a -prune -o -type f -name &quot;*.txt&quot;
+# ./right.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./test.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./left.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./Test2.txt -&gt; matched with ` -o -type f -name &quot;*.txt&quot;`
+# ./ACTI-QUANT -&gt; matched with `find . -path &quot;./ACTI-QUANT&quot; -a -prune`
+</code></pre>
+<blockquote>
+<p>So carefully looking at the last example, ./ACTI-QUANT is pruned for deeper consideration but the directory is found. Find executes left to right so since the ./ACTI-QUANT is found and an implicit "AND" is operated between <code>-path</code> and <code>-prune</code>, those both together evaluate to "TRUE". Since that part is true, the <code>-o</code> stuff that follows is not considered when the directory is ./ACTI-QUANT, but if the files are not in that directory (<code>-path</code> not satisfied), then <code>find . -path "./ACTI-QUANT" -prune</code> is not "TRUE" and we can execute the stuff after <code>-o</code>.</p>
+</blockquote>
+<p>Another way to visualize:</p>
+<pre><code class="language-bash">( -path &quot;./ACTI-QUANT&quot; -a -prune ) -o ( -type f -a -name '*.txt' -a -print )
+
+</code></pre>
+<blockquote>
+<p>If you don’t give any action (-print, -exec, -delete, etc.), the default action is -print.</p>
+</blockquote>
+<ol>
+<li>Find files owned by a user</li>
+</ol>
+<pre><code class="language-bash">find . -user bearceb
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../zip_and_unzip/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../zip_and_unzip/" class="btn btn-xs btn-link">
+        Zip and Unzip
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../sftp/sftp/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../sftp/sftp/" class="btn btn-xs btn-link">
+        SFTP
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
