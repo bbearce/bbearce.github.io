@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Awk - Ben's Code Journal</title>
+    <link href="../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../css/highlight.css">
+    <link href="../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Awk", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../sed/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../sed/" class="btn btn-xs btn-link">
+        Sed
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="awk">Awk</h1>
+<p><a href="https://en.wikipedia.org/wiki/AWK">WIKI</a> AWK  is a scripting language designed for text processing and typically used as a data extraction and reporting tool. Like <code>sed</code> and <code>grep</code>, it is a filter, and it is a standard feature of most Unix-like operating systems.</p>
+<p>It works <strong>line by line</strong>, splitting input into fields and applying actions.</p>
+<ol>
+<li>Basic Usage\Structure:</li>
+</ol>
+<pre><code class="language-bash">awk 'pattern { action }' file
+</code></pre>
+<ul>
+<li>pattern: condition to match (like if).</li>
+<li>action: what to do if the pattern matches (default = print line).</li>
+<li>file: input file (or you can pipe data in).</li>
+</ul>
+<blockquote>
+<p>If no pattern → action applies to every line.</p>
+<p>If no action → default action is { print $0 } (print entire line).</p>
+</blockquote>
+<ol>
+<li>Fields</li>
+</ol>
+<p>AWK splits each line by whitespace (default).</p>
+<ul>
+<li>$0 → whole line</li>
+<li>$1 → first field</li>
+<li>$2 → second field</li>
+<li>..can go indefinitely with integers</li>
+<li>NF → number of fields</li>
+<li>NR → record (line) number</li>
+</ul>
+<pre><code class="language-bash">echo &quot;Alice 30 Doctor&quot; | awk '{print $1, $2}'
+# Output: Alice 30
+echo &quot;Alice 30 Doctor&quot; | awk '{print $1, $3}'
+# Output: Alice Doctor
+</code></pre>
+<p>test.txt:</p>
+<pre><code class="language-bash">cat test.txt
+
+asdfasdf
+fjfjfjfjfj
+aaaaa
+</code></pre>
+<pre><code class="language-bash">awk '{print $1}' test.txt
+# Output:
+# asdfasdf
+# fjfjfjfjfj
+# aaaaa
+
+awk '{print $2}' test.txt
+# Output:
+# 
+# 
+# 
+</code></pre>
+<blockquote>
+<p>Note each line only has 1 field.</p>
+</blockquote>
+<p>Also using cat on a file and piping to awk is the same as above.</p>
+<pre><code class="language-bash">cat test.txt | awk '{print $1}'
+# Output:
+# asdfasdf
+# fjfjfjfjfj
+# aaaaa
+
+cat test.txt | awk '{print $2}'
+# Output:
+# 
+# 
+# 
+</code></pre>
+<ol>
+<li>Useful Examples</li>
+</ol>
+<pre><code class="language-bash">awk '{print NR, $0}' test.txt
+# Output
+# 1 asdfasdf
+# 2 fjfjfjfjfj
+# 3 aaaaa
+awk '{print NR, $1}' test.txt
+# Output
+# 1 asdfasdf
+# 2 fjfjfjfjfj
+# 3 aaaaa
+awk '{print NF, $0}' test.txt
+# Output
+# 1 asdfasdf
+# 1 fjfjfjfjfj
+# 1 aaaaa
+</code></pre>
+<ol>
+<li>Built in Variables</li>
+</ol>
+<pre><code class="language-bash">* NR → line number
+* NF → number of fields
+* FS → input field separator (default: space)
+* OFS → output field separator (default: space)
+</code></pre>
+<pre><code class="language-bash">cat test.txt
+# Output
+# a
+# b
+# c
+awk 'BEGIN {OFS=&quot;|&quot;} {print $1}' test.txt
+# Output
+# a
+# b
+# c
+awk 'BEGIN {OFS=&quot;|&quot;} {print $1,$2}' test.txt
+# Output
+# a|
+# b|
+# c|
+awk 'BEGIN {OFS=&quot;|&quot;} {print $1,$2,$3}' test.txt
+# Output
+# a||
+# b||
+# c||
+cat test.txt
+# Output
+# a,1,2,3
+# b,2,4,6
+# c,3,6,9
+awk 'BEGIN {FS=&quot;,&quot;; OFS=&quot;|&quot;} {print $1,$2,$3}' test.txt
+# Output
+# a|1|2
+# b|2|4
+# c|3|6
+awk 'BEGIN {FS=&quot;&quot;; OFS=&quot;|&quot;} {print $1,$2,$3,$4,$5,$6,$7}' test.txt
+# Output
+# a|,|1|,|2|,|3
+# b|,|2|,|4|,|6
+# c|,|3|,|6|,|9
+awk 'BEGIN {FS=&quot; &quot;; OFS=&quot;|&quot;} {print $1,$2,$3}' test.txt
+# Output
+# a,1,2,3||
+# b,2,4,6||
+# c,3,6,9||
+</code></pre>
+<ol>
+<li>
+<p>BEGIN and END Blocks</p>
+</li>
+<li>
+<p>BEGIN runs before reading lines.</p>
+</li>
+<li>END runs after all lines processed.</li>
+</ol>
+<pre><code class="language-bash">cat test.txt
+# Output
+# a,1,2,3
+# b,2,4,6
+# c,3,6,9
+awk 'BEGIN {count=0} {count++} END {print &quot;Total:&quot;, count}' test.txt
+# Output
+# Total: 3
+</code></pre>
+<ol>
+<li>Arithmetic
+You can do math on fields:</li>
+</ol>
+<pre><code class="language-bash">awk '{sum = $2 + $3; print $1, sum}' test.txt
+# Output -&gt; Notice without BEGIN and FS, even commas are part of $1 - field 1
+# a,1,2,3 0
+# b,2,4,6 0
+# c,3,6,9 0
+
+awk 'BEGIN {FS=&quot;,&quot;} {sum = $2 + $3; print $1, sum}' test.txt
+# Output
+# a 3
+# b 6
+# c 9
+
+awk 'BEGIN {FS=&quot;,&quot;; OFS=&quot;|&quot;} {sum = $2 + $3; print $1, sum}' test.txt
+# Output
+# a|3
+# b|6
+# c|9
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../sed/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../sed/" class="btn btn-xs btn-link">
+        Sed
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../basics/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../basics/" class="btn btn-xs btn-link">
+        Basics
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
