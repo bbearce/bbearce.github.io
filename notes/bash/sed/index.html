@@ -34,6 +34,7 @@
         
         var pageToc = [
           {title: "sed", url: "#_top", children: [
+              {title: "Search", url: "#search" },
               {title: "Find and Replate", url: "#find-and-replate" },
               {title: "Find Line", url: "#find-line" },
           ]},
@@ -86,8 +87,28 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="sed">sed</h1>
+<h2 id="search">Search</h2>
+<blockquote>
+<p><code>grep</code> is likely better</p>
+</blockquote>
+<pre><code class="language-bash">$ sed -n &quot;/pattern/p&quot; file.txt
+
+$ cat test.txt 
+asdfasdf
+fjfjfjfjfj
+aaaaa
+
+$ sed -n &quot;/a/p&quot; test.txt 
+asdfasdf
+aaaaa
+</code></pre>
 <h2 id="find-and-replate">Find and Replate</h2>
-<pre><code class="language-bash">$ sed -i -e &quot;&quot; file.txt
+<blockquote>
+<p><code>g</code> is for global or replace all</p>
+</blockquote>
+<pre><code class="language-bash">$ sed -i -e &quot;s/pattern_to_find/replace_string/&quot; file.txt
+
+$ sed -i -e &quot;s/pattern_to_find/replace_string/g&quot; file.txt
 </code></pre>
 <p>Flags:</p>
 <pre><code class="language-bash">-i[SUFFIX], --in-place[=SUFFIX]
@@ -99,14 +120,14 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
               add the script to the commands to be executed
 </code></pre>
 <p>Ex:</p>
-<pre><code class="language-bash">bbearce@pop-os:~$ cat deleteme.txt 
+<pre><code class="language-bash">$ cat deleteme.txt 
 abc
 
 abc
 
 abc
-bbearce@pop-os:~$ sed -i -e &quot;s/abc/XYZ/g&quot; deleteme.txt
-bbearce@pop-os:~$ cat deleteme.txt 
+$ sed -i -e &quot;s/abc/XYZ/g&quot; deleteme.txt
+$ cat deleteme.txt 
 XYZ
 
 XYZ
@@ -117,7 +138,25 @@ XYZ
 <blockquote>
 <p><a href="https://www.baeldung.com/linux/read-specific-line-from-file">Source</a></p>
 </blockquote>
-<pre><code class="language-bash">$ sed -n '5{p;q}' input.txt
+<pre><code class="language-bash">$ cat test.txt 
+asdfasdf
+fjfjfjfjfj
+aaaaa
+
+$ sed -n &quot;1p&quot; test.txt 
+asdfasdf
+$ sed -n &quot;2p&quot; test.txt 
+fjfjfjfjfj
+$ sed -n &quot;1,2p&quot; test.txt 
+asdfasdf
+fjfjfjfjfj
+$ sed -n &quot;1~2p&quot; test.txt 
+asdfasdf
+aaaaa
+$ sed -n &quot;2{p;q}&quot; test.txt 
+fjfjfjfjfj
+$ sed -n &quot;1,2{p;q}&quot; test.txt 
+asdfasdf
 </code></pre>
 <pre><code class="language-bash">* -n, --quiet, --silent
               suppress automatic printing of pattern space
@@ -125,6 +164,8 @@ XYZ
 * “-n ‘5p’” means print only the fifth line
 
 * The sed has provided a ‘q‘ command that allows to “quit” further processing. We can put the ‘q‘ command in the two one-liners
+
+* {p;q} is just to apply the p and the q command
 </code></pre>
 
   <br>
