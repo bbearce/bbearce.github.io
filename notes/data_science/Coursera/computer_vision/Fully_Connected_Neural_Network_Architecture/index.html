@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>14. Fully Connected Neural Network Architectures - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Fully Connected Neural Network Architecture", url: "#_top", children: [
+              {title: "Lab: Neural Network Rectified Linear Unit -ReLU- vs Sigmoid-v2", url: "#lab-neural-network-rectified-linear-unit-relu-vs-sigmoid-v2" },
+              {title: "Reading: Training a Neural Network with Momentum and Data Augmentation", url: "#reading-training-a-neural-network-with-momentum-and-data-augmentation" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Neural_Nets/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Neural_Nets/" class="btn btn-xs btn-link">
+        13. Neural Nets
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="fully-connected-neural-network-architecture">Fully Connected Neural Network Architecture</h1>
+<ul>
+<li>1 hidden layer is a deep neural network</li>
+<li>Deeper are more accurate but take longer to train</li>
+<li>ReLU is 0 &lt; 0 and linear above 0</li>
+<li>Dropout helps with overfitting</li>
+</ul>
+<h2 id="lab-neural-network-rectified-linear-unit-relu-vs-sigmoid-v2">Lab: Neural Network Rectified Linear Unit -ReLU- vs Sigmoid-v2</h2>
+<p><a href="JupyterNotebooks/Neural Network Rectified Linear Unit -ReLU- vs Sigmoid-v2">Neural Network Rectified Linear Unit -ReLU- vs Sigmoid-v2</a></p>
+<h2 id="reading-training-a-neural-network-with-momentum-and-data-augmentation">Reading: Training a Neural Network with Momentum and Data Augmentation</h2>
+<ul>
+<li>Momentum - optimizes training process  </li>
+<li>Data Augmentation - expands and diversifies the training data  </li>
+</ul>
+<h3 id="momentum">Momentum</h3>
+<p>In standard gradient descent, parameter updates rely solely on the current gradient, which can make learning slow—especially when the loss surface has sharp curves or narrow valleys. Momentum addresses this by incorporating information from previous gradients, creating a 'velocity' that smooths updates and builds speed in consistent directions.</p>
+<p><span class="arithmatex">\(v_{t} = \gamma v_{t-1} + \eta \nabla J(\theta)\)</span><br />
+<span class="arithmatex">\(\theta = \theta - v_{t}\)</span></p>
+<ul>
+<li><span class="arithmatex">\(v_t\)</span> represents the accumulated volocity (or smoothed gradient)</li>
+<li><span class="arithmatex">\(\gamma\)</span> is the momentum coefficient (usually around 0.9)</li>
+<li><span class="arithmatex">\(\eta\)</span> is the learning rate, and</li>
+<li><span class="arithmatex">\(\nabla J(\theta)\)</span> is the gradient of the loss functoin converning the parameters.</li>
+</ul>
+<h3 id="data-augmentation">Data Augmentation</h3>
+<p>Data augmentation is a powerful technique for reducing overfitting, a common challenge in neural network training where the model performs well on training data but poorly on unseen data. It works by generating new, varied versions of existing training samples through random transformations such as cropping, resizing, flipping, rotating, or adding noise.</p>
+<p>In practice, data augmentation is often applied on the fly during training using tools such as tf.image in TensorFlow or torchvision in PyTorch, ensuring each training batch contains fresh variations for improved generalization.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Neural_Nets/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Neural_Nets/" class="btn btn-xs btn-link">
+        13. Neural Nets
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
