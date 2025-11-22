@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>16. CNN Architectures - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "CNN Architectures", url: "#_top", children: [
+              {title: "LeNet-5:", url: "#lenet-5" },
+              {title: "AlexNet:", url: "#alexnet" },
+              {title: "VGGNet:", url: "#vggnet" },
+              {title: "ResNet:", url: "#resnet" },
+              {title: "Transfer Learning", url: "#transfer-learning" },
+              {title: "Lab: Image classification with CNN.ipynb", url: "#lab-image-classification-with-cnnipynb" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Convolutional_Networks/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Convolutional_Networks/" class="btn btn-xs btn-link">
+        15. Convolutional Networks
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="cnn-architectures">CNN Architectures</h1>
+<p>Popular architectures include:</p>
+<ul>
+<li>LeNet-5</li>
+<li>AlexNet</li>
+<li>VGGNet</li>
+<li>ResNet</li>
+</ul>
+<p>One of the first CNNs was proposed by Jan Lekun and others in 1989. The most successful use case of the LeNet-5 is the MNIST dataset of handwritten digits. LeNet-5 receives an input image, normally a grayscale image. </p>
+<p>Reminder:</p>
+<p>For a conv layer with: 
+*  input size: <span class="arithmatex">\(H_{in}, W_{in}\)</span>
+*  kernel size: <span class="arithmatex">\(K_{h}, K_{w}\)</span>
+*  stride: <span class="arithmatex">\(S\)</span>
+*  padding: <span class="arithmatex">\(P\)</span>
+*  number of filters: <span class="arithmatex">\(C_{out} (design choice)\)</span></p>
+<p><span class="arithmatex">\(H_{out} = (H_{in}-K_{h}+2P)/S + 1\)</span><br />
+<span class="arithmatex">\(W_{out} = (W_{in}-K_{w}+2P)/S + 1\)</span>  </p>
+<p>For a pool layer with: 
+*  input size: <span class="arithmatex">\(H_{in}, W_{in}\)</span>
+*  kernel size: <span class="arithmatex">\(K\)</span>  (always square?)
+*  stride: <span class="arithmatex">\(S\)</span>
+*  number of filters: <span class="arithmatex">\(C_{out}\)</span> (same as coming in)</p>
+<blockquote>
+<p>Assumes square so H is W.  </p>
+</blockquote>
+<p><span class="arithmatex">\(H_{out} = (H_{in}-K)/S + 1\)</span> </p>
+<blockquote>
+<p>No padding in classic LeNet pool layers, so:</p>
+</blockquote>
+<p><span class="arithmatex">\(H_{out} = H_{in}/S\)</span> </p>
+<h2 id="lenet-5">LeNet-5:</h2>
+<p><img alt="LeNet-5.png" src="../Images/CNN_Architectures/LeNet-5.png" /></p>
+<ol>
+<li>32x32x1 in put image  </li>
+<li>5x5 filter (kernel) with a stride of 1 resulting in a vol of 28x28x6 outputs.  </li>
+</ol>
+<pre><code class="language-python">H_out = ((32-5+2*0)/1) + 1 = 28.0
+W_out = ((32-5+2*0)/1) + 1 = 28.0
+C_out = 6 # Chosen
+
+</code></pre>
+<ol>
+<li>Pooling layer with stride of 2 and 14x14x6 outputs. </li>
+</ol>
+<blockquote>
+<p>no mention of filter dimentions and only stride specified...assume a kernel of 2x2 (K=2).</p>
+</blockquote>
+<pre><code class="language-python">H_out = (28-2)/2) + 1 = 14.0
+W_out = (28-2)/2) + 1 = 14.0
+C_out = 6 # Stays same
+</code></pre>
+<ol>
+<li>5x5 filter (kernel) with a stride of 1 resulting in a vol of 10x10x16 outputs.  </li>
+</ol>
+<pre><code class="language-python">H_out = (14-5+2*0)/1 + 1 = 10.0
+W_out = (14-5+2*0)/1 + 1 = 10.0
+C_out = 16 # Chosen
+</code></pre>
+<ol>
+<li>Pooling layer with stride of 2 and 5x5x16 outputs.  <blockquote>
+<p>no mention of filter dimentions and only stride specified...assume a kernel of 2x2 (K=2).</p>
+</blockquote>
+</li>
+</ol>
+<pre><code class="language-python">H_out = (10-2)/2) + 1 = 5.0
+W_out = (10-2)/2) + 1 = 5.0
+C_out = 16 # Stays same
+
+</code></pre>
+<p>...then into the fully connected layers</p>
+<h2 id="alexnet">AlexNet:</h2>
+<p><img alt="AlexNet.png" src="../Images/CNN_Architectures/AlexNet.png" /></p>
+<p>ImageNet is a benchmark dataset. AlexNet in 2012 beat the then reigning champ, SIFT + EVs (51%) by getting around 63.3% accuracy. AlexNet was a CNN and beat out a HOG like method.</p>
+<p>The first  (11x11, 25) layer has a lot of parameters</p>
+<h2 id="vggnet">VGGNet:</h2>
+<p><img alt="VGGNet.png" src="../Images/CNN_Architectures/VGGNet.png" /></p>
+<p>The VGG network is a very deep convolutional network that was developed out of the need to reduce the number of parameters in the convolution layers and improve on training time. It also showed in general that deeper networks performed better. VGGNet has multiple variants like the VGG19 and the VGG16, where 16 stands for the number of layers in the network. Here VGG16 is pictured next to AlexNet. We see it's much deeper. </p>
+<p><img alt="VGGNet-16.png" src="../Images/CNN_Architectures/VGGNet-16.png" /></p>
+<p>Basically, going deeper and reducing the kernel size was the key innovation. By reducing the kernel size. This gives:</p>
+<ul>
+<li>The same receptive field (or better) - Basically even though the kernels are smaller, in a layer each stack of filters sees what the layer before it saw. So the deeper you go, you are seeing so many passes through the image that your receptive field is actually getting quite large.</li>
+<li>Fewer parameters - smaller kernels - and each parameter is a learned weight.</li>
+<li>More nonlinearities - 3 ReLUs instead of 1</li>
+<li>Think of it like this: A single ReLU after one giant conv is like one painter trying to paint a mural in one go. Three conv+ReLU layers is like 3 painters working in stages, refining edges, shapes, textures.</li>
+<li>Each layer can:<ul>
+<li>extract new features,</li>
+<li>reshape representations,</li>
+<li>compress or expand information,</li>
+<li>compose patterns into more complex patterns.</li>
+</ul>
+</li>
+<li>Deeper representation</li>
+</ul>
+<p>In other words, depth beats width.</p>
+<h2 id="resnet">ResNet:</h2>
+<p>As CNNs got deeper, the vanishing gradient began to become a problem again. 
+<img alt="ResNet.png" src="../Images/CNN_Architectures/ResNet.png" /></p>
+<p>Helped solve the problem by introducing residual learning.  Residual layers or skip connections allow the gradient to bypass different layers, improving performance. We can now build much deeper networks. Here is a 32-layer network from the paper Deep Residual Learning for Image Recognition. </p>
+<h2 id="transfer-learning">Transfer Learning</h2>
+<p>Use pre-trained networks to have a jumping off point. You can then add or remove layers or just continue training.</p>
+<p><img alt="TransferLearning.png" src="../Images/CNN_Architectures/TransferLearning.png" /></p>
+<p>We will cover the simplest method, where we replace the softmax layer with our own softmax layer. The number of neurons is equal to the number of classes. We then train the softmax layer on the dataset we would like to classify. The input dimension of each neuron in the softmax layer is equal to the last number of neurons fully connected layer. </p>
+<h2 id="lab-image-classification-with-cnnipynb">Lab: Image classification with CNN.ipynb</h2>
+<p><a href="../JupyterNotebooks/Image%20classification%20with%20CNN.ipynb">Image classification with CNN.ipynb</a></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Convolutional_Networks/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Convolutional_Networks/" class="btn btn-xs btn-link">
+        15. Convolutional Networks
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
