@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>5. Transformers - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Transformers", url: "#_top", children: [
+              {title: "Overview", url: "#overview" },
+              {title: "Lab Transformers", url: "#lab-transformers" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../computer_vision/Overview/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../computer_vision/Overview/" class="btn btn-xs btn-link">
+        1. Overview
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Deep_Learning_Models/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Deep_Learning_Models/" class="btn btn-xs btn-link">
+        4. Deep Learning Models
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="transformers">Transformers</h1>
+<h2 id="overview">Overview</h2>
+<p>Neural network architecture that has revolutionized natural language processing (NLP) and beyond. They are used for creating the deep learning models that power AI tools such as ChatGPT/Gemini Unlike traditional recurrent neural networks (RNNs) and convolutional neural networks (CNNs), Transformers excel at capturing long-range dependencies in sequential data, making them ideal for tasks like machine translation, text summarization, question answering, and text-to-image generation. Different types of transformers include generative pre-trained models used in ChatGPT, bidirectional transformers (BERT) used in Google Search and Google Translate, and image transformers used in products such as Adobe Photoshop.</p>
+<p>The key innovation in transformers is the <strong>attention mechanism</strong>. This mechanism allows the model to weigh the importance of different parts of the input sequence when processing each input or token.</p>
+<p>The self-attention mechanism has three parts. First, the query, key, and value vectors, identified as Q, K, and V, respectively, are generated for each input token. Q represents the word we are focusing on. K is for all other words and V contains the information to be passed to the next layer.</p>
+<p><img alt="attention_mechanism" src="../Images/transformers/attention_mechanism.png" /></p>
+<p>Second are the <strong>attention scores</strong>. The query vector of a token is compared to the key vector of all other tokens using a dot product. This results in a set of attention scores, indicating each token's relevance to the current token.</p>
+<p><img alt="attention_score" src="../Images/transformers/attention_score.png" /></p>
+<p>Third is the <strong>weighted sum</strong> The attention scores are normalized and a weighted sum of the value vectors is computed to obtain the context vector for the current token.</p>
+<p><img alt="weighted_sum" src="../Images/transformers/weighted_sum.png" /></p>
+<p>Let's take an example to understand the self-attention mechanism. We start with the sequence of words, the dog runs. Each word in the sequence is represented by a vector or an embedding in some internal vector space, like so. To each embedding, a position vector is added to retain the positional information of the word in the sentence. </p>
+<p><img alt="att_mech_ex_1" src="../Images/transformers/att_mech_ex_1.png" /></p>
+<p>We generate queries, keys, and values from each input embedding vector as displayed here.</p>
+<p><img alt="att_mech_ex_2" src="../Images/transformers/att_mech_ex_2.png" /></p>
+<p>For each word, we compute how it should attend to every other word by calculating the dot product of the query and key vectors. As displayed in this matrix:</p>
+<p><img alt="att_mech_ex_3" src="../Images/transformers/att_mech_ex_3.png" /></p>
+<p>The values in this matrix can be called the attention scores. Next, we scale the score and apply the softmax function to normalize the scores and turn them into probabilities, as displayed here. Then, for each word, we compute the weighted sum of the value vectors weighted by the attention scores. These weighted sums are used to create a new contextualized vector representation.
+<img alt="att_mech_ex_4" src="../Images/transformers/att_mech_ex_4.png" /></p>
+<p>Transformers are also extensively used for text-to-image generation based on another form of attention mechanism known as the cross-attention mechanism. The cross-attention mechanism allows the sequence of one type of data, such as a text prompt, to influence the generation of the sequence of another type of data, such as image data.
+<img alt="att_mech_ex_5" src="../Images/transformers/att_mech_ex_5.png" /></p>
+<p>Given a prompt like a two-story house with a red roof and a garden in front, we want to generate an image that matches this description.
+<img alt="att_mech_ex_6" src="../Images/transformers/att_mech_ex_6.png" /></p>
+<p>First, the self-attention mechanism learns the contextualized embedding from the entire sentence. These embeddings are then passed through the transformer encoder which gives us a sequence of queries (Q) representing the text. Next, the transformer model for images (such as DALL-E), uses a cross-attention mechanism for image generation based on Q. Lastly, DALL-E generates an image using a variant of the auto-regressive model. The model predicts the next part of the image based on the text prompt and previously generated image parts. The image transformer model doesn't just look for a stored image that matches the text description but synthesizes a new image based on understanding the input. The output image may contain novel combinations of objects that may not exist in the real world such as a horse with legs made of bamboo. It can also combine unrelated concepts into a single image. For example, we can provide a prompt such as a turtle driving a car and it can create a picture of a turtle sitting in the driver's seat and driving a car even though such a thing doesn't exist. It can also generate multiple variants of an image from the same output giving us creative variability. Unlike RNNs which process data sequentially, transformers can be parallelized, significantly speeding up training. This makes them particularly effective for tasks like machine translation, text generation, and other NLP applications. In contrast, RNNs process data sequentially, limiting parallelization and making them slower to train. While RNNs are suitable for tasks with shorter dependencies, they struggle with long-range context and can suffer from vanishing gradients. Transformers excel in handling complex relationships across long sequences, making them the preferred choice today. But these groundbreaking capabilities do not come without caveats.</p>
+<p><img alt="att_mech_ex_7" src="../Images/transformers/att_mech_ex_7.png" /></p>
+<p>As transformers rely solely on data-driven learning to infer relationships, they require a huge amount of training data to generalize well to new tasks. This brings us to one of the transformer's major shortfalls. As they rely on large datasets to learn from context, they inherit the bias in the training data. Despite these shortcomings, transformers have been one of the most important neural network developments of current times and have been instrumental in providing accessibility to the power of neural networks to the general public. In this video, you learned that:</p>
+<ul>
+<li>Transformers are a type of neural network architecture that has revolutionized the field of natural language processing. </li>
+<li>Transformers excel at capturing long-range dependencies and sequential data, making them ideal for machine translation, text summarization, question answering, and text-to-image generation. </li>
+<li>To process text data, transformers use a self-attention mechanism. A self-attention mechanism has three parts: the query, key, and value vectors; the attention scores; and the weighted sum. </li>
+<li>For text-to-image generation, transformers use the cross-attention mechanism. Transformers can process data in parallel, which significantly speeds up their training, making them particularly effective for tasks like machine translation, text generation, and other NLP applications. </li>
+<li>One major shortfall of transformers is that they rely on large datasets to learn from context and, therefore, inherit the bias in their training data.</li>
+</ul>
+<h2 id="lab-transformers">Lab Transformers</h2>
+<p><a href="../JupyterNotebooks/DL0101EN-4-1-Transformers-with-Keras-py-v1.ipynb">DL0101EN-4-1-Transformers-with-Keras-py-v1.ipynb</a></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../computer_vision/Overview/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../computer_vision/Overview/" class="btn btn-xs btn-link">
+        1. Overview
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Deep_Learning_Models/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Deep_Learning_Models/" class="btn btn-xs btn-link">
+        4. Deep Learning Models
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
