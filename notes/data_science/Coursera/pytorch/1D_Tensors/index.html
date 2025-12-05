@@ -94,20 +94,20 @@ First, we import Torch. Next, we create a Python list with the following element
 <img alt="1D_Tensors3" src="../Images/1D_Tensors3.png" /></p>
 <p>In this example, we create a float tensor, as the elements in the list are floats. We can use the data attribute Dtype to find the type of data that is stored within the tensor. We can use the method type to find the type of the tensor.<br />
 <img alt="1D_Tensors4" src="../Images/1D_Tensors4.png" /></p>
-<p>We can also specify the data type of a tensor within the constructor. We can specify the data type using the parameter Dtype. Even though the list contains floats, the Dtype of the tensor is int32.
-<img alt="1D_Tensors5" src="../Images/1D_Tensors5.png" /></p>
-<p>We can also explicitly create a tensor of a specific type. In this example, we create a float tensor explicitly using the float tensor method. Now let's check the type of tensor. We see the type of the tensor is a float tensor. When we print out A, we can see the decimals were added to the numbers in the tensor. 
-<img alt="1D_Tensors6" src="../Images/1D_Tensors6.png" /></p>
-<p>We can also change the type of the tensor. Consider the following tensor of long type. We can convert the type of the tensor to float using the type method passing in the argument torch.floatTensor. We can verify the type of the tensor has changed. 
-<img alt="1D_Tensors7" src="../Images/1D_Tensors7.png" /></p>
-<p>We can cast the following list to a tensor. The method size gives us the number of elements in the tensor. As there is a 5 elements, the result is 5. The attribute endimension represents the number of dimensions or the rank of the tensor. In this case, rank of the tensor is 1.</p>
+<p>We can also specify the data type of a tensor within the constructor. We can specify the data type using the parameter Dtype. Even though the list contains floats, the Dtype of the tensor is int32.</p>
+<p><img alt="1D_Tensors5" src="../Images/1D_Tensors5.png" /></p>
+<p>We can also explicitly create a tensor of a specific type. In this example, we create a float tensor explicitly using the float tensor method. Now let's check the type of tensor. We see the type of the tensor is a float tensor. When we print out A, we can see the decimals were added to the numbers in the tensor. </p>
+<p><img alt="1D_Tensors6" src="../Images/1D_Tensors6.png" /></p>
+<p>We can also change the type of the tensor. Consider the following tensor of long type. We can convert the type of the tensor to float using the type method passing in the argument torch.floatTensor. We can verify the type of the tensor has changed. </p>
+<p><img alt="1D_Tensors7" src="../Images/1D_Tensors7.png" /></p>
+<p>We can cast the following list to a tensor. The method size gives us the number of elements in the tensor. As there is a 5 elements, the result is 5. The attribute and dimension represents the number of dimensions or the rank of the tensor. In this case, rank of the tensor is 1.</p>
 <p><img alt="1D_Tensors8" src="../Images/1D_Tensors8.png" /></p>
 <p>In many cases, you will require 2D tensors as inputs to your neural networks. Thus, you might need to convert your 1D tensors to 2D tensors before you could use them as inputs. </p>
 <p>Here we have a PyTorch tensor with 5 elements in it. The dimension of this tensor is 1. We will convert this tensor into a 2D tensor using the view method in PyTorch. The first argument of the view method represents the number of rows in this case, 5, and the second element represents the number of columns, in this case, 1. If we didn't know that the original tensor had 5 elements in it, we could use a value of minus 1 for the first argument and PyTorch will infer the number of rows in the new tensor for us. Thus, if we now check the dimension of the acol tensor using the endimension method in PyTorch, we will see it has a dimension of 2.
 <img alt="1D_Tensors9" src="../Images/1D_Tensors9.png" /></p>
 <p>In this example, the tensor has 6 elements in it. As before, we can reshape the tensor using the view method as there is 6 elements in the original tensor. We pass 6 as the first argument to the view method for creating 6 rows and 1 as the second argument to create one column. Similarly, we could have used a minus 1 instead of 6. 
 <img alt="1D_Tensors10" src="../Images/1D_Tensors10.png" /></p>
-<p>It's not difficult to convert PyTorch tensors to NumPy arrays and Python lists and then convert them back. This gives PyTorch the ability to work within the Python ecosystem. Many Python libraries use NumPy arrays. Consider the following NumPy array. We can convert a NumPy array to a Torch tensor using the function fromNumPy. We can convert the Torch tensor back to NumPy arrays using the method NumPy. Let's represent NumPy array with a blue box and the Torch tensor with a red box, and back to NumPy with a green box. Back to NumPy points to the variable Torch tensor. The variable Torch tensor points to the variable NumPy array, therefore if you change the variable NumPy array, both Torch tensor and Back to NumPy will change. You will see an example of this in the lab.
+<p>It's not difficult to convert PyTorch tensors to NumPy arrays and Python lists and then convert them back. This gives PyTorch the ability to work within the Python ecosystem. Many Python libraries use NumPy arrays. Consider the following NumPy array. We can convert a NumPy array to a Torch tensor using the function from_numpy. We can convert the Torch tensor back to NumPy arrays using the method numpy. Let's represent NumPy array with a blue box and the Torch tensor with a red box, and back_to_numpy with a green box. back_to_numpy points to the variable Torch tensor. The variable Torch tensor points to the variable NumPy array, therefore if you change the variable NumPy array, both Torch tensor and back_to_numpy will change. You will see an example of this in the lab.
 <img alt="1D_Tensors11" src="../Images/1D_Tensors11.png" /></p>
 <p>We can convert a Pandas series to a tensor in a similar manner. We simply use the attribute values to convert the series to a NumPy array. We then use the function fromNumPy to convert it to a tensor. </p>
 <p><img alt="1D_Tensors12" src="../Images/1D_Tensors12.png" /></p>
@@ -117,10 +117,10 @@ First, we import Torch. Next, we create a Python list with the following element
 <img alt="1D_Tensors14" src="../Images/1D_Tensors14.png" /></p>
 <p>Let's review some indexing and slicing methods that you can use to access a particular value or set of values stored in a tensor. Consider the following tensor. We can change the first element of the tensor to 100 as follows. The tensor's first value is now 100. We can change the fifth element of the tensor as follows. The fifth element is now 0.
 <img alt="1D_Tensors15" src="../Images/1D_Tensors15.png" /></p>
-<p>We can slice PyTorch tensors just like Python lists. The elements of the array correspond to the following index. We can select the elements from 1 to 3 and assign it to a new torch tensor D as follows. The elements in D correspond to the following indexes, and similar to lists, we do not count the element corresponding to the last index. 
-<img alt="1D_Tensors16" src="../Images/1D_Tensors16.png" /></p>
-<p>We can assign indexes in a tensor to new values as follows. The tensor C now has new values. 
-<img alt="1D_Tensors17" src="../Images/1D_Tensors17.png" /></p>
+<p>We can slice PyTorch tensors just like Python lists. The elements of the array correspond to the following index. We can select the elements from 1 to 3 and assign it to a new torch tensor D as follows. The elements in D correspond to the following indexes, and similar to lists, we do not count the element corresponding to the last index. </p>
+<p><img alt="1D_Tensors16" src="../Images/1D_Tensors16.png" /></p>
+<p>We can assign indexes in a tensor to new values as follows. The tensor C now has new values. </p>
+<p><img alt="1D_Tensors17" src="../Images/1D_Tensors17.png" /></p>
 <p>PyTorch makes it easy to do many operations that are commonly performed in neural networks. Let's review some of these operations on one-dimensional tensors. We will look at many of the operations in the context of Euclidean vectors to make things more interesting. </p>
 <p>Vector addition is a widely used operation. Consider the vector U with two elements or components. The components are distinguished by the different colors. Similarly, consider the vector V with two components. In vector addition, we create a new vector, in this case we call it Z. The first component of Z is the addition of the first component of vectors U and V. Similarly, the second component is the sum of the second components of U and V. This new vector, Z, is now a linear combination of the vector Y and V.</p>
 <p><img alt="1D_Tensors18" src="../Images/1D_Tensors18.png" /></p>
@@ -138,15 +138,14 @@ First, we import Torch. Next, we create a Python list with the following element
 <p><img alt="1D_Tensors24" src="../Images/1D_Tensors24.png" /></p>
 <p>We can also perform dot product using the PyTorch function dot and assign it the tensor result as follows. 
 <img alt="1D_Tensors25" src="../Images/1D_Tensors25.png" /></p>
-<p>Consider a tensor U. The tensor contains the following elements. </p>
-<p>If we add a scalar value to the tensor, PyTorch will add that value to each element in the tensor. This property is known as broadcasting. 
+<p>Consider a tensor U. The tensor contains the following elements. If we add a scalar value to the tensor, PyTorch will add that value to each element in the tensor. This property is known as broadcasting. 
 <img alt="1D_Tensors26" src="../Images/1D_Tensors26.png" /></p>
 <p>We can also apply functions to Torch tensors. We will teach you how to do so, but we will not cover in-place operations. Consider the tensor A. We can calculate the mean or average value of all the elements in A using the method mean. This corresponds to the average of all the elements. In this case, the result is zero. </p>
-<p><img alt="1D_Tensors27" src="../Images/1D_Tensors27.png" />
-There are many other functions. For example, consider the tensor B. We can find the maximum value using the method max. We can see the largest value is 5. Therefore, the method max returns a 5. We can use Torch to create functions that map tensor to new Torch tensors. </p>
+<p><img alt="1D_Tensors27" src="../Images/1D_Tensors27.png" /></p>
+<p>There are many other functions. For example, consider the tensor B. We can find the maximum value using the method max. We can see the largest value is 5. Therefore, the method max returns a 5. We can use Torch to create functions that map tensor to new Torch tensors. </p>
 <p><img alt="1D_Tensors28" src="../Images/1D_Tensors28.png" /></p>
-<p>Let's implement some code on the left side of the screen and use the right side of the screen to demonstrate what's going on with vectors. We can access the value of pi in NumPy as follows. We can create the following Torch tensor in radians. This array corresponds to the following vector. We can apply the function sine to the tensor x and assign the values to the tensor y. This applies the sine function to each element in the tensor. This corresponds to applying the sine function to each component of the vector. The result is a new tensor, y, where each value corresponds to a sine function being applied to each element in the tensor, x. 
-<img alt="1D_Tensors29" src="../Images/1D_Tensors29.png" /></p>
+<p>Let's implement some code on the left side of the screen and use the right side of the screen to demonstrate what's going on with vectors. We can access the value of pi in NumPy as follows. We can create the following Torch tensor in radians. This array corresponds to the following vector. We can apply the function sine to the tensor x and assign the values to the tensor y. This applies the sine function to each element in the tensor. This corresponds to applying the sine function to each component of the vector. The result is a new tensor, y, where each value corresponds to a sine function being applied to each element in the tensor, x. </p>
+<p><img alt="1D_Tensors29" src="../Images/1D_Tensors29.png" /></p>
 <p>A useful function for plotting mathematical functions is line space. Line space returns evenly spaced numbers over a specified interval. We specify the starting point of the sequence, the ending point of the sequence. The parameter steps indicates the number of samples to generate, in this case, 5. </p>
 <p><img alt="1D_Tensors30" src="../Images/1D_Tensors30.png" /></p>
 <p>The space between samples is 1. If we change the parameter num to 9, we get 9 evenly spaced numbers over the interval from minus 2 to 2. The result is the difference between subsequent samples is 0.5 as compared to the example before. 
