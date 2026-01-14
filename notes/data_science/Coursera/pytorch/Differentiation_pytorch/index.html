@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>2D Tensors - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "2D Tensors", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="2d-tensors">2D Tensors</h1>
+<p><img alt="Differentiation_Pytorch1" src="../Images/Differentiation_Pytorch1.png" /></p>
+<p>In this module we will learn about differentiation in pytorch and this will be used for generating parameters in neural networks. We’ll start by covering simple derivatives and then delve deeper into partial derivatives. So let’s learn about derivatives. Consider the function y, which is a quadratic function in X. When we calculate the value of this function at x = 2, the function evaluates to 4. Now let’s calculate the derivative of this function. According to the rules of calculus, we take the power of x i.e. in this case 2, bring it in front of x, multiply x with 2 and reduce the power of x by 1. Thus the derivative of this function equals to 2 times x. Evaluating the derivative at x = 2, we see that it’s value equals to 4.</p>
+<p><img alt="Differentiation_Pytorch2" src="../Images/Differentiation_Pytorch2.png" /></p>
+<p>Now, let’s try to calculate this derivative in pytorch. First, we create a new tensor x and specify its value as 2. We do so because we want to evaluate functions and derivatives of x for the value of x equals 2. Notice that when creating x we also specify the parameter of requires_grad and set it to True in the tensor constructor. Doing so essentially tells PyTorch that we would be using evaluating functions and derivatives of x using this value of x Next, we create a new tensor y and specify that y is equal to x square. This creates a new tensor Y for us, which is equal to the squared function of x.</p>
+<p>Since we specified the value of X equal to 2, the value of Y equals to 4. For calculating the derivative of y we call the backward function in py torch on y. The backward function first calculates the derivative of y and then evaluates it for the value of x equals 2 From the previous slide, we learnt that the derivative of x square is equal to 2x Now to evaluate the derivative of y at x equals 2, we need to call the grad attribute on x. Doing so takes the value of x equals 2 and plugs it in y’s derivative Finally, giving us the result of 4. </p>
+<p><img alt="Differentiation_Pytorch3" src="../Images/Differentiation_Pytorch3.png" /></p>
+<p>Behind the scenes, pytorch calculates derivatives by creating a backwards graph. It is a particular type of graph in which the tensors and the backwards functions are the nodes in the graph. Based upon whether a particular tensor is a leaf or not in the graph, pytorch evaluates the derivative of that tensor.</p>
+<p>If the leaf attribute for a tensor is set to True, pytorch won’t evaluate its derivative. We won’t get too much into the details of the how the backwards graph is constructed and used but the aim here was to provide you with a high level understanding of how pytorch uses this graph for calculating derivatives. So, here’s how the tensors x and y look internally in pytorch once we create them. As you can see here, each tensor has a specific set of attributes. The data attribute holds the data of the tensor. The grad attribute will hold the gradient or derivative value once it is calculated. The gradient function attribute points to a node in the backwards graph.</p>
+<p>The is leaf attribute is used for denoting whether a particular tensor is a leaf in the graph or not. We discussed about the requires_grad attribute on the previous slide. Using all of these attributes, along with the backwards graph, pytorch calculates the derivative of the tensor y based upon x’s value. </p>
+<p><img alt="Differentiation_Pytorch4" src="../Images/Differentiation_Pytorch4.png" /></p>
+<p>Let’s do another example. Here we have z, a function of x. Evaluating z at x equals to 2, the value of z equals 9. Calculating the derivative of of z based upon the rules of calculus. And evaluating it at x equal 2, we get the result of 6. </p>
+<p><img alt="Differentiation_Pytorch5" src="../Images/Differentiation_Pytorch5.png" />
+Here’s how we would do this in pytorch. </p>
+<p><img alt="Differentiation_Pytorch6" src="../Images/Differentiation_Pytorch6.png" /></p>
+<p>Now, let’s talk about partial derivatives Here we have a function of two variables u and v Based upon the rules of calculus, the derivative of f with respect to u equals v plus 2u. When differentiating f with respect to u we treat v as a constant and apply the rules of derivatives of f. Similarly, when we differentiate f with respect v, we treat u as a constant and using the rules of calculus this derivative equals u.</p>
+<p><img alt="Differentiation_Pytorch7" src="../Images/Differentiation_Pytorch7.png" /></p>
+<p>Similar to what we had earlier, we define the u and v tensors with the initial values of 1 and 2 respectively. We also define the f tensor, the value of f equals 3. calling the backward function on f, it will calculate the two partial derivatives of f with respect to u and v and evaluate then at the values 1 and 2. </p>
+<p>Calling the grad function on u will calculate the derivative of f with respect to u. and evaluate it with the values of 1 and 2 for u and v respectively.</p>
+<p><img alt="Differentiation_Pytorch8" src="../Images/Differentiation_Pytorch8.png" /></p>
+<p>Here’s a similar process for calculating the derivative of f with respect to v. We have only scratched the surface see the labs, for more examples. </p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
