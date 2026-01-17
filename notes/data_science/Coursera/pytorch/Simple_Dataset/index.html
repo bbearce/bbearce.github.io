@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>3. Simple Dataset - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Simple Dataset", url: "#_top", children: [
+              {title: "Datasets", url: "#datasets" },
+              {title: "Transforms", url: "#transforms" },
+              {title: "Transforms Compose", url: "#transforms-compose" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../2D_Tensors/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../2D_Tensors/" class="btn btn-xs btn-link">
+        2. 2D Tensors
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="simple-dataset">Simple Dataset</h1>
+<pre><code class="language-python">import torch
+from torch.utils.data import Dataset
+from torchvision import transforms
+</code></pre>
+<h2 id="datasets">Datasets</h2>
+<pre><code class="language-python">class toy_set(Dataset):
+    def __init__(self, length=100, transform=None):
+        self.x = 2 * torch.ones(length, 2)
+        self.y = torch.ones(length, 1)
+
+        self.len = length
+        self.transform = transform
+
+    def __getitem__(self, index):
+        sample = self.x[index], self.y[index]
+        if self.transform:
+            sample = self.transform(sample)
+        return sample
+
+    def __len__(self):
+        return self.len
+</code></pre>
+<pre><code class="language-python">dataset = toy_set()
+len(dataset) # 100
+dataset[0] # (tensor([2., 2.]), tensor([1.]))
+
+for i in range(3):
+    x,y=dataset[i]
+    print(i,'x:',x,'y:',y)
+
+# 0 x: tensor([2., 2.]) y: tensor([1.])
+# 1 x: tensor([2., 2.]) y: tensor([1.])
+# 2 x: tensor([2., 2.]) y: tensor([1.])
+</code></pre>
+<h2 id="transforms">Transforms</h2>
+<p>Create cllable classes that transform datasets.</p>
+<pre><code class="language-python">class add_mult(object):
+
+    def __init__(self, addx=1, muly=1):
+        self.addx = addx
+        self.muly = muly
+
+    def __call__(self, sample):
+        x = sample[0]
+        y = sample[1]
+        x = x + self.addx
+        y = y * self.muly
+        sample = x, y
+        return sample
+</code></pre>
+<pre><code class="language-python"># First lets apply to a dataset with None for transform
+dataset = toy_set()
+dataset[0] # dataset[0]
+a_m=add_mult()
+x_,y_ = a_m(dataset[0])
+
+# Second lets set datasets transform object
+dataset_ = toy_set(length=100, transform=a_m)
+dataset_[0] # (tensor([3., 3.]), tensor([1.]))
+</code></pre>
+<h2 id="transforms-compose">Transforms Compose</h2>
+<p>In this case, we create the class “mult” that will multiply all the elements of a tensor by the value mul. </p>
+<pre><code class="language-python">class mult(object):
+
+    def __init__(self, mul=100):
+        self.mul = mul
+
+    def __call__(self, sample):
+        x = sample[0]
+        y = sample[1]
+        x = x * self.mul
+        y = y * self.mul
+        sample = x, y
+        return sample
+</code></pre>
+<p>We create a transforms Compose object. In the constructor, we place a list. The first element of the list is the constructor for the first transform; the second element of the list is the constructor for the second transform. We can apply the transform on the data directly. The function takes the input elements of the dataset, applies the first transform, applies the second transform, and returns the output as a tuple containing the tensors. We can apply the compose object directly in the dataset constructor Each time we retrieve a sample, the original tensor is passed to the compose object, the first transform is applied, then the second transform is applied. </p>
+<pre><code class="language-python"># Compose(transforms: List[Callable])
+data_transform = transforms.Compose([add_mult(), mult()])
+dataset_ = toy_set(length=100, transform=data_transform)
+dataset_[0] # (tensor([300., 300.]), tensor([100.]))
+</code></pre>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../2D_Tensors/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../2D_Tensors/" class="btn btn-xs btn-link">
+        2. 2D Tensors
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
