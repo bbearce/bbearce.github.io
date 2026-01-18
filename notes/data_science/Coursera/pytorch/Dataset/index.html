@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>4. Dataset - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Dataset", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Simple_Dataset/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Simple_Dataset/" class="btn btn-xs btn-link">
+        3. Simple Dataset
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="dataset">Dataset</h1>
+<p>In this video we will build datasets for images, some of the techniques learned here can be applied to larger datasets as well In this video we will review: The Dataset Class for images, Torch Vision Transforms, Torch Vision Datasets. Lets build a dataset for images. Lets first review the components that we will need.</p>
+<pre><code class="language-python">from PIL import Image
+import pandas as pd
+import os
+from matplotlib.pyplot import imshow
+from torch.utils.data import Dataset, DataLoader
+</code></pre>
+<p>We will import the following libraries. </p>
+<p><img alt="Dataset_1" src="../Images/Dataset_1.png" /></p>
+<p>In this video we will use Zalando’s Fashion-MNIST training set of 60,000 28x28 grayscale images of clothing. The data set has 10 types of label or classes. </p>
+<p><img alt="Dataset_2" src="../Images/Dataset_2.png" /></p>
+<p>The path to the csv file with the labels for each image can be obtained as follows: You can load the CSV file and convert it into a dataframe, using the Pandas function read_csv(). You can view the dataframe using the method head. The first column of the dataframe corresponds to the type of clothing. This is the class or label. The second column is the name of the image file corresponding to that item of clothing.</p>
+<p><img alt="Dataset_3" src="../Images/Dataset_3.png" /></p>
+<p>You can obtain the image file name and class of the second image To load the image, you need the directory and the image name. In this case we now have the path of the first image.</p>
+<p><img alt="Dataset_4" src="../Images/Dataset_4.png" /></p>
+<p>You can then use the function Image.open to store the image to the variable image and display the image and class or label.</p>
+<p><img alt="Dataset_5" src="../Images/Dataset_5.png" /></p>
+<p>You can repeat the process for the 20th image.</p>
+<p><img alt="Dataset_6" src="../Images/Dataset_6.png" /></p>
+<p>The process of building a dataset class for images is similar but we do not load all images into memory, we can also apply similar techniques to larger datasets. 
+In the constructor we simply create a Pandas data frame as a attribute “data names”. Let's take a look at the get item method, when we create an object and iterate through it.</p>
+<p><img alt="Dataset_7" src="../Images/Dataset_7.png" /></p>
+<p>We create a dataset object, this loads the csv file with the name and class of image. We call the first sample. In this case the value for “1 d x” is zero. We load the image path. We then load the image using the path. The variable image now contains fashion0.png, we assign the image label or class to y, then we return the image and label y as a tuple.</p>
+<p><img alt="Dataset_8" src="../Images/Dataset_8.png" /></p>
+<p>We can assign the image to the variable image, we can also see the label or class. </p>
+<p><img alt="Dataset_9" src="../Images/Dataset_9.png" /></p>
+<p>Torch Vision has a set of widely used pre build transforms, that are used on images. We import the module, the first transform will crop the image by taking a 20 by 20 piece of the image. The image would look something like this. The second transform will convert the image to a tensor. Instead of applying the transforms directly, we can compose the transform. we can then apply the transform object in to the dataset in the constructor. There is an extra dimension representing the sample.</p>
+<p><img alt="Dataset_10" src="../Images/Dataset_10.png" /></p>
+<p>Torch Vision also has pre built datasets that are commonly used to compare models. We import the the dataset module from torch vision, we create the dataset object. In this case, we use the MNIST dataset. The parameter root is the Root directory of the dataset. The parameter train indicates, if you would like to use the training or testing dataset, true means you are using the training dataset false indicates the test dataset. If the download parameter is set to true, the object downloads the dataset from the internet and puts it into the root directory. If the dataset is already downloaded, it is not downloaded again in this case, we convert the image to a tensor. (Music) </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Simple_Dataset/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Simple_Dataset/" class="btn btn-xs btn-link">
+        3. Simple Dataset
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
