@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>6. Linear Regression Training - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Linear_Regression_Training", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Loss/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Loss/" class="btn btn-xs btn-link">
+        7. Loss
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Linear_Regression/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Linear_Regression/" class="btn btn-xs btn-link">
+        5. Linear Regression
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="linear_regression_training">Linear_Regression_Training</h1>
+<p><img alt="Images/linear_regression_training_1" src="../Images/linear_regression_training_1.png" /></p>
+<p>In this video, we will go over the process of learning parameters for linear regression. This is called training. In this module, we will review what is a dataset, the noise assumption, provide an overview of training. We use a dataset of examples. In this case, we have n points with x and y values. We will use these examples to learn the linear relationship, or line, between x and y. When x is only one dimension, linear regression is sometimes referred to as simple linear regression. Imagine this set with many thousands of ordered pairs. Corresponding x-y coordinates are marked with the same subscript, linking them together. Subscripts range from n equals 1 to n with n defining the set size. Commonly, you will encounter datasets organized as tensors.</p>
+<p><img alt="Images/linear_regression_training_2" src="../Images/linear_regression_training_2.png" /></p>
+<p>Example of simple linear regression datasets include predicting housing sizes, giving the size of the house. The variable y is the house price, and x is the size. Predicting stock prices using interest rates. In this case, y is the stock price, and x is the interest rate. Fuel economy of cars give horsepower. Y is the fuel economy, and x is the horsepower.</p>
+<p><img alt="Images/linear_regression_training_3" src="../Images/linear_regression_training_3.png" /></p>
+<p>Even if the linear assumption is correct, there is always some error. We take this into account by assuming a small random value is added to the point on the line. This is called noise. For linear regression, the particular type of noise is Gaussian. </p>
+<p><img alt="Images/linear_regression_training_4" src="../Images/linear_regression_training_4.png" /></p>
+<p>The figure on the left shows the distribution of the noise. The horizontal axis shows the value added, and the vertical axis illustrates the probability that the value will be added. </p>
+<p><img alt="Images/linear_regression_training_5" src="../Images/linear_regression_training_5.png" /></p>
+<p>Usually, a small positive value is added</p>
+<p><img alt="Images/linear_regression_training_6" src="../Images/linear_regression_training_6.png" /></p>
+<p>...or a small negative value. Sometimes large values are added</p>
+<p><img alt="Images/linear_regression_training_7" src="../Images/linear_regression_training_7.png" /></p>
+<p>...but for the most part, the values added are near zero.</p>
+<p><img alt="Images/linear_regression_training_8" src="../Images/linear_regression_training_8.png" /></p>
+<p>The more significant the standard deviation, or the more dispersed the distribution is, the more the samples deviate from the line.</p>
+<p><img alt="Images/linear_regression_training_9" src="../Images/linear_regression_training_9.png" /></p>
+<p>In linear regression, we plot the points on the Cartesian plane. We would like to come up with a linear function for x that can best represent the points. In this example, the line does not do a good job. This line does a slightly better job at fitting the points. Finally, this line does the best at fitting all the points. A more systematic way of finding the best line can be determined by minimizing a function.</p>
+<p><img alt="Images/linear_regression_training_10" src="../Images/linear_regression_training_10.png" /></p>
+<p>The following is the Average Loss, Mean Squared Error, or COST function. It is a function of the slope and bias. As we plug in different slope and biases, we get different values. It turns out the line with the best fit has the smallest value for this function. Now let's see how to minimize this cost. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Loss/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Loss/" class="btn btn-xs btn-link">
+        7. Loss
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Linear_Regression/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Linear_Regression/" class="btn btn-xs btn-link">
+        5. Linear Regression
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Gradient Descent - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Gradient Descent", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="gradient-descent">Gradient Descent</h1>
+<p>Gradient descent is a method to find the minimum of a function. It can be applied to functions with multiple dimensions, but let's look at the example of just one dimension. In this video, we will review what's gradient descent, problems with the learning rate, and to stop gradient descent. What's gradient descent? </p>
+<p><img alt="Images/gradient_descent_1" src="../Images/gradient_descent_1.png" /></p>
+<p>Gradient descent is a method to find the minimum of a function. Consider the loss function. If we start off with a random guess for the slope parameter, we use the superscript to indicate the guess number. In this case, it is our first guess, so it is zero. We have to move our guess in the positive direction. We can move the slope in that direction by adding a positive number. Examining the sign of the derivative, it is the opposite sign of the number. Therefore, we can add the number proportional to the negative of the slope. </p>
+<p><img alt="Images/gradient_descent_2" src="../Images/gradient_descent_2.png" /></p>
+<p>Subtracting the derivative works if we are on the other side of the minimum. In this case, we would like to move in the negative direction. We can move the parameter value to the negative direction by adding a negative number to the parameter. Examining the sign of the derivative, it is the opposite sign of the number. Therefore, we can add an amount proportional to the negative of the derivative. </p>
+<p><img alt="Images/gradient_descent_3" src="../Images/gradient_descent_3.png" /></p>
+<p>In gradient descent, we iteratively calculate this equation. We start off with a guess. We update the parameter by adding a value proportional to the derivative. We update the parameter again. We can express the process as follows. The parameter ETA is the learning rate and tells us how much we need to jump. Let us clarify the process with an example. </p>
+<p><img alt="Images/gradient_descent_4" src="../Images/gradient_descent_4.png" /></p>
+<p>We start off with a guess of -4. </p>
+<p><img alt="Images/gradient_descent_5" src="../Images/gradient_descent_5.png" /></p>
+<p>The value for the derivative at -4 is -112. We will use the following value for the learning rate. We calculate the first iteration. The value of the parameter for the first iteration is -1.20. The value for this parameter has a smaller loss. We can see the loss is lower after the first iteration. </p>
+<p><img alt="Images/gradient_descent_6" src="../Images/gradient_descent_6.png" /></p>
+<p>For the next iterations, we use the previous parameter estimate of -1.2. We update the parameter value using the update rule. The value for the parameter is now -0.64. The loss function is closer to the minimum. The loss value continues to get smaller. </p>
+<p><img alt="Images/gradient_descent_7" src="../Images/gradient_descent_7.png" /></p>
+<p>Let's see problems with the learning rate. If we choose a learning rate that's too big, sometimes we miss the minimum. Let's say we use a learning rate of 1 over 5. We update the parameter value using the update rule. The value for the parameter is 3.28. The loss function now has a higher value. Now the loss value gets larger. </p>
+<p><img alt="Images/gradient_descent_8" src="../Images/gradient_descent_8.png" /></p>
+<p>Sometimes we can set the learning rate too small. Let's see what happens when we set the learning rate to 1 over 240. For every iteration, the value of the parameter hardly changes. In this case, it will take a lot of iterations to reach the minimum value. We will learn how to select the learning rate. There are several ways to stop the process of gradient descent. Let's go over a few popular ways to stop gradient descent. </p>
+<p><img alt="Images/gradient_descent_9" src="../Images/gradient_descent_9.png" /></p>
+<p>We can run gradient descent. For a set number of iterations is a popular way. In this case, we run it for 3 iterations. But for the final iteration, we miss the minimum. </p>
+<p><img alt="Images/gradient_descent_10" src="../Images/gradient_descent_10.png" /></p>
+<p>Another method to stop gradient descent is to see if the loss starts increasing. Let's record a few iterations of gradient descent and record the results in the table. For the first value, the loss is 250. We calculate the first iteration. We see the loss for this iteration is 150 less than the previous iteration. For the second iteration, the loss is also decreasing. We repeat the process. Examining the table, we see the loss is 50 and still decreasing. So, we keep going. The loss is now 100. This value is larger than 50, so we stop. We use the value of the parameter corresponding to loss of 50. The value is approximately -2.5. You will learn more about gradient descent throughout the course.</p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
