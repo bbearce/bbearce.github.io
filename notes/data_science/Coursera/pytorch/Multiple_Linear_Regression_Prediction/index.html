@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>18. Multiple Linear Regression Prediction - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Multiple Linear Regression Prediction", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-link">
+        19. Multiple Linear Regression Training
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Training_Val_Test_Pytorch/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Training_Val_Test_Pytorch/" class="btn btn-xs btn-link">
+        17. Training Val Test Pytorch
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="multiple-linear-regression-prediction">Multiple Linear Regression Prediction</h1>
+<p>We will review Multiple Linear Regression in multiple dimensions and how to build these models using PyTorch. Linear is perhaps the most often used function in PyTorch and is key to building neural networks. In this video we will review: Linear regression in Multiple dimensions The problem of prediction, with respect to PyTorch will review the Class Linear and how to build custom Modules using nn.Modules.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_1" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_1.png" /></p>
+<p>In Multiple linear regression we have multiple predictor variables, in this example we have 4 predictor variables, then:</p>
+<ul>
+<li>We have the bias</li>
+<li>w1: coefficient or the weight <span class="arithmatex">\(x_1\)</span></li>
+<li>w2: coefficient or the weight <span class="arithmatex">\(x_2\)</span> and so on.</li>
+</ul>
+<p><img alt="Multiple_Linear_Regression_Prediction_2" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_2.png" /></p>
+<p>In general weight and bias are parameters of our model that we obtain via training. The table contains different samples of the predictor variables <span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span>. The position of each point is placed on the 2D plane, colour coded accordingly. </p>
+<p><img alt="Multiple_Linear_Regression_Prediction_3" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_3.png" /></p>
+<p>Each sample of the predictor variables <span class="arithmatex">\(x_1\)</span> and <span class="arithmatex">\(x_2\)</span> will be mapped to a new value <span class="arithmatex">\(Y\)</span>. The new values of <span class="arithmatex">\(Y\)</span> (y-hat) are mapped in the vertical direction, with height proportional to the value that y-hat takes. </p>
+<p><img alt="Multiple_Linear_Regression_Prediction_4" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_4.png" /></p>
+<p>We can express the operation as a linear transformation, x is a 1 by D tensor or vector and is sometimes referred to as a feature, w is a D by 1 tensor or vector of parameters y-hat is the dependent variable. Using dot product we can express the equation in terms of vector operations.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_5" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_5.png" /></p>
+<p>Consider the following example with the bias equal to one. We perform the dot product of x and w. This multiplies the first component of x and w. We then add the product of the second component of w and x. 
+We then add the bias, the result is 9.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_6" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_6.png" /></p>
+<p>The most important property is the shape. The number of columns of x, Must be the same as the number of rows of w. We then add b We perform the dot product operation, then add b, the result is y-hat.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_7" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_7.png" /></p>
+<p>We will use the colour representation to help us to understand the relationship between the shape and the parameters.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_8" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_8.png" /></p>
+<p>The following directed graph is also helpful to understand dot product. Nodes represent features and the edges represent parameters. These graphs will be used later to help us understand neural networks. In this case we have 2 dimensions. We can extend it to D arbitrary dimensions.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_9" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_9.png" /></p>
+<p><img alt="Multiple_Linear_Regression_Prediction_10" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_10.png" /></p>
+<p>We can perform linear regression on multiple samples of tensors or vectors, in this case we have 4 samples, each sample has 4 columns. This is the output of a train loader object with 4 samples We have the tensor or Matrix represented with an upper-case X. The first sample corresponds to the first row in the matrix. The second sample corresponds to the 2nd row in the matrix, and so on.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_11" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_11.png" /></p>
+<p>For multiple samples, the regression equation is a linear transformation. y and b are vectors or row tensors, one row for each sample. Let’s use the colour representation of dot product to get a better idea of what is going on. In the following image, each sample in the matrix X is represented by a different colour, essentially a different shade of green or blue. The parameter is orange. Notice that y-hat is bold as it’s a vector or multi dimensional tensor.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_12" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_12.png" /></p>
+<p>For the first sample we perform dot product with the first row of the matrix and the parameter. We then add the bias term, we then get the prediction for the first sample. For the second sample, we take the dot product of the parameter vector, we then add the bias term. We then get the prediction for the second sample. We repeat the process for the third and fourth sample, taking the dot product and adding the bias term, each sample produces a new prediction. </p>
+<p><img alt="Multiple_Linear_Regression_Prediction_13" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_13.png" /></p>
+<p>In summary, the number of columns of X and number of weights must be the same in this case too. Although there is only one bias, we add the bias term to each dot product using a vector in green. And there are as many predictions as samples or columns in X. </p>
+<p><img alt="Multiple_Linear_Regression_Prediction_14" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_14.png" /></p>
+<p>Let us use the useful class linear to perform linear regression in multiple dimensions. We import linear from the nn package. The weights and bias are randomly initialized, to get the same results every time we run the code, we use the random seed. We will learn how parameters are obtained in the next section. We will create a model object using the constructer linear, the parameter “in – features” is the size of each input sample or the number of columns, “out features” is size of each output sample, it essentially creates a linear function. The linear produces the following function. Let’s use the following diagram to represent the shape. The parameter “in features” represents the number of columns of x, and the number of model weights, “Out features” is the size of outputs in this case one. </p>
+<p><img alt="Multiple_Linear_Regression_Prediction_15" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_15.png" /></p>
+<p>The method parameters, this gives us the model parameters; the first is the slope, the second the bias, we have to apply the Python function list to get an output as the method is lazily evaluated. We can see the linear weights and the bias. In the lab, you can also use the method “state dict”.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_16" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_16.png" /></p>
+<p>We can create an input tensor, this is a row vector or tensor with two columns. We apply the linear object, the result is a a 1x1 tensor corresponding to the prediction. </p>
+<p><img alt="Multiple_Linear_Regression_Prediction_17" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_17.png" /></p>
+<p>We can apply linear regression to multiple samples, we create a tensor where each row is a different sample. As before we use different colours to represent the different samples, we apply the model object, as we have three inputs, the output is three rows. The actual output is a tensor with three rows and one column, corresponding to the following colours.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_18" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_18.png" /></p>
+<p>In PyTorch it is customary to make a custom module, in the context of regression it will behave almost identical to the linear object. This may seem a little redundant, but this will be required later when be build neural networks. Custom modules are classes; these classes are the subclass or children of the package “nn.Modules”. In this case, we call our custom module LR. We make the Class a child of “nn.Modules”. As a result, it inherits all the methods and attributes. In the object constructor, the argument is the size of the input and output, x and y respectively. We call the “super” in the constructor, this allows us to create objects from the package nn.Module inside the object, without initializing it explicitly. We can now create an object of type linear, the arguments are set via the object constructor We assign it to self.linear. We can now call the object of type linear anywhere in the class. We use the function forward to produce a prediction. We will not have to call the forward method explicitly, just use parenthesis as it behaves like the call method in Python.</p>
+<p><img alt="Multiple_Linear_Regression_Prediction_19" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_19.png" /></p>
+<p>We create our custom module or class. This behaves like the linear object, the parameters “in-features” is two and “out-features” is one. This object behaves like linear, we can make a prediction for one sample. </p>
+<p><img alt="Multiple_Linear_Regression_Prediction_20" src="../Images/Multiple_Linear_Regression_Prediction/Multiple_Linear_Regression_Prediction_20.png" /></p>
+<p>Or we can make predictions for multiple samples.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-link">
+        19. Multiple Linear Regression Training
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Training_Val_Test_Pytorch/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Training_Val_Test_Pytorch/" class="btn btn-xs btn-link">
+        17. Training Val Test Pytorch
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

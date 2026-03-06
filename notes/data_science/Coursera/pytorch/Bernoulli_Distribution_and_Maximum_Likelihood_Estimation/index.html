@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>23. Bernoulli Distribution and Maximum Likelihood Estimation - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Bernoulli Distribution and Maximum Likelihood Estimation", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-link">
+        24. Logistic Regression Cross Entropy Loss
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Linear_Classifiers/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Linear_Classifiers/" class="btn btn-xs btn-link">
+        22. Linear Classifiers
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="bernoulli-distribution-and-maximum-likelihood-estimation">Bernoulli Distribution and Maximum Likelihood Estimation</h1>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_1.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_1.png" /></p>
+<p>Consider a biased coin flip. The probability of heads is given by 0.2 and the probability of tails is given by 0.8. It turns out that we can represent both probabilities with one parameter, which we'll denote by theta. Theta is also known as the Bernoulli parameter. The probability of heads, simply, is given by theta and the probability of tails is given by 1 minus theta.</p>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_2.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_2.png" /></p>
+<p>We can calculate the likelihood of a sequence of events by multiplying the probability of each individual event to obtain the likelihood. Consider the following sequence of three events. For the first flip, we have a head and the probability of observing a head is 0.2. Consider the second flip. We observe a second head. For calculating the likelihood of this sequence, we can simply multiply 0.2 by 0.2. For the third flip, we obtain a tail and the probability of observing one is 0.8. To obtain the likelihood of these sequence of events, we simply multiply 0.2 times 0.2 times 0.8, which equals to 0.032. </p>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_3.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_3.png" /></p>
+<p>Now let's consider the case where we don't actually know the values of the parameter theta. To start, we'll consider two sample values of theta, i.e., theta equals to 0.5 and theta equals to 0.2. We have the first flip. The likelihood of observing a head for the first Bernoulli parameter is 0.5 and for the second parameter is 0.2. We observe a second flip. In this case, it's a tails. For the parameter theta equals 0.5, the value of the likelihood is given by 0.25. And for the parameter theta equals 0.2, the value of the likelihood is given by multiplying 0.2 with 0.8, which is 0.16. For the third flip, we observe a head again. The likelihood value for the parameter theta equals 0.5 is 0.125 and the value for the parameter of the 0.2 is 0.032. Finally, for the fourth flip, we observe a tail. Thus, for the following sequence, the likelihood values for the two parameters equal 0.0625 and 0.0256, respectively. Notice that amongst the two values of the likelihood, the value of likelihood corresponding to the parameter theta equals 0.5 is larger compared to the other value. This intuitively makes sense as well. In the real world, if you flip a coin, the probability of getting a head or tail is equally likely. Thus, the value of the likelihood given by the parameter theta equals 0.5 is more likely to occur. So it turns out, we can estimate the actual parameter by considering parameter values that maximize our likelihood.</p>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_4.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_4.png" /></p>
+<p>We can represent our sequence of events by a mathematical function known as the Bernoulli distribution. Further, we can denote the event of getting a head by 0 and the event of getting a tail by 1. Thus, the probability of y equals 0 for a specific value of theta is given by, which equals. Similarly, the probability of y equals 1, i.e., tail is given by. Note that both the probabilities are functions of theta. </p>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_5.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_5.png" /></p>
+<p>So, from the previous coin example, we had the following expression for the probability of y for a specific value of theta. Here, y could have two possible values, i.e., 0 and 1. Generalizing this equation for any value of y, we get (equation), and substituting the probability equation for y from above, we get the following. Thus, our goal is to find a value of theta that maximizes this function. </p>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_6.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_6.png" /></p>
+<p>It is helpful to visualize as follows. Each of the individual probabilities is a mathematical function. Multiplied together, the likelihood function is represented by the overlapping values and the goal is to find the value of the parameter that maximizes this expression.</p>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_7.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_7.png" /></p>
+<p>It is usually difficult to maximize the likelihood function. The log of the likelihood function is much simpler to deal with. As the log function is monotonically increasing, the location of the maximum value of the parameter remains in the same position.</p>
+<p><img alt="Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_8.png" src="../Images/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/Bernoulli_Distribution_and_Maximum_Likelihood_Estimation_8.png" /></p>
+<p>The expression for the log of the likelihood function is given by. We can use this equation to obtain the value of theta that maximizes the likelihood. That's it. Thank you for watching this video. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-link">
+        24. Logistic Regression Cross Entropy Loss
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Linear_Classifiers/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Linear_Classifiers/" class="btn btn-xs btn-link">
+        22. Linear Classifiers
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -62,12 +62,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+      <a href="../Stochastic_Gradient_Descent/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
-        Install
+      <a href="../Stochastic_Gradient_Descent/" class="btn btn-xs btn-link">
+        13. Stochastic Gradient Descent
       </a>
     </div>
     
@@ -84,35 +84,35 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
     
 
     <h1 id="linear-regression-pytorch">Linear Regression Pytorch</h1>
-<p><img alt="linear_regression_training_slope_and_bias_1" src="../Images/linear_regression_training_slope_and_bias_1.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_1" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_1.png" /></p>
 <p>The cost is the average loss or total loss. Mathematically it looks like this. It is a funtion of the slope. The slope controls the relationship between x and y. The bias controls the horizontal offset. </p>
-<p><img alt="linear_regression_training_slope_and_bias_2" src="../Images/linear_regression_training_slope_and_bias_2.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_2" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_2.png" /></p>
 <p>In true linear regression, the cost function is of 2 variables, the slope and bias. We can plot as a surface. One axis is slope and the other is bias with height as cost.</p>
-<p><img alt="linear_regression_training_slope_and_bias_3" src="../Images/linear_regression_training_slope_and_bias_3.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_3" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_3.png" /></p>
 <p>In this example, for one sample, the loss is the same as the cost. The value for x and y is 1. l is expression and cost of loss func. For slope of 0 and bias of 15 we have the following point. Applying cost func, we get 256</p>
-<p><img alt="linear_regression_training_slope_and_bias_4" src="../Images/linear_regression_training_slope_and_bias_4.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_4" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_4.png" /></p>
 <p>In this example, we have a y and x value of 1. In this example cost is 361.</p>
-<p><img alt="linear_regression_training_slope_and_bias_5" src="../Images/linear_regression_training_slope_and_bias_5.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_5" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_5.png" /></p>
 <p>Contour plots give you a birds eye view of the cost function. In this case w is horizontal axis and b is vertical. Keep in mind the </p>
-<p><img alt="linear_regression_training_slope_and_bias_6" src="../Images/linear_regression_training_slope_and_bias_6.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_6" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_6.png" /></p>
 <p>Now we take a vertical versus horizontal slice to see loss versus w. We can see the contour at the same time on the right. Contour lines represent similar changes in loss. Therefore if contour lines start getting far apart the loss is changing more slowly. Close together is fast.</p>
-<p><img alt="linear_regression_training_slope_and_bias_7" src="../Images/linear_regression_training_slope_and_bias_7.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_7" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_7.png" /></p>
 <p>The following 3 points are different parameter values we can see for each iteration. The sample value is decreasing. </p>
-<p><img alt="linear_regression_training_slope_and_bias_8" src="../Images/linear_regression_training_slope_and_bias_8.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_8" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_8.png" /></p>
 <p>Let's minimize the hard way. Define MSE for the value on the line.</p>
-<p><img alt="linear_regression_training_slope_and_bias_9" src="../Images/linear_regression_training_slope_and_bias_9.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_9" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_9.png" /></p>
 <p>Initialize tensors for w, b, x and y values.</p>
-<p><img alt="linear_regression_training_slope_and_bias_10" src="../Images/linear_regression_training_slope_and_bias_10.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_10" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_10.png" /></p>
 <p>The process is identical to last val but we also do bias term.</p>
-<p><img alt="linear_regression_training_slope_and_bias_11" src="../Images/linear_regression_training_slope_and_bias_11.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_11" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_11.png" /></p>
 <p>7 iterations in, w and b are closer but not perfect. 15 in, the line is close to perfect.</p>
-<p><img alt="linear_regression_training_slope_and_bias_12" src="../Images/linear_regression_training_slope_and_bias_12.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_12" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_12.png" /></p>
 <p>We can see the correspondence between the loss surface and contour lines.</p>
-<p><img alt="linear_regression_training_slope_and_bias_13" src="../Images/linear_regression_training_slope_and_bias_13.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_13" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_13.png" /></p>
 <p>In general the derivative of a multi variate function with respect to any one variable is called a partial derivative.</p>
-<p><img alt="linear_regression_training_slope_and_bias_14" src="../Images/linear_regression_training_slope_and_bias_14.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_14" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_14.png" /></p>
 <p>A vector of all partial derivatives is called the gradient.</p>
-<p><img alt="linear_regression_training_slope_and_bias_15" src="../Images/linear_regression_training_slope_and_bias_15.png" /></p>
+<p><img alt="linear_regression_training_slope_and_bias_15" src="../Images/Linear_Regression_Training_Slope_And_Bias/linear_regression_training_slope_and_bias_15.png" /></p>
 <p>The gradient is perpendicular to contour lines and points to the greatest change. It also points to the direction of the next iteration.</p>
 
   <br>
@@ -126,12 +126,12 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
   <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
     
     <div class="wm-article-nav pull-right">
-      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+      <a href="../Stochastic_Gradient_Descent/" class="btn btn-xs btn-default pull-right">
         Next
         <i class="fa fa-chevron-right" aria-hidden="true"></i>
       </a>
-      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
-        Install
+      <a href="../Stochastic_Gradient_Descent/" class="btn btn-xs btn-link">
+        13. Stochastic Gradient Descent
       </a>
     </div>
     

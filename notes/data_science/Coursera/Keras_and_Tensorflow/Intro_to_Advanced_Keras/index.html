@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>1. Intro to Advanced Keras - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Intro to Advanced Keras", url: "#_top", children: [
+              {title: "Sequential API", url: "#sequential-api" },
+              {title: "Functional API", url: "#functional-api" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../pytorch/Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../pytorch/Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-link">
+        24. Logistic Regression Cross Entropy Loss
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="intro-to-advanced-keras">Intro to Advanced Keras</h1>
+<p><img alt="Images/Intro_to_Advanced_Keras_1" src="../Images/Intro_to_Advanced_Keras_1.png" /></p>
+<p>While the sequential API in Keras is excellent for a simple linear stack of layers, the functional API provides more flexibility and control, essential for building complex models. Let's take a closer look at the functional API. </p>
+<pre><code class="language-bash">pyenv activate venv3.10.4
+</code></pre>
+<h2 id="sequential-api">Sequential API</h2>
+<pre><code class="language-python">from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Input
+
+# Create a Sequential model
+## Hint, 784 is the flattened ImageNet shape
+model = Sequential([
+    Input(shape=(784,)),
+    Dense(64, activation='relu', input_shape=(784,)),
+    Dense(10, activation='softmax')
+])
+
+# Compile the model
+model.compile(optimizer='adam',
+              loss='sparse_categorical_crossentropy',
+              metrics=['accuracy'])
+</code></pre>
+<h2 id="functional-api">Functional API</h2>
+<p>In the functional API example, you first define an input layer. Connect the first dense layer with relu activation to the input layer. </p>
+<pre><code class="language-python">from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense
+
+# Define the input
+inputs = Input(shape=(784,))
+
+# Define layers
+x = Dense(64, activation='relu')(inputs)
+outputs = Dense(10, activation='softmax')(x)
+
+# Create the model
+model = Model(inputs=inputs, outputs=outputs)
+
+# Compile the model
+model.compile(optimizer='adam', loss='sparse_categorical_crossentropy', metrics=['accuracy'])
+</code></pre>
+<p>The output layer has the softmax activation. Then combine the input and output layers into a model. The functional API offers several advantages crucial for research and developing cutting-edge models. It is flexible enabling you to create complex architectures like multi branch models, residual connections, and more. The functional API provides clarity, and the model structure is more explicit and easier to debug. Layers and models can be reused across different parts of the architecture. Let's look at a complex model with multiple inputs. </p>
+<pre><code class="language-python">from tensorflow.keras.layers import concatenate
+from tensorflow.keras.utils import plot_model
+
+# Define two sets of inputs
+inputA = Input(shape=(64,))
+inputB = Input(shape=(128,))
+
+# The first branch operates on the first input
+x = Dense(8, activation='relu')(inputA)
+x = Dense(4, activation='relu')(x)
+
+# The second branch operates on the second input
+y = Dense(16, activation='relu')(inputB)
+y = Dense(4, activation='relu')(y)
+
+# Combine the outputs of the two branches
+combined = concatenate([x, y])
+
+# Apply a dense layer and then a regression prediction on the combined outputs
+z = Dense(2, activation='relu')(combined)
+z = Dense(1, activation='linear')(z)
+
+# The model will accept the inputs of the two branches and output a single value
+model = Model(inputs=[inputA, inputB], outputs=z)
+
+# Compile the model
+model.compile(optimizer='adam', loss='mean_squared_error')
+</code></pre>
+<p>In the example, two input layers, input A and input B, are defined with different shapes. Separate branches process each input through dense layers. Then outputs of the branches are concatenated. The combined output is processed through additional dense layers to produce a final output. You can use Keras Functional API to develop models in diverse fields such as healthcare, finance, and autonomous driving. Its ability to handle complex architectures makes it an invaluable tool for any deep learning practitioner. For example, the healthcare industry uses functional API models for medical image analysis to detect diseases. </p>
+<p>We learned that the Keras Functional API is a powerful tool that provides the flexibility needed to build complex neural network models. Its advantages over the Sequential API including the ability to create models with multiple inputs and outputs, shared layers, and intricate architectures, make it essential for advanced deep learning applications. By understanding and utilizing the functional API, you can enhance your models' capabilities and tackle a wider range of problems. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../pytorch/Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../pytorch/Logistic_Regression_Cross_Entropy_Loss/" class="btn btn-xs btn-link">
+        24. Logistic Regression Cross Entropy Loss
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

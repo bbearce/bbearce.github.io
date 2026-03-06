@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Logistic Regresson Prediction - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Logistic Regresson Prediction", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="logistic-regresson-prediction">Logistic Regresson Prediction</h1>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_1.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_1.png" /></p>
+<p>In logistic regression, we have a linear function, we pass the output to the logistic function and get our estimate as Y hat. We can also apply logistic regression to equations of vectors involving dot products. The output of logistic regression is still one dimensional. Now, let's talk about two ways through which we can create a logistic function in PyTorch. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_2.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_2.png" /></p>
+<p>The first way is using the module torch dot nn. So, let's create some data. We use the object constructor nn dot sigmoid and this creates a sigmoid object for us. We input our tensor to the sigmoid object to get our local estimate. Here's a plot of our local estimate. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_3.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_3.png" /></p>
+<p>The second way to create a logistic function in py torch is by simply using torch module. We have our same input tensor, in this case our sigmoid is an actual function so we pass our tensor as an input to the sigmoid function and get an output. Here's a plot of the output.</p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_4.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_4.png" /></p>
+<p>Till now we have focused on creating logistic functions in PyTorch. Now let's see how we can create logistic regression models in PyTorch using the nn dot sequential package. The nn dot sequential package is a really fast way to build your logistic regression models. So we start with a linear constructor and we also have a sigmoid constructor. Our input is 1 dimensional. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_5.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_5.png" /></p>
+<p>We use a sequential constructor as follows to produce our model. The first parameter that is passed as input to our sequential constructor is the linear constructor and the second parameter is the sigmoid constructor. We then produce our model. Behind the scenes, this takes tensor x, produces the intermediate output z and then passes z to the sigmoid function. Which then produces our output estimate y hat. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_6.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_6.png" /></p>
+<p>We can also build custom modules in PyTorch by sub-classing the nn dot module package. Here is a custom module built by sub-classing nn dot module. It is called logistic regression. It is pretty similar to linear regression. We construct our linear object using the nn dot linear constructor. The only difference is that our output will already have the sigmoid function. And this will apply the sigmoid function to our intermediate output for producing the final output. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_7.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_7.png" /></p>
+<p>We can create a model for our custom module by using the constructor as follows. We pass in 1 as the argument to the constructor, since our input is 1 dimensional. This will produce a linear output on which the sigmoid function will be applied. To produce our final output y hat. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_8.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_8.png" /></p>
+<p>Here’s a side by side comparison of our custom model and the sequential model. We create the custom model by calling the logistic regression module we wrote from scratch. We pass in one to the constructor as our input is one dimensional. Similarly, we create our sequential model using the existing nn dot sequential package. Again, we pass in one to the linear constructor as our input is one dimensional. Both of these models will produce the same output at the end. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_9.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_9.png" /></p>
+<p>Now let’s learn about how we can make predictions in PyTorch. 
+Let’s consider some sample values of model parameters. Based upon our previous examples, b and w were our model parameters. The exact values of the parameters are shown on the left i.e. 0.2294 and -0.2380 but we’ll approximate them to 0.23 and -0.23 respectively. Let's consider an input tensor x of 1 dimension containing the value 1. We apply an model to the input tensor. First, the input tensor is passed to a linear function and the intermediate output is passed to the sigmoid function. Finally, producing an output. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_10.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_10.png" /></p>
+<p>Now, let's consider a multi sample as an input. Making a prediction on multi sample inputs is very similar to the case of a single sample input. We apply a model to our multi sample input x. The model applies a linear function to each element of the input and then passes it to the sigmoid function. Finally producing an output containing multiple elements. Each of the elements in the output corresponds to a single sample of the input.</p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_11.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_11.png" /></p>
+<p>We can also apply logistic regression to multidimensional inputs. Let's look at the 2D case. The 2D model behaves similar to its 1D counter part.</p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_12.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_12.png" /></p>
+<p>Just like the 1D case, instead of 1, we now pass 2 to our custom logistic regression module since our input is 2 dimensional. Similarly, for creating a sequential 2d model, we pass in 2 to the linear constructor since our input is 2 dimensional.</p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_13.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_13.png" /></p>
+<p>Let’s consider some sample values of model parameters for 2 dimensional inputs. Here b and w are the model parameters. The exact values of the parameters are shown on the left. And we can approximate the values as on the right. Now, let’s consider our model. For a 2 dimensional input, we apply an model to the input tensor. First, the input tensor is passed to a linear function and the intermediate output is passed to the sigmoid function. </p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_14.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_14.png" /></p>
+<p>Finally, producing an output. We do the same thing for multiple samples of 2 dimensional inputs except that: We apply the sigmoid function to each intermediate output.</p>
+<p><img alt="Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_15.png" src="../Images/Logistic_Regression_Prediction/Logistic_Regression_Prediction_15.png" /></p>
+<p>We have the X tensor here – a multi dimensional multi sample input. We apply the model to x, which in turn applies the linear function and sigmoid function to each intermediate output. And we get three final outputs. </p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

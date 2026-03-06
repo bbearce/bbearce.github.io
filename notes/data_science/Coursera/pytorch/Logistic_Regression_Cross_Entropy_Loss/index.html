@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>24. Logistic Regression Cross Entropy Loss - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Logistic Regression Cross Entropy Loss", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../Keras_and_Tensorflow/Intro_to_Advanced_Keras/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../Keras_and_Tensorflow/Intro_to_Advanced_Keras/" class="btn btn-xs btn-link">
+        1. Intro to Advanced Keras
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/" class="btn btn-xs btn-link">
+        23. Bernoulli Distribution and Maximum Likelihood Estimation
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="logistic-regression-cross-entropy-loss">Logistic Regression Cross Entropy Loss</h1>
+<p>In this video, we'll talk about the cross-entropy loss. This will be our total loss or cost function for logistic regression, but we'll also apply it to other models for classification. In this video, we will talk about Problem with Mean Squared Error. First, we'll talk about Maximum Likelihood Estimation, and then we'll see how to go from Maximum Likelihood Estimation to calculating cross-entropy loss, then train the model PyTorch. Here we'll do it just for logistic regression, but the same methodology applies to all the models that involve classification. When training linear classifiers, we want to minimize the number of misclassified samples. This is because if our classifier classifies a high number of samples incorrectly during training, it would not work well on actual test data. Thus, we want to minimize the loss. The loss for our linear classifier is calculated using the loss function, which is also known as the cost function. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_1.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_1.png" /></p>
+<p>The loss function looks something like this. It looks pretty similar to linear regression, except we have this little logistic term here. This equation looks pretty daunting, so let's do a simplified example, where we'll only focus on the bias term, which is also known as the B-term of the linear classifier. We'll also look at how the threshold function behaves, so that it's a little easier to understand.</p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_2.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_2.png" /></p>
+<p>Now let's see how we can calculate the loss of the threshold function we have here. From the previous slide, the mathematical formula for calculating the loss function is as follows. Beyond the mathematical formula, let's try to have an intuitive understanding of what the loss function is actually calculating. Here we have three red samples and three blue samples. The red samples are the ones that have been misclassified. Going back to the mathematical representation of our loss function, the Yn term equals to 0 for the red samples and 1 for the blue samples. The value of the threshold function for all of these samples equals to 1. Plugging in the values of Yn and the threshold function for all these samples in the formula of the loss function, and summing all the values, we get that the loss of this threshold function for three misclassified samples is equal to 3. We can denote the number of misclassified samples versus the cost or loss in a table like this. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_3.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_3.png" /></p>
+<p>Generalizing for this particular threshold function, if we had two misclassified samples, our cost would be 2,</p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_4.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_4.png" /></p>
+<p>and had we had zero misclassified samples, our cost would be 0.</p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_5.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_5.png" /></p>
+<p>Now let's see the plot of the cost of the threshold function. We have the gradient descent item from our bias parameter B. The value for the cost for a specific line is given by the green ball. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_6.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_6.png" /></p>
+<p>If we move the line a little, we have two misclassified samples for the threshold function. But now, notice something interesting happens to the cost function. The value falls in a region where we have a flat line on the cost function. The gradient in this region is 0. We do not want this to happen. When something like this happens, the parameter will get stuck in the region, thereby resulting in none of the parameter values getting updated for the classifier. As a result, we will have two misclassified samples. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_7.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_7.png" /></p>
+<p>Instead of using the threshold function, let's consider using the sigmoid function. We'll see the advantage of using this function for classification. Here's a plot of the cost of the sigmoid function. Notice how the curve is smooth compared to the curve of the threshold function. Using the sigmoid function for classification, we have three misclassified samples here. Note the corresponding value of the cost denoted by the green ball on the curve. Now if we move the line by a little, we see that we have two misclassified samples, and the corresponding value of the cost is in a smooth region, not in a flat region. Finally, if we move the line even more to the right so that we have no misclassified samples, the value of the loss is always smooth and only flat in the minimum, resulting in better parameter values and less misclassified samples. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_8.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_8.png" /></p>
+<p>Let's look at the cost surface for two parameters W and B. 
+<img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_9.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_9.png" /></p>
+<p>It turns out, unlike the one-parameter case, the cost surface for logistic regression with the squared loss is flat. If you look closely at the surface, there are a lot of contour lines around this region, </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_10.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_10.png" /></p>
+<p>but not as many around this region, which implies a flat surface. If we start random initialization in a good location (below), our algorithm will converge to a minimum, </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_11.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_11.png" /></p>
+<p>but if we start our initialization in the bad region (flat part in the south part 2 figs above), nothing will happen. Let's see what happens if we use maximum likelihood estimation to estimate the parameter.</p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_12.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_12.png" /></p>
+<p>We have a classification dataset here and will only focus on the bias parameter. The sample of Y in this dataset belong to either one of two classes, either red or blue. Class 0 is represented by red and class 1 is denoted by blue. We can calculate the likelihood for this dataset as follows. As the logistic function gave us the probability of Y being equal to 0 or 1, we can calculate the likelihood using this, which equals to 0.445. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_13.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_13.png" /></p>
+<p>Now, let's consider another line, which seems to be better at classifying the training data with a different value for the bias parameter. As with the previous case, we can calculate the likelihood as follows, and the likelihood value equals 0.46 for this case. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_14.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_14.png" /></p>
+<p>And for the final line, which seems to be the best one, the value of… The likelihood's value is 0.47. Our goal is to obtain the parameters that maximize the likelihood function. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/https://www.coursera.org/learn/deep-neural-networks-with-pytorch/lecture/3LjrE/logistic-regression-cross-entropy-lossLogistic_Regression_Cross_Entropy_Loss_15.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_15.png" /></p>
+<p>So just like flipping a coin, you can come up with an expression for the likelihood and here's an idealized plot of just one parameter. We want to find the maximum point. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_16.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_16.png" /></p>
+<p>If we take the log, as you can see, it didn't affect the position of the maximum, just the shape of the function. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_17.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_17.png" /></p>
+<p>And if we want to minimize something, we simply multiply it by a negative number. If you notice carefully, the location of the minimum is in the same place as the position of the maximum. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_18.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_18.png" /></p>
+<p>And we can simply average it out. It turns out, the minimum of this function corresponds to the maximum value of the likelihood.</p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_19.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_19.png" /></p>
+<p>The final expression is the cross-entropy loss, or cost. Here's the actual expression, where theta represents the weights and biases, and we can implement it in PyTorch as follows. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_20.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_20.png" /></p>
+<p>Here's the corresponding contour plot of the equation we just implemented in PyTorch. There's contours all over the plot surface, and it will only be flat at the minimum. Now we'll cover how to perform logistic regression in PyTorch. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_21.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_21.png" /></p>
+<p>To perform logistic regression, first we need to create a model. In PyTorch, we can create a logistic regression model using the sequential method. In this case, we have a one-dimensional input and a one-dimensional output. The linear model is then passed to the sigmoid function, finally producing a one-dimensional output.</p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_22.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_22.png" /></p>
+<p>Another way to create a model for logistic regression is by defining our own custom model using the nn.module package. The initialization of this class will be based upon the input dimension and the output dimension, which in our case would be 1.</p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_23.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_23.png" /></p>
+<p>Next, we define our forward pass function. The forward pass refers to calculating the predicted output value by our model based upon the input. We apply the sigmoid function to our intermediate linear output z in order to convert it to sigmoid probabilities. Next, we need to define our loss function. The loss function is used for updating the weight parameter of the model so that we end up with the best model for performing logistic regression. We can use mean squared error or MSE. PyTorch has an inbuilt method for doing this. We can use nn.mseloss method for calculating the loss as a mean squared error. PyTorch also has some other functions for calculating loss. We saw this formula for calculating the cross-entropy. Instead of writing this verbose formula all by ourselves, we can instead use PyTorch's inbuilt nn.bceLoss function for calculating the loss. We are very close to performing logistic regression. Just a few more steps and we'll be done. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_24.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_24.png" /></p>
+<p>We start by loading our dataset. We then create the logistic regression model. Since both our input and output dimensions are equal to 1, we pass 1 and 1 to the constructor of our model class. We use the Stochastic Gradient Descent Optimizer, also abbreviated as SGD, for updating the model parameters. We specify the learning rate as 0.01 for the parameter updates. </p>
+<p><img alt="Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_25.png" src="../Images/Logistic_Regression_Cross_Entropy_Loss/Logistic_Regression_Cross_Entropy_Loss_25.png" /></p>
+<p>Finally, here's all the code you will need for performing logistic regression in PyTorch. Let's understand what this code does. We run this code for 100 epochs. For each iteration, we load the x and y from the dataset. We then pass the input i.e. x to our model and get a predicted value, i.e. y-hat from the model. Next, we calculate the loss based upon our selected criteria for selecting the best model. We then get the gradients for the parameters using the loss.backward function and finally update the parameter using the optimizer.step function. By the end of 100 epochs, we would have the best model based upon the above criteria for performing logistic regression. Just a final note, the output produced by our model will have a value between 0 and 1. We will perform some thresholding in the lab to get the actual class values. Thank you for watching this video. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../Keras_and_Tensorflow/Intro_to_Advanced_Keras/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../Keras_and_Tensorflow/Intro_to_Advanced_Keras/" class="btn btn-xs btn-link">
+        1. Intro to Advanced Keras
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Bernoulli_Distribution_and_Maximum_Likelihood_Estimation/" class="btn btn-xs btn-link">
+        23. Bernoulli Distribution and Maximum Likelihood Estimation
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

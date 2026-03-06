@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>20. Linear Regression Multiple Output - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Linear Regression Multiple Output", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Multiple_Output_Linear_Regression_Training/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Multiple_Output_Linear_Regression_Training/" class="btn btn-xs btn-link">
+        21. Multiple Output Linear Regression Training
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-link">
+        19. Multiple Linear Regression Training
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="linear-regression-multiple-output">Linear Regression Multiple Output</h1>
+<p><img alt="Linear_Regression_Multiple_Output_1" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_1.png" /></p>
+<p>In this section we will review Linear Regression with Multiple Outputs. In this video we will discuss Linear regression with Multiple Outputs, with respect to Pytorch. We'll discuss custom modules With Single and Multiple Samples. We have the following linear equation as a function of the tensor or vector x. We have the second linear equation that is a function of the tensor or vector x, but this equation has a different set of parameters.</p>
+<p><img alt="Linear_Regression_Multiple_Output_2" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_2.png" /></p>
+<p>We can express the operation with matrix operations, where the parameters are stored in a matrix W. Let's see how to make a prediction, as before lets focus on the shape of the output or set of samples. </p>
+<p><img alt="Linear_Regression_Multiple_Output_3" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_3.png" /></p>
+<p>Let's represent the sample x with orange, we will represent the first column of the matrix in red representing the weights of the first function. We perform the dot product of x with the first column of the matrix W, we get a scaler value. We represent the bias term of the linear function in red, we add that value to the result of the dot products first operation. We get the output of the first equation. We will represent the second column of the matrix in blue, we perform the dot product of x and the row column, we get a scaler value. We represent the bias term of the second linear function in blue, we add that value to the result of the first operation We get the result of the first equation. </p>
+<p><img alt="Linear_Regression_Multiple_Output_4" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_4.png" /></p>
+<p>The following directed graph is also helpful to understand dot product. The nodes represent features and the edges represent parameters. These edge represents the outputs of the function.</p>
+<p><img alt="Linear_Regression_Multiple_Output_5" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_5.png" /></p>
+<p>We can use this method to represent M linear functions with D inputs. The matrix has M columns and D rows. </p>
+<p><img alt="Linear_Regression_Multiple_Output_6" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_6.png" /></p>
+<p>We can also use the graph to represent the data. </p>
+<p><img alt="Linear_Regression_Multiple_Output_7" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_7.png" /></p>
+<p>Let's see how to create a Custom Module. The class for our linear model has not changed but we will alter the parameter when we create the object or model. In the constructer the input dimension will be the number of features and the output dimension will be the number of outputs. These are used in the linear constructor with in the class </p>
+<p><img alt="Linear_Regression_Multiple_Output_8" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_8.png" /></p>
+<p>Just like before we will create a linear regression object with two dimensions. This is the number of rows of x and the parameter matrix w. We will set our features equal to 2, this is the number of columns of x and the number of bias terms. We can view the parameters, we have the weights or columns of the matrix and the bias terms.</p>
+<p><img alt="Linear_Regression_Multiple_Output_9" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_9.png" /></p>
+<p>We can create a 2d input tensor, we make a prediction, the result is two outputs as specified in the image. For one tensor, we get two tensor outputs.</p>
+<p><img alt="Linear_Regression_Multiple_Output_10" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_10.png" /></p>
+<p>For multiple samples the process is identical, each vector or 1D tensor can be represented as a row in a matrix or two dimensional tensor. We will use colors to represent each row. </p>
+<p><img alt="Linear_Regression_Multiple_Output_11" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_11.png" /></p>
+<p>Let's use the colours to represent the output for multiple samples this time Y is a matrix or 2D tensor, in this case as there are two rows, there are two columns in Y as before, each column will represent an output. Each row in X is a sample, the number of columns of X still equals the number of rows of W. There are only two bias terms. We add the bias to each sample we can represent this as a matrix or using python broadcasting.</p>
+<p><img alt="Linear_Regression_Multiple_Output_12" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_12.png" /></p>
+<p>The first output of the first sample is the dot product of the first columnwith the first row of X, the result is a scalar or number. We then add the bias term, the result is the first sample of the output. For the first output of the second sample, we find the dot product of the first column with the second row of X the result is a scalar or number. We then add the bias term, the result is the second sample of the first output. The process is identical for the final sample. The second output will be the second column of Y and each sample output will be the row. Let's look at the first samples second output.</p>
+<p><img alt="Linear_Regression_Multiple_Output_13" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_13.png" /></p>
+<p>The second output of the first sample is the dot product of the second column with the first row of X the result is a scalar or number. We then add the bias term. The result is the second output sample in the first row second column of Y. The process is identical for the second sample except we use the second row of X. Finally the process is identical for the final sample.</p>
+<p><img alt="Linear_Regression_Multiple_Output_14" src="../Images/Linear_Regression_Multiple_Output/Linear_Regression_Multiple_Output_14.png" /></p>
+<p>In Pytorch we create a tensor with two columns and three rows, using colors to help clarify the process, we call the object. It performs a linear transformation, we get the following output. The correspondence with the colors is as follows. In the next video we will see how to train the model. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Multiple_Output_Linear_Regression_Training/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Multiple_Output_Linear_Regression_Training/" class="btn btn-xs btn-link">
+        21. Multiple Output Linear Regression Training
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Multiple_Linear_Regression_Training/" class="btn btn-xs btn-link">
+        19. Multiple Linear Regression Training
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
