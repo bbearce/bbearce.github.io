@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>2. Keras Functional API and Subclassing API - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Keras Functional API and Subclassing API", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Creating_Custom_Layers_in_Keras/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Creating_Custom_Layers_in_Keras/" class="btn btn-xs btn-link">
+        3. Creating Custom Layers in Keras
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Intro_to_Advanced_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Intro_to_Advanced_Keras/" class="btn btn-xs btn-link">
+        1. Intro to Advanced Keras
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="keras-functional-api-and-subclassing-api">Keras Functional API and Subclassing API</h1>
+<p><img alt="Images/Keras_Functional_API_and_Subclassing_API/Keras_Functional_API_and_Subclassing_API_1" src="../Images/Keras_Functional_API_and_Subclassing_API/Keras_Functional_API_and_Subclassing_API_1.png" /></p>
+<p>he functional API is beneficial when you need to construct models beyond the simple stack of the layers the sequential API offers. For instance, it allows for creating models with multiple inputs and outputs, shared layers, and even models with nonlinear data flows. This increased flexibility is crucial for research and tackling complex problems requiring custom solutions. </p>
+<pre><code class="language-bash">pyenv activate venv3.10.4
+</code></pre>
+<pre><code class="language-python">from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Dense
+
+# Define the input
+inputs = Input(shape=(784,))
+
+# Define a dense layer
+x = Dense(64, activation='relu')(inputs)
+
+# Define the output layer
+outputs = Dense(10, activation='softmax')(x)
+
+# Create the model
+model = Model(inputs=inputs, outputs=outputs)
+</code></pre>
+<p>The input function is used to define the shape of the input data. The dense layers are added sequentially with the first dense layer applying a relu activation function and the final dense layer applying a softmax activation function suitable for multiclass classification. One of the significant advantages of the functional API is the ability to handle models with multiple inputs and outputs. This ability is particularly useful in complex applications like multitask learning. </p>
+<pre><code class="language-python">from tensorflow.keras.layers import concatenate
+
+# Define two sets of inputs
+inputA = Input(shape=(64,))
+inputB = Input(shape=(128,))
+
+# The first branch operates on the first input
+x = Dense(8, activation='relu')(inputA)
+x = Dense(4, activation='relu')(x)
+x = Model(inputs=inputA, outputs=x)
+
+# The second branch operates on the second input
+y = Dense(16, activation='relu')(inputB)
+y = Dense(4, activation='relu')(y)
+y = Model(inputs=inputB, outputs=y)
+</code></pre>
+<p>Here's how you can define a model with multiple inputs and outputs. You create each input layer, process them through different paths, and merge them before passing them through the output layers. In the code, define two separate input layers with different shapes. </p>
+<pre><code class="language-python"># Combine the output of the two branches
+combined = concatenate([x.output, y.output])
+
+# Apply a FC layer and then a regression prediction on the combined outputs
+z = Dense(2, activation='relu')(combined)
+z = Dense(1, activation='linear')(z)
+
+# The model will accept the inputs of the two branches and then output a single value
+model = Model(inputs=[x.input, y.input], outputs=z)
+</code></pre>
+<p>Then separate branches of the model will be defined, each processing one of the inputs.</p>
+<pre><code class="language-python">from tensorflow.keras.layers import Lambda
+
+# Define the input layer
+input = Input(shape=(28, 28, 1))
+
+# Define a shared convolutional base
+conv_base = Dense(64, activation='relu')
+
+# Process the input through the shared layer
+processed_1 = conv_base(input)
+processed_2 = conv_base(input)
+
+# Create a model using the shared layer
+model = Model(inputs=input, outputs=[processed_1, processed_2])
+</code></pre>
+<p>For instance, in a Siamese network, you can use shared layers to process two different inputs through the same layers and then compare their outputs. In the code, define a shared dense layer applied to both inputs. Apply the shared layer to the input and create a model with shared layers producing two outputs. </p>
+<pre><code class="language-python">from tensorflow.keras.layers import Conv2D, MaxPooling2D, Flatten
+from tensorflow.keras.activations import relu, linear
+
+# First input model
+inputA = Input(shape=(32, 32, 1))
+x = Conv2D(32, (3, 3), activation=relu)(inputA)
+x = MaxPooling2D((2, 2))(x)
+x = Flatten()(x)
+x = Model(inputs=inputA, outputs=x)
+
+# Second input model
+inputB = Input(shape=(32, 32, 1))
+y = Conv2D(32, (3, 3), activation=relu)(inputB)
+y = MaxPooling2D((2, 2))(y)
+y = Flatten()(y)
+y = Model(inputs=inputB, outputs=y)
+</code></pre>
+<p>Let's put it all together in a practical example. You will build a complex model with multiple inputs, shared layers, and outputs. You start by defining the input layers, then add layers to process each input, merge the layers, and finally explain the output layers. </p>
+<pre><code class="language-python"># Combine the output of the two branches
+combined = concatenate([x.output, y.output])
+
+# Apply a FC layer and then a regression prediction on the combined outputs
+z = Dense(64, activation=relu)(combined)
+z = Dense(1, activation=linear)(z)
+
+# The model will accept the inputs of the two branches and then output a single value
+model = Model(inputs=[x.input, y.input], outputs=z)
+</code></pre>
+<p>Here's the complete code for the model. This complex model includes two branches each with convolutional layers, followed by pooling and flattening layers. The outputs of these branches are concatenated and passed through additional dense layers, ending with a single output unit. </p>
+<p>Another powerful feature of Keras is subclassing API. Unlike the sequential and functional APIs, the subclassing API offers the most flexibility. This API allows you to define custom and dynamic models by subclassing the model class and implementing your own call() method. </p>
+<p>The subclassing API is particularly useful when you need to build models where the forward pass cannot be defined statically. It is widely used in research and development for custom training loops and non-standard architectures. </p>
+<pre><code class="language-python">import tensorflow as tf
+
+# Define your model by subclassing
+class MyModel(tf.keras.Model):
+    def __init__(self):
+        super(MyModel, self).__init__()
+        # Define layers
+        self.dense1 = tf.keras.layers.Dense(64, activation='relu')
+        self.dense2 = tf.keras.layers.Dense(10, activation='softmax')
+    def call(self, inputs):
+        # Forward pass
+        x = self.dense1(inputs)
+        return self.dense2(x)
+
+
+# Instantiate the model
+model = MyModel()
+
+# Define loss function and optimizer
+loss_fn = tf.keras.losses.SparseCategoricalCrossentropy()
+optimizer = tf.keras.optimizers.Adam()
+</code></pre>
+<p>To use the subclassing API, you need to subclass the model class and define your layers in the init method. Then you implement the forward pass in the call() method where you explicitly define how the layers are connected and how the data flows through the model. In this example, a custom model MyModel is created by subclassing tf.keras.model. The model consists of two dense layers where the first layer has 64 neurons with relu activation and the second layer has ten neurons with softmax activation. The subclassing API is especially useful in the following scenarios. </p>
+<ul>
+<li>
+<p>Models with dynamic architectures. When the models architectures need to be changed dynamically, such as in certain types of reinforcement learning models.</p>
+</li>
+<li>
+<p>Custom training loops, when you need more control over the training process and want to implement custom training loops.</p>
+</li>
+<li>
+<p>Research and prototyping, for experimenting with new types of layers or architectures that are not yet available in the standard keras API. </p>
+</li>
+</ul>
+<pre><code class="language-python"># Define number of epochs
+epochs = 5
+#Creat ea dummy training dataset
+(train_images, train_labels), _ = tf.keras.datasets.mnist.load_data()
+train_images = train_images.reshape(-1, 28*28).astype(&quot;float32&quot;) / 255
+# Flatten and normalize
+train_labels = train_labels.astype(np.int32)
+
+# Create a tf.data dataset for batching
+train_dataset = tf.data.Dataset.from_tensor_slices((train_images, train_labels)).batch(32)
+
+# Custom training loop
+for epoch in range(epochs):
+    print(f&quot;Epoch {epoch+1}/{epochs}&quot;)
+    for x_batch, y_batch in train_dataset:
+        with tf.GradientTape() as tape:
+            predictions = model(x_batch, training=True)
+            loss = loss_fn(y_batch, predictions)
+        gradients = tape.gradient(loss, model.trainable_variables)
+        optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+    print(f&quot;Epoch {epoch+1}, Loss: {loss.numpy():.4f}&quot;)
+</code></pre>
+<p>In this example, a custom training loop is implemented using a tf.GradientTape method. This provides more flexibility and control over the training process compared to the built in keras.fit method. </p>
+<pre><code class="language-python"># !pip install networkx
+# !pip install matplotlib
+
+import matplotlib.pyplot as plt
+import networkx as nx
+
+# Create a graph
+G = nx.DiGraph()
+
+# Adding nodes
+G.add_node(&quot;Input&quot;)
+G.add_node(&quot;Condition Check&quot;)
+G.add_node(&quot;Path 1 Layer 1&quot;)
+G.add_node(&quot;Path 1 Layer 2&quot;)
+G.add_node(&quot;Path 2 Layer 1&quot;)
+G.add_node(&quot;Path 2 Layer 2&quot;)
+G.add_node(&quot;Output&quot;)
+
+# Adding edges for dynamic flow
+G.add_edges_from([
+    (&quot;Input&quot;, &quot;Condition Check&quot;),
+    (&quot;Condition Check&quot;, &quot;Path 1 Layer 1&quot;),
+    (&quot;Path 1 Layer 1&quot;, &quot;Path 1 Layer 2&quot;),
+    (&quot;Path 1 Layer 2&quot;, &quot;Output&quot;),
+    (&quot;Condition Check&quot;, &quot;Path 2 Layer 1&quot;),
+    (&quot;Path 2 Layer 1&quot;, &quot;Path 2 Layer 2&quot;),
+    (&quot;Path 2 Layer 2&quot;, &quot;Output&quot;),
+])
+
+# Position nodes using a shell layout
+pos = nx.shell_layout(G)
+
+# Draw the graph
+plt.figure(figsize=(8, 6))
+nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=3000,
+        font_size=10, font_weight='bold', edge_color='gray')
+plt.title('Dynamic Graph Visualization')
+plt.show()
+</code></pre>
+<p>In addition, the subclassing API allows the use of dynamic graphs. </p>
+<p><img alt="Images/Keras_Functional_API_and_Subclassing_API/Keras_Functional_API_and_Subclassing_API_2" src="../Images/Keras_Functional_API_and_Subclassing_API/Keras_Functional_API_and_Subclassing_API_2.png" /></p>
+<p>This example code will first add edges for dynamic flow and then draw the graph with the title as shown in the output. In this video, you learned that Keras Functional API allows you to define layers and connect them in a graph of layers. The Functional API can handle models with multiple inputs and outputs. Another powerful feature of the functional API is shared layers, which are helpful when you want to apply the same transformation to multiple inputs. Subclassing API allows you to define custom and dynamic models by subclassing the model class and implementing your own call() method. The tf.GradientTape method provides more flexibility and control over the training process compared to the built in keras.fit method.</p>
+<p><a href="https://github.com/bbearce/code-journal/blob/master/docs/notes/data_science/Coursera/Keras_and_Tensorflow/JupyterNotebooks/M01L01_Lab_%20Implementing%20the%20Functional%20API%20in%20Keras.ipynb">https://github.com/bbearce/code-journal/blob/master/docs/notes/data_science/Coursera/Keras_and_Tensorflow/JupyterNotebooks/M01L01_Lab_%20Implementing%20the%20Functional%20API%20in%20Keras.ipynb</a></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Creating_Custom_Layers_in_Keras/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Creating_Custom_Layers_in_Keras/" class="btn btn-xs btn-link">
+        3. Creating Custom Layers in Keras
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Intro_to_Advanced_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Intro_to_Advanced_Keras/" class="btn btn-xs btn-link">
+        1. Intro to Advanced Keras
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

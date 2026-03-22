@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>10. Introducing Transpose Convolution - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Introducing Transpose Convolution", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Introduction_To_Transformers/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Introduction_To_Transformers/" class="btn btn-xs btn-link">
+        11. Introduction To Transformers
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Tensorflow_for_Image_Processing/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Tensorflow_for_Image_Processing/" class="btn btn-xs btn-link">
+        9. Tensorflow for Image Processing
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="introducing-transpose-convolution">Introducing Transpose Convolution</h1>
+<p><img alt="Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_1.png" src="../Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_1.png" /></p>
+<p>Welcome to this video on transpose convolution. ​After watching this video, ​you'll be able to explain the concept of ​transpose convolution and its applications, ​implement transpose convolution using Keras, ​list the best practices for ​using transpose convolution effectively. </p>
+<p><img alt="Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_2.png" src="../Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_2.png" /></p>
+<p>Transpose convolution is an essential technique ​in deep learning for image processing tasks. ​Also known as deconvolution, ​transpose convolution is particularly ​useful in applications such as image generation, ​super-resolution, and semantic segmentation. ​To understand transpose convolution, ​let's briefly revisit standard convolution. ​</p>
+<p><img alt="Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_3.png" src="../Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_3.png" /></p>
+<p>In convolution neural networks (CNNs), ​a convolution operation involves sliding a filter ​or kernel across the input image ​to produce a feature map. ​This process reduces the spatial dimensions of the input, ​which is useful for extracting features, ​but not for tasks requiring up-sampling. </p>
+<p><img alt="Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_4.png" src="../Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_4.png" /></p>
+<p>​Certain tasks, such as generating ​higher-resolution images from low-resolution inputs, ​require increasing the spatial dimensions of an image. ​Transpose convolution addresses this need ​by performing the inverse operation of convolution, ​effectively up-sampling the input to a larger size. </p>
+<p><img alt="Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_5.png" src="../Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_5.png" /></p>
+<p>​Transpose convolution works by ​inserting zeros between elements ​of the input feature map and ​then applying the convolution operation. ​This process increases ​the spatial dimensions of the input, ​creating an up-sampled feature map that ​retains the characteristics of the original input, ​but at a higher resolution. </p>
+<p><img alt="Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_6.png" src="../Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_6.png" /></p>
+<p>​Transpose convolutions are ​crucial in various applications. ​In generative adversarial networks, ​GANs, they generate images from latent vectors. ​In super-resolution tasks, ​they enhance image resolution. 
+​Additionally, they produce ​pixel-wise classification maps and ​semantic segmentation by ​up-sampling intermediate feature maps.</p>
+<pre><code class="language-bash">pyenv activate venv3.10.4
+</code></pre>
+<pre><code class="language-python">import os
+import logging
+import tensorflow as tf
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Conv2DTranspose
+
+# Set environment variables to suppress TensorFlow warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Ignore INFO, WARNING, and ERROR messages
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Turn off oneDNN custom operations
+
+# Use logging to suppress TensorFlow warnings
+logging.getLogger('tensorflow').setLevel(logging.ERROR)
+
+# Define the input layer
+input_layer = Input(shape=(28, 28, 1))
+
+# Add a transpose convolution layer
+transpose_conv_layer = Conv2DTranspose(
+    filters=32,
+    kernel_size=(3, 3),
+    strides=(2, 2),
+    padding='same',
+    activation='relu'
+)(input_layer)
+
+# Define the output layer
+output_layer = Conv2DTranspose(
+    filters=1,
+    kernel_size=(3, 3),
+    activation='sigmoid',
+    padding='same'
+)(transpose_conv_layer)
+
+# Create the model
+model = Model(inputs=input_layer, outputs=output_layer)
+
+# Compile the model
+model.compile(
+    optimizer='adam',
+    loss='mean_squared_error',
+    metrics=['accuracy']
+)
+
+# Display the model summary
+model.summary()
+</code></pre>
+<p>​Let's implement transpose convolution in Keras. ​You will create a simple model with an input layer, ​a transpose convolution layer, and an output layer. ​This code creates ​a transpose convolution layer with 32 filters, ​a three-by-three kernel, ​strides of two, and relu activation. ​This code creates the output layer of ​one filter and a sigmoid activation. ​This code creates a Keras model that connects ​the input and output layers ​through a transpose convolution layer. ​This code compiles the model with ​the Adam optimizer and mean squared error loss. </p>
+<p><img alt="Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_7.png" src="../Images/Introducing_Transpose_Convolution/Introducing_Transpose_Convolution_7.png" /></p>
+<p>​While using transpose convolution, ​be aware of potential issues ​such as checkerboard artifacts, ​which can occur due to ​uneven overlapping of the convolution kernels. ​To mitigate this, consider ​using additional techniques like ​blinear up-sampling followed ​by a regular convolution layer.</p>
+<pre><code class="language-python">import os
+import logging
+import tensorflow as tf
+from tensorflow.keras.models import Sequential, Model
+from tensorflow.keras.layers import Input, UpSampling2D, Conv2D
+
+# Set environment variables to suppress TensorFlow warnings
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'  # Ignore INFO, WARNING, and ERROR messages
+os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'  # Turn off oneDNN custom operations
+
+# Use logging to suppress TensorFlow warnings
+logging.getLogger('tensorflow').setLevel(logging.ERROR)
+
+# Define the input layer
+input_layer = Input(shape=(28, 28, 1))
+
+# Define a model with up-sampling followed by convolution to avoid checkerboard artifacts
+x = UpSampling2D(size=(2, 2))(input_layer)
+output_layer = Conv2D(
+    filters=64,
+    kernel_size=(3, 3),
+    padding='same'
+)(x)
+
+# Create the model
+model = Model(inputs=input_layer, outputs=output_layer)
+
+# Compile the model
+model.compile(
+    optimizer='adam',
+    loss='mean_squared_error',
+    metrics=['accuracy']
+)
+
+# Display the model summary
+model.summary()
+</code></pre>
+<p>​Let's see an example where you can reduce ​the artifacts and improve ​the quality of the up-sampled images. ​In this example, up-sampling ​2D performs up-sampling by a factor of two. ​This code applies a convolution layer ​to refine the up-sampled output.</p>
+<p>​In this video, you learned ​transpose convolution is useful in image generation, ​super-resolution, and semantic segmentation applications. ​It performs the inverse operation of convolution, ​effectively up-sampling the input image ​to a larger size of higher resolution. 
+​It works by inserting zeros between elements of ​the input feature map and ​then applying the convolution operation. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Introduction_To_Transformers/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Introduction_To_Transformers/" class="btn btn-xs btn-link">
+        11. Introduction To Transformers
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Tensorflow_for_Image_Processing/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Tensorflow_for_Image_Processing/" class="btn btn-xs btn-link">
+        9. Tensorflow for Image Processing
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

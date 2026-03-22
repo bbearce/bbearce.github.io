@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>11. Introduction To Transformers - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Introducing To Transformers", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Building_Transformers_for_Sequential_Data/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Building_Transformers_for_Sequential_Data/" class="btn btn-xs btn-link">
+        12. Building Transformers for Sequential Data
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Introducing_Transpose_Convolution/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Introducing_Transpose_Convolution/" class="btn btn-xs btn-link">
+        10. Introducing Transpose Convolution
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="introducing-to-transformers">Introducing To Transformers</h1>
+<p><img alt="Images/Introduction_To_Transformers/Introduction_To_Transformers_1.png" src="../Images/Introduction_To_Transformers/Introduction_To_Transformers_1.png" /></p>
+<p>​Welcome to this video on Transformers in Keras. ​After watching this video, ​you'll be able to define ​the importance of transformers in deep learning, ​explain the architecture and ​functionality of transformers, ​implement a transformer model using Keras with examples.</p>
+<p><img alt="Images/Introduction_To_Transformers/Introduction_To_Transformers_2.png" src="../Images/Introduction_To_Transformers/Introduction_To_Transformers_2.png" /></p>
+<p>​Transformers have transformed the field of ​natural language processing and are ​now being applied to a wide range of tasks, ​including image processing and time series prediction. ​Transformers were introduced by ​Vaswani Adal in the landmark paper, ​"Attention is All You Need". ​Unlike traditional sequence models such as RNNs, ​transformers leverage self attention mechanisms ​to process and put data in parallel, ​making them highly efficient and powerful. ​Transformers are now the backbone ​of state of the art models like BERT, ​GPT, and many others. </p>
+<p><img alt="Images/Introduction_To_Transformers/Introducing_To_Tansformers_3.png" src="../Images/Introduction_To_Transformers/Introduction_To_Transformers_3.png" /></p>
+<p>​The transformer model consists of two main parts, ​the encoder and the decoder. 
+​Both the encoder and the decoder ​are composed of layers that ​include self attention mechanisms ​and feed forward neural networks. ​Self-attention allows the model ​to weigh the importance of ​different words in a sentence ​when encoding a particular word. ​This is crucial for capturing ​dependencies that are far apart in the input sequence. ​The feed forward neural network layers help in ​transforming the input data ​after the self attention mechanism. ​Each layer in the encoder and decoder stacks ​multiple such sub layers enabling ​the model to learn complex representations. </p>
+<p><img alt="Images/Introduction_To_Transformers/5.png" src="../Images/Introduction_To_Transformers/Introduction_To_Transformers_4.png" /></p>
+<p>​Self-attention is the core component ​of the transformer architecture. ​It allows each word and ​the input to attend to every other word, ​making it possible to capture ​contexts and relationships more effectively. 
+​In self-attention, each word ​is represented by three vectors. ​Query, key and value. ​The attention score is computed as ​a dot product of the query and key vectors, ​which is then used to weigh the value vectors. ​This process allows the model to focus on ​different parts of the input ​sequence when making predictions. </p>
+<pre><code class="language-bash">pyenv activate venv3.10.4
+</code></pre>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras.layers import Layer
+
+class SelfAttention(Layer):
+    def __init__(self, d_model):
+        super(SelfAttention, self).__init__()
+        self.d_model = d_model
+        self.query_dense = tf.keras.layers.Dense(d_model)
+        self.key_dense = tf.keras.layers.Dense(d_model)
+        self.value_dense = tf.keras.layers.Dense(d_model)
+    def call(self, inputs):
+        q = self.query_dense(inputs)
+        k = self.key_dense(inputs)
+        v = self.value_dense(inputs)
+        attention_weights = tf.nn.softmax(
+            tf.matmul(q, k, transpose_b=True) /
+            tf.math.sqrt(tf.cast(self.d_model, tf.float32)),
+            axis=-1
+        )
+        output = tf.matmul(attention_weights, v)
+        return output
+
+
+# Example usage
+inputs = tf.random.uniform((1, 60, 512))  # Batch size of 1, sequence length of 60, and model dimension of 512
+self_attention = SelfAttention(d_model=512)
+output = self_attention(inputs)
+
+print(output.shape)  # Should print (1, 60, 512)
+</code></pre>
+<p>​In this code example, ​the self attention class ​defines the self attention mechanism. ​The init method initializes the dense layers for query, ​key and value projections. ​The call method computes the attention weights ​and applies them to the value vectors to get the output. 
+​The tf.nn.softmax parameter applies ​the Softmax function to ​the attention scores to get the attention weights. </p>
+<p><img alt="Images/Introduction_To_Transformers/Introducing_To_Tansformers_5.png" src="../Images/Introduction_To_Transformers/Introduction_To_Transformers_5.png" /></p>
+<p>​The transformer encoder is composed of multiple layers, ​each containing a self attention mechanism ​followed by a feed forward neural network. ​Each layer also includes ​residual connections and ​layer normalization to stabilize training. ​The input to the encoder is ​first embedded and then passed through ​positional encoding to add ​information about the position of words in the sequence. ​This helps the model understand the order of words. </p>
+<pre><code class="language-python">class TransformerEncoder(Layer):
+    def __init__(self, d_model, num_heads, dff, rate=0.1):
+        super(TransformerEncoder, self).__init__()
+        self.mha = tf.keras.layers.MultiHeadAttention(
+            num_heads=num_heads,
+            key_dim=d_model
+        )
+        self.ffn = tf.keras.Sequential([
+            tf.keras.layers.Dense(dff, activation='relu'),
+            tf.keras.layers.Dense(d_model)
+        ])
+    def call(self, x, training, mask):
+        attn_output = self.mha(x, x, x, attention_mask=mask)  # Self attention
+        attn_output = self.dropout1(attn_output, training=training)
+        out1 = self.layernorm1(x + attn_output)  # Residual connection and normalization
+        ffn_output = self.ffn(out1)  # Feed forward network
+        ffn_output = self.dropout2(ffn_output, training=training)
+        out2 = self.layernorm2(out1 + ffn_output)  # Residual connection and normalization
+        return out2
+
+
+# Example usage
+encoder = TransformerEncoder(d_model=512, num_heads=8, dff=2048)
+x = tf.random.uniform((1, 60, 512))
+mask = None
+</code></pre>
+<p>​In the example, the transformer encoder class ​defines the transformer encoder. ​The init method initializes the multi head attention, ​feed forward network, ​layer normalization, and dropout layers. 
+​The multi head attention method ​applies multi head attention to the input. ​The call method applies ​self attention, residual connection, ​normalization, feed forward network, ​and another residual connection and normalization. </p>
+<p><img alt="Images/Introduction_To_Transformers/Introducing_To_Tansformers_6.png" src="../Images/Introduction_To_Transformers/Introduction_To_Transformers_6.png" /></p>
+<p>​The transformer decoder is similar to the encoder, ​but with an additional cross attention mechanism ​to attend to the encoders output. ​This allows the decoder to generate ​sequences based on the context provided by the encoder. ​The decoder takes the target sequence as input, ​applies self attention and cross ​attention with the encoders output, ​and then passes through a feed forward neural network. </p>
+<pre><code class="language-python">class TransformerDecoder(Layer):
+    def __init__(self, d_model, num_heads, dff, rate=0.1):
+        super(TransformerDecoder, self).__init__()
+        self.mha1 = tf.keras.layers.MultiHeadAttention(
+            num_heads=num_heads,
+            key_dim=d_model
+        )
+        self.mha2 = tf.keras.layers.MultiHeadAttention(
+            num_heads=num_heads,
+            key_dim=d_model
+        )
+        self.ffn = tf.keras.Sequential([
+            tf.keras.layers.Dense(dff, activation='relu'),
+            tf.keras.layers.Dense(d_model)
+        ])
+        self.layernorm1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
+        self.layernorm2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
+        self.layernorm3 = tf.keras.layers.LayerNormalization(epsilon=1e-6)
+        self.dropout1 = tf.keras.layers.Dropout(rate)
+        self.dropout2 = tf.keras.layers.Dropout(rate)
+        self.dropout3 = tf.keras.layers.Dropout(rate)
+
+    def call(self, x, enc_output, training, look_ahead_mask, padding_mask):
+        attn1 = self.mha1(x, x, x, attention_mask=look_ahead_mask)  # Self attention
+        attn1 = self.dropout1(attn1, training=training)
+        out1 = self.layernorm1(x + attn1)  # Residual connection and normalization
+
+        attn2 = self.mha2(
+            out1,
+            enc_output,
+            enc_output,
+            attention_mask=padding_mask
+        )  # Cross attention
+        attn2 = self.dropout2(attn2, training=training)
+        out2 = self.layernorm2(out1 + attn2)  # Residual connection and normalization
+
+        ffn_output = self.ffn(out2)  # Feed forward network
+        ffn_output = self.dropout3(ffn_output, training=training)
+        out3 = self.layernorm3(out2 + ffn_output)  # Residual connection and normalization
+
+        return out3
+</code></pre>
+<p>​In the example, the transformer decoder class ​defines the transformer decoder. ​The init method initializes the multi head attention, ​feed forward network, layer normalization, ​and drop out layers. 
+​The multi head attention method applies multi ​head attention to the input and encoder output. ​The call method applies self attention, ​cross attention, residual connection, ​normalization, feed forward network, ​and another residual connection and normalization. </p>
+<p>​In this video, you learned ​the transformer model consists of two main parts, ​the encoder and the decoder. ​Both the encoder and decoder are composed of layers that ​include self attention mechanisms ​and feed forward neural networks. ​Transformers have become a cornerstone in deep learning, ​especially in natural language processing. ​Understanding and implementing transformers will ​enable you to build powerful models for various tasks. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Building_Transformers_for_Sequential_Data/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Building_Transformers_for_Sequential_Data/" class="btn btn-xs btn-link">
+        12. Building Transformers for Sequential Data
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Introducing_Transpose_Convolution/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Introducing_Transpose_Convolution/" class="btn btn-xs btn-link">
+        10. Introducing Transpose Convolution
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

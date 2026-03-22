@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>3. Creating Custom Layers in Keras - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Creating Custom Layers in Keras", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Overview_of_Tensorflow_2.x/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Overview_of_Tensorflow_2.x/" class="btn btn-xs btn-link">
+        4. Overview of Tensorflow 2.x
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Keras_Functional_API_and_Subclassing_API/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Keras_Functional_API_and_Subclassing_API/" class="btn btn-xs btn-link">
+        2. Keras Functional API and Subclassing API
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="creating-custom-layers-in-keras">Creating Custom Layers in Keras</h1>
+<p><img alt="Images/Creating_Custom_Layers_in_Keras/Creating_Custom_Layers_in_Keras_1" src="../Images/Creating_Custom_Layers_in_Keras/Creating_Custom_Layers_in_Keras_1.png" /></p>
+<p>​After watching this video, you'll be able to explain the need of custom layers in ​neural network models, describe the basics of creating custom layers, ​implement a custom layer in a model. </p>
+<p><img alt="Images/Creating_Custom_Layers_in_Keras/Creating_Custom_Layers_in_Keras_2" src="../Images/Creating_Custom_Layers_in_Keras/Creating_Custom_Layers_in_Keras_2.png" /></p>
+<p>Custom layers allow you to define your own operations in a neural network, ​giving you the flexibility to tailor your models to specific tasks and ​experiment with new ideas. ​Whether you're working on cutting-edge research or ​building a specialized application, understanding how to create custom layers ​can greatly enhance your ability to innovate and solve complex problems. </p>
+<p><img alt="Images/Creating_Custom_Layers_in_Keras/Creating_Custom_Layers_in_Keras_3" src="../Images/Creating_Custom_Layers_in_Keras/Creating_Custom_Layers_in_Keras_3.png" /></p>
+<p>​Creating custom layers is essential when you need specific functionalities ​not provided by Keras. ​Standard layers like dense, convolutional or LSTM cover a broad range of use cases, ​but sometimes you need something more specific. ​Custom layers allow you to implement novel research ideas. 
+​If you're developing new algorithms or techniques, ​custom layers let you implement them directly into your models. ​Optimize performance, tailor layers to better suit your specific data or ​computational constraints. ​Enhance flexibility, custom layers enable you to define unique behaviors that ​aren't possible with standard layers. ​Improve readability and maintenance, encapsulate complex logic and ​reusable components, making your code cleaner and easier to manage. ​By creating custom layers, you unlock the full potential of Keras, ​allowing for more sophisticated and fine-tuned models.</p>
+<pre><code class="language-bash">pyenv activate venv3.10.4
+</code></pre>
+<pre><code class="language-python">from tensorflow.keras.layers import Layer
+
+class MyCustomLayer(Layer):
+    def __init__(self, units=32, **kwargs):
+        super(MyCustomLayer, self).__init__(**kwargs)
+        self.units = units
+    def build(self, input_shape):
+        self.w = self.add_weight(
+            shape=(input_shape[-1], self.units),
+            initializer='random_normal',
+            trainable=True
+        )
+        self.b = self.add_weight(
+            shape=(self.units,),
+            initializer='zeros',
+            trainable=True
+        )
+    def call(self, inputs):
+        return tf.matmul(inputs, self.w) + self.b
+
+
+</code></pre>
+<p>​Lets look at the basic structure of a custom layer in keras. ​Here's an example of a simple custom layer that performs a dense operation. 
+​To create a custom layer, you need the subclass, ​the layer class from from tensorflow.keras.layers. ​This involves implementing three key methods, ​init, that initializes the layer's attributes. ​build, that creates the layer's weights. ​This method is called once during the first call to the layer. ​call, that defines the forward path logic.</p>
+<pre><code class="language-python">class CustomDenseLayer(Layer):
+    def __init__(self, units=32):
+        super(CustomDenseLayer, self).__init__()
+        self.units = units
+    def build(self, input_shape):
+        self.w = self.add_weight(
+            shape=(input_shape[-1], self.units),
+            initializer='random_normal',
+            trainable=True
+        )
+        self.b = self.add_weight(
+            shape=(self.units,),
+            initializer='zeros',
+            trainable=True
+        )
+    def call(self, inputs):
+        return tf.nn.relu(tf.matmul(inputs, self.w) + self.b)
+</code></pre>
+<p>​Now let's implement a custom dense layer that includes activation logic. ​You will define the init, build, and ​call methods to create a fully functional layer. ​This custom layer will perform a dense operation followed by a relu activation. Finally, you will use your custom layer in a Keras model. 
+​Integrating custom layers into a model is straightforward, ​just like using any other Keras layer. </p>
+<pre><code class="language-python">from tensorflow.keras.models import Sequential
+
+model = Sequential([
+    CustomDenseLayer(64),
+    CustomDenseLayer(10)
+])
+
+model.compile(optimizer='adam', loss='categorical_crossentropy')
+</code></pre>
+<p>​Here's an example of a simple sequential model using a custom dense layer. ​In this video, you learned that creating custom layers in keras is ​a powerful way to extend the functionality of your neural networks. ​It allows you to tailor your models to specific needs, ​implement novel research ideas, and optimize performance for unique tasks. ​By practicing and experimenting with custom layers, you'll gain a deeper ​understanding of how neural networks work and enhance your ability to innovate. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Overview_of_Tensorflow_2.x/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Overview_of_Tensorflow_2.x/" class="btn btn-xs btn-link">
+        4. Overview of Tensorflow 2.x
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Keras_Functional_API_and_Subclassing_API/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Keras_Functional_API_and_Subclassing_API/" class="btn btn-xs btn-link">
+        2. Keras Functional API and Subclassing API
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
