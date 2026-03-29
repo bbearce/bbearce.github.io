@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>15. Tensorflow for Sequential Data - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Tensorflow for Sequential Data", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Transformers_For_Time_Series_Predictions/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Transformers_For_Time_Series_Predictions/" class="btn btn-xs btn-link">
+        14. Transformers For Time Series Predictions
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="tensorflow-for-sequential-data">Tensorflow for Sequential Data</h1>
+<p>​Welcome to this video on how to ​develop TensorFlow for sequential data. ​After watching this video, ​you'll be able to:</p>
+<ul>
+<li>Describe ​TensorFlow's capabilities for handling sequential data.   </li>
+<li>​Demonstrate how TensorFlow can be used to ​process and analyze sequential data with examples. </li>
+</ul>
+<p>​Sequential data, such as time series, text, ​and audio, is a type of data ​where the order of the data points is crucial. ​TensorFlow offers a range ​of tools and functionalities that ​makes it well-suited for ​processing and analyzing sequential data. </p>
+<p><img alt="Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_1.png" src="../Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_1.png" /></p>
+<p>​Sequential data is characterized by ​its temporal or sequential nature, ​meaning that the order in which ​the data points appear is important. ​Examples include time series data ​like stock prices, temperature readings, ​and sensor data, text data, ​like sentences and paragraphs, ​and audio data, like speech and music. 
+​Analyzing and making predictions on such data requires ​models that can capture ​the dependencies and patterns within the sequences. </p>
+<p><img alt="Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_2.png" src="../Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_2.png" /></p>
+<p>​TensorFlow provides several layers and ​tools specifically designed for sequential data. ​These include recurrent neural networks, ​RNNs, long short-term memory networks, ​LSTMs, gated recurrent units, ​GRUs, convolutional layers for sequence data, Conv1D. ​These patterns help in capturing ​the temporal dependencies and ​patterns in sequential data, ​making TensorFlow a powerful framework ​for tasks like time series forecasting, ​natural language processing, and speech recognition. </p>
+<p><img alt="Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_3.png" src="../Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_3.png" /></p>
+<p>​Let's start by building ​a simple RNN model using TensorFlow. ​You will use a time series data set and ​create an RNN model to predict future values. ​The model will consist of ​an RNN layer followed by ​a dense layer for output prediction. </p>
+<pre><code class="language-bash">pyenv activate venv3.10.4
+</code></pre>
+<pre><code class="language-python">import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import SimpleRNN, Dense
+
+# Generate some example sequential data
+import numpy as np
+
+# Create a simple sine wave dataset
+def create_sine_wave_dataset(seq_length=100):
+    x = np.linspace(0, 50, seq_length)
+    y = np.sin(x)
+    return y
+
+data = create_sine_wave_dataset()
+time_steps = np.arange(len(data))
+
+# Prepare the dataset
+def prepare_data(data, time_steps, time_window):
+    X, Y = [], []
+    for i in range(len(data) - time_window):
+        X.append(data[i:i + time_window])
+        Y.append(data[i + time_window])
+    return np.array(X), np.array(Y)
+
+time_window = 10
+X, Y = prepare_data(data, time_steps, time_window)
+</code></pre>
+<p>​In this example, first generate ​a simple sine wave data set for ​demonstration and define its dimensions. ​Then prepare the data set by ​creating sequences and corresponding labels. </p>
+<pre><code class="language-python"># Reshape the data to match RNN input shape
+X = X.reshape(X.shape[0], X.shape[1], 1)
+
+# Build the RNN model
+model = Sequential([
+    SimpleRNN(50, activation='relu', input_shape=(time_window, 1)),
+    Dense(1)
+])
+</code></pre>
+<p>​Now build an RNN model using TensorFlows, ​simple RNN, and dense layers.</p>
+<pre><code class="language-python"># Compile the model
+model.compile(optimizer='adam', loss='mse')
+
+# Train the model
+model.fit(X, Y, epochs=20, batch_size=16)
+
+# Make predictions
+predictions = model.predict(X)
+
+# Plot the results
+import matplotlib.pyplot as plt
+
+plt.plot(time_steps, data, label='True Data')
+plt.plot(time_steps[time_window:], predictions, label='Predictions')
+plt.xlabel('Time Steps')
+plt.ylabel('Value')
+plt.legend()
+plt.show()
+</code></pre>
+<p>​Finally, compile and train the model. ​Make predictions, and plot the results. ​</p>
+<pre><code class="language-python">from tensorflow.keras.layers import LSTM
+
+# Build the LSTM model
+lstm_model = Sequential([
+    LSTM(50, activation='relu', input_shape=(time_window, 1)),
+    Dense(1)
+])
+
+# Compile the model
+lstm_model.compile(optimizer='adam', loss='mse')
+
+# Train the model
+lstm_model.fit(X, Y, epochs=20, batch_size=16)
+
+# Make predictions
+lstm_predictions = lstm_model.predict(X)
+
+
+# Plot the results
+import matplotlib.pyplot as plt
+
+plt.plot(time_steps, data, label='True Data')
+plt.plot(time_steps[time_window:], lstm_predictions, label='LSTM Predictions')
+plt.xlabel('Time Steps')
+plt.ylabel('Value')
+plt.legend()
+plt.show()
+</code></pre>
+<p>Now, let's build an LSTM model. ​LSTMs are a type of RNN ​that are capable of learning long-term dependencies, ​making them suitable for sequential data ​with long-term patterns. 
+​You will use the same data set and ​structure the model similar to your RNN model, ​but with LSTM layers. ​In this example, replace ​the simple RNN layer with ​an LSTM layer to build the LSTM model. ​Next, compile and train the LSTM model. ​Finally, make predictions and plot ​the results to compare with the true data. </p>
+<p><img alt="Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_4.png" src="../Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_4.png" /></p>
+<p>​Next, let's see how TensorFlow ​can be used to handle text data. ​Text data requires specific pre-processing steps ​such as tokenization and padding. ​TensorFlow's text vectorization layer helps in ​converting text data into ​numerical format suitable for model training. </p>
+<pre><code class="language-python">from tensorflow.keras.layers import TextVectorization
+
+# Sample text data
+texts = [
+    &quot;Hello, how are you?&quot;,
+    &quot;I am fine, thank you.&quot;,
+    &quot;How about you?&quot;,
+    &quot;I am good too.&quot;
+]
+
+# Define the TextVectorization layer
+vectorizer = TextVectorization(
+    output_mode='int',
+    max_tokens=100,
+    output_sequence_length=10
+)
+
+# Adapt the vectorizer to the text data
+vectorizer.adapt(texts)
+
+# Vectorize the text data
+text_vectorized = vectorizer(texts)
+
+print(&quot;Vectorized text data:\n&quot;, text_vectorized.numpy())
+</code></pre>
+<p>​In this example, first, ​define sample text data. ​Then create a text vectorization layer ​to tokenize and pad the text sequences. ​Finally, adapt the vectorizer to ​the text data and transform ​the text into numerical format. </p>
+<p><img alt="Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_5.png" src="../Images/Tensorflow_for_Sequential_Data/Tensorflow_for_Sequential_Data_5.png" /></p>
+<p>​In this video, you learned ​sequential data is characterized ​by its temporal or sequential nature, ​meaning that the order in which ​the data points appear is important. ​TensorFlow provides several layers and ​tools specifically designed for sequential data. ​These include recurrent neural networks, ​RNNs, long short-term memory networks, ​LSTMs, gated recurrent units, ​GRUs, convolutional layers for sequence data, Conv1D. ​Text data requires specific pre-processing steps ​such as tokenization and padding. 
+​TensorFlow's text vectorization layer helps in ​converting text data into ​numerical format suitable for model training. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Transformers_For_Time_Series_Predictions/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Transformers_For_Time_Series_Predictions/" class="btn btn-xs btn-link">
+        14. Transformers For Time Series Predictions
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
