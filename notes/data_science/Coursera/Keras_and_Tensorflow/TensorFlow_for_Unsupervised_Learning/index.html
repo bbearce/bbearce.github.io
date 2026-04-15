@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>20. TensorFlow for Unsupervised Learning - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "TensorFlow for Unsupervised Learning", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-link">
+        19. Generative Adversarial Networks
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="tensorflow-for-unsupervised-learning">TensorFlow for Unsupervised Learning</h1>
+<p>​Welcome to this video on ​TensorFlow for unsupervised learning. ​After watching this video, ​you'll be able to explain the use of ​TensorFlow for unsupervised learning tasks. ​Demonstrate how to implement ​a basic unsupervised learning model using TensorFlow. </p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_1.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_1.png" /></p>
+<p>Unsupervised learning is a type of machine learning ​where the model is trained on ​data without labeled responses. ​This approach is essential for discovering ​hidden patterns and structures within the data. ​Common applications include clustering, ​dimensionality reduction, and anomaly detection. ​Let's learn more about unsupervised applications. </p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_2.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_2.png" /></p>
+<p>​Clustering involves grouping ​similar data points together. </p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_3.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_3.png" /></p>
+<p>​Dimensionality reduction includes reducing the number of ​features in a dataset ​while retaining important information.</p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_4.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_4.png" />
+<img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_5.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_5.png" /></p>
+<p>​Anomaly detection involves identifying ​unusual data points that do not fit the general pattern. ​These applications are widely used in ​various domains such as customer segmentation, ​image compression, and fraud detection.</p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_6.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_6.png" /></p>
+<p>​TensorFlow provides powerful tools ​for implementing unsupervised learning models. ​With its flexible architecture and extensive libraries, ​TensorFlow can handle ​various unsupervised learning tasks efficiently. ​In this section, you will focus on ​clustering and dimensionality reduction using TensorFlow. </p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_7.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_7.png" /></p>
+<p>​Let's start by building a basic ​clustering model using TensorFlow. ​You will use the K means algorithm, ​which is a popular clustering technique. ​In this code, you load and pre process the MNIST ​dataset by normalizing the pixel values ​and reshaping the images. ​You then apply the K means clustering ​algorithm to group the images into ten clusters. </p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_8.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_8.png" />
+<img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_9.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_9.png" /></p>
+<p>​Finally, you display a few images ​from each cluster to visualize the results. ​Next, you will build an auto encoder ​for dimensionality reduction. ​An auto encoder is a type of neural network used to learn ​efficient representations of data by compressing ​the input into a lower dimensional space ​and reconstructing it back. 
+​In this code, you define ​an auto encoder with an input layer, ​an encoding layer, a bottleneck layer, ​a decoding layer, and an output layer. ​The model is trained to reconstruct ​the input data from its compressed representation. ​This process effectively reduces ​the dimensionality of the data. </p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_10.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_10.png" /></p>
+<p>After training the Auto encoder, ​you evaluate its performance by ​visualizing the compressed representations. ​Let's plot the two D representation of the data. ​In this code, you extract ​the compressed representations from ​the bottleneck layer of the auto encoder. ​You then use the TSNE, ​a technique for visualizing ​high dimensional data and 2D to plot the compressed data. 
+​The resulting scatter plot shows how ​the data points are grouped ​in the lower dimensional space.</p>
+<p><img alt="Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_11.png" src="../Images/TensorFlow_for_Unsupervised_Learning/TensorFlow_for_Unsupervised_Learning_11.png" /></p>
+<p>​In this video, you learned that. ​Unsupervised learning is a powerful approach ​for discovering hidden patterns and data, ​and TensorFlow provides robust tools ​to facilitate these tasks. ​Common applications include clustering, ​dimensionality reduction, and anomaly detection. ​These applications are widely used in ​various domains such as customer segmentation, ​image compression, and fraud detection.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-link">
+        19. Generative Adversarial Networks
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

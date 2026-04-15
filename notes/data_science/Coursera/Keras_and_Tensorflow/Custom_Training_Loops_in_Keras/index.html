@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Custom Training Loops in Keras - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Custom Training Loops in Keras", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="custom-training-loops-in-keras">Custom Training Loops in Keras</h1>
+<p>​Welcome to this video on custom training loops in Keras. ​After watching this video, ​you'll be able to describe ​a basic structure of a custom training loop, ​explain the benefits of a custom training loop, ​implement a custom training loop. </p>
+<p><img alt="Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_1.png" src="../Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_1.png" /></p>
+<p>​Let's begin by exploring ​the basic structure of a custom training loop. ​It involves several key components. ​The dataset, the model, ​the optimizer, and the loss function. ​Let's break down each component. </p>
+<p><img alt="Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_2.png" src="../Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_2.png" /></p>
+<p>​Here's a code example of setting up the environment. 
+​First, set up your environment by importing ​the necessary libraries and preparing your dataset. ​Next, prepare a simple dataset. ​In this example, you import TensorFlow and Keras modules, ​load the MNIST dataset, normalize the data, ​and then create a TensorFlow dataset, ​and batch it for training. </p>
+<p><img alt="Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_3.png" src="../Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_3.png" /></p>
+<p><img alt="Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_4.png" src="../Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_4.png" /></p>
+<p>​Now let's look at how to define ​the loss function and optimizer. ​The loss function measures how well ​the model's predictions match the true labels. ​The optimizer updates the model's weights ​to minimize the loss. ​Now let's implement the custom training loop. 
+​You will iterate over the dataset, ​compute the loss, and apply ​gradients to update the model's weights. ​First, create a simple model with a flatten layer. ​Next, define the loss function and optimizer. ​Finally, implement the custom training loop. ​In this loop, you iterate over ​the training dataset for a specified number of epochs. </p>
+<p><img alt="Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_5.png" src="../Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_5.png" /></p>
+<p>​For each batch, compute ​the logits by passing the inputs through the model. ​You can then calculate ​the loss using the specified loss function. 
+​To compute gradients and update ​model weights, we use tf.GradientTape. ​TF.GradientTape is a TensorFlow API ​that records operations for automatic differentiation, ​which is a technique used to compute ​the gradients required to ​optimize a model during training. ​By using tf.GradientTape, ​you can watch the forward pass through the network, ​which allows TensorFlow to record ​all operations on the watched variables. ​These recorded operations are then used to compute ​the gradients of the loss with ​respect to each weight in the network. ​Using these gradients, the optimizer ​updates the model weights to minimize the loss. ​This technique allows for ​fine control over each training step, ​making it possible to implement ​complex training procedures and custom algorithms. </p>
+<p><img alt="Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_6.png" src="../Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_6.png" /></p>
+<p>​Custom training loops include several benefits. 
+​They provide more granular control ​over the training process, ​allowing for the implementation of ​custom loss functions and optimization strategies. ​They also enable advanced logging and monitoring, ​which can be crucial for research and development. ​Custom training loops also offer ​integration with custom operations and layers. </p>
+<p><img alt="Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_7.png" src="../Images/Custom_Training_Loops_in_Keras/Custom_Training_Loops_in_Keras_7.png" /></p>
+<p>​In this video, you learned that ​a custom training loop consists of a dataset, ​model, optimizer, and the loss function. ​To implement the custom training loop, ​you iterate over the dataset, ​compute the loss, and apply ​gradients to update the model's weights. ​Some of the benefits of custom training loops ​include custom loss functions and metrics, ​advanced logging and monitoring, ​flexibility for research, and ​integration with custom operations and layers. </p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

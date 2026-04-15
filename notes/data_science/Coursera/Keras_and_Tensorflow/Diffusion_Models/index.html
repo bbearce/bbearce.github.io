@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>18. Diffusion Models - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Diffusion Models", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-link">
+        19. Generative Adversarial Networks
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Building_Autoencoders_in_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Building_Autoencoders_in_Keras/" class="btn btn-xs btn-link">
+        17. Building Autoencoders in Keras
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="diffusion-models">Diffusion Models</h1>
+<p>Welcome to this video on how to build diffusion models. ​After watching this video, ​you'll be able to: Explain the concept of ​diffusion models and their ​significance in machine learning. ​Demonstrate how to implement ​a basic diffusion model using Keras. </p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_1.png" src="../Images/Diffusion_Models/Diffusion_Models_1.png" /></p>
+<p>​Diffusion models are a class ​of generative models that have recently ​gained popularity for their ability to ​produce high-quality synthetic data. ​They are used in various applications, ​including image generation and enhancement. ​</p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_2.png" src="../Images/Diffusion_Models/Diffusion_Models_2.png" /></p>
+<p>Diffusion models are probabilistic models that generate ​data by iteratively refining a noisy initial sample. ​They start with a random noise and gradually apply ​a series of transformations to ​produce a coherent data sample. 
+​The process is akin to ​simulating the physical process of diffusion, ​where particles spread out from regions of ​high concentration to regions of low concentration. ​</p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_3.png" src="../Images/Diffusion_Models/Diffusion_Models_3.png" /></p>
+<p>Diffusion models work by defining ​a forward process and a reverse process. ​The forward process adds ​noise to the data over a series of ​steps while the reverse process ​learns to denoise the data step by step, ​ultimately reconstructing the original data. ​This reverse denoising process is what allows ​diffusion models to generate ​high-quality samples from random noise. </p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_4.png" src="../Images/Diffusion_Models/Diffusion_Models_4.png" /></p>
+<p>​Diffusion models have several applications ​in the field of machine learning. ​Image generation, creating ​realistic images from random noise. ​Image denoising, removing noise ​from the images to enhance quality. 
+​Data augmentation, generating synthetic data ​to augment training data sets. ​These applications demonstrate the versatility ​and power of diffusion models in various domains.</p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_5.png" src="../Images/Diffusion_Models/Diffusion_Models_5.png" />
+<img alt="Images/Diffusion_Models/Diffusion_Models_6.png" src="../Images/Diffusion_Models/Diffusion_Models_6.png" /></p>
+<p>​Let's build a basic diffusion model in Keras. ​You will start by defining ​the model architecture and then ​train it to learn the denoising process. ​In this code, you define ​a simple convolutional neural network, ​CNN, as your diffusion model. ​The model takes a noisy 28 by 28 image as input, ​processes it through a series of ​convolutional and dense layers, ​and outputs a denoised image of the same size. ​You compile the model using ​the Adam optimizer and binary cross-entropy loss. </p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_7.png" src="../Images/Diffusion_Models/Diffusion_Models_7.png" />
+<img alt="Images/Diffusion_Models/Diffusion_Models_8.png" src="../Images/Diffusion_Models/Diffusion_Models_8.png" /></p>
+<p>​Next, you will prepare the MNIST dataset. ​add noise to the images ​train your diffusion model to denoise them. ​In this code, you load and pre-process ​the MNIST dataset set by normalizing the pixel values, ​and adding random noise to the images. ​The model is then trained using noisy images as input, ​and the original images as the target, ​teaching the model to denoise the images. </p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_9.png" src="../Images/Diffusion_Models/Diffusion_Models_9.png" />
+<img alt="Images/Diffusion_Models/Diffusion_Models_10.png" src="../Images/Diffusion_Models/Diffusion_Models_10.png" /></p>
+<p>​After training, you can evaluate ​the diffusion model's performance by ​visualizing the denoised images. ​Let's compare the original, ​noisy, and denoised images. ​This code generates predictions using ​the trained diffusion model and visualizes the results. ​By displaying the original, ​noisy, and denoised images side by side ​you can see how effectively the model ​has learned to remove noise from the images. </p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_11.png" src="../Images/Diffusion_Models/Diffusion_Models_11.png" /></p>
+<p>​You can further improve the ​diffusion model by fine tuning it. ​Fine tuning involves adjusting ​the models parameters and retraining ​it for additional epochs. ​In this code, you unfreeze ​the last four layers of the ​diffusion model and recompile it. ​Training the model again for ​a few more epochs can ​help in fine tuning its performance, ​leading to better denoising results. </p>
+<p><img alt="Images/Diffusion_Models/Diffusion_Models_12.png" src="../Images/Diffusion_Models/Diffusion_Models_12.png" /></p>
+<p>​In this video, you learned ​diffusion models are powerful tools for generating tasks, ​capable of producing high-quality data samples, ​and enhancing image quality. ​They are probabilistic models that generate data ​by iteratively refining a noisy initial sample. ​The process is akin to simulating ​the physical process of diffusion where ​particles spread out from regions of ​high concentration to regions of low concentration. 
+​Diffusion models work by defining ​a forward process and a reverse process. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Generative_Adversarial_Networks/" class="btn btn-xs btn-link">
+        19. Generative Adversarial Networks
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Building_Autoencoders_in_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Building_Autoencoders_in_Keras/" class="btn btn-xs btn-link">
+        17. Building Autoencoders in Keras
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

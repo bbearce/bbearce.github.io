@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Advanced Keras Techniques - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Advanced Keras Techniques", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+
+    <h1 id="advanced-keras-techniques">Advanced Keras Techniques</h1>
+<p>Welcome to this video on advanced Keras techniques. ​After watching this video, ​you'll be able to list the advanced Keras techniques. ​Demonstrate each technique with code example.</p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_1.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_1.png" /></p>
+<p>​Keras offers a variety of advanced techniques that ​can significantly enhance your model development process. ​These techniques include custom training loops, ​specialized layers, and advanced callback functions. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_2.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_2.png" /></p>
+<p>​Custom training loops give ​more control over the training process. ​While Keras fit method is powerful and convenient, ​custom training loops allows you to tailor ​the training process to your specific needs. 
+​This can be particularly useful for implementing ​complex training strategies or custom loss functions. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_3.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_3.png" /></p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_4.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_4.png" /></p>
+<p>​Let's look at a simple example ​of a custom training loop, ​you will use a basic neural network in the code. ​In this example, you define ​a simple model and create an optimizer and loss function. ​The training loop iterates over ​the training dataset for a specified number of epochs. ​Within each iteration, we use a gradient tape ​to record operations for automatic differentiation. ​The gradients are then applied ​to the models trainable weights. ​This approach allows for greater flexibility ​compared to the built-in fit method. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_5.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_5.png" /></p>
+<p>​Keras allows you to create ​specialized layers to extend ​the functionality of your model, ​such as custom dense layers and Lambda layers. ​These layers can implement ​advanced custom activation functions. ​This model can be useful for implementing ​custom layers that aren't ​available in the standard Keras library. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_6.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_6.png" /></p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_7.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_7.png" /></p>
+<p>​Let's look at an example of a custom dense layer. ​In this example, you define ​a custom dense layer by sub classing the layer class. ​The build method initializes the weights and ​biases while the call method defines the forward pass. ​This layer can then be used in ​a Keras model like any other layer. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_8.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_8.png" /></p>
+<p>​Callback functions in Keras are a powerful tool to ​customize and extend the behavior ​of your model training process. ​They allow you to monitor training, ​implement early stopping, save ​model checkpoints, and custom callbacks. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_9.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_9.png" /></p>
+<p>​Let's create a custom callback that ​logs additional metrics during training. ​In this example, you define ​a custom callback by sub classing the callback class. ​The on epoch end method is overridden to ​print the loss and accuracy at the end of each epoch. ​This custom callback is then ​passed to the fit method during model training. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_10.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_10.png" /></p>
+<p>​Optimizing your models is ​crucial for achieving the best performance. 
+​TensorFlow offers various tools for model optimization, ​including mixed precision training, ​and the TensorFlow model optimization toolkit.</p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_11.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_11.png" /></p>
+<p>​In this example, you enable mixed precision training by ​setting the global policy to mixed underscore float 16. ​This allows TensorFlow to use ​16 bit floats where possible. ​Improving performance and reducing ​memory usage without compromising model accuracy. </p>
+<p><img alt="Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_12.png" src="../Images/Advanced_Keras_Techniques/Advanced_Keras_Techniques_12.png" /></p>
+<p>​In this video, you learned ​advanced Keras techniques include custom training loops, ​specialized layers, advanced callback functions, ​and model optimization with TensorFlow. ​These techniques will help you create ​more flexible and efficient deep learning models. </p>
+
+  <br>
+    
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
