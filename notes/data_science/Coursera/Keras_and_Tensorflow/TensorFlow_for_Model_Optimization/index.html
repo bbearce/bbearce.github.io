@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>23. TensorFlow for Model Optimization - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "TensorFlow for Model Optimization", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Model_Optimization/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Model_Optimization/" class="btn btn-xs btn-link">
+        22. Model Optimization
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="tensorflow-for-model-optimization">TensorFlow for Model Optimization</h1>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_1.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_1.png" /></p>
+<p>Welcome to this video on TensorFlow for Model Optimization. ​After watching this video, you'll be able to explain the importance of TensorFlow for optimizing deep learning models to improve ​efficiency in terms of speed, size, and computational requirements. ​List the TensorFlow tools and techniques for optimization. ​Demonstrate how to use TensorFlow tools and techniques for optimization.</p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_2.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_2.png" /></p>
+<p>​Model optimization is crucial for developing efficient and performant deep learning models. ​Optimized models train faster, reduce the model size, use resources more effectively, ​perform better on both training and inference tasks, provide scalability for deployment, ​use lower memory and power consumption. </p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_3.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_3.png" /></p>
+<p>TensorFlow provides several built-in tools and techniques ​to help with this process. TensorFlow includes several optimization techniques ​such as mixed-precision training, knowledge distillation, and simple post-training optimization ​techniques like pruning, quantization, which are supported by the TensorFlow Model Optimization ​Toolkit.</p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_4.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_4.png" /></p>
+<p>These tools help you optimize your models for both training and deployment. ​Mixed-precision training leverages both 16-bit and 32-bit floating-point types to accelerate ​model training and reduce memory usage. This technique can significantly improve performance ​on modern GPUs that support mixed-precision operations. It reduces memory bandwidth and ​uses lower precision where possible, allowing models to train faster on modern GPUs without ​significant loss of model accuracy. </p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_5.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_5.png" /></p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_6.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_6.png" /></p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_7.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_7.png" /></p>
+<p>In this example, you set the global policy to Mixed ​Float 16 for mixed-precision in training. Then you load and preprocess the MNIST dataset ​and define a simple model. You then optimize the model by using an optimizer ​and loss function. This speeds up training by reducing the size of gradients and other ​immediate results while maintaining accuracy through loss scaling. This allows TensorFlow ​to use 16-bit floats where possible, improving performance and reducing memory usage without ​compromising model accuracy. </p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_8.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_8.png" /></p>
+<p>Knowledge distillation is a technique that ​involves training a smaller student model to mimic the behavior of a larger teacher ​The teacher model is typically a deep and complex neural network trained to high accuracy, ​and the student model is a smaller, simpler network that learns from the teacher by trying ​to match its output. This technique reduces the model size, making it suitable for deployment ​on resource-constrained devices with faster inference time while retraining the performance ​of a more complex model.</p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_9.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_9.png" /></p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_10.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_10.png" /></p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_11.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_11.png" /></p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_12.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_12.png" /></p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_13.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_13.png" /></p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_14.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_14.png" /></p>
+<p>The teacher model is trained to achieve high accuracy on the ​training data. The student model is then trained using the ​outputs, logits, of the teacher model instead of the original labels. This is achieved using ​a softened version of the outputs, controlled by a temperature parameter in the softmax ​function. Train the student model using knowledge ​distillation with smaller data and fewer epochs. Predict teacher logits for the batch using ​tf.GradientTape method. Calculate distillation loss and apply gradients. 
+​Use a smaller subset of the MNIST dataset and train the student model. </p>
+<p><img alt="Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_15.png" src="../Images/TensorFlow_for_Model_Optimization/TensorFlow_for_Model_Optimization_15.png" /></p>
+<p>​In this video, you learned, TensorFlow includes several optimization techniques such as mixed ​precision training, knowledge distillation, and simple post-training optimization techniques ​like pruning, quantization, which are supported by the TensorFlow Model ​Optimization Toolkit. These techniques can significantly enhance the performance, ​efficiency, and scalability of your deep learning models. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Model_Optimization/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Model_Optimization/" class="btn btn-xs btn-link">
+        22. Model Optimization
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
