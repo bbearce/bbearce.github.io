@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>26. Deep Q-Networks (DQNs) with Keras - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Deep Q Networks DQNs with Keras", url: "#_top", children: [
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Q-Learning_with_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Q-Learning_with_Keras/" class="btn btn-xs btn-link">
+        25. Q-Learning with Keras
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="deep-q-networks-dqns-with-keras">Deep Q Networks DQNs with Keras</h1>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_1.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_1.png" /></p>
+<p>​After watching this video, you'll be able to explain what are Deep Q-Networks. ​Describe the DQNs key concepts. ​Explain the steps to implement DQNs with Keras, ​demonstrate the steps to implement DQNs with Keras. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_2.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_2.png" /></p>
+<p>​Deep Q-Networks (DQNs) are an extension of Q-Learning that uses deep neural ​networks to approximate the Q-Value function. ​Traditional Q-Learning becomes impractical for ​large state spaces due to the exponential growth of the Q-Table. ​DQNs address this limitation by using a neural network to estimate the Q-Values, ​allowing the algorithm to scale to environments with large or ​continuous state spaces. 
+​The DQN algorithm was famously used by DeepMind to achieve human-level ​performance in playing atari games. ​The key innovation of DQNs is the use of experience, ​replay and target networks to stabilize training and improve performance. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_3.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_3.png" /></p>
+<p>​Lets look at some key concepts of DQNs. ​Q-Value function approximation. ​Instead of using a Q-Table, DQNs use a neural network to approximate ​the Q-Value function QSA where the A is the state, and the A is the action. ​Experience replay, ​DQNS store agent experiences state action reward next state in a replay buffer. ​During training, random samples from this buffer are used to update the network, ​breaking the correlation between consecutive samples and ​improving learning stability. 
+​Target network, a separate target network is used to generate the target Q-Values. ​This network is updated less frequently than the primary network, ​providing more stable target values and preventing oscillations during training. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_4.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_4.png" /></p>
+<p>Implementing DQNs involves several steps similar to Q-Learning, but ​with additional components for experience, replay, and target networks. ​These steps initialize the environment and parameters. ​To begin DQNs, you define the environment using a platform like Open AI's Gym. ​Set the hyperparameters for ​training and initialize the replay buffer to store experiences. ​Build the Q-Network and target network. 
+​In Keras, you build two neural networks, ​the primary Q-network and the target network. ​Both networks have the same architecture, but the target networks weights ​are updated less frequently to provide stable Q-Value targets during training. ​Implement experience replay, ​experience replay involves storing the agents experiences in a replay buffer. ​During training, ​you sample random minibatches from this buffer to update the Q-Network, ​which helps in breaking the correlation between consecutive experiences. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_5.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_5.png" /></p>
+<p>​Train the Q-Network, ​training involves iteratively updating the Q-Values using the Bellman equation. ​The primary Q-Network is updated using the gradients computed from the loss between ​the predicted Q-Values and the target Q-Values obtained from the target network. ​Evaluate the agent, after training, you evaluate the agent ​by letting it interact with the environment using the learned policy. 
+​The agent's performance is measured by the cumulative reward obtained over ​multiple episodes. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_6.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_6.png" /></p>
+<p>​Here is the code implementation for each step, ​focusing on initializing the environment, building the Q-Network and target network, ​implementing experience replay, training the Q-Network, and evaluating the agent. ​You initialize the cart poll environment and ​define key hyperparameters such as the learning rate, discount factor, ​expiration rate, and batch size for experience replay. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_7.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_7.png" /></p>
+<p>​The replay buffer is initialized using a DQ with a fixed maximum size to ​store experiences. ​</p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_8.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_8.png" /></p>
+<p>Two neural networks are created, the primary Q-Network and the target network. ​Both networks have the same architecture with two hidden layers containing 24 ​neurons with relu activation. ​The target networks weights are updated periodically to match the primary networks ​weights. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_9.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_9.png" /></p>
+<p>​The remember function stores experiences in the replay buffer. ​The replay function samples random minibatches from the buffer to ​train the Q-Network, helping to break the correlation between consecutive ​experiences and stabilized training. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_10.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_10.png" /></p>
+<p>​The training loop iterates over a specified number of episodes. ​For each episode, the agent interacts with the environment, ​selecting actions based on the Epsilon greedy policy. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_11.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_11.png" /></p>
+<p>​The agent's experience is state action reward. ​Next state, done are stored in the replay buffer. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_12.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_12.png" /></p>
+<p>​The Q-Values are updated using the Bellman equation, ​leveraging the target network for stable Q-Value targets. </p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_13.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_13.png" /></p>
+<p>​The exploration rate decays over time to balance exploration and ​exploitation, the target networks weights are periodically updated to match ​the primary networks weights. ​</p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_14.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_14.png" /></p>
+<p>After training, ​the agent is evaluated by interacting with the environment using the learned policy. ​The environment is rendered to visualize the agents behavior and ​the total reward for each episode is printed. ​During evaluation, the agent primarily exploits the learned Q-Values to maximize ​rewards, demonstrating the effectiveness of the trained Q-Network.</p>
+<p><img alt="Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_15.png" src="../Images/Deep_Q_Networks_DQNs_with_Keras/Deep_Q_Networks_DQNs_with_Keras_15.png" /></p>
+<p>​In this video, you learned, ​the key innovations of DQNs include experience replay and target networks, ​which help stabilize training and improve performance. ​The steps to implement DQNs include initializing the environment, ​building the Q-Network and target network, implementing experience replay, ​training the Q-Network, and evaluating the agent. </p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../../../docker/install/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../../../docker/install/" class="btn btn-xs btn-link">
+        Install
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Q-Learning_with_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Q-Learning_with_Keras/" class="btn btn-xs btn-link">
+        25. Q-Learning with Keras
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
