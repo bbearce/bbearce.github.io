@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>2. Memory-Based versus Generator-Based Data Loading - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Memory-Based versus Generator-Based Data Loading.md", url: "#_top", children: [
+              {title: "Assignment Overview: Compare Memory-Based versus Generator-Based Data Loading", url: "#assignment-overview-compare-memory-based-versus-generator-based-data-loading" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Building_a_CNN_Classifier/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Building_a_CNN_Classifier/" class="btn btn-xs btn-link">
+        3. Building a CNN Classifier
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../DataLoading/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../DataLoading/" class="btn btn-xs btn-link">
+        1. DataLoading
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="memory-based-versus-generator-based-data-loadingmd">Memory-Based versus Generator-Based Data Loading.md</h1>
+<h2 id="assignment-overview-compare-memory-based-versus-generator-based-data-loading">Assignment Overview: Compare Memory-Based versus Generator-Based Data Loading</h2>
+<p>Welcome to the hands-on lab for working with satellite imagery and comparing memory-based versus generator-based data loading.</p>
+<p>This set of instructions will guide you through all of the targeted tasks in the provided notebook. By following these steps, you'll gain crucial experience manipulating images in Python, understanding directory handling, and visualizing remote sensing data for deep learning projects.</p>
+<p>You'll start by downloading the dataset and exploring the two main folders contained within. First folder, class_0_non_agri, contains images of non-agricultural land, and the second folder, class_1_agri, contains images representing agricultural land. Each class folder includes numerous images.</p>
+<p>Your first step is to use Python's standard library (os) to list, sort, and handle file paths for these categories. You will use os.listdir() to obtain file names within the class_0_non_agri directory. Then, you will open and display the first image in non_agri_images. Your first exercise would be to look at the image dimensions of a single image in non_agri_images. Then, using memory-based loading, you will read all images in a list.</p>
+<p>Next, to compare with lazy loading, you will display the first four non-agricultural images. Similarly, you will create the list of all agricultural images and calculate their number in your next exercise. Finally, you will end the lab by displaying the first four images of the agricultural land. If you get errors opening images, re-check your directory paths and ensure you're using the correct full absolute or relative paths.</p>
+<p>By following these steps, you'll gain confidence in file handling, image loading, and visualization with common Python tools for deep learning. Complete all the code and questions to finish the lab successfully. You will need to download and save the finished lab on your computer for final evaluation at the end of this course. Good luck!</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Building_a_CNN_Classifier/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Building_a_CNN_Classifier/" class="btn btn-xs btn-link">
+        3. Building a CNN Classifier
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../DataLoading/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../DataLoading/" class="btn btn-xs btn-link">
+        1. DataLoading
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>

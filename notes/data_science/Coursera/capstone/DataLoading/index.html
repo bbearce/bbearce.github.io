@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    
+    <link rel="shortcut icon" href="../../../../../img/favicon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>1. DataLoading - Ben's Code Journal</title>
+    <link href="../../../../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../../../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../../../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../../../../css/highlight.css">
+    <link href="../../../../../css/extra.css" rel="stylesheet">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../../../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../../../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../../../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../../../../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Data Loading", url: "#_top", children: [
+              {title: "Introduction", url: "#introduction" },
+              {title: "Bulk loading method", url: "#bulk-loading-method" },
+              {title: "Sequential loading method", url: "#sequential-loading-method" },
+              {title: "Summary", url: "#summary" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../../../../js/base.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Memory-Based_versus_Generator-Based_Data_Loading/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Memory-Based_versus_Generator-Based_Data_Loading/" class="btn btn-xs btn-link">
+        2. Memory-Based versus Generator-Based Data Loading
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../Keras_and_Tensorflow/Deep_Q_Networks_DQNs_with_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../Keras_and_Tensorflow/Deep_Q_Networks_DQNs_with_Keras/" class="btn btn-xs btn-link">
+        26. Deep Q-Networks (DQNs) with Keras
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="data-loading">Data Loading</h1>
+<h2 id="introduction">Introduction</h2>
+<p>Data loading is a fundamental step in any data-related workflow. To extract any value from data, be it for analysis, visualization, or building sophisticated deep learning models, it must be made available in the system for inspection. Did you know a poor data pipeline can cost up to 80% of a data scientist's time?</p>
+<p>In deep learning, a model's ability to learn, generalize, and perform relies heavily on the quality and quantity of the data it's trained on.</p>
+<p>But long before a single gradient is calculated or a neuron is updated, data scientists face a critical yet often overlooked challenge of efficiently loading and managing massive datasets. The two main methods you can use to handle this are bulk loading and sequential loading.</p>
+<p>Let's begin by understanding how these methods influence memory usage, training speed, and a project's overall scalability.</p>
+<h2 id="bulk-loading-method">Bulk loading method</h2>
+<p>Bulk loading is a simple, intuitive, and commonly used method, especially among developers just beginning to work on data-intensive tasks. In this method, the entire dataset is read from its storage location, including local disk, network drive, and cloud. The data is then loaded into the system's RAM at once. The program typically loops through each file path in the dataset, opens the image files one by one, converts them into arrays, and stores them in a master list. Once the process is complete, the full dataset is held in memory and ready for immediate access.</p>
+<h3 id="advantages-of-the-bulk-loading-method">Advantages of the bulk loading method</h3>
+<p>The main advantage of bulk loading is the speed of repeated access it offers after the initial load is finished.</p>
+<p>Since all the data is stored in high-speed RAM, subsequent operations like fetching a random batch of images or shuffling the entire dataset become extremely efficient. This eliminates the need for repeated disk I/O, which is comparatively slow and can hinder performance.</p>
+<h3 id="disadvantages-of-the-bulk-loading-method">Disadvantages of the bulk loading method</h3>
+<p>The major drawback of bulk loading is its extreme memory usage. The amount of RAM required scales linearly with the size of the dataset. Consider a dataset of 10,000 images, at 256x256 resolution, requiring roughly 2 GB of memory. While this may be manageable for small datasets, real-world applications such as medical imaging or autonomous driving often involve millions of high-resolution images, requiring terabytes of RAM.</p>
+<p>This lack of scalability makes bulk loading difficult for production environments and limits its practicality to small-scale or research use cases.</p>
+<h2 id="sequential-loading-method">Sequential loading method</h2>
+<p>In direct contrast to the bulk loading method, sequential data retrieval from the storage is performed on per batch basis, and on demand instead of preloading the entire dataset. The first step in this method involves compiling a list of the file paths to all the data samples. This list, containing only strings, requires a small amount of memory, even for millions of files.</p>
+<p>In sequential, or lazy, loading, the data is not read from the disk until it is needed within the training loop. For example, to prepare a batch for training, a subset of file paths is selected, and each file is loaded and transformed, which could be resized or normalized and then collated into a batch. At any given time, only the current batch resides in RAM. After the batch has been used in a training step, its memory can be released, allowing the system to load the next batch and enabling efficient memory usage throughout training.</p>
+<h3 id="advantages-of-the-sequential-loading-method">Advantages of the sequential loading method</h3>
+<p>The key benefit of sequential loading is its exceptional memory efficiency, which enables high scalability. Whether the dataset has hundreds or hundreds of millions of images, this approach allows training models on datasets far exceeding the system's RAM capacity.</p>
+<p>Additionally, since there's no large, initial loading phase, the application can start processing almost immediately.</p>
+<h3 id="disadvantages-of-the-sequential-loading-method">Disadvantages of the sequential loading method</h3>
+<p>The primary drawback of naive sequential loading is the repeated disk I/O, which is significantly slower than accessing data from RAM. During training, a graphics processing unit, or GPU, can process data much faster than a single central processing unit, or CPU, thread can read it from the disk. This leads to an I/O bottleneck where the GPU remains idle, waiting for the next batch.</p>
+<p>This issue is usually resolved through parallel data loading and is implemented efficiently in most deep learning frameworks such as Keras and PyTorch.</p>
+<h2 id="summary">Summary</h2>
+<p>In this reading, you've learned about the features, advantages, and disadvantages of two data loading methods: bulk loading and sequential loading.</p>
+<p>The bulk loading method offers an easy and intuitive way for data handling.
+The entire dataset is read from the storage location and then loaded into the system's RAM in one go in case of the bulk loading method.
+The main advantage of bulk loading is the speed of repeated access it offers after the initial load is finished.
+The severe memory limitations faced by the bulk loading method make it unusable for serious deep learning implementations.
+The sequential loading method retrieves data from storage one small batch at a time, and on demand, instead of preloading the entire dataset.
+The key benefit of sequential loading is its exceptional memory efficiency, which enables high scalability.
+The primary drawback of the sequential loading method is the repeated disk I/O, which is significantly slower than accessing data from RAM.</p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Memory-Based_versus_Generator-Based_Data_Loading/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Memory-Based_versus_Generator-Based_Data_Loading/" class="btn btn-xs btn-link">
+        2. Memory-Based versus Generator-Based Data Loading
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../../Keras_and_Tensorflow/Deep_Q_Networks_DQNs_with_Keras/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../../Keras_and_Tensorflow/Deep_Q_Networks_DQNs_with_Keras/" class="btn btn-xs btn-link">
+        26. Deep Q-Networks (DQNs) with Keras
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content">
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by None (noraj).</p>
+</footer>
+
+</body>
+</html>
