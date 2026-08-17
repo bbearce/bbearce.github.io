@@ -116,34 +116,8 @@ if (is_top_frame) { $('body').addClass('wm-top-page'); }
 A single line containing the space separated values of N and M.</p>
 <p>Constraints:</p>
 <ul>
-<li>5&lt;N&lt;101  </li>
-<li>15&lt;M&lt;303  </li>
+<li>5</li>
 </ul>
-<p><strong>Example</strong></p>
-<p>Sample Input:<br />
-<code>9 27</code></p>
-<p>Sample Output:</p>
-<pre><code>------------.|.------------
----------.|..|..|.---------
-------.|..|..|..|..|.------
----.|..|..|..|..|..|..|.---
-----------WELCOME----------
----.|..|..|..|..|..|..|.---
-------.|..|..|..|..|.------
----------.|..|..|.---------
-------------.|.------------
-</code></pre>
-<pre><code class="language-python">if __name__ == '__main__':
-    N, M = map(int,input().split())
-
-    for i in range(int((N-1)/2)):
-        print(((2*i+1)*&quot;.|.&quot;).center(M,'-'))
-
-    print('WELCOME'.center(M,'-'))
-
-    for i in range(int((N-1)/2)):
-        print((((N-2)-2*i)*&quot;.|.&quot;).center(M,'-'))
-</code></pre>
 
   <br>
     
